@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.StartApp" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/palettegrey</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/logo</item>
+        <item name="android:windowSplashScreenBrandingImage"></item>
+        <item name="postSplashScreenTheme">@style/Base.Theme.MAD24_P02_Team1</item>
+    </style>
+</resources>
