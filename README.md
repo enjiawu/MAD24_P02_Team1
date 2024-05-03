@@ -2,8 +2,8 @@
 # MAD24_P02_Team1
 MAD 2024 Assignment
 ## Students:
-S10258457C Yeo Jin Rong
-S10256978E Wu Enjia
+S10258457C Yeo Jin Rong  
+S10256978E Wu Enjia  
 
 
 ## Introduction:
