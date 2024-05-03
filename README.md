@@ -3,6 +3,7 @@
 MAD 2024 Assignment
 ## Students:
 S10258457C Yeo Jin Rong
+S10256978E Wu Enjia
 
 
 ## Introduction:
@@ -36,7 +37,7 @@ Food & Drink
 - Successfully incorporte recycler views with horizontal scrolling for ingredients and similar recipes - [ ]
 - Virtual Pantry - Gwendolyn - [ ]
 - Glycaemic Index Calculator - Timothy - [ ]
-- Meal Planner - En Jia - [ ]
+- Meal Planner - Enjia - [ ]
 - Shopping List - Wen Ya - [ ]
 
 ### Acknowledgements:
