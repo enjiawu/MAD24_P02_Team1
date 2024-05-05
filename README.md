@@ -4,6 +4,7 @@ MAD 2024 Assignment
 ## Students:
 S10258457C Yeo Jin Rong  
 S10256978E Wu Enjia  
+S10256132A Timothy Chai Weijie
 
 
 ## Introduction:
