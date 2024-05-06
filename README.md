@@ -46,9 +46,8 @@ Food & Drink
 - Successfully create a Meal Plan layout for a single day (Morning, Afternoon and Night) - [ ]
 - Successfully implement API requests for Generate Meal Plan and Add to Meal Plan - [ ]
 - Successfully display Meal plan including meal names, brief description and links  - [ ]
-
-- Meal Planner - Enjia - [ ]
-- Shopping List - Wenya - [ ]
+#### Shopping List - Wenya - [ ]
+#### Tasks (Shopping List):
 > Stage 2
 #### Image Analysis using API, search recipes based on image binary file - Jin Rong - [ ]
 #### Advanced Food Recipe Search - Enjia - [ ]
