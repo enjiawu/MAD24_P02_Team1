@@ -30,17 +30,23 @@ Food & Drink
 ### Features:
 > Stage 1
 #### Splash Screen on App Launch - Jin Rong - [x]
-#### Main Menu with motion layout functionaility - Jin Rong - [x]
+#### Main Menu with motion layout functionality - Jin Rong - [x]
 #### Random Recipe Browsing, filtered by tags, provided by Spoonacular API - Jin Rong - [ ]
 ##### Tasks (Recipe Browser):
 - Successfully implement API requests for GetRecipes, SimilarRecipes and Ingredients - [ ]
 - Successfully incorporate recycler views with vertical scrolling - [ ]
 - Successfully incorporate onClickListener for recipes to load a new activity - [ ]
-- Successfully incorporte recycler views with horizontal scrolling for ingredients and similar recipes - [ ]
+- Successfully incorporate recycler views with horizontal scrolling for ingredients and similar recipes - [ ]
 #### Virtual Pantry - Timothy - [ ]
 ##### Tasks (Virtual Pantry):
 #### Glycaemic Index Calculator - Ggwendolynn - [ ]
-#### Tasks (Glycaemic Index Claculator):
+#### Tasks (Glycaemic Index Calculator):
+#### Meal Planner - Enjia - [ ]
+#### Tasks (Meal Planner):
+- Successfully create a Meal Plan layout for a single day (Morning, Afternoon and Night) - [ ]
+- Successfully implement API requests for Generate Meal Plan and Add to Meal Plan - [ ]
+- Successfully display Meal plan including meal names, brief description and links  - [ ]
+
 - Meal Planner - Enjia - [ ]
 - Shopping List - Wenya - [ ]
 > Stage 2
