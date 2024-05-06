@@ -1,11 +1,12 @@
-
+![image](https://github.com/enjiawu/MAD24_P02_Team1/assets/133361144/826a5292-c18b-4f23-97dd-67c8f00aea17)
 # MAD24_P02_Team1
 MAD 2024 Assignment
 ## Students:
 S10258457C Yeo Jin Rong  
 S10256978E Wu Enjia  
 S10256132A Timothy Chai Weijie
-
+S10262576 Ggwendolynn Lee Rasni 
+S10262410A Xue Wenya 
 
 ## Introduction:
 - Hello, we are Group 1 from the MAD Module for Software Engineering Specialisation under Information Technology (N54).
