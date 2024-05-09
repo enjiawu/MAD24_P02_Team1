@@ -44,7 +44,7 @@ Food & Drink
 ##### Meal Planner - Enjia - [ ]
 ###### Tasks (Meal Planner):
 - Successfully create a Meal Plan layout for a single day (Morning, Afternoon and Night) - [ ]
-- Successfully implement API requests for Generate Meal Plan and Add to Meal Plan - [ ]
+- Successfully implement API requests and UI for Search for Recipe to add to Meal Plan - [ ]
 - Successfully display Meal plan including meal names, brief description and links  - [ ]
 ##### Shopping List - Wenya - [ ]
 ###### Tasks (Shopping List):

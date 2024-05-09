@@ -1,4 +1,4 @@
-package sg.edu.np.mad.mad24_p02_team1;
+package sg.edu.np.mad.pocketchef;
 
 import android.os.Bundle;
 import android.os.Handler;
