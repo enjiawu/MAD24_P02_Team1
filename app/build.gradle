@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace 'sg.edu.np.mad.mad24_p02_team1'
+    namespace 'sg.edu.np.mad.pocketchef'
     compileSdk 34
 
     defaultConfig {
-        applicationId "sg.edu.np.mad.mad24_p02_team1"
+        applicationId "sg.edu.np.mad.pocketchef"
         minSdk 24
         targetSdk 34
         versionCode 1

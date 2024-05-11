@@ -1,29 +1,33 @@
 package sg.edu.np.mad.pocketchef;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.core.graphics.Insets;
 import androidx.core.splashscreen.SplashScreen;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.recyclerview.widget.RecyclerView;
 
 public class MainActivity extends AppCompatActivity {
-    private RecyclerView buttonRecyclerView;
+    Context context;
     boolean isReady = false;
-    private Button startButton;
     private MotionLayout motionLayout;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        SplashScreen splashScreen = SplashScreen.installSplashScreen(this);
+        SplashScreen.installSplashScreen(this);
         View content = findViewById(android.R.id.content);
         content.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             @Override
@@ -38,21 +42,45 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main_activity), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
-        // Implement Motion layout
-        motionLayout = findViewById(R.id.main);
-    }
-    private void dismissSplashScreen() {
-        new Handler().postDelayed(new Runnable() {
+        FindViews(); // Initialize views after setContentView()
+        motionLayout.setOnTouchListener(new View.OnTouchListener() {
+            private float startX;
             @Override
-            public void run() {
-                isReady = true;
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        startX = event.getX();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        float endX = event.getX();
+                        float diffX = endX - startX;
+
+                        if (Math.abs(diffX) > 100) { // Minimum swipe distance threshold
+                            if (diffX > 0) {
+                                // Right swipe (forward)
+                                motionLayout.transitionToEnd();
+                            } else {
+                                // Left swipe (backward)
+                                motionLayout.transitionToStart();
+                            }
+                        }
+                        break;
+                }
+                return true;
             }
-        }, 3000);
+        });
+    }
+
+    private void FindViews() {
+        motionLayout = findViewById(R.id.main_activity);
+    }
+
+    private void dismissSplashScreen() {
+        new Handler().postDelayed(() -> isReady = true, 3000);
     }
 }

@@ -2,7 +2,7 @@
 <resources>
     <style name="Theme.StartApp" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/black</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/logo</item>
-        <item name="postSplashScreenTheme">@style/Base.Theme.MAD24_P02_Team1</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/pocketchef_logo</item>
+        <item name="postSplashScreenTheme">@style/Base.Theme.pocketchef</item>
     </style>
 </resources>
