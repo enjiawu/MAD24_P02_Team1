@@ -46,14 +46,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Implement Motion layout
         motionLayout = findViewById(R.id.main);
-        startButton = findViewById(R.id.buttonStart);
-        startButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Start the MotionScene transition
-                motionLayout.transitionToEnd();
-            }
-        });
     }
     private void dismissSplashScreen() {
         new Handler().postDelayed(new Runnable() {
