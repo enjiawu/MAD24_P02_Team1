@@ -41,17 +41,18 @@ Food & Drink
 ###### Tasks (Virtual Pantry):
 ##### Glycaemic Index Calculator - Ggwendolynn - [ ]
 ###### Tasks (Glycaemic Index Calculator):
-##### Meal Planner - Enjia - [ ]
+##### Advanced Food Recipe Search - Enjia - [ ]
 ###### Tasks (Meal Planner):
-- Successfully create a Meal Plan layout for a single day (Morning, Afternoon and Night) - [ ]
-- Successfully implement API requests and UI for Search for Recipe to add to Meal Plan - [ ]
-- Successfully display Meal plan including meal names, brief description and links  - [ ]
+- Successfully implement Advanced Searching UI with options to search for recipe by name, ingredients and nutrients - [ ]
+- Successfully implement API requests for Search for Recipe - [ ]
+- Successfully display searched Recipes in UI  - [ ]
+- Successfully implement sorting of searched recipes - [ ]
 ##### Shopping List - Wenya - [ ]
 ###### Tasks (Shopping List):
 ---
 #### Stage 2
 ##### Image Analysis using API, search recipes based on image binary file - Jin Rong - [ ]
-##### Advanced Food Recipe Search - Enjia - [ ]
+##### Community page - Enjia - [ ]
 ##### Caloric Counter - Ggwendolynn - [ ]
 ##### Advanced User Login - Timothy - [ ]
 ##### Generated Shopping List - Wenya - [ ]
