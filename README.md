@@ -37,10 +37,10 @@ Food & Drink
 - Successfully incorporate recycler views with vertical scrolling - [ ]
 - Successfully incorporate onClickListener for recipes to load a new activity - [ ]
 - Successfully incorporate recycler views with horizontal scrolling for ingredients and similar recipes - [ ]
-##### Virtual Pantry - Timothy - [ ]
-###### Tasks (Virtual Pantry):
-##### Glycaemic Index Calculator - Ggwendolynn - [ ]
-###### Tasks (Glycaemic Index Calculator):
+##### User login system using database - Timothy - [ ]
+###### Tasks (User login system using database):
+##### User profile - Ggwendolynn - [ ]
+###### Tasks (User profile):
 ##### Advanced Food Recipe Search - Enjia - [ ]
 ###### Tasks (Meal Planner):
 - Successfully implement Advanced Searching UI with options to search for recipe by name, ingredients and nutrients - [ ]
@@ -54,7 +54,7 @@ Food & Drink
 ##### Image Analysis using API, search recipes based on image binary file - Jin Rong - [ ]
 ##### Community page - Enjia - [ ]
 ##### Caloric Counter - Ggwendolynn - [ ]
-##### Advanced User Login - Timothy - [ ]
+##### Virtual Pantry - Timothy - [ ]
 ##### Generated Shopping List - Wenya - [ ]
 ### Acknowledgements:
 - Video tutorial for motion layout:
