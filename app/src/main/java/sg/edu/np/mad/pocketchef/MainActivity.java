@@ -54,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
             private float startX;
             private VelocityTracker velocityTracker;
 
-
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getActionMasked()) {
@@ -69,15 +68,15 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case MotionEvent.ACTION_MOVE:
                         velocityTracker.addMovement(event);
-                        velocityTracker.computeCurrentVelocity(1000); // 1000 milliseconds
+                        velocityTracker.computeCurrentVelocity(1000);
                         break;
                     case MotionEvent.ACTION_UP:
                         float endX = event.getX();
                         float diffX = endX - startX;
-                        if (Math.abs(diffX) > 50 && velocityTracker != null) { // Minimum swipe distance threshold
-                            velocityTracker.computeCurrentVelocity(1000); // 1000 milliseconds
+                        if (Math.abs(diffX) > 10 && velocityTracker != null) {
+                            velocityTracker.computeCurrentVelocity(1000);
                             float velocityX = velocityTracker.getXVelocity();
-                            if (Math.abs(velocityX) > 300) { // Minimum swipe velocity threshold
+                            if (Math.abs(velocityX) > 100) {
                                 if (diffX > 0) {
                                     // Right swipe (forward)
                                     motionLayout.transitionToEnd();
@@ -87,24 +86,16 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             }
                         }
-                        if (velocityTracker != null) {
-                            velocityTracker.recycle();
-                            velocityTracker = null;
-                        }
                         break;
                     case MotionEvent.ACTION_CANCEL:
-                        if (velocityTracker != null) {
-                            velocityTracker.recycle();
-                            velocityTracker = null;
-                        }
                         break;
                 }
                 return true;
             }
         });
-    }
+        }
 
-    private void FindViews() {
+        private void FindViews() {
         motionLayout = findViewById(R.id.main_activity);
     }
 

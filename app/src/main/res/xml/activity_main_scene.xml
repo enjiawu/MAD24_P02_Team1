@@ -8,40 +8,22 @@
         app:duration="1000">
 
         <!-- Define swipe up gesture to transition -->
-        <OnSwipe
-            app:touchAnchorId="@id/main_activity"
-            app:touchAnchorSide="top"/>
+        <OnSwipe app:touchAnchorSide="top" />
     </Transition>
 
     <ConstraintSet android:id="@+id/start">
         <!-- Intial Constraints for TextView and ImageView-->
         <Constraint
-            android:id="@+id/textView_username"
-            android:layout_width="wrap_content"
+            android:id="@+id/cardView_welcome"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="visible"
-            app:layout_constraintBottom_toTopOf="@id/button_start"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textView_welcome_message" />
-
-        <Constraint
-            android:id="@+id/button_start"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="visible"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textView_username" />
-        <Constraint
-            android:id="@+id/textView_welcome_message"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="visible"
+            android:layout_margin="16dp"
+            app:alpha="1.0"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toStartOf="parent" />
         <!-- Constraints for the card view -->
         <Constraint
             android:id="@+id/cardView1"
@@ -61,7 +43,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"  />
+            app:layout_constraintTop_toTopOf="parent" />
         <Constraint
             android:id="@+id/cardView3"
             android:layout_width="0dp"
@@ -70,7 +52,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"  />
+            app:layout_constraintTop_toTopOf="parent" />
         <Constraint
             android:id="@+id/cardView4"
             android:layout_width="0dp"
@@ -79,7 +61,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"  />
+            app:layout_constraintTop_toTopOf="parent" />
         <Constraint
             android:id="@+id/cardView5"
             android:layout_width="0dp"
@@ -106,32 +88,14 @@
     <ConstraintSet android:id="@+id/end">
         <!-- Setting Visbility to Gone -->
         <Constraint
-            android:id="@+id/textView_username"
+            android:id="@+id/cardView_welcome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@id/button_start"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textView_welcome_message" />
-
-        <Constraint
-            android:id="@+id/button_start"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textView_username" />
-        <Constraint
-            android:id="@+id/textView_welcome_message"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:alpha="0.0"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toStartOf="parent" />
         <!-- Card View Visibility set to Visible -->
         <Constraint
             android:id="@+id/cardView1"
@@ -189,7 +153,12 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/cardView5"
             app:layout_constraintTop_toBottomOf="@+id/cardView3" />
-
+        <Constraint
+            android:id="@+id/toolbar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </ConstraintSet>
-
 </MotionScene>
