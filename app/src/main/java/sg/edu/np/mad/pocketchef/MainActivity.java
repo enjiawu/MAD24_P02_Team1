@@ -1,6 +1,6 @@
 package sg.edu.np.mad.pocketchef;
-
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuItem;
@@ -24,13 +24,13 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
 
-/** @noinspection deprecation*/
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     boolean isReady = false;
     private MotionLayout motionLayout;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     MaterialToolbar toolbar;
+    MenuItem nav_home, nav_recipes, nav_search, nav_shoppinglist;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setCheckedItem(nav_home);
         // Custom setOnTouchListener for swipe gestures (in-built Gesture Detector is not working)
         motionLayout.setOnTouchListener(new View.OnTouchListener() {
             private float startX;
@@ -124,6 +125,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         toolbar = findViewById(R.id.toolbar);
+        nav_home = navigationView.getMenu().findItem(R.id.nav_home);
+        nav_recipes = navigationView.getMenu().findItem(R.id.nav_recipes);
+        nav_search = navigationView.getMenu().findItem(R.id.nav_search);
     }
 
     private void dismissSplashScreen() {
@@ -132,6 +136,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        int itemId = menuItem.getItemId();
+        if (itemId == R.id.nav_home) {
+            // Nothing happens
+        } else if (itemId == R.id.nav_recipes) {
+            Intent intent = new Intent(MainActivity.this, RecipeActivity.class);
+            finish();
+            startActivity(intent);
+        } else if (itemId == R.id.nav_search) {
+            Intent intent2 = new Intent(MainActivity.this, AdvancedSearchActivity.class);
+            finish();
+            startActivity(intent2);
+        }
+        drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 }
