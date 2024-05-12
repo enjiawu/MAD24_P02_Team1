@@ -1,8 +1,10 @@
 package sg.edu.np.mad.pocketchef;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
@@ -13,6 +15,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.core.graphics.Insets;
 import androidx.core.splashscreen.SplashScreen;
@@ -30,7 +33,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     MaterialToolbar toolbar;
-    MenuItem nav_home, nav_recipes, nav_search, nav_shoppinglist;
+    MenuItem nav_home, nav_recipes, nav_search;
+
+    CardView cardView1, cardView2, cardView3, cardView4, cardView5, cardView6;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -58,7 +63,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         FindViews(); // Initialize views after setContentView()
         // Set toolbar as action bar
         setSupportActionBar(toolbar);
-        // Navigation Drawer Menu Set Up
+        // Hide and Show Items
+        Menu menu = navigationView.getMenu();
+        menu.findItem(R.id.nav_logout).setVisible(false);
+        menu.findItem(R.id.nav_shoppinglist).setVisible(false);
+        // Set up navigation view
         navigationView.bringToFront();
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
@@ -109,6 +118,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 return true;
             }
         });
+
+        // Card View On CLick Listener for RecipeActivity
+        cardView1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, RecipeActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -128,6 +146,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         nav_home = navigationView.getMenu().findItem(R.id.nav_home);
         nav_recipes = navigationView.getMenu().findItem(R.id.nav_recipes);
         nav_search = navigationView.getMenu().findItem(R.id.nav_search);
+        cardView1 =findViewById(R.id.cardView1);
+        cardView2 = findViewById(R.id.cardView2);
+        cardView3 = findViewById(R.id.cardView3);
+        cardView4 = findViewById(R.id.cardView4);
+        cardView5 = findViewById(R.id.cardView5);
+        cardView6 = findViewById(R.id.cardView6);
     }
 
     private void dismissSplashScreen() {
