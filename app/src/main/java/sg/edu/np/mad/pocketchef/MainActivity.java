@@ -1,11 +1,9 @@
 package sg.edu.np.mad.pocketchef;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.GestureDetector;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -13,17 +11,26 @@ import android.view.ViewTreeObserver;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.core.graphics.Insets;
 import androidx.core.splashscreen.SplashScreen;
+import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
-public class MainActivity extends AppCompatActivity {
-    Context context;
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.navigation.NavigationView;
+
+/** @noinspection deprecation*/
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     boolean isReady = false;
     private MotionLayout motionLayout;
+    DrawerLayout drawerLayout;
+    NavigationView navigationView;
+    MaterialToolbar toolbar;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -49,6 +56,14 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
         FindViews(); // Initialize views after setContentView()
+        // Set toolbar as action bar
+        setSupportActionBar(toolbar);
+        // Navigation Drawer Menu Set Up
+        navigationView.bringToFront();
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+        navigationView.setNavigationItemSelectedListener(this);
         // Custom setOnTouchListener for swipe gestures (in-built Gesture Detector is not working)
         motionLayout.setOnTouchListener(new View.OnTouchListener() {
             private float startX;
@@ -93,13 +108,30 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-        }
+    }
 
-        private void FindViews() {
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    private void FindViews() {
         motionLayout = findViewById(R.id.main_activity);
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
+        toolbar = findViewById(R.id.toolbar);
     }
 
     private void dismissSplashScreen() {
         new Handler().postDelayed(() -> isReady = true, 3000);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        return true;
     }
 }
