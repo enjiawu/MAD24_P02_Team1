@@ -31,12 +31,13 @@ Food & Drink
 #### Stage 1
 ##### Splash Screen on App Launch - Jin Rong - [x]
 ##### Main Menu with motion layout functionality - Jin Rong - [x]
-##### Random Recipe Browsing, filtered by tags, provided by Spoonacular API - Jin Rong - [ ]
+##### Random Recipe Browsing, filtered by tags, provided by Spoonacular API - Jin Rong - [X]
 ###### Tasks (Recipe Browser):
 - Successfully implement API requests for GetRecipes, SimilarRecipes and Ingredients - [ ]
-- Successfully incorporate recycler views with vertical scrolling - [ ]
+- Successfully incorporate recycler views with vertical scrolling - [X]
 - Successfully incorporate onClickListener for recipes to load a new activity - [ ]
 - Successfully incorporate recycler views with horizontal scrolling for ingredients and similar recipes - [ ]
+- Successfully incorporate instructions recycler viewholder - [ ]
 ##### User login system using database - Timothy - [ ]
 ###### Tasks (User login system using database):
 ##### User profile - Ggwendolynn - [ ]
