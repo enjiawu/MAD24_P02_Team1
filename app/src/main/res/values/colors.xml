@@ -7,4 +7,5 @@
     <color name="paletteorange">#feac5d</color>
     <color name="palettetext">#140F1F</color>
     <color name="palettedarkblue">#001219</color>
+    <color name="transparent">#00FFFFFF</color>
 </resources>

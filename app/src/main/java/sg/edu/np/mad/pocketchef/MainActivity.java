@@ -1,11 +1,9 @@
 package sg.edu.np.mad.pocketchef;
-
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.GestureDetector;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -13,17 +11,26 @@ import android.view.ViewTreeObserver;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.core.graphics.Insets;
 import androidx.core.splashscreen.SplashScreen;
+import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
-public class MainActivity extends AppCompatActivity {
-    Context context;
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.navigation.NavigationView;
+
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     boolean isReady = false;
     private MotionLayout motionLayout;
+    DrawerLayout drawerLayout;
+    NavigationView navigationView;
+    MaterialToolbar toolbar;
+    MenuItem nav_home, nav_recipes, nav_search, nav_shoppinglist;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -49,11 +56,19 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
         FindViews(); // Initialize views after setContentView()
+        // Set toolbar as action bar
+        setSupportActionBar(toolbar);
+        // Navigation Drawer Menu Set Up
+        navigationView.bringToFront();
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+        navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setCheckedItem(nav_home);
         // Custom setOnTouchListener for swipe gestures (in-built Gesture Detector is not working)
         motionLayout.setOnTouchListener(new View.OnTouchListener() {
             private float startX;
             private VelocityTracker velocityTracker;
-
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -69,15 +84,15 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case MotionEvent.ACTION_MOVE:
                         velocityTracker.addMovement(event);
-                        velocityTracker.computeCurrentVelocity(1000); // 1000 milliseconds
+                        velocityTracker.computeCurrentVelocity(1000);
                         break;
                     case MotionEvent.ACTION_UP:
                         float endX = event.getX();
                         float diffX = endX - startX;
-                        if (Math.abs(diffX) > 50 && velocityTracker != null) { // Minimum swipe distance threshold
-                            velocityTracker.computeCurrentVelocity(1000); // 1000 milliseconds
+                        if (Math.abs(diffX) > 10 && velocityTracker != null) {
+                            velocityTracker.computeCurrentVelocity(1000);
                             float velocityX = velocityTracker.getXVelocity();
-                            if (Math.abs(velocityX) > 300) { // Minimum swipe velocity threshold
+                            if (Math.abs(velocityX) > 100) {
                                 if (diffX > 0) {
                                     // Right swipe (forward)
                                     motionLayout.transitionToEnd();
@@ -87,16 +102,8 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             }
                         }
-                        if (velocityTracker != null) {
-                            velocityTracker.recycle();
-                            velocityTracker = null;
-                        }
                         break;
                     case MotionEvent.ACTION_CANCEL:
-                        if (velocityTracker != null) {
-                            velocityTracker.recycle();
-                            velocityTracker = null;
-                        }
                         break;
                 }
                 return true;
@@ -104,11 +111,44 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
     private void FindViews() {
         motionLayout = findViewById(R.id.main_activity);
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
+        toolbar = findViewById(R.id.toolbar);
+        nav_home = navigationView.getMenu().findItem(R.id.nav_home);
+        nav_recipes = navigationView.getMenu().findItem(R.id.nav_recipes);
+        nav_search = navigationView.getMenu().findItem(R.id.nav_search);
     }
 
     private void dismissSplashScreen() {
         new Handler().postDelayed(() -> isReady = true, 3000);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        int itemId = menuItem.getItemId();
+        if (itemId == R.id.nav_home) {
+            // Nothing happens
+        } else if (itemId == R.id.nav_recipes) {
+            Intent intent = new Intent(MainActivity.this, RecipeActivity.class);
+            finish();
+            startActivity(intent);
+        } else if (itemId == R.id.nav_search) {
+            Intent intent2 = new Intent(MainActivity.this, AdvancedSearchActivity.class);
+            finish();
+            startActivity(intent2);
+        }
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
     }
 }
