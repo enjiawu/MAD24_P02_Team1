@@ -19,8 +19,8 @@ import sg.edu.np.mad.pocketchef.R;
 
 // Recycler View Adapater
 public class IngredientsAdapater extends RecyclerView.Adapter<IngredientsViewHolder> {
-    Context context;
-    List<ExtendedIngredient> list;
+    final Context context;
+    final List<ExtendedIngredient> list;
 
     public IngredientsAdapater(Context context, List<ExtendedIngredient> list) {
         this.context = context;
@@ -53,8 +53,9 @@ public class IngredientsAdapater extends RecyclerView.Adapter<IngredientsViewHol
 
 // Method to implement Recylcer View viewholder
 class IngredientsViewHolder extends RecyclerView.ViewHolder {
-    TextView textView_ingredients_quantity, textView_ingredients_name;
-    ImageView imageView_ingredients;
+    final TextView textView_ingredients_quantity;
+    final TextView textView_ingredients_name;
+    final ImageView imageView_ingredients;
 
     public IngredientsViewHolder(@NonNull View itemView) {
         super(itemView);

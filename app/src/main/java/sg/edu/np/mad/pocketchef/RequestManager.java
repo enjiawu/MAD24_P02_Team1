@@ -24,8 +24,8 @@ import sg.edu.np.mad.pocketchef.Models.RecipeDetailsResponse;
 import sg.edu.np.mad.pocketchef.Models.SimilarRecipeResponse;
 
 public class RequestManager {
-    Context context;
-    Retrofit retrofit = new Retrofit.Builder()
+    final Context context;
+    final Retrofit retrofit = new Retrofit.Builder()
             .baseUrl("https://api.spoonacular.com")
             .addConverterFactory(GsonConverterFactory.create())
             .build();

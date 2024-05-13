@@ -18,8 +18,8 @@ import sg.edu.np.mad.pocketchef.Models.Ingredient;
 import sg.edu.np.mad.pocketchef.R;
 
 public class InstructionsIngredientsAdapter extends RecyclerView.Adapter<InstructionIngredientsViewHolder> {
-    Context context;
-    List<Ingredient> list;
+    final Context context;
+    final List<Ingredient> list;
 
     public InstructionsIngredientsAdapter(Context context, List<Ingredient> list) {
         this.context = context;
@@ -53,8 +53,8 @@ public class InstructionsIngredientsAdapter extends RecyclerView.Adapter<Instruc
 }
 
 class InstructionIngredientsViewHolder extends RecyclerView.ViewHolder {
-    ImageView imageView_instructions_step_items;
-    TextView textView_instructions_step_item;
+    final ImageView imageView_instructions_step_items;
+    final TextView textView_instructions_step_item;
     public InstructionIngredientsViewHolder(@NonNull View itemView) {
         super(itemView);
         imageView_instructions_step_items = itemView.findViewById(R.id.imageView_instructions_step_items);
