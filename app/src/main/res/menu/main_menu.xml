@@ -4,19 +4,19 @@
     <group>
         <item
             android:id="@+id/nav_home"
-            android:icon="@drawable/pocketchef_logo"
+            android:icon="@drawable/ic_home"
             android:title="Home" />
         <item
             android:id="@+id/nav_recipes"
-            android:icon="@drawable/pocketchef_logo"
+            android:icon="@drawable/ic_recipes"
             android:title="Recipes" />
         <item
             android:id="@+id/nav_search"
-            android:icon="@drawable/pocketchef_logo"
+            android:icon="@drawable/ic_search_menu"
             android:title="Advanced Search" />
         <item
             android:id="@+id/nav_shoppinglist"
-            android:icon="@drawable/pocketchef_logo"
+            android:icon="@drawable/ic_shopping_list"
             android:title="shopping list" />
     </group>
         <item android:title="Profile">
@@ -24,15 +24,15 @@
                 <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/nav_login"
-                    android:icon="@drawable/pocketchef_logo"
+                    android:icon="@drawable/ic_login"
                     android:title="Login" />
                 <item
                     android:id="@+id/nav_profile"
-                    android:icon="@drawable/pocketchef_logo"
+                    android:icon="@drawable/ic_profile"
                     android:title="Profile" />
                 <item
                     android:id="@+id/nav_logout"
-                    android:icon="@drawable/pocketchef_logo"
+                    android:icon="@drawable/ic_logout"
                     android:title="Logout" />
                 </group>
             </menu>

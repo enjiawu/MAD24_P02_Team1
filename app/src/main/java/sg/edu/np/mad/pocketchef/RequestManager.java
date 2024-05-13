@@ -14,10 +14,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
-
 import sg.edu.np.mad.pocketchef.Listener.RdmRecipeRespListener;
 import sg.edu.np.mad.pocketchef.Listener.RecipeDetailsListener;
-import sg.edu.np.mad.pocketchef.Models.InstructionsResponse;
 import sg.edu.np.mad.pocketchef.Models.RandomRecipeApiResponse;
 import sg.edu.np.mad.pocketchef.Models.RecipeDetailsResponse;
 

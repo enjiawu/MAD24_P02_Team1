@@ -42,6 +42,7 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
     private final List<String> tags = new ArrayList<>();
     private SearchView searchView;
     private ProgressBar progressBar;
+    private int previousScrollPosition = 0;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     MaterialToolbar toolbar;
@@ -120,13 +121,15 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if (hasScrolledEnough()) {
+                if (dy > 0 && hasScrolledEnough()) { // Scrolling downwards
                     transitionMotionLayoutToEnd();
+                } else if (dy < 0 && shouldTransitionToStart()) { // Scrolling upwards
+                    transitionMotionLayoutToStart();
                 }
             }
         });
     }
-
+    // Methods for scrolling function, transition motion layout
     private boolean hasScrolledEnough() {
         LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
         if (layoutManager != null && recyclerView.getAdapter() != null) {
@@ -136,6 +139,25 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
         return false;
     }
 
+    private boolean shouldTransitionToStart() {
+        LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+        if (layoutManager != null) {
+            int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+            return firstVisibleItemPosition <= SCROLL_THRESHOLD;
+        }
+        return false;
+    }
+    private void transitionMotionLayoutToEnd() {
+        MotionLayout motionLayout = findViewById(R.id.main);
+        motionLayout.transitionToEnd();
+    }
+
+    private void transitionMotionLayoutToStart() {
+        MotionLayout motionLayout = findViewById(R.id.main);
+        motionLayout.transitionToStart();
+    }
+    // Methods to call API
+    // Methods to fetch RandomRecipes
     private void fetchRandomRecipes() {
         progressBar.setVisibility(View.VISIBLE);
         requestManager.getRandomRecipes(new RdmRecipeRespListener() {
@@ -160,12 +182,9 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
         recyclerView.setAdapter(randomRecipeAdapter);
     }
 
-    private void transitionMotionLayoutToEnd() {
-        MotionLayout motionLayout = findViewById(R.id.main);
-        motionLayout.transitionToEnd();
-    }
     private final RecipeClickListener recipeClickListener = id -> startActivity(new Intent(RecipeActivity.this, RecipeDetailsActivity.class)
             .putExtra(EXTRA_RECIPE_ID, id));
+
     @Override
     public void onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -174,6 +193,7 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
             super.onBackPressed();
         }
     }
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         int itemId = menuItem.getItemId();
