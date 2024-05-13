@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">pocketchef</string>
     <string name="api_key">0ec6a3b6c99649ac89f7119854b7fbae</string>
+    <string name="source">Source</string>
     <string name="textView_title_text">Pocket Chef</string>
     <string name="textView_title_subtitle">Recipes at your fingertips</string>
     <string name="navigation_drawer_open">Open Nav Drawer</string>"
