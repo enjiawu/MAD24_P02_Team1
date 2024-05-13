@@ -16,8 +16,8 @@ import sg.edu.np.mad.pocketchef.Models.InstructionsResponse;
 import sg.edu.np.mad.pocketchef.R;
 
 public class InstructionsAdapter extends RecyclerView.Adapter<InstructionsViewHolder> {
-    Context context;
-    List<InstructionsResponse> list;
+    final Context context;
+    final List<InstructionsResponse> list;
 
     public InstructionsAdapter(Context context, List<InstructionsResponse> list) {
         this.context = context;
@@ -47,8 +47,8 @@ public class InstructionsAdapter extends RecyclerView.Adapter<InstructionsViewHo
 }
 
 class InstructionsViewHolder extends RecyclerView.ViewHolder {
-    TextView textView_instruction_name;
-    RecyclerView recycler_instruction_steps;
+    final TextView textView_instruction_name;
+    final RecyclerView recycler_instruction_steps;
     public InstructionsViewHolder(@NonNull View itemView) {
         super(itemView);
         textView_instruction_name = itemView.findViewById(R.id.textView_instruction_name);

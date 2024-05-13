@@ -16,8 +16,8 @@ import sg.edu.np.mad.pocketchef.Models.Step;
 import sg.edu.np.mad.pocketchef.R;
 
 public class InstructionStepAdapter extends RecyclerView.Adapter<InstructionStepViewHolder>{
-    Context context;
-    List<Step> list;
+    final Context context;
+    final List<Step> list;
 
     public InstructionStepAdapter(Context context, List<Step> list) {
         this.context = context;
@@ -53,8 +53,10 @@ public class InstructionStepAdapter extends RecyclerView.Adapter<InstructionStep
 }
 
 class InstructionStepViewHolder extends RecyclerView.ViewHolder {
-    TextView textView_instructions_step_number, textView_instructions_step_title;
-    RecyclerView recycler_instruction_equipments, recycler_instruction_ingredients;
+    final TextView textView_instructions_step_number;
+    final TextView textView_instructions_step_title;
+    final RecyclerView recycler_instruction_equipments;
+    final RecyclerView recycler_instruction_ingredients;
     public InstructionStepViewHolder(@NonNull View itemView) {
         super(itemView);
         textView_instructions_step_number = itemView.findViewById(R.id.textView_instructions_step_number);

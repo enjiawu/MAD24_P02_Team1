@@ -20,9 +20,9 @@ import sg.edu.np.mad.pocketchef.Models.SimilarRecipeResponse;
 import sg.edu.np.mad.pocketchef.R;
 
 public class SimilarRecipeAdapter extends RecyclerView.Adapter<SimilarRecipeViewHolder> {
-    Context context;
-    List<SimilarRecipeResponse> list;
-    RecipeClickListener listener;
+    final Context context;
+    final List<SimilarRecipeResponse> list;
+    final RecipeClickListener listener;
 
     public SimilarRecipeAdapter(Context context, List<SimilarRecipeResponse> list, RecipeClickListener listener) {
         this.context = context;
@@ -64,9 +64,10 @@ public class SimilarRecipeAdapter extends RecyclerView.Adapter<SimilarRecipeView
 }
 
 class SimilarRecipeViewHolder extends RecyclerView.ViewHolder {
-    CardView similar_recipe_holder;
-    TextView textView_similar_recipe_title, textView_similar_recipe_servings;
-    ImageView imageView_similar_recipe;
+    final CardView similar_recipe_holder;
+    final TextView textView_similar_recipe_title;
+    final TextView textView_similar_recipe_servings;
+    final ImageView imageView_similar_recipe;
 
     public SimilarRecipeViewHolder(@NonNull View itemView) {
         super(itemView);

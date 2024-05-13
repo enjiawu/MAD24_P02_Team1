@@ -31,6 +31,8 @@
     <string name="textView_meal_servings_textEnd">" Servings"</string>
     <string name="textView_meal_ready_textEnd">" Minutes"</string>
     <string name="textView_meal_price_textEnd">" $ per serving"</string>
+    <string name="textView_header_title_text">PocketChef</string>
+    <string name="textView_header_subtitle_text">Recipe at your fingertips</string>
     <string-array name="tags">
         <item>main course</item>
         <item>side dish</item>

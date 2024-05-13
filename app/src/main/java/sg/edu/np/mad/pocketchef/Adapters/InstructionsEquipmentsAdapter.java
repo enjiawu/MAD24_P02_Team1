@@ -18,8 +18,8 @@ import sg.edu.np.mad.pocketchef.Models.Equipment;
 import sg.edu.np.mad.pocketchef.R;
 
 public class InstructionsEquipmentsAdapter extends RecyclerView.Adapter<InstructionsEquipmentsViewHolder> {
-    Context context;
-    List<Equipment> list;
+    final Context context;
+    final List<Equipment> list;
 
     public InstructionsEquipmentsAdapter(Context context, List<Equipment> list) {
         this.context = context;
@@ -53,8 +53,8 @@ public class InstructionsEquipmentsAdapter extends RecyclerView.Adapter<Instruct
 }
 
 class InstructionsEquipmentsViewHolder extends RecyclerView.ViewHolder {
-    ImageView imageView_instructions_step_items;
-    TextView textView_instructions_step_item;
+    final ImageView imageView_instructions_step_items;
+    final TextView textView_instructions_step_item;
     public InstructionsEquipmentsViewHolder(@NonNull View itemView) {
         super(itemView);
         imageView_instructions_step_items = itemView.findViewById(R.id.imageView_instructions_step_items);
