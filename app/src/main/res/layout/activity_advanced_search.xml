@@ -59,7 +59,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="20"
-            android:inputType="number"
             android:padding="2dp"
             android:hint="@string/search_by_name_hint"
             android:textColorHint="#9E9E9E"
@@ -86,7 +85,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:ems="15"
-            android:inputType="number"
             android:padding="2dp"
             android:hint="@string/exclude_ingredients_hint"
             android:layout_marginLeft="9dp"
@@ -278,37 +276,37 @@
             app:layout_constraintStart_toEndOf="@+id/dietText"
             app:layout_constraintTop_toBottomOf="@+id/maxCalories" />
 
-        <!-- Intolerences -->
+        <!-- Intolerances -->
         <TextView
-            android:id="@+id/intolerencesText"
+            android:id="@+id/intolerancesText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
             android:layout_marginRight="20dp"
-            android:text="@string/intolerences"
-            app:layout_constraintEnd_toStartOf="@+id/intolerences_spinner"
+            android:text="@string/intolerances"
+            app:layout_constraintEnd_toStartOf="@+id/intolerances_spinner"
             app:layout_constraintTop_toBottomOf="@+id/minCalories" />
         <Spinner
-            android:id="@+id/intolerences_spinner"
+            android:id="@+id/intolerances_spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
             android:layout_marginRight="40dp"
             android:background="@color/white"
-            android:entries="@array/intolerencesArray"
+            android:entries="@array/intolerancesArray"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/maxCalories" />
 
         <!--Search Button-->
         <Button
-            android:id="@+id/button"
+            android:id="@+id/searchButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/search"
             android:layout_marginTop="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/intolerencesText" />
+            app:layout_constraintTop_toBottomOf="@+id/intolerancesText" />
 
 
             <androidx.recyclerview.widget.RecyclerView
@@ -325,16 +323,14 @@
                 app:layout_constraintStart_toStartOf="parent" />
         </androidx.constraintlayout.motion.widget.MotionLayout>
 
-        <!--
         <ProgressBar
             android:id="@+id/progressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintVertical_bias="0.5" />
-        -->
 
     </FrameLayout>
 

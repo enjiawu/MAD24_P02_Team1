@@ -77,74 +77,21 @@ public class RequestManager {
     }
 
     //Method to call API for searched recipes
-    public void getSearchedRecipes(SearchRecipeListener listener, String query, String excludeIngredients, int minCarbs, int maxCarbs, int minProtein, int maxProtein, int minCalories, int maxCalories, String diet,  String intolereneces){
-
-        /*
-        HashMap<String, String> queryParams = new HashMap<>();
-
-        //Making sure that only queries with user inputs get put into the API calling
-        if (query != null && !query.isEmpty()){
-            queryParams.put("query", query);
-        }
-
-        if (excludeIngredients != null && !excludeIngredients.isEmpty()){
-            queryParams.put("query", query);
-        }
-
-        if (isValidNumber(minCarbs)){
-            queryParams.put("query", query);
-        }
-
-        if (isValidNumber(maxCarbs)){
-            queryParams.put("query", query);
-        }
-
-        if (isValidNumber(minProtein))
-        {
-            queryParams.put("query", query);
-        }
-
-        if (isValidNumber(maxProtein)){
-            queryParams.put("query", query);
-        }
-
-        if (isValidNumber(minCalories)){
-            queryParams.put("query", query);
-        }
-
-        if (isValidNumber(maxCalories)){
-            queryParams.put("query", query);
-        }
-
-        if (diet != null && !diet.isEmpty() && diet!="None"){
-            queryParams.put("query", query);
-        }
-
-        if (intolereneces != null && !intolereneces.isEmpty() && diet!="None"){
-            queryParams.put("query", query);
-        }*/
+    public void getSearchedRecipes(SearchRecipeListener listener, String query, String excludeIngredients, Integer minCarbs, Integer maxCarbs, Integer minProtein, Integer maxProtein, Integer minCalories, Integer maxCalories, String diet,  String intolerances){
 
         CallSearchedRecipes callSearchedRecipes = retrofit.create(CallSearchedRecipes.class);
         Call<SearchedRecipeApiResponse> call = callSearchedRecipes.callSearchedRecipes(context.getString(R.string.api_key),
-                query != null && !query.isEmpty() ? "query" : null,  // Include query if not empty
-                excludeIngredients != null && !excludeIngredients.isEmpty() ? "excludeIngredients" : null,
-                minCarbs != null ? "minCarbs" : null,  // Include minCarbs if not null
-                maxCarbs != null ? "maxCarbs" : null,  // Include maxCarbs if not null
-
+                query != null && !query.isEmpty() ? query : null,  // Include query if not empty
+                excludeIngredients != null && !excludeIngredients.isEmpty() ? excludeIngredients : null,
+                minCarbs != null ? minCarbs : 0,  // Include minCarbs if not min value
+                maxCarbs != null ? maxCarbs : 2147483647,  // Include maxCarbs if not max value
+                minCalories != null ? minCalories : 2147483647,
+                maxCalories != null ? maxCalories : 2147483647,
+                minProtein != null ? minProtein : 2147483647,
+                maxProtein != null ? maxProtein : 2147483647,
+                diet != null && !diet.isEmpty() && diet != "None" ? diet : null,
+                intolerances != null && !intolerances.isEmpty() && intolerances != "None" ? intolerances : null
                 );
-
-    }
-    private boolean isValidNumber(String num){ //To make sure that number inputs are numbers and not empty
-        if (num == null || num.isEmpty()) {
-            return false;
-        }
-
-        try {
-            int intValue = Integer.parseInt(num);
-            return intValue >= 0; // Check for non-negative
-        } catch (NumberFormatException e) {
-            return false;
-        }
     }
 
     // Method to GET random recipes from API
@@ -171,7 +118,16 @@ public class RequestManager {
         @GET("recipes/complexSearch")
         Call<SearchedRecipeApiResponse> callSearchedRecipes(
                 @Query("apiKey") String apiKey,
-                @Query("query") String apple
+                @Query("query") String query,
+                @Query("excludeIngredients") String excludeIngredients,
+                @Query("minCarbs") int minCarbs,
+                @Query("maxCarbs") int maxCarbs,
+                @Query("minProtein") int minProtein,
+                @Query("maxProtein") int maxProtein,
+                @Query("minCalories") int minCalories,
+                @Query("maxCalories") int maxCalories,
+                @Query("diet") String diet,
+                @Query("intolerances") String intolerances
         );
     }
 }

@@ -47,8 +47,6 @@
         <item>drink</item>
     </string-array>
 
-    <String name = "apple">apple</String>
-
     <!-- Advanced Searching String -->
     <string name="advanced_searching_title">Advanced Searching</string>
     <string name="search_by_name">Name </string>
@@ -77,8 +75,8 @@
         <item>Whole30</item>
     </string-array>
 
-    <string name="intolerences">Intolerences</string>
-    <string-array name="intolerencesArray">
+    <string name="intolerances">Intolerances</string>
+    <string-array name="intolerancesArray">
         <item>None</item>
         <item>Dairy</item>
         <item>Egg</item>
