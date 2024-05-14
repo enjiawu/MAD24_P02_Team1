@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">pocketchef</string>
-    <string name="api_key">0ec6a3b6c99649ac89f7119854b7fbae</string>
+    <string name="api_key">5010e5d6fd164cadb42db2f7b025db4c</string>
     <string name="textView_title_text">Pocket Chef</string>
     <string name="textView_title_subtitle">Recipes at your fingertips</string>
     <string name="navigation_drawer_open">Open Nav Drawer</string>"
@@ -46,4 +46,63 @@
         <item>snack</item>
         <item>drink</item>
     </string-array>
+
+    <String name = "apple">apple</String>
+
+    <!-- Advanced Searching String -->
+    <string name="advanced_searching_title">Advanced Searching</string>
+    <string name="search_by_name">Name </string>
+    <string name="exclude_ingredients">Exclude Ingredients</string>
+    <string name="min_carbs">Min Carbs</string>
+    <string name="max_carbs">Max Carbs</string>
+    <string name="min_protein">Min Protein</string>
+    <string name="max_protein">Max Protein</string>
+    <string name="min_calories">Min Calories</string>
+    <string name="max_calories">Max Calorie</string>
+    <string name="search">Search</string>
+
+    <string name="diet">Diet</string>
+    <string-array name="dietArray">
+        <item>None</item>
+        <item>Gluten Free</item>
+        <item>Ketogenic</item>
+        <item>Vegetarian</item>
+        <item>Lacto-Vegetarian</item>
+        <item>Ovo-Vegetarian</item>
+        <item>Vegan</item>
+        <item>Pescetarian</item>
+        <item>Paleo</item>
+        <item>Primal</item>
+        <item>Low FODMAP</item>
+        <item>Whole30</item>
+    </string-array>
+
+    <string name="intolerences">Intolerences</string>
+    <string-array name="intolerencesArray">
+        <item>None</item>
+        <item>Dairy</item>
+        <item>Egg</item>
+        <item>Gluten</item>
+        <item>Grain</item>
+        <item>Peanut</item>
+        <item>Seafood</item>
+        <item>Sesame</item>
+        <item>Shellfish</item>
+        <item>Soy</item>
+        <item>Sulfite</item>
+        <item>Tree Nut</item>
+        <item>Wheat</item>
+    </string-array>
+
+    <!-- Hints -->
+    <string name = "search_by_name_hint">Apple pie</string>
+    <string name = "exclude_ingredients_hint">tomtato,cheese (comma-separated)</string>
+    <string name = "min_carbs_hint">10</string>
+    <string name = "max_carbs_hint">100</string>
+    <string name = "min_protein_hint">10</string>
+    <string name = "max_protein_hint">100</string>
+    <string name = "min_calories_hint">50</string>
+    <string name = "max_calories_hint">800</string>
+
+
 </resources>

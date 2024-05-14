@@ -4,7 +4,9 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.StringJoiner;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -16,8 +18,10 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 import sg.edu.np.mad.pocketchef.Listener.RdmRecipeRespListener;
 import sg.edu.np.mad.pocketchef.Listener.RecipeDetailsListener;
+import sg.edu.np.mad.pocketchef.Listener.SearchRecipeListener;
 import sg.edu.np.mad.pocketchef.Models.RandomRecipeApiResponse;
 import sg.edu.np.mad.pocketchef.Models.RecipeDetailsResponse;
+import sg.edu.np.mad.pocketchef.Models.SearchedRecipeApiResponse;
 
 public class RequestManager {
     Context context;
@@ -72,6 +76,77 @@ public class RequestManager {
         });
     }
 
+    //Method to call API for searched recipes
+    public void getSearchedRecipes(SearchRecipeListener listener, String query, String excludeIngredients, int minCarbs, int maxCarbs, int minProtein, int maxProtein, int minCalories, int maxCalories, String diet,  String intolereneces){
+
+        /*
+        HashMap<String, String> queryParams = new HashMap<>();
+
+        //Making sure that only queries with user inputs get put into the API calling
+        if (query != null && !query.isEmpty()){
+            queryParams.put("query", query);
+        }
+
+        if (excludeIngredients != null && !excludeIngredients.isEmpty()){
+            queryParams.put("query", query);
+        }
+
+        if (isValidNumber(minCarbs)){
+            queryParams.put("query", query);
+        }
+
+        if (isValidNumber(maxCarbs)){
+            queryParams.put("query", query);
+        }
+
+        if (isValidNumber(minProtein))
+        {
+            queryParams.put("query", query);
+        }
+
+        if (isValidNumber(maxProtein)){
+            queryParams.put("query", query);
+        }
+
+        if (isValidNumber(minCalories)){
+            queryParams.put("query", query);
+        }
+
+        if (isValidNumber(maxCalories)){
+            queryParams.put("query", query);
+        }
+
+        if (diet != null && !diet.isEmpty() && diet!="None"){
+            queryParams.put("query", query);
+        }
+
+        if (intolereneces != null && !intolereneces.isEmpty() && diet!="None"){
+            queryParams.put("query", query);
+        }*/
+
+        CallSearchedRecipes callSearchedRecipes = retrofit.create(CallSearchedRecipes.class);
+        Call<SearchedRecipeApiResponse> call = callSearchedRecipes.callSearchedRecipes(context.getString(R.string.api_key),
+                query != null && !query.isEmpty() ? "query" : null,  // Include query if not empty
+                excludeIngredients != null && !excludeIngredients.isEmpty() ? "excludeIngredients" : null,
+                minCarbs != null ? "minCarbs" : null,  // Include minCarbs if not null
+                maxCarbs != null ? "maxCarbs" : null,  // Include maxCarbs if not null
+
+                );
+
+    }
+    private boolean isValidNumber(String num){ //To make sure that number inputs are numbers and not empty
+        if (num == null || num.isEmpty()) {
+            return false;
+        }
+
+        try {
+            int intValue = Integer.parseInt(num);
+            return intValue >= 0; // Check for non-negative
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
     // Method to GET random recipes from API
     private interface CallRandomRecipes {
         @GET("recipes/random")
@@ -88,6 +163,15 @@ public class RequestManager {
         Call<RecipeDetailsResponse> callRecipeDetails(
                 @Path("id") int id,
                 @Query("apiKey") String apiKey
+        );
+    }
+
+    // Method to GET searched recipes from API, based on queries passed entered by user
+    private interface CallSearchedRecipes {
+        @GET("recipes/complexSearch")
+        Call<SearchedRecipeApiResponse> callSearchedRecipes(
+                @Query("apiKey") String apiKey,
+                @Query("query") String apple
         );
     }
 }

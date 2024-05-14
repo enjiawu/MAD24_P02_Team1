@@ -1,10 +1,343 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AdvancedSearchActivity">
+    android:fitsSystemWindows="true"
+    tools:context=".MainActivity"
+    tools:openDrawer="start">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:headerLayout="@layout/header"
+        app:menu="@menu/main_menu" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.motion.widget.MotionLayout
+            android:id="@+id/main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/paletteorange"
+            android:clipToPadding="false"
+            app:layoutDescription="@xml/recipe_activity_scene"
+            tools:context=".RecipeActivity">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/paletteblue"
+            android:minHeight="?attr/actionBarSize"
+            app:contentInsetStart="0dp"
+            app:contentInsetStartWithNavigation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/ic_launcher_foreground" />
+
+         <!-- Search By Name -->
+        <TextView
+            android:id="@+id/searchByNameText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/search_by_name"
+            android:layout_marginLeft="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+        <EditText
+            android:id="@+id/searchByName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="20"
+            android:inputType="number"
+            android:padding="2dp"
+            android:hint="@string/search_by_name_hint"
+            android:textColorHint="#9E9E9E"
+            android:textSize="12dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginLeft="20dp"
+            app:layout_constraintStart_toEndOf="@id/searchByNameText"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+        <!-- Exclude Ingredients -->
+        <TextView
+            android:id="@+id/excludeIngredientsText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/exclude_ingredients"
+            android:layout_marginLeft="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/searchByName" />
+
+        <EditText
+            android:id="@+id/excludeIngredients"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:ems="15"
+            android:inputType="number"
+            android:padding="2dp"
+            android:hint="@string/exclude_ingredients_hint"
+            android:layout_marginLeft="9dp"
+            android:textSize="12dp"
+            android:textColorHint="#9E9E9E"
+            app:layout_constraintStart_toEndOf="@+id/excludeIngredientsText"
+            app:layout_constraintTop_toBottomOf="@+id/searchByName" />
+
+        <!-- Carbs -->
+        <TextView
+            android:id="@+id/minCarb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/min_carbs"
+            android:layout_marginLeft="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/excludeIngredientsText" />
+
+        <EditText
+            android:id="@+id/editMinCarbs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="2dp"
+            android:inputType="number"
+            android:hint="@string/min_carbs_hint"
+            android:ems="4"
+            android:textAlignment="center"
+            android:textSize="12dp"
+            android:textColorHint="#9E9E9E"
+            android:layout_marginTop="16dp"
+            android:layout_marginLeft="22dp"
+            app:layout_constraintStart_toEndOf="@+id/minCarb"
+            app:layout_constraintTop_toBottomOf="@+id/excludeIngredientsText"/>
+
+        <TextView
+            android:id="@+id/maxCarb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"
+            android:text="@string/max_carbs"
+            app:layout_constraintEnd_toStartOf="@+id/editMaxCarbs"
+            app:layout_constraintTop_toBottomOf="@+id/excludeIngredientsText"/>
+
+        <EditText
+            android:id="@+id/editMaxCarbs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:inputType="number"
+            android:padding="2dp"
+            android:hint="@string/max_carbs_hint"
+            android:ems="4"
+            android:textSize="12dp"
+            android:textAlignment="center"
+            android:textColorHint="#9E9E9E"
+            android:layout_marginRight="60dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/excludeIngredientsText"/>
+
+        <!-- Protein -->
+        <TextView
+            android:id="@+id/minProtein"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="18dp"
+            android:text="@string/min_protein"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/minCarb" />
+
+        <EditText
+            android:id="@+id/editMinProtein"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="2dp"
+            android:inputType="number"
+            android:hint="@string/min_protein_hint"
+            android:ems="4"
+            android:textSize="12dp"
+            android:textColorHint="#9E9E9E"
+            android:textAlignment="center"
+            android:layout_marginTop="14dp"
+            android:layout_marginLeft="15dp"
+            app:layout_constraintStart_toEndOf="@+id/minProtein"
+            app:layout_constraintTop_toBottomOf="@+id/minCarb" />
+
+        <TextView
+            android:id="@+id/maxProtein"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:text="@string/max_protein"
+            android:layout_marginRight="13dp"
+            app:layout_constraintEnd_toStartOf="@+id/editMaxProtein"
+            app:layout_constraintTop_toBottomOf="@+id/minCarb" />
+
+        <EditText
+            android:id="@+id/editMaxProtein"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:hint="@string/max_protein_hint"
+            android:ems="4"
+            android:textSize="12dp"
+            android:textColorHint="#9E9E9E"
+            android:textAlignment="center"
+            android:inputType="number"
+            android:padding="2dp"
+            android:layout_marginRight="60dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/minCarb" />
+
+
+        <!-- Calories -->
+        <TextView
+            android:id="@+id/minCalories"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="18dp"
+            android:text="@string/min_calories"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/minProtein" />
+
+        <EditText
+            android:id="@+id/editMinCalories"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/min_calories_hint"
+            android:ems="4"
+            android:textSize="12dp"
+            android:textColorHint="#9E9E9E"
+            android:textAlignment="center"
+            android:padding="2dp"
+            android:inputType="number"
+            android:layout_marginTop="14dp"
+            android:layout_marginLeft="10dp"
+            app:layout_constraintStart_toEndOf="@+id/minCalories"
+            app:layout_constraintTop_toBottomOf="@+id/minProtein" />
+
+        <TextView
+            android:id="@+id/maxCalories"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:layout_marginRight="13dp"
+            android:text="@string/max_calories"
+            app:layout_constraintEnd_toStartOf="@+id/editMaxCalories"
+            app:layout_constraintTop_toBottomOf="@+id/minProtein" />
+
+        <EditText
+            android:id="@+id/editMaxCalories"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:hint="@string/max_calories_hint"
+            android:ems="4"
+            android:textSize="12dp"
+            android:textColorHint="#9E9E9E"
+            android:textAlignment="center"
+            android:inputType="number"
+            android:padding="2dp"
+            android:layout_marginRight="60dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/minProtein" />
+
+        <!-- Diet -->
+        <TextView
+            android:id="@+id/dietText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:layout_marginRight="13dp"
+            android:text="@string/diet"
+            android:layout_marginLeft="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/minCalories" />
+
+        <Spinner
+            android:id="@+id/diet_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:layout_marginLeft="20dp"
+            android:background="@color/white"
+            android:entries="@array/dietArray"
+            app:layout_constraintStart_toEndOf="@+id/dietText"
+            app:layout_constraintTop_toBottomOf="@+id/maxCalories" />
+
+        <!-- Intolerences -->
+        <TextView
+            android:id="@+id/intolerencesText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:layout_marginRight="20dp"
+            android:text="@string/intolerences"
+            app:layout_constraintEnd_toStartOf="@+id/intolerences_spinner"
+            app:layout_constraintTop_toBottomOf="@+id/minCalories" />
+        <Spinner
+            android:id="@+id/intolerences_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:layout_marginRight="40dp"
+            android:background="@color/white"
+            android:entries="@array/intolerencesArray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/maxCalories" />
+
+        <!--Search Button-->
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/search"
+            android:layout_marginTop="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/intolerencesText" />
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_searched_recipes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_marginBottom="400dp"
+                android:paddingTop="30dp"
+                app:layout_constraintBottom_toBottomOf="@id/main"
+                app:layout_constraintDimensionRatio="w:16:9"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.444"
+                app:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.motion.widget.MotionLayout>
+
+        <!--
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="visible"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintVertical_bias="0.5" />
+        -->
+
+    </FrameLayout>
+
+
+
+</androidx.drawerlayout.widget.DrawerLayout>
