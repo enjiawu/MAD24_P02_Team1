@@ -2,7 +2,9 @@ package sg.edu.np.mad.pocketchef;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.GestureDetector;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -13,6 +15,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.graphics.Insets;
 import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
@@ -22,6 +25,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.navigation.NavigationView;
 import com.squareup.picasso.Picasso;
 
@@ -32,6 +36,7 @@ import sg.edu.np.mad.pocketchef.Adapters.IngredientsAdapater;
 import sg.edu.np.mad.pocketchef.Adapters.InstructionsAdapter;
 import sg.edu.np.mad.pocketchef.Adapters.SimilarRecipeAdapter;
 import sg.edu.np.mad.pocketchef.Listener.InstructionsListener;
+import sg.edu.np.mad.pocketchef.Listener.OnSwipeTouchListener;
 import sg.edu.np.mad.pocketchef.Listener.RecipeClickListener;
 import sg.edu.np.mad.pocketchef.Listener.RecipeDetailsListener;
 import sg.edu.np.mad.pocketchef.Listener.SimilarRecipesListener;
@@ -56,6 +61,8 @@ public class RecipeDetailsActivity extends AppCompatActivity implements Navigati
     NavigationView navigationView;
     MaterialToolbar toolbar;
     MenuItem nav_home, nav_recipes, nav_search;
+    ConstraintLayout recipeDetailsLayout;
+    MaterialButton buttonNutritionLabel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +92,15 @@ public class RecipeDetailsActivity extends AppCompatActivity implements Navigati
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(RecipeDetailsActivity.this);
         navigationView.setCheckedItem(nav_home);
+        // Set up onButtonClickListener
+        buttonNutritionLabel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(RecipeDetailsActivity.this, NutritionDialogActivity.class);
+                intent.putExtra("RECIPE_ID", id);
+                startActivity(intent);
+            }
+        });
     }
 
     // Intialise objects
@@ -116,6 +132,9 @@ public class RecipeDetailsActivity extends AppCompatActivity implements Navigati
         nav_home = navigationView.getMenu().findItem(R.id.nav_home);
         nav_recipes = navigationView.getMenu().findItem(R.id.nav_recipes);
         nav_search = navigationView.getMenu().findItem(R.id.nav_search);
+        recipeDetailsLayout = findViewById(R.id.recipe_details);
+        // Intialise Button
+        buttonNutritionLabel = findViewById(R.id.button_Nutrition_Label);
     }
 
     // Implementing the recipeDetailsListener

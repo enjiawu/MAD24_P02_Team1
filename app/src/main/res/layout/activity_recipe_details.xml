@@ -6,8 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".MainActivity"
-    tools:openDrawer="start">
+    tools:context=".MainActivity">
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
@@ -28,7 +27,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/paletteorange"
-            tools:context=".RecipeDetailsActivity">
+            tools:context=".RecipeDetailsActivity"
+            android:id="@+id/recipe_details"
+            android:clickable="true"
+            android:focusable="true">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
@@ -197,6 +199,19 @@
                             android:textSize="18sp"
                             android:textStyle="normal" />
                     </GridLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/button_Nutrition_Label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:outlineAmbientShadowColor="@color/paletteorange"
+                        android:outlineSpotShadowColor="@color/paletteorange"
+                        android:padding="8dp"
+                        android:text="View Nutrition Info"
+                        android:fontFamily="@font/montserrat"
+                        android:backgroundTint="@color/paletteorange"
+                        android:textColor="@color/palettetext"/>
 
                     <TextView
                         android:id="@+id/textView_meal_servings"
