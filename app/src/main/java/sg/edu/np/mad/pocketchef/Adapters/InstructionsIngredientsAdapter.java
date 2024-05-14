@@ -41,8 +41,10 @@ public class InstructionsIngredientsAdapter extends RecyclerView.Adapter<Instruc
         } else {
             holder.textView_instructions_step_item.setText(list.get(position).name);
             holder.textView_instructions_step_item.setSelected(true);
-            Picasso.get().load("https://spoonacular.com/cdn/ingredients_100x100/" + list.get(position).image).into(holder.imageView_instructions_step_items);
-            holder.imageView_instructions_step_items.setVisibility(View.VISIBLE);
+            Picasso.get().load("https://img.spoonacular.com/ingredients_100x100/" + list.get(position).image)
+                    .fit()
+                    .centerCrop()
+                    .into(holder.imageView_instructions_step_items);
         }
     }
 

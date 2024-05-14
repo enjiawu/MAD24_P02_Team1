@@ -212,6 +212,36 @@
                         android:fontFamily="@font/montserrat"
                         android:backgroundTint="@color/paletteorange"
                         android:textColor="@color/palettetext"/>
+                    <!-- Nutrition Dialog Layout -->
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/nutrition_dialog_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="visible"
+                        android:padding="16dp">
+
+                        <!-- Title TextView -->
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/textView_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/montserrat"
+                            android:text="@string/textView_nutritiondialog_title"
+                            android:textAlignment="center"
+                            android:textColor="@color/palettedarkblue"
+                            android:textSize="24sp"
+                            app:layout_constraintTop_toTopOf="parent"/>
+
+                        <!-- Nutrition Label ImageView -->
+                        <ImageView
+                            android:id="@+id/imageView_nutrition"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:scaleType="fitCenter"
+                            app:layout_constraintTop_toBottomOf="@id/textView_title"
+                            android:src="@drawable/ic_launcher_foreground"/>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <TextView
                         android:id="@+id/textView_meal_servings"

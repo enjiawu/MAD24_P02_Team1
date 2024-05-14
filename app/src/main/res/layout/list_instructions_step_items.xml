@@ -14,11 +14,12 @@
 
         <ImageView
             android:id="@+id/imageView_instructions_step_items"
-            android:layout_width="100dp"
-            android:layout_height="60dp"
+            android:layout_width="80dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:contentDescription="@string/imageView_instruction_step_items_Image"
-            android:scaleType="center"
-            android:src="@drawable/ic_launcher_foreground"/>
+            android:scaleType="center" />
 
         <TextView
             android:id="@+id/textView_instructions_step_item"

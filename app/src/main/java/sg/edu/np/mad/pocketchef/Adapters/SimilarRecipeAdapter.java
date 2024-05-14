@@ -52,7 +52,7 @@ public class SimilarRecipeAdapter extends RecyclerView.Adapter<SimilarRecipeView
             SimilarRecipeResponse recipe = list.get(position);
             holder.textView_similar_recipe_title.setText(recipe.title);
             holder.textView_similar_recipe_servings.setText(recipe.servings + context.getString(R.string.textView_similar_recipe_servings_textEnd));
-            Picasso.get().load("https://img.spoonacular.com/recipeImages/" + recipe.id + "-556x370." + recipe.imageType).into(holder.imageView_similar_recipe);
+            Picasso.get().load("https://spoonacular.com/recipeImages/" + recipe.id + "-556x370." + recipe.imageType).into(holder.imageView_similar_recipe);
             holder.similar_recipe_holder.setOnClickListener(v -> listener.onRecipeClicked(String.valueOf(recipe.id)));
         }
     }
