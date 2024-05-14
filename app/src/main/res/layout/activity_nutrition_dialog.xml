@@ -1,0 +1,40 @@
+<!-- Main Content Area -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/nutrition_dialog_activity"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/palettebeige">
+        <!-- Title TextView -->
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/textView_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/montserrat"
+            android:text="@string/textView_nutritiondialog_title"
+            android:textAlignment="center"
+            android:textColor="@color/palettedarkblue"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <!-- Nutrition Label ImageView -->
+        <ImageView
+            android:id="@+id/imageView_nutrition"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="36dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="36dp"
+            android:layout_marginBottom="16dp"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView_title"
+            android:src="@drawable/ic_launcher_foreground"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
