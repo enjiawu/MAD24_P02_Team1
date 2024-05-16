@@ -1,6 +1,7 @@
 package sg.edu.np.mad.pocketchef;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -77,21 +78,38 @@ public class RequestManager {
     }
 
     //Method to call API for searched recipes
-    public void getSearchedRecipes(SearchRecipeListener listener, String query, String excludeIngredients, Integer minCarbs, Integer maxCarbs, Integer minProtein, Integer maxProtein, Integer minCalories, Integer maxCalories, String diet,  String intolerances){
+    public void getSearchedRecipes(SearchRecipeListener listener, String query, String excludeIngredients, int minCarbs, int maxCarbs, int minProtein, int maxProtein, int minCalories, int maxCalories, String diet,  String intolerances){
 
         CallSearchedRecipes callSearchedRecipes = retrofit.create(CallSearchedRecipes.class);
         Call<SearchedRecipeApiResponse> call = callSearchedRecipes.callSearchedRecipes(context.getString(R.string.api_key),
-                query != null && !query.isEmpty() ? query : null,  // Include query if not empty
-                excludeIngredients != null && !excludeIngredients.isEmpty() ? excludeIngredients : null,
-                minCarbs != null ? minCarbs : 0,  // Include minCarbs if not min value
-                maxCarbs != null ? maxCarbs : 2147483647,  // Include maxCarbs if not max value
-                minCalories != null ? minCalories : 2147483647,
-                maxCalories != null ? maxCalories : 2147483647,
-                minProtein != null ? minProtein : 2147483647,
-                maxProtein != null ? maxProtein : 2147483647,
-                diet != null && !diet.isEmpty() && diet != "None" ? diet : null,
-                intolerances != null && !intolerances.isEmpty() && intolerances != "None" ? intolerances : null
+                query,
+                excludeIngredients,
+                minCarbs,
+                maxCarbs,
+                minCalories,
+                maxCalories,
+                minProtein,
+                maxProtein,
+                diet,
+                intolerances
                 );
+        call.enqueue(new Callback<SearchedRecipeApiResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<SearchedRecipeApiResponse> call, @NonNull Response<SearchedRecipeApiResponse> response) {
+                if (!response.isSuccessful()) {
+                    listener.didError(response.message());
+                    return;
+                }
+                listener.didFetch(response.body(), response.message());
+                Log.d("apiResponse", "recipes: " + response);
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<SearchedRecipeApiResponse> call, @NonNull Throwable throwable) {
+                listener.didError(throwable.getMessage());
+                Log.d("notworking","stupid");
+            }
+        });
     }
 
     // Method to GET random recipes from API

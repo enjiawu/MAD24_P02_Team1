@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -17,32 +15,31 @@ import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
-import androidx.core.graphics.Insets;
 import androidx.core.view.GravityCompat;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
 
-import sg.edu.np.mad.pocketchef.Adapters.RandomRecipeAdapter;
-import sg.edu.np.mad.pocketchef.Listener.RdmRecipeRespListener;
+import sg.edu.np.mad.pocketchef.Adapters.SearchedRecipesAdapter;
 import sg.edu.np.mad.pocketchef.Listener.RecipeClickListener;
 import sg.edu.np.mad.pocketchef.Listener.SearchRecipeListener;
-import sg.edu.np.mad.pocketchef.Models.RandomRecipeApiResponse;
 import sg.edu.np.mad.pocketchef.Models.SearchedRecipeApiResponse;
 
 public class AdvancedSearchActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     private static final String EXTRA_RECIPE_ID = "id";
-    private ProgressBar progressBar;
+    private RequestManager requestManager;
+
+    DrawerLayout drawerLayout;
+    NavigationView navigationView;
+    MaterialToolbar toolbar;
+    MenuItem nav_home, nav_recipes, nav_search;
+
     private Spinner dietSpinner;
     private Spinner intolerancesSpinner;
-    private RequestManager requestManager;
-    private RecyclerView recyclerSearchedRecpies;
     private EditText queryEdit;
     private EditText excludeIngredientsEdit;
     private EditText minCarbsEdit;
@@ -63,32 +60,20 @@ public class AdvancedSearchActivity extends AppCompatActivity implements Navigat
     private String intolerances;
     private Button searchButton;
 
-    DrawerLayout drawerLayout;
-    NavigationView navigationView;
-    MaterialToolbar toolbar;
-    MenuItem nav_home, nav_recipes, nav_search;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_advanced_search);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            setupViews();
-            setupListeners();
-            requestManager = new RequestManager(this);
-            return insets;
-        });
+        setupViews();
+        setupListeners();
+        requestManager = new RequestManager(this);
     }
 
     private void setupViews() {
-        searchButton = findViewById(R.id.searchButton);
-        progressBar = findViewById(R.id.progressBar);
         dietSpinner = findViewById(R.id.diet_spinner);
-        intolerancesSpinner = findViewById(R.id.intolerances_spinner);
-        recyclerSearchedRecpies = findViewById(R.id.recycler_searched_recipes);
+        intolerancesSpinner =findViewById(R.id.intolerances_spinner);
+        searchButton = findViewById(R.id.searchButton);
         // Navigation Menu set up
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
@@ -104,6 +89,7 @@ public class AdvancedSearchActivity extends AppCompatActivity implements Navigat
         navigationView.setNavigationItemSelectedListener(AdvancedSearchActivity.this);
         navigationView.setCheckedItem(nav_home);
         // Setting up spinner
+        /*
         ArrayAdapter<CharSequence> dietArrayAdapter = ArrayAdapter.createFromResource(
                 this,
                 R.array.dietArray,
@@ -117,7 +103,7 @@ public class AdvancedSearchActivity extends AppCompatActivity implements Navigat
         );
         intolerancesArrayAdapter.setDropDownViewResource(R.layout.spinner_inner_text);
         dietSpinner.setAdapter(dietArrayAdapter);
-        intolerancesSpinner.setAdapter(intolerancesArrayAdapter);
+        intolerancesSpinner.setAdapter(intolerancesArrayAdapter);*/
     }
 
     // Setting up listeners
@@ -135,30 +121,90 @@ public class AdvancedSearchActivity extends AppCompatActivity implements Navigat
                 minCaloriesEdit = findViewById(R.id.editMinCalories);
                 maxCaloriesEdit = findViewById(R.id.editMaxCalories);
 
-                try{
+                //Data validation to see if there are inputs, if dont have assign default value
+                try {
                     query = queryEdit.getText().toString();
+                } catch (Exception ex) {
+                    query = null;
+                }
+
+                try {
                     excludeIngredients = excludeIngredientsEdit.getText().toString();
+                } catch (Exception ex) {
+                    excludeIngredients = null;
+                }
+
+                try {
                     minCarbs = Integer.parseInt(minCarbsEdit.getText().toString());
+                } catch (Exception ex) {
+                    minCarbs = 0;
+                }
+
+                try {
                     maxCarbs = Integer.parseInt(maxCarbsEdit.getText().toString());
+                } catch (Exception ex) {
+                    maxCarbs = 2147483647;
+                }
+
+                try {
                     minProtein = Integer.parseInt(minProteinEdit.getText().toString());
+                } catch (Exception ex) {
+                    minProtein = 0;
+                }
+
+                try {
                     maxProtein = Integer.parseInt(maxProteinEdit.getText().toString());
+                } catch (Exception ex) {
+                    maxProtein = 2147483647;
+                }
+
+                try {
                     minCalories = Integer.parseInt(minCaloriesEdit.getText().toString());
+                } catch (Exception ex) {
+                    minCalories = 0;
+                }
+
+                try {
                     maxCalories = Integer.parseInt(maxCaloriesEdit.getText().toString());
+                } catch (Exception ex) {
+                    maxCalories = 2147483647;
+                }
+
+                try {
                     diet = dietSpinner.getSelectedItem().toString();
+                    if (diet == "None"){
+                        throw new Exception();
+                    }
+                } catch (Exception ex) {
+                    diet = null;
+                }
+
+                try {
                     intolerances = intolerancesSpinner.getSelectedItem().toString();
+                    if (intolerances == "None"){
+                        throw new Exception();
+                    }
+                } catch (Exception ex) {
+                    intolerances = null;
                 }
-                catch(Exception e){
-                    Log.d("pocketchef", "error with the inputs");
-                }
 
-
-                //User input validation
-
-                fetchSearchedRecipes();
+                Intent intent = new Intent(AdvancedSearchActivity.this, SearchedRecipesOutput.class);
+                Bundle userInput = new Bundle();
+                userInput.putString("query",query);
+                userInput.putString("excludeIngredients",excludeIngredients);
+                userInput.putInt("minCarbs",minCarbs);
+                userInput.putInt("maxCarbs",maxCarbs);
+                userInput.putInt("minProtein",minProtein);
+                userInput.putInt("maxProtein",maxProtein);
+                userInput.putInt("minCalories",minCalories);
+                userInput.putInt("maxCalories",maxCalories);
+                userInput.putString("diet",diet);
+                userInput.putString("intolerances",intolerances);
+                intent.putExtras(userInput);
+                startActivity(intent);
             }
         });
     }
-
 
     @Override
     public void onBackPressed() {
@@ -167,36 +213,7 @@ public class AdvancedSearchActivity extends AppCompatActivity implements Navigat
         } else {
             super.onBackPressed();
         }
-    }
-
-    //Reading User Inputs and searching for the recipe
-    public void fetchSearchedRecipes(){
-        progressBar.setVisibility(View.VISIBLE); // Making the progress bar visible as the recipes get searched
-        requestManager.getSearchedRecipes(new SearchRecipeListener() {
-            @Override
-            public void didFetch(SearchedRecipeApiResponse response, String message) {
-                progressBar.setVisibility(View.GONE);
-                setupSearchedRecipeRecyclerView(response);
-                Log.d("pocketchefAPI", message);
-            }
-
-            @Override
-            public void didError(String message) {
-                progressBar.setVisibility(View.GONE);
-                Toast.makeText(AdvancedSearchActivity.this, message, Toast.LENGTH_SHORT).show();
-            }
-        }, query, excludeIngredients, minCarbs, maxCarbs, minProtein, maxProtein, minCalories, maxCalories, diet, intolerances);
-    }
-
-    private void setupSearchedRecipeRecyclerView(SearchedRecipeApiResponse response) {
-        recyclerSearchedRecpies.setHasFixedSize(true);
-        recyclerSearchedRecpies.setLayoutManager(new GridLayoutManager(AdvancedSearchActivity.this, 1));
-        RandomRecipeAdapter randomRecipeAdapter = new RandomRecipeAdapter(AdvancedSearchActivity.this, response.recipes, recipeClickListener);
-        recyclerSearchedRecpies.setAdapter(randomRecipeAdapter);
-    }
-
-    private final RecipeClickListener recipeClickListener = id -> startActivity(new Intent(AdvancedSearchActivity.this, RecipeDetailsActivity.class)
-            .putExtra(EXTRA_RECIPE_ID, id));
+    };
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
