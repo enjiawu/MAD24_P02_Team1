@@ -216,11 +216,11 @@ public class AdvancedSearchActivity extends AppCompatActivity implements Navigat
             finish();
             startActivity(intent);
         } else if (itemId == R.id.nav_recipes) {
-            // Nothing happens
-        } else if (itemId == R.id.nav_search) {
-            Intent intent2 = new Intent(AdvancedSearchActivity.this, AdvancedSearchActivity.class);
+            Intent intent2 = new Intent(AdvancedSearchActivity.this, RecipeActivity.class);
             finish();
             startActivity(intent2);
+        } else if (itemId == R.id.nav_search) {
+            // Nothing happens
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;

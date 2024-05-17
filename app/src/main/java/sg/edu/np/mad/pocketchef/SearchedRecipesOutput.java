@@ -239,7 +239,7 @@ public class SearchedRecipesOutput extends AppCompatActivity implements Navigati
 
     //To see recipe details
     private final RecipeClickListener recipeClickListener = id -> startActivity(new Intent(SearchedRecipesOutput.this, RecipeDetailsActivity.class)
-            .putExtra(EXTRA_RECIPE_ID, id));
+            .putExtra("id", id));
 
     //For menu
     @Override
