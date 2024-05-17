@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">pocketchef</string>
-    <string name="api_key">5010e5d6fd164cadb42db2f7b025db4c</string>
+    <string name="api_key">ab9613c9bcf74e4eaedcd3796034b648</string>
     <string name="textView_title_text">Pocket Chef</string>
     <string name="textView_title_subtitle">Recipes at your fingertips</string>
     <string name="navigation_drawer_open">Open Nav Drawer</string>"
@@ -101,6 +101,19 @@
     <string name="exclude_ingredients_hint">tomtato,cheese (comma-separated)</string>
     <string name="min_hint">0</string>
     <string name="max_hint">1000000</string>
+
+    <!--Sorting for searched recipes-->
+    <string-array name="sortArray">
+        <item>Sort by</item>
+        <item>Carbs (Asc)</item>
+        <item>Carbs (Desc)</item>
+        <item>Protein (Asc)</item>
+        <item>Protein (Desc)</item>
+        <item>Calories (Asc)</item>
+        <item>Calories (Desc)</item>
+    </string-array>
+
+    <string name="no_recipes_found">No Recipes Found!</string>
 
 
 </resources>

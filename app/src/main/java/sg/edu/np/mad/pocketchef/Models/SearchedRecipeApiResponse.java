@@ -4,13 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SearchedRecipeApiResponse {
-    private List<SearchedRecipe> recipes;
+    private List<SearchedRecipe> results;
+    private int offset;
+    private int number;
+    private int totalResults;
 
     public List<SearchedRecipe> getRecipes() {
-        return recipes;
+        return results;
     }
 
-    public void setRecipes(List<SearchedRecipe> recipes) {
-        this.recipes = recipes;
+    public void setRecipes(List<SearchedRecipe> results) {
+        this.results = results;
     }
 }

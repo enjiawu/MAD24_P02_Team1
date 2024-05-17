@@ -30,14 +30,17 @@ import sg.edu.np.mad.pocketchef.Listener.SearchRecipeListener;
 import sg.edu.np.mad.pocketchef.Models.SearchedRecipeApiResponse;
 
 public class AdvancedSearchActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+    //Defining variables
     private static final String EXTRA_RECIPE_ID = "id";
     private RequestManager requestManager;
 
+    //For menu
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     MaterialToolbar toolbar;
     MenuItem nav_home, nav_recipes, nav_search;
 
+    //For user input
     private Spinner dietSpinner;
     private Spinner intolerancesSpinner;
     private EditText queryEdit;
@@ -60,16 +63,19 @@ public class AdvancedSearchActivity extends AppCompatActivity implements Navigat
     private String intolerances;
     private Button searchButton;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_advanced_search);
+        //Settting up views and listeners
         setupViews();
         setupListeners();
         requestManager = new RequestManager(this);
     }
 
+    //Setting up views
     private void setupViews() {
         dietSpinner = findViewById(R.id.diet_spinner);
         intolerancesSpinner =findViewById(R.id.intolerances_spinner);
@@ -88,26 +94,11 @@ public class AdvancedSearchActivity extends AppCompatActivity implements Navigat
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(AdvancedSearchActivity.this);
         navigationView.setCheckedItem(nav_home);
-        // Setting up spinner
-        /*
-        ArrayAdapter<CharSequence> dietArrayAdapter = ArrayAdapter.createFromResource(
-                this,
-                R.array.dietArray,
-                R.layout.spinner_text
-        );
-        dietArrayAdapter.setDropDownViewResource(R.layout.spinner_inner_text);
-        ArrayAdapter<CharSequence> intolerancesArrayAdapter = ArrayAdapter.createFromResource(
-                this,
-                R.array.intolerancesArray,
-                R.layout.spinner_text
-        );
-        intolerancesArrayAdapter.setDropDownViewResource(R.layout.spinner_inner_text);
-        dietSpinner.setAdapter(dietArrayAdapter);
-        intolerancesSpinner.setAdapter(intolerancesArrayAdapter);*/
     }
 
     // Setting up listeners
     public void setupListeners(){
+        //Check if search button has been clicked
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,7 +112,7 @@ public class AdvancedSearchActivity extends AppCompatActivity implements Navigat
                 minCaloriesEdit = findViewById(R.id.editMinCalories);
                 maxCaloriesEdit = findViewById(R.id.editMaxCalories);
 
-                //Data validation to see if there are inputs, if dont have assign default value
+                //Data validation to see if there are inputs, if don't have assign default value
                 try {
                     query = queryEdit.getText().toString();
                 } catch (Exception ex) {
@@ -135,7 +126,7 @@ public class AdvancedSearchActivity extends AppCompatActivity implements Navigat
                 }
 
                 try {
-                    minCarbs = Integer.parseInt(minCarbsEdit.getText().toString());
+                    minCarbs = Integer.parseInt(minCarbsEdit.getText().toString());;
                 } catch (Exception ex) {
                     minCarbs = 0;
                 }
@@ -188,6 +179,7 @@ public class AdvancedSearchActivity extends AppCompatActivity implements Navigat
                     intolerances = null;
                 }
 
+                //Sending the data to Advanced Search Activity
                 Intent intent = new Intent(AdvancedSearchActivity.this, SearchedRecipesOutput.class);
                 Bundle userInput = new Bundle();
                 userInput.putString("query",query);
@@ -215,6 +207,7 @@ public class AdvancedSearchActivity extends AppCompatActivity implements Navigat
         }
     };
 
+    //For menu
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         int itemId = menuItem.getItemId();

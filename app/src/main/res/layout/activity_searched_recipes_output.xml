@@ -44,6 +44,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/ic_launcher_foreground" />
 
+      <!-- Button to expand search and go to the search inputs-->
       <Button
           android:id="@+id/expand_search_button"
           android:layout_width="match_parent"
@@ -60,18 +61,59 @@
           app:layout_constraintStart_toStartOf="parent"
           app:layout_constraintTop_toBottomOf="@id/toolbar"/>
 
+      <!-- Recycler view for searched recipes to be displayed-->
       <androidx.recyclerview.widget.RecyclerView
           android:id="@+id/recycler_searched_recipes"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
-          android:layout_marginTop="150dp"
+          android:layout_marginTop="180dp"
+          app:layout_constraintBottom_toBottomOf="parent"
           app:layout_constraintDimensionRatio="w:16:9"
           app:layout_constraintEnd_toEndOf="parent"
           app:layout_constraintHorizontal_bias="0.0"
           app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintTop_toBottomOf="@+id/expand_search_button" />
+          app:layout_constraintTop_toBottomOf="@+id/intolerances_spinner" />
 
     </androidx.constraintlayout.motion.widget.MotionLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!--Spinner for sorting recipes-->
+        <Spinner
+            android:id="@+id/sort_by_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="130dp"
+            android:background="@drawable/searched_recipes_sort"
+            android:entries="@array/sortArray"
+            android:padding="8dp"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf = "parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+      <!--TextView that will be displayed if got no recipes found-->
+      <TextView
+          android:id="@+id/no_recipe_found"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_centerHorizontal="true"
+          android:text="@string/no_recipes_found"
+          android:textAlignment="center"
+          android:textColor="@color/black"
+          android:textSize="20dp"
+          android:visibility="gone"
+          app:flow_horizontalAlign="center"
+          app:flow_verticalAlign="center"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <ProgressBar
         android:id="@+id/progressBar"

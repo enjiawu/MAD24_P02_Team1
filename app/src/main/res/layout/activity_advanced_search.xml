@@ -21,6 +21,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <!--Scroll View-->
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
         <androidx.constraintlayout.motion.widget.MotionLayout
             android:id="@+id/main"
             android:layout_width="match_parent"
@@ -384,12 +389,12 @@
 
             <Spinner
                 android:id="@+id/diet_spinner"
-                style = "@style/spinner_style"
-                android:layout_width="wrap_content"
+                android:layout_width="150sp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:background="@color/white"
+                android:padding="8dp"
                 android:entries="@array/dietArray"
+                android:background="@drawable/custom_spinner_background"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/dietText" />
 
@@ -398,7 +403,7 @@
                 android:id="@+id/intolerancesText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="200dp"
+                android:layout_marginLeft="175dp"
                 android:layout_marginTop="10dp"
                 android:text="@string/intolerances"
                 android:textSize="16sp"
@@ -408,11 +413,12 @@
 
             <Spinner
                 android:id="@+id/intolerances_spinner"
-                style = "@style/spinner_style"
-                android:layout_width="wrap_content"
+                android:layout_width="150sp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="70dp"
-                android:background="@color/white"
+                android:layout_marginLeft="50dp"
+                android:background="@drawable/custom_spinner_background"
+                android:padding="8dp"
+                android:textColor="@color/black"
                 android:entries="@array/intolerancesArray"
                 app:layout_constraintStart_toEndOf="@+id/diet_spinner"
                 app:layout_constraintTop_toBottomOf="@+id/intolerancesText" />
@@ -434,21 +440,9 @@
                 android:layout_marginTop="20dp"
                 android:text="@string/search" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_searched_recipes"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:paddingTop="30dp"
-                app:layout_constraintDimensionRatio="w:16:9"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.444"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/advancedSearchingFragment" />
 
             </androidx.constraintlayout.motion.widget.MotionLayout>
-
-
+        </androidx.core.widget.NestedScrollView>
     </FrameLayout>
 
 

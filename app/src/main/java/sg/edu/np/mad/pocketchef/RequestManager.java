@@ -78,7 +78,7 @@ public class RequestManager {
     }
 
     //Method to call API for searched recipes
-    public void getSearchedRecipes(SearchRecipeListener listener, String query, String excludeIngredients, int minCarbs, int maxCarbs, int minProtein, int maxProtein, int minCalories, int maxCalories, String diet,  String intolerances){
+    public void getSearchedRecipes(SearchRecipeListener listener, String query, String excludeIngredients, int minCarbs, int maxCarbs, int minProtein, int maxProtein, int minCalories, int maxCalories, String diet,  String intolerances, String sort, String sortDirection){
 
         CallSearchedRecipes callSearchedRecipes = retrofit.create(CallSearchedRecipes.class);
         Call<SearchedRecipeApiResponse> call = callSearchedRecipes.callSearchedRecipes(context.getString(R.string.api_key),
@@ -86,12 +86,14 @@ public class RequestManager {
                 excludeIngredients,
                 minCarbs,
                 maxCarbs,
-                minCalories,
-                maxCalories,
                 minProtein,
                 maxProtein,
+                minCalories,
+                maxCalories,
                 diet,
-                intolerances
+                intolerances,
+                sort,
+                sortDirection
                 );
         call.enqueue(new Callback<SearchedRecipeApiResponse>() {
             @Override
@@ -101,13 +103,11 @@ public class RequestManager {
                     return;
                 }
                 listener.didFetch(response.body(), response.message());
-                Log.d("apiResponse", "recipes: " + response);
             }
 
             @Override
             public void onFailure(@NonNull Call<SearchedRecipeApiResponse> call, @NonNull Throwable throwable) {
                 listener.didError(throwable.getMessage());
-                Log.d("notworking","stupid");
             }
         });
     }
@@ -145,7 +145,9 @@ public class RequestManager {
                 @Query("minCalories") int minCalories,
                 @Query("maxCalories") int maxCalories,
                 @Query("diet") String diet,
-                @Query("intolerances") String intolerances
+                @Query("intolerances") String intolerances,
+                @Query("sort") String sort,
+                @Query("sortDirection") String sortDirection
         );
     }
 }
