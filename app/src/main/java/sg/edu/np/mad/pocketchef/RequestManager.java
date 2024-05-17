@@ -22,10 +22,12 @@ import retrofit2.http.Streaming;
 import sg.edu.np.mad.pocketchef.Listener.InstructionsListener;
 import sg.edu.np.mad.pocketchef.Listener.RdmRecipeRespListener;
 import sg.edu.np.mad.pocketchef.Listener.RecipeDetailsListener;
+import sg.edu.np.mad.pocketchef.Listener.SearchRecipeListener;
 import sg.edu.np.mad.pocketchef.Listener.SimilarRecipesListener;
 import sg.edu.np.mad.pocketchef.Models.InstructionsResponse;
 import sg.edu.np.mad.pocketchef.Models.RandomRecipeApiResponse;
 import sg.edu.np.mad.pocketchef.Models.RecipeDetailsResponse;
+import sg.edu.np.mad.pocketchef.Models.SearchedRecipeApiResponse;
 import sg.edu.np.mad.pocketchef.Models.SimilarRecipeResponse;
 
 public class RequestManager {
@@ -122,6 +124,42 @@ public class RequestManager {
         });
     }
 
+    //Method to call API for searched recipes
+    public void getSearchedRecipes(SearchRecipeListener listener, String query, String excludeIngredients, int minCarbs, int maxCarbs, int minProtein, int maxProtein, int minCalories, int maxCalories, String diet, String intolerances, String sort, String sortDirection){
+
+        CallSearchedRecipes callSearchedRecipes = retrofit.create(CallSearchedRecipes.class);
+        Call<SearchedRecipeApiResponse> call = callSearchedRecipes.callSearchedRecipes(context.getString(R.string.api_key),
+                query,
+                excludeIngredients,
+                minCarbs,
+                maxCarbs,
+                minProtein,
+                maxProtein,
+                minCalories,
+                maxCalories,
+                diet,
+                intolerances,
+                sort,
+                sortDirection
+        );
+        call.enqueue(new Callback<SearchedRecipeApiResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<SearchedRecipeApiResponse> call, @NonNull Response<SearchedRecipeApiResponse> response) {
+                if (!response.isSuccessful()) {
+                    listener.didError(response.message());
+                    return;
+                }
+                listener.didFetch(response.body(), response.message());
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<SearchedRecipeApiResponse> call, @NonNull Throwable throwable) {
+                listener.didError(throwable.getMessage());
+            }
+        });
+    }
+
+
     // Method to GET random recipes from API
     private interface CallRandomRecipes {
         @GET("recipes/random")
@@ -159,5 +197,25 @@ public class RequestManager {
                 @Query("apiKey") String apiKey
         );
     }
-}
 
+    // Method to GET searched recipes from API, based on queries passed entered by user
+    private interface CallSearchedRecipes {
+        @GET("recipes/complexSearch")
+        Call<SearchedRecipeApiResponse> callSearchedRecipes(
+                @Query("apiKey") String apiKey,
+                @Query("query") String query,
+                @Query("excludeIngredients") String excludeIngredients,
+                @Query("minCarbs") int minCarbs,
+                @Query("maxCarbs") int maxCarbs,
+                @Query("minProtein") int minProtein,
+                @Query("maxProtein") int maxProtein,
+                @Query("minCalories") int minCalories,
+                @Query("maxCalories") int maxCalories,
+                @Query("diet") String diet,
+                @Query("intolerances") String intolerances,
+                @Query("sort") String sort,
+                @Query("sortDirection") String sortDirection
+        );
+    }
+
+}
