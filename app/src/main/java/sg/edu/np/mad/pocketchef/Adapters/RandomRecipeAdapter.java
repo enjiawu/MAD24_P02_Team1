@@ -22,9 +22,9 @@ import sg.edu.np.mad.pocketchef.R;
 
 public class RandomRecipeAdapter extends RecyclerView.Adapter<RandomRecipeViewHolder>{
     // Context object to access resources and layout inflator
-    Context context;
-    List<Recipe> list;
-    RecipeClickListener listener;
+    final Context context;
+    final List<Recipe> list;
+    final RecipeClickListener listener;
 
     public RandomRecipeAdapter(Context context, List<Recipe> list, RecipeClickListener listener) {
         this.context = context;
@@ -65,9 +65,12 @@ public class RandomRecipeAdapter extends RecyclerView.Adapter<RandomRecipeViewHo
 }
 
 class RandomRecipeViewHolder extends RecyclerView.ViewHolder {
-    CardView random_list_container;
-    TextView textView_title, textView_servings, textView_upvote, textView_time;
-    ImageView imageView_food;
+    final CardView random_list_container;
+    final TextView textView_title;
+    final TextView textView_servings;
+    final TextView textView_upvote;
+    final TextView textView_time;
+    final ImageView imageView_food;
 
     // Assigning list_random_recipe xml elements to variables in adapater
     public RandomRecipeViewHolder(@NonNull View itemView) {

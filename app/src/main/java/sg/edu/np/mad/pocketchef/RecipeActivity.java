@@ -1,8 +1,11 @@
 package sg.edu.np.mad.pocketchef;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.GestureDetector;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -47,6 +50,7 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
     NavigationView navigationView;
     MaterialToolbar toolbar;
     MenuItem nav_home, nav_recipes, nav_search;
+    View view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +64,7 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
     }
 
     private void setupViews() {
+        view = findViewById(R.id.recipe_details);
         searchView = findViewById(R.id.searchView_home);
         spinner = findViewById(R.id.spinner_tags);
         recyclerView = findViewById(R.id.recycler_random_recipes);
@@ -211,7 +216,6 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
-
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
         super.onPointerCaptureChanged(hasCapture);
