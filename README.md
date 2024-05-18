@@ -47,13 +47,15 @@ Through our platform, users will gain access to tools and resources to plan meal
 - Successfully incorporate onClickListener for recipes to load a new activity - [ ]
 - Successfully incorporate recycler views with horizontal scrolling for ingredients and similar recipes - [ ]
 - Successfully incorporate instructions recycler viewholder - [ ]
+  
 #### User login system using a database - Timothy - [ ]
 ##### Tasks (User login system using a database):
 - 
+
 #### User profile - Ggwendolynn - [ ]
 ##### Tasks (User profile):
 - Successfully designed profile UI with Name, Email, DOB, and Password = [x]
-- Successfully implement the profile page with an editable page - [ ]
+- Successfully implement the profile page with an editable page - [X]
 - Successfully connected to database for user's details - [ ]
 
 #### Advanced Food Recipe Search - Enjia - [x]
@@ -62,6 +64,7 @@ Through our platform, users will gain access to tools and resources to plan meal
 - Successfully implement API requests for Search for Recipe - [x]
 - Successfully display searched Recipes in UI - [x]
 - Successfully implement sorting of searched recipes - [x]
+
 #### Shopping List - Wenya - [ ]
 ##### Tasks (Shopping List):
 - 
