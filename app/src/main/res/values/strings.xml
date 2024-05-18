@@ -1,4 +1,132 @@
 <resources>
-    <string name="app_name">MAD24_P02_Team1</string>
-    <string name="api_key">0ec6a3b6c99649ac89f7119854b7fbae</string>
+    <string name="app_name">pocketchef</string>
+    <string name="api_key">a337243f8ab941abb3c0498cd50e7867</string>
+    <string name="source">Source</string>
+    <string name="textView_title_text">Pocket Chef</string>
+    <string name="textView_title_subtitle">Recipes at your fingertips</string>
+    <string name="navigation_drawer_open">Open Nav Drawer</string>"
+    <string name="navigation_drawer_close">Close Nav Drawer</string>
+    <string name="recipe_name">Recipe Name</string>
+    <string name="recipe_details">Recipe Details</string>
+    <string name="time_text">X Minutes</string>
+    <string name="servings_text">X Persons</string>
+    <string name="cost_text">X</string>
+    <string name="searchView_query_hint">Search your recipe...</string>
+    <string name="textView_instruction_name_text">Instruction</string>
+    <string name="textView_instruction_step_item_text">Item</string>
+    <string name="imageView_instruction_step_items_Image">Ingredients/Equipment</string>
+    <string name="textView_instructions_step_number_text">1</string>
+    <string name="textView_instructions_step_title_text">Step Title</string>
+    <string name="textView_instructions_equipments_title_text">Equipments</string>
+    <string name="textView_instructions_ingredients_title">Ingredients</string>
+    <string name="textView_ingredients_quantity_text">1 pc</string>
+    <string name="textView_ingredients_name_text">lorem</string>
+    <string name="textView_servings_text">2 Persons</string>
+    <string name="textView_similar_recipe_title_text">Similar Recipe</string>
+    <string name="textView_similar_recipe_servings_text">2 Persons</string>
+    <string name="textView_similar_recipe_title_NoRecipes">No Similar Recipes Found</string>
+    <string name="textView_similar_recipe_servings_textEnd">" Persons"</string>
+    <string name="spinner_inner_text_placeholder">Dessert</string>
+    <string name="spinner_text_placeholder">Menu</string>
+    <string name="textView_meal_servings_textEnd">" Servings"</string>
+    <string name="textView_meal_ready_textEnd">" Minutes"</string>
+    <string name="textView_meal_price_textEnd">" $ per serving"</string>
+    <string name="textView_header_title_text">PocketChef</string>
+    <string name="textView_header_subtitle_text">Recipe at your fingertips</string>
+    <string name="textView_nutritiondialog_title">Nutritional Info</string>
+    <string-array name="tags">
+        <item>main course</item>
+        <item>side dish</item>
+        <item>dessert</item>
+        <item>appetizer</item>
+        <item>salad</item>
+        <item>bread</item>
+        <item>breakfast</item>
+        <item>soup</item>
+        <item>beverage</item>
+        <item>sauce</item>
+        <item>marinade</item>
+        <item>fingerfood</item>
+        <item>snack</item>
+        <item>drink</item>
+    </string-array>
+
+    <!--  Advanced Searching String  -->
+    <string name="advanced_searching_title">Advanced Searching</string>
+    <string name="search_by_name">Name </string>
+    <string name="exclude_ingredients">Exclude Ingredients</string>
+    <string name="min_carbs">Min Carbs</string>
+    <string name="max_carbs">Max Carbs</string>
+    <string name="min_protein">Min Protein</string>
+    <string name="max_protein">Max Protein</string>
+    <string name="min_calories">Min Calories</string>
+    <string name="max_calories">Max Calories</string>
+    <string name="search">Search</string>
+    <string name="calories">Calories</string>
+    <string name="protein">Protein</string>
+    <string name="carbs">Carbs</string>
+    <string name="expand_search">EXPAND SEARCH</string>
+
+    <string name="diet">Diet</string>
+    <string-array name="dietArray">
+        <item>None</item>
+        <item>Gluten Free</item>
+        <item>Ketogenic</item>
+        <item>Vegetarian</item>
+        <item>Lacto-Vegetarian</item>
+        <item>Ovo-Vegetarian</item>
+        <item>Vegan</item>
+        <item>Pescetarian</item>
+        <item>Paleo</item>
+        <item>Primal</item>
+        <item>Low FODMAP</item>
+        <item>Whole30</item>
+    </string-array>
+
+    <string name="intolerances">Intolerances</string>
+    <string-array name="intolerancesArray">
+        <item>None</item>
+        <item>Dairy</item>
+        <item>Egg</item>
+        <item>Gluten</item>
+        <item>Grain</item>
+        <item>Peanut</item>
+        <item>Seafood</item>
+        <item>Sesame</item>
+        <item>Shellfish</item>
+        <item>Soy</item>
+        <item>Sulfite</item>
+        <item>Tree Nut</item>
+        <item>Wheat</item>
+    </string-array>
+
+    <!--  Hints  -->
+    <string name="search_by_name_hint">Apple pie</string>
+    <string name="exclude_ingredients_hint">tomtato,cheese (comma-separated)</string>
+    <string name="min_hint">0</string>
+    <string name="max_hint">1000000</string>
+
+    <!-- Sorting for searched recipes -->
+    <string-array name="sortArray">
+        <item>Sort by</item>
+        <item>Carbs (Asc)</item>
+        <item>Carbs (Desc)</item>
+        <item>Protein (Asc)</item>
+        <item>Protein (Desc)</item>
+        <item>Calories (Asc)</item>
+        <item>Calories (Desc)</item>
+    </string-array>
+    <string name="no_recipes_found">No Recipes Found!</string>
+    <string name="activity_recipe_toolbar_title">Random Recipes</string>
+    <string name="activity_recipe_details_instructions_title">Instructions</string>
+    <string name="activity_recipe_details_ingredients_title">Ingredients</string>
+    <string name="activity_recipe_details_similarrecipes_title">Similar Recipes</string>
+    <string name="button_Nutrition_label_text">View Nutrition Info</string>
+    <string name="textView_calories_label_text">Calories:</string>
+    <string name="textView_daily_requirements_coverage_label_text">Daily Req:</string>
+    <string name="textView_fat_label_text">Fat:</string>
+    <string name="textView_protein_label_text">Protein:</string>
+    <string name="cardView1_title_text">Recipes</string>
+    <string name="cardView2_title_text">Advanced Search</string>
+
 </resources>

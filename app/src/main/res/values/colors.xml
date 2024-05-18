@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="palettegrey">#dde0e9</color>
+    <color name="paletteblack">#FF000000</color>
+    <color name="palettewhite">#FFFFFFFF</color>
     <color name="palettebeige">#f5eace</color>
-    <color name="paletteyellow">#f9d589</color>
-    <color name="paletteorange">#f39a32</color>
-    <color name="palettegreen">#8bab6c</color>
+    <color name="paletteblue">#1d828e</color>
+    <color name="paletteorange">#feac5d</color>
+    <color name="palettetext">#140F1F</color>
+    <color name="palettedarkblue">#001219</color>
+    <color name="transparent">#00FFFFFF</color>
 </resources>

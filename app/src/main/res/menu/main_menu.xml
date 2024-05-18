@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group>
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_home"
+            android:title="Home" />
+        <item
+            android:id="@+id/nav_recipes"
+            android:icon="@drawable/ic_recipes"
+            android:title="Recipes" />
+        <item
+            android:id="@+id/nav_search"
+            android:icon="@drawable/ic_search_menu"
+            android:title="Advanced Search" />
+        <item
+            android:id="@+id/nav_shoppinglist"
+            android:icon="@drawable/ic_shopping_list"
+            android:title="shopping list" />
+    </group>
+        <item android:title="Profile">
+            <menu>
+                <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_login"
+                    android:icon="@drawable/ic_login"
+                    android:title="Login" />
+                <item
+                    android:id="@+id/nav_profile"
+                    android:icon="@drawable/ic_profile"
+                    android:title="Profile" />
+                <item
+                    android:id="@+id/nav_logout"
+                    android:icon="@drawable/ic_logout"
+                    android:title="Logout" />
+                </group>
+            </menu>
+        </item>
+    <item android:title="Additional Features">
+        <menu>
+            <item
+                android:id="@+id/nav_addfeature1"
+                android:icon="@drawable/pocketchef_logo"
+                android:title="feature1" />
+            <item
+                android:id="@+id/nav_addfeature2"
+                android:icon="@drawable/pocketchef_logo"
+                android:title="feature2" />
+            <item
+                android:id="@+id/nav_addfeature3"
+                android:icon="@drawable/pocketchef_logo"
+                android:title="feature3" />
+        </menu>
+    </item>
+</menu>

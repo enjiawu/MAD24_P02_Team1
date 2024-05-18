@@ -1,10 +1,9 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
-    <style name="Base.Theme.MAD24_P02_Team1" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="Base.Theme.pocketchef" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
-    <style name="Theme.MAD24_P02_Team1" parent="Base.Theme.MAD24_P02_Team1" />
+    <style name="Theme.pocketchef" parent="Base.Theme.pocketchef" />
 </resources>
