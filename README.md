@@ -52,7 +52,10 @@ Through our platform, users will gain access to tools and resources to plan meal
 - 
 #### User profile - Ggwendolynn - [ ]
 ##### Tasks (User profile):
-- 
+- Successfully designed profile UI with Name, Email, DOB, and Password = [x]
+- Successfully implement the profile page with an editable page - [ ]
+- Successfully connected to database for user's details - [ ]
+
 #### Advanced Food Recipe Search - Enjia - [x]
 ##### Tasks (Meal Planner):
 - Successfully implement Advanced Searching UI with options to search for recipes by name, ingredients and nutrients - [x]
