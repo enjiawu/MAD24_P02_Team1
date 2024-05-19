@@ -8,4 +8,8 @@
     <color name="palettetext">#140F1F</color>
     <color name="palettedarkblue">#001219</color>
     <color name="transparent">#00FFFFFF</color>
+    <color name="primary">#feac5d</color>
+    <color name="secondary">#1d828e</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFF</color>
 </resources>

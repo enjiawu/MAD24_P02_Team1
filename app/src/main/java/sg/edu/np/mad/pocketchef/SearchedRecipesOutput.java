@@ -127,8 +127,8 @@ public class SearchedRecipesOutput extends AppCompatActivity implements Navigati
         expandSearchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { //Go back to AdvancedSearchActivity
-                Intent intent = new Intent(SearchedRecipesOutput.this, AdvancedSearchActivity.class);
-                startActivity(intent);
+                Intent SearchedRecipeintent = new Intent(SearchedRecipesOutput.this, AdvancedSearchActivity.class);
+                startActivity(SearchedRecipeintent);
             }
         });
 

@@ -38,13 +38,31 @@
                 android:layout_height="wrap_content"
                 android:background="@color/paletteblue"
                 android:minHeight="?attr/actionBarSize"
-                app:title="Recipe Details"
                 app:contentInsetStart="0dp"
                 app:contentInsetStartWithNavigation="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:navigationIcon="@drawable/ic_launcher_foreground" />
+                app:navigationIcon="@drawable/ic_launcher_foreground"
+                app:title="Recipe Details" />
+
+            <!-- add to favorite list button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_favorite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:backgroundTint="@color/paletteblue"
+                android:textColor="@android:color/white"
+                app:icon="@android:drawable/btn_star_big_off"
+                app:iconGravity="textEnd"
+                app:iconPadding="15dp"
+                app:iconSize="30dp"
+                app:iconTint="@android:color/white"
+                android:contentDescription="add this recipe to favorite"
+                style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton.Icon"
+                app:layout_constraintEnd_toEndOf="parent" />
+
             <!-- Nested scroll view for accessibility -->
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
