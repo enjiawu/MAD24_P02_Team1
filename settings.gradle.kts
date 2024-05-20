@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "pocketchef"
+rootProject.name = "MAD24_P02_Team1"
 include(":app")
  
