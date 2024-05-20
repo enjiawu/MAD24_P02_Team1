@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId = "sg.edu.np.mad.pocketchef"
-        minSdk = 30
+        minSdk = 33
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"

@@ -128,5 +128,8 @@
     <string name="textView_protein_label_text">Protein:</string>
     <string name="cardView1_title_text">Recipes</string>
     <string name="cardView2_title_text">Advanced Search</string>
+    <string name="btn_favourite_text">Add To Favourites</string>
+    <string name="cardview3_text">Favourites</string>
+    <string name="cardView_6_text">Profile</string>
 
 </resources>

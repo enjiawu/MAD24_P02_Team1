@@ -59,9 +59,11 @@
                 app:iconPadding="15dp"
                 app:iconSize="30dp"
                 app:iconTint="@android:color/white"
-                android:contentDescription="add this recipe to favorite"
+                android:contentDescription="@string/btn_favourite_text"
                 style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton.Icon"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/toolbar"
+                tools:ignore="MissingConstraints" />
 
             <!-- Nested scroll view for accessibility -->
             <androidx.core.widget.NestedScrollView
