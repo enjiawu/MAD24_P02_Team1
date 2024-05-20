@@ -7,6 +7,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import sg.edu.np.mad.pocketchef.Models.Database;
+import sg.edu.np.mad.pocketchef.Models.FavoriteRecipe;
+
 public class EditFavoriteActivity extends AppCompatActivity {
     EditText editTextRecipeName;
     Button buttonSave, buttonCancel;

@@ -11,6 +11,8 @@ import android.graphics.BitmapFactory;
 import java.util.ArrayList;
 import java.util.List;
 
+import sg.edu.np.mad.pocketchef.Models.User;
+
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "users.db";
     private static final int DATABASE_VERSION = 1;

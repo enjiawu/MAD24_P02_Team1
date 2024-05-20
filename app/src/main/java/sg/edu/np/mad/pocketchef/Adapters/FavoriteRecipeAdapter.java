@@ -14,7 +14,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import sg.edu.np.mad.pocketchef.FavoriteRecipe;
+import sg.edu.np.mad.pocketchef.Models.FavoriteRecipe;
 import sg.edu.np.mad.pocketchef.FavoriteRecipesActivity;
 import sg.edu.np.mad.pocketchef.R;
 

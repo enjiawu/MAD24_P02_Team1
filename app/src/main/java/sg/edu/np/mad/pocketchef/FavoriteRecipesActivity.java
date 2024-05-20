@@ -13,6 +13,8 @@ import com.google.android.material.appbar.MaterialToolbar;
 import java.util.List;
 
 import sg.edu.np.mad.pocketchef.Adapters.FavoriteRecipeAdapter;
+import sg.edu.np.mad.pocketchef.Models.Database;
+import sg.edu.np.mad.pocketchef.Models.FavoriteRecipe;
 
 public class FavoriteRecipesActivity extends AppCompatActivity {
     RecyclerView recyclerViewFavorites;

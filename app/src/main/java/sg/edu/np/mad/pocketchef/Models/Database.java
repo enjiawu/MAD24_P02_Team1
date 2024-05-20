@@ -1,4 +1,4 @@
-package sg.edu.np.mad.pocketchef;
+package sg.edu.np.mad.pocketchef.Models;
 
 import java.util.ArrayList;
 import java.util.List;
