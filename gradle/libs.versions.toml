@@ -1,10 +1,18 @@
 [versions]
+#<<<<<<< HEAD
 agp = "8.4.0"
+#=======
+#agp = "8.3.2"
+#>>>>>>> master
 junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
 appcompat = "1.6.1"
-material = "1.11.0"
+#<<<<<<< HEAD
+#material = "1.11.0"
+#=======
+material = "1.12.0"
+#>>>>>>> master
 activity = "1.8.0"
 constraintlayout = "2.1.4"
 
@@ -18,5 +26,9 @@ activity = { group = "androidx.activity", name = "activity", version.ref = "acti
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 
 [plugins]
-android-application = { id = "com.android.application", version.ref = "agp" }
+#<<<<<<< HEAD
+#android-application = { id = "com.android.application", version.ref = "agp" }
+#=======
+androidApplication = { id = "com.android.application", version.ref = "agp" }
+#>>>>>>> master
 
