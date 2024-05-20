@@ -3,7 +3,6 @@ package sg.edu.np.mad.pocketchef;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,6 +12,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import java.util.List;
+
+import sg.edu.np.mad.pocketchef.Models.Database;
 
 public class AddToFavoritesDialog extends Dialog {
     private Context context;

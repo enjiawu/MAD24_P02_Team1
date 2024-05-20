@@ -1,4 +1,4 @@
-package sg.edu.np.mad.pocketchef;
+package sg.edu.np.mad.pocketchef.Models;
 
 public class FavoriteRecipe {
     private int id;

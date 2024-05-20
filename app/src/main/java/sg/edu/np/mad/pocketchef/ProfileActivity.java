@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import sg.edu.np.mad.pocketchef.Models.User;
 
 public class ProfileActivity extends AppCompatActivity {
 
