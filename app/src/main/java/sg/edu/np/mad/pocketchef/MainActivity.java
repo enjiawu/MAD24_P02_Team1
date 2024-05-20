@@ -141,7 +141,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         cardView3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, FavoriteRecipe.class);
+                Intent intent = new Intent(MainActivity.this, FavoriteRecipesActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        cardView4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
                 startActivity(intent);
             }
         });
