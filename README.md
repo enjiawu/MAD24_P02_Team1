@@ -42,11 +42,11 @@ Through our platform, users will gain access to tools and resources to plan meal
 #### Main Menu with motion layout functionality - Jin Rong - [x]
 #### Random Recipe Browsing, filtered by tags, provided by Spoonacular API - Jin Rong - [x]
 ##### Tasks (Recipe Browser):
-- Successfully implement API requests for GetRecipes, SimilarRecipes and Ingredients - [ ]
+- Successfully implement API requests for GetRecipes, SimilarRecipes and Ingredients - [x]
 - Successfully incorporate recycler views with vertical scrolling - [x]
-- Successfully incorporate onClickListener for recipes to load a new activity - [ ]
-- Successfully incorporate recycler views with horizontal scrolling for ingredients and similar recipes - [ ]
-- Successfully incorporate instructions recycler viewholder - [ ]
+- Successfully incorporate onClickListener for recipes to load a new activity - [x]
+- Successfully incorporate recycler views with horizontal scrolling for ingredients and similar recipes - [x]
+- Successfully incorporate instructions recycler viewholder - [x]
   
 #### User login system using a database - Timothy - [ ]
 ##### Tasks (User login system using a database):
@@ -70,7 +70,15 @@ Through our platform, users will gain access to tools and resources to plan meal
 - 
 ---
 ### Stage 2
-#### Image Analysis using API, search recipes based on image binary file - Jin Rong - [ ]
+#### Image Classification utilising TFLite model and Voice Recognition, recommend recipes based on input- Jin Rong - [ ]
+- Successfully implement tensorflow lite model - [ ]
+- Successfully implement camera intent to capture image (take photo or use gallery) - [ ]
+- Successfully utilise tensorflow lite model to predict image with high accuracy (sufficiently high confidence at 100 epoch) - [ ]
+- Successfully implement voice recognition using Android Native Speech Recogniser - [ ]
+- Successfully parse voice into a string that correlates with a library - [ ]
+- Obtain Recipe IDs from Spoonacular API, parse into recycler views in new activity - [ ]
+- Implement onClickListener for recipes leading to RecipeDetailsActivity - [ ]
+
 #### Community page - Enjia - [ ]
 #### Caloric Counter - Ggwendolynn - [ ]
 #### Virtual Pantry - Timothy - [ ]
