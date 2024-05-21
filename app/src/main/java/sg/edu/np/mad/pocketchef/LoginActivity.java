@@ -44,7 +44,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class LogInActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private String uid = "";
@@ -75,7 +75,7 @@ public class LogInActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -387,7 +387,7 @@ public class LogInActivity extends AppCompatActivity {
                             viewAnimator.showNext();
                         }
                     } else {
-                        Toast.makeText(LogInActivity.this, "Invalid email format.",
+                        Toast.makeText(LoginActivity.this, "Invalid email format.",
                                 Toast.LENGTH_SHORT).show();
                         // Handle the error
                     }
@@ -442,11 +442,11 @@ public class LogInActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(usernameEmailLogInText.strip().isEmpty())  {
-                    Toast.makeText(LogInActivity.this, "Fill in your username/email.",
+                    Toast.makeText(LoginActivity.this, "Fill in your username/email.",
                             Toast.LENGTH_SHORT).show();
 
                 } else if (passwordLogInText.strip().isEmpty()) {
-                    Toast.makeText(LogInActivity.this, "Fill in your account password.",
+                    Toast.makeText(LoginActivity.this, "Fill in your account password.",
                             Toast.LENGTH_SHORT).show();
 
                 } else if (usernameEmailLogInText.contains("@") && usernameEmailLogInText.contains(".")) {
@@ -457,9 +457,9 @@ public class LogInActivity extends AppCompatActivity {
                             Log.d("CONTAINS", String.valueOf(usedEmails.contains(usernameEmailLogInText)));
 
                             if(!usedEmails.contains(usernameEmailLogInText))
-                                Toast.makeText(LogInActivity.this, "User does not exist.",
+                                Toast.makeText(LoginActivity.this, "User does not exist.",
                                         Toast.LENGTH_SHORT).show();
-                            else Toast.makeText(LogInActivity.this, "Invalid password.",
+                            else Toast.makeText(LoginActivity.this, "Invalid password.",
                                     Toast.LENGTH_SHORT).show();
                         }
                     });
@@ -477,9 +477,9 @@ public class LogInActivity extends AppCompatActivity {
                                         } else {
                                             Log.d("CONTAINS U", String.valueOf(usedUsernames.contains(usernameEmailLogInText)));
                                             if(!usedUsernames.contains(usernameEmailLogInText)) {
-                                                Toast.makeText(LogInActivity.this, "User does not exist.",
+                                                Toast.makeText(LoginActivity.this, "User does not exist.",
                                                         Toast.LENGTH_SHORT).show();
-                                            } else Toast.makeText(LogInActivity.this, "Invalid Password.",
+                                            } else Toast.makeText(LoginActivity.this, "Invalid Password.",
                                                     Toast.LENGTH_SHORT).show();
 
 
