@@ -58,8 +58,8 @@ public class MainActivity extends AppCompatActivity {
     private String profilePicture;
     private String profileDescription = "";
 
-    private List<String> usedUsernames;
-    private List<String> usedEmails;
+    private List<String> usedUsernames = new ArrayList<>();
+    private List<String> usedEmails = new ArrayList<>();
 
     private Boolean validUsername = false;
     private Boolean validEmail = false;
