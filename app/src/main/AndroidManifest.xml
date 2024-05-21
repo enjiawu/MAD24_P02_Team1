@@ -19,7 +19,7 @@
             android:theme="@style/Theme.MAD24_P02_Team1"
 
 
-            android:name=".MainActivity"
+            android:name=".LogInActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

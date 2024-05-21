@@ -36,7 +36,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
@@ -45,7 +44,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity {
+public class LogInActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private String uid = "";
@@ -388,7 +387,7 @@ public class MainActivity extends AppCompatActivity {
                             viewAnimator.showNext();
                         }
                     } else {
-                        Toast.makeText(MainActivity.this, "Invalid email format.",
+                        Toast.makeText(LogInActivity.this, "Invalid email format.",
                                 Toast.LENGTH_SHORT).show();
                         // Handle the error
                     }
@@ -443,11 +442,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(usernameEmailLogInText.strip().isEmpty())  {
-                    Toast.makeText(MainActivity.this, "Fill in your username/email.",
+                    Toast.makeText(LogInActivity.this, "Fill in your username/email.",
                             Toast.LENGTH_SHORT).show();
 
                 } else if (passwordLogInText.strip().isEmpty()) {
-                    Toast.makeText(MainActivity.this, "Fill in your account password.",
+                    Toast.makeText(LogInActivity.this, "Fill in your account password.",
                             Toast.LENGTH_SHORT).show();
 
                 } else if (usernameEmailLogInText.contains("@") && usernameEmailLogInText.contains(".")) {
@@ -458,9 +457,9 @@ public class MainActivity extends AppCompatActivity {
                             Log.d("CONTAINS", String.valueOf(usedEmails.contains(usernameEmailLogInText)));
 
                             if(!usedEmails.contains(usernameEmailLogInText))
-                                Toast.makeText(MainActivity.this, "User does not exist.",
+                                Toast.makeText(LogInActivity.this, "User does not exist.",
                                         Toast.LENGTH_SHORT).show();
-                            else Toast.makeText(MainActivity.this, "Invalid password.",
+                            else Toast.makeText(LogInActivity.this, "Invalid password.",
                                     Toast.LENGTH_SHORT).show();
                         }
                     });
@@ -478,9 +477,9 @@ public class MainActivity extends AppCompatActivity {
                                         } else {
                                             Log.d("CONTAINS U", String.valueOf(usedUsernames.contains(usernameEmailLogInText)));
                                             if(!usedUsernames.contains(usernameEmailLogInText)) {
-                                                Toast.makeText(MainActivity.this, "User does not exist.",
+                                                Toast.makeText(LogInActivity.this, "User does not exist.",
                                                         Toast.LENGTH_SHORT).show();
-                                            } else Toast.makeText(MainActivity.this, "Invalid Password.",
+                                            } else Toast.makeText(LogInActivity.this, "Invalid Password.",
                                                     Toast.LENGTH_SHORT).show();
 
 
