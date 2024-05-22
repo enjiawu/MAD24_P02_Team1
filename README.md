@@ -5,7 +5,7 @@ MAD 2024 Assignment
 - S10258457C **Yeo Jin Rong**
 - S10256978E **Wu Enjia**  
 - S10256132A **Timothy Chai Weijie** 
-- S10262576 **Ggwendolynn Lee Rasni**  
+- S10262576D **Ggwendolynn Lee Rasni**  
 - S10262410A **Xue Wenya**  
 
 ## Welcome to Pocket Chef
