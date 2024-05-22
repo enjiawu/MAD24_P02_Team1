@@ -48,9 +48,12 @@ Through our platform, users will gain access to tools and resources to plan meal
 - Successfully incorporate recycler views with horizontal scrolling for ingredients and similar recipes - [x]
 - Successfully incorporate instructions recycler viewholder - [x]
   
-#### User login system using a database - Timothy - [ ]
+#### User login system using a database - Timothy - [x]
 ##### Tasks (User login system using a database):
-- 
+- Successfully implement login and signup page in a single activity using ViewAnimator - [x]
+- Successfully implement gathering of more complex data types such as date and image - [x]
+- Successfully connect to database to add new account details and recognise user to log in - [x]
+- Successfully implement input validation and relevant error toasts for account details - [x]
 
 #### User profile - Ggwendolynn - [X]
 ##### Tasks (User profile):
