@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
     <uses-permission android:name="android.permission.INTERNET" />
+<!--    new-->
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -31,9 +32,15 @@
             android:name=".RecipeDetailsActivity"
             android:exported="false" />
         <activity
+            android:theme="@style/Theme.StartApp"
+
+
             android:name=".MainActivity"
+            android:exported="true" />
+        <activity
+            android:name=".LoginActivity"
             android:exported="true"
-            android:theme="@style/Theme.StartApp">
+            android:theme="@style/Theme.pocketchef">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
