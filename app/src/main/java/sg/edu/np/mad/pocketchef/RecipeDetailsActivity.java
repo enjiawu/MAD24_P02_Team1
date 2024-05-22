@@ -1,12 +1,17 @@
 package sg.edu.np.mad.pocketchef;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +34,8 @@ import com.google.android.material.navigation.NavigationView;
 import com.squareup.picasso.Picasso;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import sg.edu.np.mad.pocketchef.Adapters.IngredientsAdapater;
@@ -44,6 +51,7 @@ import sg.edu.np.mad.pocketchef.Models.SimilarRecipeResponse;
 import sg.edu.np.mad.pocketchef.Models.SummaryParser;
 
 public class RecipeDetailsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
     // Global variables for activity
     private static final long API_REQUEST_DELAY = 1000;
     int recipeId;
@@ -95,6 +103,9 @@ public class RecipeDetailsActivity extends AppCompatActivity implements Navigati
                 nutritionLabelLayout.setVisibility(View.VISIBLE);
             }
         });
+
+        //set the onclicklistener for the favorite button
+        btnFavorite.setOnClickListener(v -> showFavoriteDialog());
     }
     // Intialise objects
     private void findViews() {
@@ -131,6 +142,8 @@ public class RecipeDetailsActivity extends AppCompatActivity implements Navigati
         imageView_nutrition = findViewById(R.id.imageView_nutrition);
         // Intialise Button
         buttonNutritionLabel = findViewById(R.id.button_Nutrition_Label);
+        // intialise favorite button
+        btnFavorite = findViewById(R.id.btn_favorite);
     }
     private void loadRecipeDetailsWithStaggeredApiCalls() {
         progressBar.setVisibility(View.VISIBLE);
@@ -237,5 +250,47 @@ public class RecipeDetailsActivity extends AppCompatActivity implements Navigati
         // Load the image using Picasso
         Picasso.get().load(nutritionLabelUrl)
                 .into(imageView_nutrition);
+    }
+
+
+
+
+    // Add to favorite list
+    MaterialButton btnFavorite;
+    List<String> categories;
+    private void showFavoriteDialog() {
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_add_to_favorites, null);
+        Spinner spinnerCategories = dialogView.findViewById(R.id.spinner_categories);
+        EditText editTextNewCategory = dialogView.findViewById(R.id.edit_new_category);
+        Button buttonSave = dialogView.findViewById(R.id.button_save);
+        Button buttonCancel = dialogView.findViewById(R.id.button_cancel);
+
+        categories = getCategories();
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerCategories.setAdapter(adapter);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(dialogView);
+        AlertDialog dialog = builder.create();
+
+        buttonSave.setOnClickListener(v -> {
+            String selectedCategory = spinnerCategories.getSelectedItem().toString();
+            String newCategory = editTextNewCategory.getText().toString().trim();
+
+            if (!newCategory.isEmpty()) {
+                categories.add(newCategory);
+                selectedCategory = newCategory;
+            }
+            dialog.dismiss();
+        });
+
+        buttonCancel.setOnClickListener(v -> dialog.dismiss());
+
+        dialog.show();
+    }
+
+    private List<String> getCategories() {
+        return new ArrayList<>(Arrays.asList("Favorite"));
     }
 }

@@ -11,19 +11,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import java.util.Calendar;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import sg.edu.np.mad.pocketchef.Models.User;
+import sg.edu.np.mad.pocketchef.Models.Utils;
 
 public class EditProfileActivity extends AppCompatActivity {
 
