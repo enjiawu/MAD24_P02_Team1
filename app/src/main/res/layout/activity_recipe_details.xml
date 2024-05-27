@@ -23,7 +23,7 @@
         android:background="@color/paletteorange"
         tools:context=".RecipeDetailsActivity">
 
-        <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/paletteorange"
@@ -38,13 +38,33 @@
                 android:layout_height="wrap_content"
                 android:background="@color/paletteblue"
                 android:minHeight="?attr/actionBarSize"
-                app:title="Recipe Details"
                 app:contentInsetStart="0dp"
                 app:contentInsetStartWithNavigation="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:navigationIcon="@drawable/ic_launcher_foreground" />
+                app:navigationIcon="@drawable/ic_launcher_foreground"
+                app:title="Recipe Details" />
+
+            <!-- add to favorite list button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_favorite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:backgroundTint="@color/paletteblue"
+                android:textColor="@android:color/white"
+                app:icon="@drawable/ic_btn_star"
+                app:iconGravity="textEnd"
+                app:iconPadding="15dp"
+                app:iconSize="30dp"
+                app:iconTint="@android:color/white"
+                android:contentDescription="@string/btn_favourite_text"
+                style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton.Icon"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/toolbar"
+                tools:ignore="MissingConstraints" />
+
             <!-- Nested scroll view for accessibility -->
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
@@ -85,7 +105,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="250dp"
                         android:layout_margin="8dp"
-                        android:scaleType="centerCrop" />
+                        android:scaleType="centerCrop"
+                        tools:ignore="ContentDescription" />
 
                     <GridLayout
                         android:id="@+id/gridLayout_summary"
@@ -109,7 +130,7 @@
                             android:layout_column="0"
                             android:layout_marginEnd="12dp"
                             android:layout_marginBottom="12dp"
-                            android:text="Protein:"
+                            android:text="@string/textView_protein_label_text"
                             android:textColor="@color/paletteorange"
                             android:textSize="18sp"
                             android:textStyle="normal" />
@@ -134,7 +155,7 @@
                             android:layout_column="2"
                             android:layout_marginEnd="12dp"
                             android:layout_marginBottom="12dp"
-                            android:text="Fat:"
+                            android:text="@string/textView_fat_label_text"
                             android:textColor="@color/paletteorange"
                             android:textSize="18sp"
                             android:textStyle="normal" />
@@ -158,7 +179,7 @@
                             android:layout_column="0"
                             android:layout_marginEnd="12dp"
                             android:layout_marginBottom="12dp"
-                            android:text="Calories:"
+                            android:text="@string/textView_calories_label_text"
                             android:textColor="@color/paletteorange"
                             android:textSize="18sp"
                             android:textStyle="normal" />
@@ -183,7 +204,7 @@
                             android:layout_column="2"
                             android:layout_marginEnd="12dp"
                             android:layout_marginBottom="12dp"
-                            android:text="Daily Req:"
+                            android:text="@string/textView_daily_requirements_coverage_label_text"
                             android:textColor="@color/paletteorange"
                             android:textSize="18sp"
                             android:textStyle="normal" />
@@ -208,7 +229,7 @@
                         android:outlineAmbientShadowColor="@color/paletteorange"
                         android:outlineSpotShadowColor="@color/paletteorange"
                         android:padding="8dp"
-                        android:text="View Nutrition Info"
+                        android:text="@string/button_Nutrition_label_text"
                         android:fontFamily="@font/montserrat"
                         android:backgroundTint="@color/paletteorange"
                         android:textColor="@color/palettetext"/>
@@ -217,7 +238,7 @@
                         android:id="@+id/nutrition_dialog_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:visibility="visible"
+                        android:visibility="gone"
                         android:padding="16dp">
 
                         <!-- Title TextView -->
@@ -236,11 +257,12 @@
                         <ImageView
                             android:id="@+id/imageView_nutrition"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="500dp"
                             android:layout_marginTop="16dp"
                             android:scaleType="fitCenter"
                             app:layout_constraintTop_toBottomOf="@id/textView_title"
-                            android:src="@drawable/ic_launcher_foreground"/>
+                            android:src="@drawable/ic_launcher_foreground"
+                            tools:ignore="ContentDescription" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <TextView
@@ -254,7 +276,8 @@
                         android:text="@string/servings_text"
                         android:textColor="@color/paletteblue"
                         android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        tools:ignore="UseCompatTextViewDrawableXml" />
 
                     <TextView
                         android:id="@+id/textView_meal_ready"
@@ -267,7 +290,8 @@
                         android:text="@string/time_text"
                         android:textColor="@color/paletteblue"
                         android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        tools:ignore="UseCompatTextViewDrawableXml" />
 
                     <TextView
                         android:id="@+id/textView_meal_price"
@@ -280,14 +304,15 @@
                         android:text="@string/cost_text"
                         android:textColor="@color/paletteblue"
                         android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        tools:ignore="UseCompatTextViewDrawableXml" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:padding="8dp"
-                        android:text="Instructions"
+                        android:text="@string/activity_recipe_details_instructions_title"
                         android:textColor="@color/palettedarkblue"
                         android:textSize="18sp"
                         android:textStyle="bold" />
@@ -304,7 +329,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:padding="8dp"
-                        android:text="Ingredients"
+                        android:text="@string/activity_recipe_details_ingredients_title"
                         android:textColor="@color/palettetext"
                         android:textSize="18sp"
                         android:textStyle="bold" />
@@ -321,7 +346,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:padding="8dp"
-                        android:text="Similar Recipes"
+                        android:text="@string/activity_recipe_details_similarrecipes_title"
                         android:textColor="@color/palettetext"
                         android:textSize="18sp"
                         android:textStyle="bold" />

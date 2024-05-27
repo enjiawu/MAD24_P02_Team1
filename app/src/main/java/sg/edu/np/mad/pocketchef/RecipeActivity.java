@@ -1,11 +1,8 @@
 package sg.edu.np.mad.pocketchef;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.GestureDetector;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -56,7 +53,7 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.recipe_activity);
+        setContentView(R.layout.activity_recipe);
         // Intialise views and listener
         setupViews();
         setupListeners();
@@ -189,15 +186,6 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
 
     private final RecipeClickListener recipeClickListener = id -> startActivity(new Intent(RecipeActivity.this, RecipeDetailsActivity.class)
             .putExtra(EXTRA_RECIPE_ID, id));
-
-    @Override
-    public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {

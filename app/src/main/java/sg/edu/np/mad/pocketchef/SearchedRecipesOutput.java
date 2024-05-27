@@ -127,8 +127,8 @@ public class SearchedRecipesOutput extends AppCompatActivity implements Navigati
         expandSearchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { //Go back to AdvancedSearchActivity
-                Intent intent = new Intent(SearchedRecipesOutput.this, AdvancedSearchActivity.class);
-                startActivity(intent);
+                Intent SearchedRecipeintent = new Intent(SearchedRecipesOutput.this, AdvancedSearchActivity.class);
+                startActivity(SearchedRecipeintent);
             }
         });
 
@@ -239,7 +239,7 @@ public class SearchedRecipesOutput extends AppCompatActivity implements Navigati
 
     //To see recipe details
     private final RecipeClickListener recipeClickListener = id -> startActivity(new Intent(SearchedRecipesOutput.this, RecipeDetailsActivity.class)
-            .putExtra(EXTRA_RECIPE_ID, id));
+            .putExtra("id", id));
 
     //For menu
     @Override

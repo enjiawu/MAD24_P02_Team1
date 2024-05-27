@@ -1,13 +1,17 @@
 package sg.edu.np.mad.pocketchef;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.GestureDetector;
+import android.util.Log;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,13 +34,14 @@ import com.google.android.material.navigation.NavigationView;
 import com.squareup.picasso.Picasso;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import sg.edu.np.mad.pocketchef.Adapters.IngredientsAdapater;
 import sg.edu.np.mad.pocketchef.Adapters.InstructionsAdapter;
 import sg.edu.np.mad.pocketchef.Adapters.SimilarRecipeAdapter;
 import sg.edu.np.mad.pocketchef.Listener.InstructionsListener;
-import sg.edu.np.mad.pocketchef.Listener.OnSwipeTouchListener;
 import sg.edu.np.mad.pocketchef.Listener.RecipeClickListener;
 import sg.edu.np.mad.pocketchef.Listener.RecipeDetailsListener;
 import sg.edu.np.mad.pocketchef.Listener.SimilarRecipesListener;
@@ -46,9 +51,10 @@ import sg.edu.np.mad.pocketchef.Models.SimilarRecipeResponse;
 import sg.edu.np.mad.pocketchef.Models.SummaryParser;
 
 public class RecipeDetailsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
     // Global variables for activity
     private static final long API_REQUEST_DELAY = 1000;
-    int id;
+    int recipeId;
     TextView textView_meal_name, textView_meal_source, textView_meal_servings, textView_meal_ready, textView_meal_price,
             textView_protein_value, textView_fat_value, textView_calories_value, textView_daily_requirements_coverage_value;
     ImageView imageView_meal_image, imageView_nutrition;
@@ -78,7 +84,7 @@ public class RecipeDetailsActivity extends AppCompatActivity implements Navigati
         });
 
         findViews();
-        id = Integer.parseInt(getIntent().getStringExtra("id"));
+        recipeId = Integer.parseInt(getIntent().getStringExtra("id"));
         // Utilising RequestManager class methods
         loadRecipeDetailsWithStaggeredApiCalls();
         // Set up nav menu
@@ -88,9 +94,8 @@ public class RecipeDetailsActivity extends AppCompatActivity implements Navigati
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(RecipeDetailsActivity.this);
         navigationView.setCheckedItem(nav_home);
-        // Set up nutrition image
-        loadNutritionLabelImage();
-        // Set up onButtonClickListener
+        loadNutritionLabelImage(); // Load the image when the layout becomes visible
+        // Set up the OnClickListener for the button
         buttonNutritionLabel.setOnClickListener(v -> {
             if (nutritionLabelLayout.getVisibility() == View.VISIBLE) {
                 nutritionLabelLayout.setVisibility(View.GONE);
@@ -98,24 +103,10 @@ public class RecipeDetailsActivity extends AppCompatActivity implements Navigati
                 nutritionLabelLayout.setVisibility(View.VISIBLE);
             }
         });
-        // Define a GestureDetector
-        GestureDetector gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
-            @Override
-            public boolean onDoubleTap(MotionEvent e) {
-                // Toggle visibility of the nutrition dialog layout
-                if (nutritionLabelLayout.getVisibility() == View.VISIBLE) {
-                    nutritionLabelLayout.setVisibility(View.GONE);
-                } else {
-                    nutritionLabelLayout.setVisibility(View.VISIBLE);
-                }
-                return true;
-            }
-        });
 
-// Set touch listener for the recipe image
-        imageView_meal_image.setOnTouchListener((v, event) -> gestureDetector.onTouchEvent(event));
+        //set the onclicklistener for the favorite button
+        btnFavorite.setOnClickListener(v -> showFavoriteDialog());
     }
-
     // Intialise objects
     private void findViews() {
         // Intialise Progress Bar
@@ -151,14 +142,16 @@ public class RecipeDetailsActivity extends AppCompatActivity implements Navigati
         imageView_nutrition = findViewById(R.id.imageView_nutrition);
         // Intialise Button
         buttonNutritionLabel = findViewById(R.id.button_Nutrition_Label);
+        // intialise favorite button
+        btnFavorite = findViewById(R.id.btn_favorite);
     }
     private void loadRecipeDetailsWithStaggeredApiCalls() {
         progressBar.setVisibility(View.VISIBLE);
         manager = new RequestManager(this);
         InstructionsManager instructionsManager = new InstructionsManager();
-        instructionsManager.fetchInstructionsWithDelay(manager, instructionsListener, id, 0);
-        instructionsManager.fetchRecipeDetailsWithDelay(manager, recipeDetailsListener, id, API_REQUEST_DELAY);
-        instructionsManager.fetchSimilarRecipesWithDelay(manager, similarRecipesListener, id, API_REQUEST_DELAY * 2);
+        instructionsManager.fetchInstructionsWithDelay(manager, instructionsListener, recipeId, 0);
+        instructionsManager.fetchRecipeDetailsWithDelay(manager, recipeDetailsListener, recipeId, API_REQUEST_DELAY);
+        instructionsManager.fetchSimilarRecipesWithDelay(manager, similarRecipesListener, recipeId, API_REQUEST_DELAY * 2);
     }
     // Implementing the recipeDetailsListener
     private final RecipeDetailsListener recipeDetailsListener = new RecipeDetailsListener() {
@@ -232,15 +225,6 @@ public class RecipeDetailsActivity extends AppCompatActivity implements Navigati
     };
 
     @Override
-    public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         int itemId = menuItem.getItemId();
         if (itemId == R.id.nav_home) {
@@ -261,11 +245,52 @@ public class RecipeDetailsActivity extends AppCompatActivity implements Navigati
     // Loading nutrition image
     private void loadNutritionLabelImage() {
         // Construct the URL for the nutrition label image
-        String nutritionLabelUrl = "https://api.spoonacular.com/recipes/" + id + "/nutritionLabel.png?apiKey=" + getString(R.string.api_key);
+        String nutritionLabelUrl = "https://api.spoonacular.com/recipes/" + recipeId + "/nutritionLabel.png?apiKey=" + getString(R.string.api_key);
+        Log.d("RecipeDetailsActivity", "Nutrition Label URL: " + nutritionLabelUrl);
         // Load the image using Picasso
         Picasso.get().load(nutritionLabelUrl)
-                .fit()
-                .centerInside()
                 .into(imageView_nutrition);
+    }
+
+
+
+
+    // Add to favorite list
+    MaterialButton btnFavorite;
+    List<String> categories;
+    private void showFavoriteDialog() {
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_add_to_favorites, null);
+        Spinner spinnerCategories = dialogView.findViewById(R.id.spinner_categories);
+        EditText editTextNewCategory = dialogView.findViewById(R.id.edit_new_category);
+        Button buttonSave = dialogView.findViewById(R.id.button_save);
+        Button buttonCancel = dialogView.findViewById(R.id.button_cancel);
+
+        categories = getCategories();
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerCategories.setAdapter(adapter);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(dialogView);
+        AlertDialog dialog = builder.create();
+
+        buttonSave.setOnClickListener(v -> {
+            String selectedCategory = spinnerCategories.getSelectedItem().toString();
+            String newCategory = editTextNewCategory.getText().toString().trim();
+
+            if (!newCategory.isEmpty()) {
+                categories.add(newCategory);
+                selectedCategory = newCategory;
+            }
+            dialog.dismiss();
+        });
+
+        buttonCancel.setOnClickListener(v -> dialog.dismiss());
+
+        dialog.show();
+    }
+
+    private List<String> getCategories() {
+        return new ArrayList<>(Arrays.asList("Favorite"));
     }
 }
