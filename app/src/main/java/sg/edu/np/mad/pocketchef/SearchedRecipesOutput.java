@@ -207,6 +207,15 @@ public class SearchedRecipesOutput extends AppCompatActivity implements Navigati
         }, query, excludeIngredients, minCarbs, maxCarbs, minProtein, maxProtein, minCalories, maxCalories, diet, intolerances, sort, sortDirection);
     }
 
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
     //Setting up recycler view to show searched recipes
     private void setupSearchedRecipeRecyclerView(SearchedRecipeApiResponse response) {
         recyclerSearchedRecpies.setHasFixedSize(true);
@@ -250,11 +259,15 @@ public class SearchedRecipesOutput extends AppCompatActivity implements Navigati
             finish();
             startActivity(intent);
         } else if (itemId == R.id.nav_recipes) {
-            // Nothing happens
-        } else if (itemId == R.id.nav_search) {
-            Intent intent2 = new Intent(SearchedRecipesOutput.this, AdvancedSearchActivity.class);
+            Intent intent2 = new Intent(SearchedRecipesOutput.this, RecipeActivity.class);
             finish();
             startActivity(intent2);
+        } else if (itemId == R.id.nav_search) {
+            // Nothing happens
+        } else if (itemId == R.id.nav_profile){
+            Intent intent3 = new Intent(SearchedRecipesOutput.this, ProfileActivity.class);
+            finish();
+            startActivity(intent3);
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;

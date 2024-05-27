@@ -62,6 +62,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+        <!--
         <Constraint
             android:id="@+id/cardView5"
             android:layout_width="0dp"
@@ -81,7 +82,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent" />-->
 
     </ConstraintSet>
 
@@ -134,7 +135,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/cardView3"
             app:layout_constraintTop_toBottomOf="@+id/cardView2" />
-
+        <!--For Stage 2-->
+        <!--
         <Constraint
             android:id="@+id/cardView5"
             android:layout_width="0dp"
@@ -152,7 +154,7 @@
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/cardView5"
-            app:layout_constraintTop_toBottomOf="@+id/cardView3" />
+            app:layout_constraintTop_toBottomOf="@+id/cardView3" />-->
         <Constraint
             android:id="@+id/toolbar"
             android:layout_width="0dp"

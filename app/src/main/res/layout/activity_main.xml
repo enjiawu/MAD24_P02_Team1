@@ -210,10 +210,11 @@
 
                 <ImageView
                     android:id="@+id/imageView_buttonlogo3"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="40dp"
+                    android:layout_marginBottom="20dp"
                     app:srcCompat="@drawable/ic_btn_star" />
             </RelativeLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -239,14 +240,17 @@
 
                 <ImageView
                     android:id="@+id/imageView_buttonlogo4"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="40dp"
+                    android:layout_marginBottom="20dp"
                     app:srcCompat="@drawable/mad_icons" />
             </RelativeLayout>
         </com.google.android.material.card.MaterialCardView>
 
+        <!--For Stage 2-->
+        <!--
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardView5"
             android:layout_width="0dp"
@@ -297,12 +301,13 @@
 
                 <ImageView
                     android:id="@+id/imageView_buttonlogo6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="15dp"
                     app:srcCompat="@drawable/ic_launcher_foreground" />
             </RelativeLayout>
         </com.google.android.material.card.MaterialCardView>
+        -->
     </androidx.constraintlayout.motion.widget.MotionLayout>
 </androidx.drawerlayout.widget.DrawerLayout>
