@@ -84,8 +84,13 @@ Through our platform, users will gain access to tools and resources to plan meal
 - Obtain Recipe IDs from Spoonacular API, parse into recycler views in new activity - [ ]
 - Implement onClickListener for recipes leading to RecipeDetailsActivity - [ ]
 
-#### Community page - Enjia - [ ]
-#### Caloric Counter - Ggwendolynn - [ ]
+#### Community page using SQLite with app notifications and recipe sharing to WhatsApp - Enjia - [ ]
+- Successfully implement Community Page User Interface - [ ]
+- Successfully implement functionality to let users add, delete and edit posts - [ ]
+- Successfully format recipe details to be displayed - [ ]
+- Successfully implement app notifications for posts - [ ]
+- Successfully implement recipe sharing using WhatsApp API - [ ]
+#### Calorie Counter - Ggwendolynn - [ ]
 #### Virtual Pantry - Timothy - [ ]
 #### Generated Shopping List - Wenya - [ ]
 ### Acknowledgements:
