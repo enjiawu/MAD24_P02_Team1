@@ -34,7 +34,7 @@ public class AddToFavoritesDialog extends Dialog {
         setContentView(R.layout.dialog_add_to_favorites);
 
         categorySpinner = findViewById(R.id.spinner_categories);
-        editTextNewCategory = findViewById(R.id.edit_new_category);
+
         buttonSave = findViewById(R.id.button_save);
         buttonCancel = findViewById(R.id.button_cancel);
 

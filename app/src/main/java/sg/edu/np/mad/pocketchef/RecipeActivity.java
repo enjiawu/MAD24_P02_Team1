@@ -180,11 +180,13 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
     private void setupRandomRecipeRecyclerView(RandomRecipeApiResponse response) {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(RecipeActivity.this, 1));
-        RandomRecipeAdapter randomRecipeAdapter = new RandomRecipeAdapter(RecipeActivity.this, response.recipes, recipeClickListener);
+        RandomRecipeAdapter randomRecipeAdapter = new RandomRecipeAdapter(RecipeActivity.this,
+                response.recipes, recipeClickListener);
         recyclerView.setAdapter(randomRecipeAdapter);
     }
 
-    private final RecipeClickListener recipeClickListener = id -> startActivity(new Intent(RecipeActivity.this, RecipeDetailsActivity.class)
+    private final RecipeClickListener recipeClickListener = id ->
+            startActivity(new Intent(RecipeActivity.this, RecipeDetailsActivity.class)
             .putExtra(EXTRA_RECIPE_ID, id));
 
     @Override
@@ -198,6 +200,10 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
             // Nothing happens
         } else if (itemId == R.id.nav_search) {
             Intent intent2 = new Intent(RecipeActivity.this, AdvancedSearchActivity.class);
+            finish();
+            startActivity(intent2);
+        }else if(itemId == R.id.nav_shoppinglist){
+            Intent intent2 = new Intent(RecipeActivity.this, CreateCategoryActivity.class);
             finish();
             startActivity(intent2);
         }
