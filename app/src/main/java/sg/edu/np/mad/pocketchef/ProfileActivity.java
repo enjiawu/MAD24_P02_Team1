@@ -186,6 +186,10 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
             startActivity(intent2);
         } else if (itemId == R.id.nav_profile){
             //Nothing Happens
+        } else if(itemId == R.id.nav_favourites){
+            Intent intent3 = new Intent(ProfileActivity.this, CreateCategoryActivity.class);
+            finish();
+            startActivity(intent3);
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;

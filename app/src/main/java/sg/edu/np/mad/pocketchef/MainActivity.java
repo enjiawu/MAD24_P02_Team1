@@ -260,7 +260,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent intent3 = new Intent(MainActivity.this, ProfileActivity.class);
             finish();
             startActivity(intent3);
+        }else if(itemId == R.id.nav_favourites){
+            Intent intent3 = new Intent(MainActivity.this, CreateCategoryActivity.class);
+            finish();
+            startActivity(intent3);
         }
+
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }

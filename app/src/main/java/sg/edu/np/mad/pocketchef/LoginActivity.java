@@ -176,12 +176,6 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
-
-
-
-
-
-
         TextView setProfilePictureText = findViewById(R.id.setProfilePictureText);
         ImageView setProfilePicture = findViewById(R.id.setProfilePicture);
 
