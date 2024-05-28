@@ -252,10 +252,7 @@ public class RecipeDetailsActivity extends AppCompatActivity implements Navigati
                 .into(imageView_nutrition);
     }
 
-
-
-
-    // Add to favorite list
+    // Add to favorite list, by Wenya
     MaterialButton btnFavorite;
     List<String> categories;
     private void showFavoriteDialog() {

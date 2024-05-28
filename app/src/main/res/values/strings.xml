@@ -131,5 +131,17 @@
     <string name="btn_favourite_text">Add To Favourites</string>
     <string name="cardview3_text">Favourites</string>
     <string name="cardView_6_text">Profile</string>
+    <string name="login_text">Log in</string>
+    <string name="profileDescriptionSignUp_text">Profile Description</string>
+    <string name="setProfilePictureText_text">Set Profile Picture</string>
+    <string name="dateOfBirthSignUp_text">Date of Birth</string>
+    <string name="nameSignUp_text">Name</string>
+    <string name="createAccount_text">Create Account</string>
+    <string name="cancelSignUp_text">Cancel</string>
+    <string name="confirmPasswordSignUp_text">Confirm Password</string>
+    <string name="passwordSignUp_text">Password</string>
+    <string name="emailSignUp_text">Email</string>
+    <string name="usernameSignUp_text">Username</string>
+    <string name="SignUp_text">Sign up</string>
 
 </resources>

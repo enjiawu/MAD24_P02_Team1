@@ -18,30 +18,21 @@ import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
 import androidx.core.view.GravityCompat;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
 
-import java.util.List;
-
 import sg.edu.np.mad.pocketchef.Adapters.SearchedRecipesAdapter;
 import sg.edu.np.mad.pocketchef.Listener.RecipeClickListener;
 import sg.edu.np.mad.pocketchef.Listener.SearchRecipeListener;
-import sg.edu.np.mad.pocketchef.Models.SearchedRecipe;
 import sg.edu.np.mad.pocketchef.Models.SearchedRecipeApiResponse;
 
 public class SearchedRecipesOutput extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     //Defining necessary variables
-    private static final String EXTRA_RECIPE_ID = "id";
     private ProgressBar progressBar;
     private RequestManager requestManager;
     private RecyclerView recyclerSearchedRecpies;
@@ -124,12 +115,9 @@ public class SearchedRecipesOutput extends AppCompatActivity implements Navigati
     // Setting up listeners
     public void setupListeners(){
         //Check if expandSearchButton has been clicked
-        expandSearchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) { //Go back to AdvancedSearchActivity
-                Intent SearchedRecipeintent = new Intent(SearchedRecipesOutput.this, AdvancedSearchActivity.class);
-                startActivity(SearchedRecipeintent);
-            }
+        expandSearchButton.setOnClickListener(v -> { //Go back to AdvancedSearchActivity
+            Intent SearchedRecipeintent = new Intent(SearchedRecipesOutput.this, AdvancedSearchActivity.class);
+            startActivity(SearchedRecipeintent);
         });
 
         //Check if user chose to sort recipes
@@ -139,7 +127,7 @@ public class SearchedRecipesOutput extends AppCompatActivity implements Navigati
                 sort = sortBySpinner.getSelectedItem().toString();
 
                 //Check how user wants to sort recipes
-                if (sort == "Sort by") {
+                if (sort.equals("Sort by")) {
                     sort = null;
                 } else {
                     switch (sort) { // Replace sort and sort direction values with user's chosen option
@@ -189,7 +177,7 @@ public class SearchedRecipesOutput extends AppCompatActivity implements Navigati
             public void didFetch(SearchedRecipeApiResponse response, String message) {
                 // Log the API response
                 if (response != null) {
-                    Log.d("SearchActivity", "API Response: " + response.toString());
+                    Log.d("SearchActivity", "API Response: " + response);
                     // Process the response and update UI accordingly
                     setupSearchedRecipeRecyclerView(response);
                 } else {
