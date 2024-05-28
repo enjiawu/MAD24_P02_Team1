@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <style name="Theme.StartApp" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/palettebeige</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/pocketchef_logo</item>
-        <item name="android:windowSplashScreenBrandingImage">@drawable/pocketchef_logo</item>
         <item name="postSplashScreenTheme">@style/Base.Theme.pocketchef</item>
     </style>
 </resources>

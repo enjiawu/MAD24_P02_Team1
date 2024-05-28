@@ -8,7 +8,6 @@ import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,14 +21,15 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
+import androidx.core.splashscreen.SplashScreen;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -66,17 +66,17 @@ public class LoginActivity extends AppCompatActivity {
     private Boolean validEmail = false;
     private Boolean validPassword = false;
     private Boolean validConfirmPassword = false;
-    private Button createAccount;
+    private MaterialButton createAccount;
 
     private String passwordLogInText = "";
     private String usernameEmailLogInText = "";
-
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
+        SplashScreen.installSplashScreen(this);
         setContentView(R.layout.activity_login);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -90,7 +90,7 @@ public class LoginActivity extends AppCompatActivity {
         viewAnimator.setInAnimation(this, android.R.anim.slide_in_left);
 //        viewAnimator.setOutAnimation(this, android.R.anim.slide_out_right);
 
-        Button signUp = findViewById(R.id.signUp);
+        MaterialButton signUp = findViewById(R.id.signUp);
         createAccount = findViewById(R.id.createAccount);
 
 //        Show next view
@@ -109,7 +109,8 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 viewAnimator.showPrevious();
             }
-        };
+        }
+        ;
 
         signUp.setOnClickListener(new Next());
 //        createAccount.setOnClickListener(new Next());
@@ -128,14 +129,8 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
-
-
-
-        Button cancelSignUp = findViewById(R.id.cancelSignUp);
+        MaterialButton cancelSignUp = findViewById(R.id.cancelSignUp);
         cancelSignUp.setOnClickListener(new Back());
-
-
-
 
 
         String defaultDate = "01-January-2000";
@@ -175,13 +170,6 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
-
-
-
-
-
-
-
         TextView setProfilePictureText = findViewById(R.id.setProfilePictureText);
         ImageView setProfilePicture = findViewById(R.id.setProfilePicture);
 
@@ -210,9 +198,6 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
-
-
-
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
@@ -231,7 +216,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
                     usedUsernames.add(childSnapshot.getValue(String.class));
-                    Log.d("CHILD",childSnapshot.getValue(String.class));
+                    Log.d("CHILD", childSnapshot.getValue(String.class));
 
                 }
 
@@ -256,7 +241,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
                     usedEmails.add(childSnapshot.getValue(String.class));
-                    Log.d("CHILD",childSnapshot.getValue(String.class));
+                    Log.d("CHILD", childSnapshot.getValue(String.class));
 
                 }
 
@@ -273,12 +258,12 @@ public class LoginActivity extends AppCompatActivity {
 
 //        Login
         //        Log in the user
-        Button logIn = findViewById(R.id.logIn);
+        MaterialButton logIn = findViewById(R.id.login);
         logIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                Make sure fields are not empty
-                if(usernameEmailLogInText.strip().isEmpty())  {
+                if (usernameEmailLogInText.strip().isEmpty()) {
                     Toast.makeText(LoginActivity.this, "Fill in your username/email.",
                             Toast.LENGTH_SHORT).show();
 
@@ -289,7 +274,7 @@ public class LoginActivity extends AppCompatActivity {
 //                    If email is entered
                 } else if (usernameEmailLogInText.contains("@") && usernameEmailLogInText.contains(".")) {
                     mAuth.signInWithEmailAndPassword(usernameEmailLogInText, passwordLogInText).addOnCompleteListener(task -> {
-                        if(task.isSuccessful()) {
+                        if (task.isSuccessful()) {
 //                            Go to main
                             Intent logIn = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(logIn);
@@ -297,11 +282,12 @@ public class LoginActivity extends AppCompatActivity {
                         } else {
                             Log.d("CONTAINS", String.valueOf(usedEmails.contains(usernameEmailLogInText)));
 
-                            if(!usedEmails.contains(usernameEmailLogInText))
+                            if (!usedEmails.contains(usernameEmailLogInText))
                                 Toast.makeText(LoginActivity.this, "User does not exist.",  // If user does not exist in database
                                         Toast.LENGTH_SHORT).show();
-                            else Toast.makeText(LoginActivity.this, "Invalid password.",    // If user exists but incorrect password
-                                    Toast.LENGTH_SHORT).show();
+                            else
+                                Toast.makeText(LoginActivity.this, "Invalid password.",    // If user exists but incorrect password
+                                        Toast.LENGTH_SHORT).show();
                         }
                     });
                 } else {
@@ -311,35 +297,36 @@ public class LoginActivity extends AppCompatActivity {
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             Log.d("LISTENER", String.valueOf(snapshot.getChildren()));
 //                            Iterate through list of usernames in use
-                            for(DataSnapshot user : snapshot.getChildren()) {
+                            for (DataSnapshot user : snapshot.getChildren()) {
                                 Log.d("LISTENER", user.child("username").getValue(String.class));
 //                                Find the email that is associated to the same account as the username entered
-                                if(usernameEmailLogInText.equalsIgnoreCase(user.child("username").getValue(String.class))) {
+                                if (usernameEmailLogInText.equalsIgnoreCase(user.child("username").getValue(String.class))) {
                                     mAuth.signInWithEmailAndPassword(user.child("email").getValue(String.class), passwordLogInText).addOnCompleteListener(task -> {
-                                        if(task.isSuccessful()) {
+                                        if (task.isSuccessful()) {
 //                                            Go to main
                                             Intent logIn = new Intent(LoginActivity.this, MainActivity.class);
                                             startActivity(logIn);
 
                                         } else {
                                             Log.d("CONTAINS U", String.valueOf(usedUsernames.contains(usernameEmailLogInText)));
-                                            if(!usedUsernames.contains(usernameEmailLogInText)) {
+                                            if (!usedUsernames.contains(usernameEmailLogInText)) {
                                                 Toast.makeText(LoginActivity.this, "User does not exist.",  // If user does not exist in database
                                                         Toast.LENGTH_SHORT).show();
-                                            } else Toast.makeText(LoginActivity.this, "Invalid Password.",  // If user exists but incorrect password
-                                                    Toast.LENGTH_SHORT).show();
+                                            } else
+                                                Toast.makeText(LoginActivity.this, "Invalid Password.",  // If user exists but incorrect password
+                                                        Toast.LENGTH_SHORT).show();
 
 
                                         }
                                     });
                                     break;
-                                };
+                                }
+                                ;
                             }
                         }
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError error) {
-
 
 
                         }
@@ -368,7 +355,7 @@ public class LoginActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
 
                 username = s.toString();
-                Validate("username",usernameSignUp);
+                Validate("username", usernameSignUp);
 
             }
         });
@@ -390,7 +377,7 @@ public class LoginActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
 
                 email = s.toString();
-                Validate("email",emailSignUp);
+                Validate("email", emailSignUp);
             }
         });
 
@@ -414,7 +401,7 @@ public class LoginActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
 
                 password = s.toString();
-                Validate("password",passwordSignUp, confirmPasswordSignUp);
+                Validate("password", passwordSignUp, confirmPasswordSignUp);
 
             }
         });
@@ -434,11 +421,9 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 confirmPassword = s.toString();
-                Validate("confirmPassword",confirmPasswordSignUp);
+                Validate("confirmPassword", confirmPasswordSignUp);
             }
         });
-
-
 
 
 //        Create new account on button press
@@ -470,7 +455,6 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
-
 
 
 //        Keep track of username / email entered
@@ -513,13 +497,11 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
-
-
         TextInputLayout nameSignUp = findViewById(R.id.nameSignUp);
 
         TextInputLayout profileDescriptionSignUp = findViewById(R.id.profileDescriptionSignUp);
 
-        Button startCooking = findViewById(R.id.startCooking);
+        MaterialButton startCooking = findViewById(R.id.startCooking);
         startCooking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -538,9 +520,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
-
     }
-
 
 
     @Override
@@ -548,7 +528,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser != null){
+        if (currentUser != null) {
             currentUser.reload();
         }
     }
@@ -558,16 +538,16 @@ public class LoginActivity extends AppCompatActivity {
 //
 //    }
 
-//    Validate various user inputs
+    //    Validate various user inputs
     public void Validate(String type, TextInputLayout textInputLayout, TextInputLayout... passwordInputLayout) {
         Boolean valid;
-        switch(type) {
+        switch (type) {
 
             case "username":
                 valid = true;
 //                Check if username is already in use
-                for(String u : usedUsernames) {
-                    if(username.equalsIgnoreCase(u)) {
+                for (String u : usedUsernames) {
+                    if (username.equalsIgnoreCase(u)) {
                         validUsername = false;
                         textInputLayout.setError("Username is already taken");
                         valid = false;
@@ -575,7 +555,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 }
 //                Remove error
-                if(valid) {
+                if (valid) {
                     textInputLayout.setError(null);
                     validUsername = true;
                     break;
@@ -585,8 +565,8 @@ public class LoginActivity extends AppCompatActivity {
             case "email":
                 valid = true;
 //                Check if email is already in use
-                for(String e : usedEmails) {
-                    if(email.equalsIgnoreCase(e)) {
+                for (String e : usedEmails) {
+                    if (email.equalsIgnoreCase(e)) {
                         validEmail = false;
                         textInputLayout.setError("Email is already in use by another account");
                         valid = false;
@@ -594,7 +574,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 }
 //                Remove error
-                if(valid) {
+                if (valid) {
                     textInputLayout.setError(null);
                     validEmail = true;
                     break;
@@ -603,7 +583,7 @@ public class LoginActivity extends AppCompatActivity {
 
             case "password":
 //                Password needs to be at least 6 characters
-                if(password.length() < 6) {
+                if (password.length() < 6) {
                     validPassword = false;
                     textInputLayout.setError("Password needs to have at least 6 characters");
                     break;
@@ -613,7 +593,7 @@ public class LoginActivity extends AppCompatActivity {
                     validPassword = true;
                 }
 //                Check if passwords match
-                if(password.equals(confirmPassword)) {
+                if (password.equals(confirmPassword)) {
                     textInputLayout.setError(null);
                     validPassword = true;
                     Log.d("VALIDPASSWORD", validPassword.toString());
@@ -624,7 +604,7 @@ public class LoginActivity extends AppCompatActivity {
 //                Optional parameter defaults to the same textInputLayout
                 TextInputLayout confirmPasswordInputLayout = passwordInputLayout.length == 0 ? textInputLayout : passwordInputLayout[0];
 //                Check if passwords match
-                if(!confirmPassword.equals(password)) {
+                if (!confirmPassword.equals(password)) {
                     validConfirmPassword = false;
                     confirmPasswordInputLayout.setError("Passwords must be the same");
                     break;
@@ -638,17 +618,11 @@ public class LoginActivity extends AppCompatActivity {
         }
 
 //        Allow account creation if all inputs are valid
-        if(validUsername && validEmail && validPassword && validConfirmPassword) {
+        if (validUsername && validEmail && validPassword && validConfirmPassword) {
             createAccount.setEnabled(true);
         } else {
             createAccount.setEnabled(false);
         }
 
     }
-
-
-
-
-
-
 }
