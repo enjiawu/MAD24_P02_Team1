@@ -33,8 +33,6 @@
             android:exported="false" />
         <activity
             android:theme="@style/Theme.StartApp"
-
-
             android:name=".MainActivity"
             android:exported="true" />
         <activity

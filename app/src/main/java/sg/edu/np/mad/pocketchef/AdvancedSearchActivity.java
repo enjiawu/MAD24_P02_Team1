@@ -183,6 +183,15 @@ public class AdvancedSearchActivity extends AppCompatActivity implements Navigat
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
     //For menu
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -197,6 +206,10 @@ public class AdvancedSearchActivity extends AppCompatActivity implements Navigat
             startActivity(intent2);
         } else if (itemId == R.id.nav_search) {
             // Nothing happens
+        }else if (itemId == R.id.nav_profile){
+        Intent intent3 = new Intent(AdvancedSearchActivity.this, ProfileActivity.class);
+        finish();
+        startActivity(intent3);
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
