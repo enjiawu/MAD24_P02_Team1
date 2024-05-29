@@ -6,8 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".ProfileActivity"
-    tools:openDrawer="start">
+    tools:context=".ProfileActivity">
 
     <!--  NavigationView  -->
     <com.google.android.material.navigation.NavigationView
