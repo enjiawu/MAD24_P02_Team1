@@ -41,10 +41,18 @@ public class InstructionsIngredientsAdapter extends RecyclerView.Adapter<Instruc
         } else {
             holder.textView_instructions_step_item.setText(list.get(position).name);
             holder.textView_instructions_step_item.setSelected(true);
-            Picasso.get().load(list.get(position).image)
-                    .fit()
-                    .centerCrop()
-                    .into(holder.imageView_instructions_step_items);
+
+            // Check if the image path is not null and not empty
+            if (list.get(position).image != null && !list.get(position).image.isEmpty()) {
+                Picasso.get()
+                        .load(list.get(position).image)
+                        .fit()
+                        .centerCrop()
+                        .into(holder.imageView_instructions_step_items);
+            } else {
+                // Handle the case where the image URL is null or empty
+                holder.imageView_instructions_step_items.setImageResource(R.drawable.pocketchef_logo_transparent);
+            }
         }
     }
 

@@ -41,10 +41,16 @@ public class InstructionsEquipmentsAdapter extends RecyclerView.Adapter<Instruct
         } else {
             holder.textView_instructions_step_item.setText(list.get(position).name);
             holder.textView_instructions_step_item.setSelected(true);
-            Picasso.get().load(list.get(position).image)
-                    .fit()
-                    .centerCrop()
-                    .into(holder.imageView_instructions_step_items);
+            if (list != null && list.get(position) != null && list.get(position).image != null) {
+                Picasso.get()
+                        .load(list.get(position).image)
+                        .fit()
+                        .centerCrop()
+                        .into(holder.imageView_instructions_step_items);
+            } else {
+                // Optionally handle the case where the image URL is null
+                holder.imageView_instructions_step_items.setImageResource(R.drawable.pocketchef_logo_transparent);
+            }
         }
     }
 

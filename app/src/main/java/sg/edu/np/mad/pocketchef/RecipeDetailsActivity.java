@@ -38,6 +38,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.RecursiveAction;
 
 import sg.edu.np.mad.pocketchef.Adapters.IngredientsAdapater;
 import sg.edu.np.mad.pocketchef.Adapters.InstructionsAdapter;
@@ -107,7 +108,7 @@ public class RecipeDetailsActivity extends AppCompatActivity implements Navigati
         });
 
         //set the onclicklistener for the favorite button
-        btnFavorite.setOnClickListener(v -> showFavoriteDialog());
+//        btnFavorite.setOnClickListener(v -> showFavoriteDialog());
     }
     // Intialise objects
     private void findViews() {
@@ -244,11 +245,17 @@ public class RecipeDetailsActivity extends AppCompatActivity implements Navigati
             finish();
             startActivity(intent);
         } else if (itemId == R.id.nav_recipes) {
-            // Nothing happens
-        } else if (itemId == R.id.nav_search) {
-            Intent intent2 = new Intent(RecipeDetailsActivity.this, AdvancedSearchActivity.class);
+            Intent intent2 = new Intent(RecipeDetailsActivity.this, RecipeActivity.class);
             finish();
             startActivity(intent2);
+        } else if (itemId == R.id.nav_search) {
+            Intent intent3 = new Intent(RecipeDetailsActivity.this, AdvancedSearchActivity.class);
+            finish();
+            startActivity(intent3);
+        } else if (itemId == R.id.nav_profile){
+            Intent intent4 = new Intent(RecipeDetailsActivity.this, ProfileActivity.class);
+            finish();
+            startActivity(intent4);
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
@@ -265,40 +272,40 @@ public class RecipeDetailsActivity extends AppCompatActivity implements Navigati
     }
 
     // Add to favorite list, by Wenya
-    List<String> categories;
-    private void showFavoriteDialog() {
-        View dialogView = getLayoutInflater().inflate(R.layout.dialog_add_to_favorites, null);
-        Spinner spinnerCategories = dialogView.findViewById(R.id.spinner_categories);
-        EditText editTextNewCategory = dialogView.findViewById(R.id.edit_new_category);
-        Button buttonSave = dialogView.findViewById(R.id.button_save);
-        Button buttonCancel = dialogView.findViewById(R.id.button_cancel);
-
-        categories = getCategories();
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerCategories.setAdapter(adapter);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setView(dialogView);
-        AlertDialog dialog = builder.create();
-
-        buttonSave.setOnClickListener(v -> {
-            String selectedCategory = spinnerCategories.getSelectedItem().toString();
-            String newCategory = editTextNewCategory.getText().toString().trim();
-
-            if (!newCategory.isEmpty()) {
-                categories.add(newCategory);
-                selectedCategory = newCategory;
-            }
-            dialog.dismiss();
-        });
-
-        buttonCancel.setOnClickListener(v -> dialog.dismiss());
-
-        dialog.show();
-    }
-
-    private List<String> getCategories() {
-        return new ArrayList<>(Arrays.asList("Favorite"));
-    }
+//    List<String> categories;
+//    private void showFavoriteDialog() {
+//        View dialogView = getLayoutInflater().inflate(R.layout.dialog_add_to_favorites, null);
+//        Spinner spinnerCategories = dialogView.findViewById(R.id.spinner_categories);
+//        EditText editTextNewCategory = dialogView.findViewById(R.id.edit_new_category);
+//        Button buttonSave = dialogView.findViewById(R.id.button_save);
+//        Button buttonCancel = dialogView.findViewById(R.id.button_cancel);
+//
+//        categories = getCategories();
+//        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        spinnerCategories.setAdapter(adapter);
+//
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setView(dialogView);
+//        AlertDialog dialog = builder.create();
+//
+//        buttonSave.setOnClickListener(v -> {
+//            String selectedCategory = spinnerCategories.getSelectedItem().toString();
+//            String newCategory = editTextNewCategory.getText().toString().trim();
+//
+//            if (!newCategory.isEmpty()) {
+//                categories.add(newCategory);
+//                selectedCategory = newCategory;
+//            }
+//            dialog.dismiss();
+//        });
+//
+//        buttonCancel.setOnClickListener(v -> dialog.dismiss());
+//
+//        dialog.show();
+//    }
+//
+//    private List<String> getCategories() {
+//        return new ArrayList<>(Arrays.asList("Favorite"));
+//    }
 }
