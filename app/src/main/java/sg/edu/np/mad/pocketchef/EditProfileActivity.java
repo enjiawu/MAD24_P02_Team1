@@ -50,7 +50,7 @@ import sg.edu.np.mad.pocketchef.Models.Utils;
 
 public class EditProfileActivity extends AppCompatActivity {
 
-
+    // Declare UI elements
     CircleImageView profile_image;
     EditText usernameEt;
     EditText nameEt, emailEt;
@@ -59,7 +59,7 @@ public class EditProfileActivity extends AppCompatActivity {
     ImageView btnSave, backIv;
     String dob = null;
 
-
+    // Firebase Authentication and References
     FirebaseAuth mAuth;
     FirebaseUser mUser;
 
@@ -74,19 +74,24 @@ public class EditProfileActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Call the superclass onCreate method to ensure any superclass initialization is done
         super.onCreate(savedInstanceState);
+        // Set the layout for this activity
         setContentView(R.layout.activity_edit_profile);
 
+        // Initialize progress dialog (The "Updating" Status when user is saving)
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Updating");
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
-        // Initialize Firebase Database
+        // Initialize Firebase Database reference for user data
         mUserRef = FirebaseDatabase.getInstance().getReference("users");
+        // Initialize Firebase Storage reference for images
         mStorageRef = FirebaseStorage.getInstance().getReference().child("Images");
 
+        // Bind UI elements to their respective views
         backIv = findViewById(R.id.backIv);
 
         changePasswordTv = findViewById(R.id.changePasswordTv);
@@ -97,6 +102,9 @@ public class EditProfileActivity extends AppCompatActivity {
         emailEt = findViewById(R.id.emailEt);
         dobTv = findViewById(R.id.dobTv);
 
+        // Set click listeners for UI elements
+
+        // When profile image is clicked, launch image selection from gallery
         profile_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,6 +112,7 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
+        // When save button is clicked, save user data
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,6 +120,7 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
+        // When date of birth text view is clicked, allow user to select date
         dobTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,6 +128,7 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
+        // When back button is clicked, navigate back to previous activity
         backIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,15 +136,18 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
+        // When change password text view is clicked, initiate password change process
         changePasswordTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 changePassword();
             }
         });
+        // Load user profile data from Firebase
         loadProfile();
     }
 
+    // Method to change user password
     private void changePassword() {
 
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
@@ -141,22 +155,30 @@ public class EditProfileActivity extends AppCompatActivity {
         View dialogView = inflater.inflate(R.layout.dialog_change_password, null);
         dialogBuilder.setView(dialogView);
 
+        // Get references to EditTexts and Button in the dialog layout
         EditText newPasswordEt = dialogView.findViewById(R.id.newPasswordEt);
         EditText oldPasswordEt = dialogView.findViewById(R.id.oldPasswordEt);
         Button buttonChangePassword = dialogView.findViewById(R.id.buttonChangePassword);
 
+        // Create the AlertDialog
         AlertDialog alertDialog = dialogBuilder.create();
 
 
+        // Set click listener for the "Change Password" button
         buttonChangePassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Retrieve the new and old passwords entered by the user
                 String newPassword = newPasswordEt.getText().toString();
                 String oldPassword = oldPasswordEt.getText().toString();
+                // Check if the new password is not empty
                 if (!TextUtils.isEmpty(newPassword)) {
+                    // Call the changePassword method to change the user's password
+                    // Dismiss the dialog after changing the password
                     changePassword(oldPassword, newPassword, alertDialog);
                     alertDialog.dismiss();
                 } else {
+                    // Show a toast message if the new password is empty
                     Toast.makeText(getApplicationContext(), "Please enter a new password", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -166,10 +188,11 @@ public class EditProfileActivity extends AppCompatActivity {
 
     }
 
-
+    // Method to change user password in Firebase
     private void changePassword(String oldPassword, String newPassword, AlertDialog alertDialog) {
         FirebaseUser user = mAuth.getCurrentUser();
 
+        // Check if the user is not null (i.e., user is signed in)
         if (user != null) {
             // Create a credential using the user's email and current password
             AuthCredential credential = EmailAuthProvider.getCredential(user.getEmail(), oldPassword);
@@ -202,11 +225,14 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
 
+    // Method to load user profile data from Firebase
     private void loadProfile() {
-        // Read data from Firebase Database
+        // Read data from Firebase Database for the current user
         mUserRef.child(mUser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
+            // Method called when data changes in the database
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                // Check if the snapshot (data) exists
                 if (snapshot.exists()) {
                     // Retrieve data safely
                     String date_of_birth = snapshot.child("date-of-birth").getValue(String.class);
@@ -239,14 +265,14 @@ public class EditProfileActivity extends AppCompatActivity {
                     }
 
                     if (Image != null && !Image.isEmpty()) {
-                        Picasso.get().load(Image).into(profile_image);
+                        Picasso.get().load(Image).into(profile_image); // Load and set profile image using Picasso library
                     }
 
                     if (username != null && !username.isEmpty()) {
                         usernameEt.setText(username);
                     }
                 } else {
-                    Log.w(TAG, "DataSnapshot does not exist");
+                    Log.w(TAG, "DataSnapshot does not exist"); // Log warning if snapshot does not exist
                 }
             }
 
@@ -257,49 +283,63 @@ public class EditProfileActivity extends AppCompatActivity {
         });
     }
 
+    // Method to select a date using DatePickerDialog (The Calendar)
     private void selectDat() {
+        // Get the current instance of Calendar
         Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+        int year = calendar.get(Calendar.YEAR); // Get the current year from the Calendar instance
+        int month = calendar.get(Calendar.MONTH); // Get the current month from the Calendar instance
+        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH); // Get the current day of the month from the Calendar instance
 
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+        // Create a new DatePickerDialog with the current date as default
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, // Set an OnDateSetListener to handle the date selection event
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
+                    // Method called when a date is set by the user
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         // Do something with the selected date
                         String selectedDate = dayOfMonth + "/" + (month + 1) + "/" + year;
+                        // Store the selected date in the variable dob
                         dob = selectedDate;
+                        // Update the dobTv TextView to display the selected date
                         dobTv.setText(dob);
                     }
                 }, year, month, dayOfMonth);
         datePickerDialog.show();
     }
 
+    // Method to save profile data
     private void saveData() {
+        // Retrieve user input from EditText fields
         String username = usernameEt.getText().toString();
         String email = emailEt.getText().toString();
         String name = nameEt.getText().toString();
 
-
+        // Check if all required fields are empty and no image is selected
         if (username.isEmpty() && email.isEmpty() && name.isEmpty() && uri == null) {
+            // If all fields are empty, show a toast message prompting the user to add information
             Toast.makeText(this, "Please Add All Information", Toast.LENGTH_SHORT).show();
         } else if (uri == null) {
-            progressDialog.show();
-            saveText(username, name, email, dob, null);
+            // If no image is selected but other fields are filled, proceed to save the text data only
+            progressDialog.show(); // Show progress dialog
+            saveText(username, name, email, dob, null); // Call method to save text data
         } else {
+            // If an image is selected, save both the image and text data
             progressDialog.show();
             mStorageRef.child(mUser.getUid()).putFile(uri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                     if (task.isSuccessful()) {
+                        // If image upload is successful, get the download URL of the uploaded image
                         mStorageRef.child(mUser.getUid()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                             @Override
                             public void onSuccess(Uri uri) {
+                                // Once download URL is obtained, save both the text and image data
                                 saveText(username, name, email, dob, uri.toString());
                             }
                         });
                     } else {
+                        // If image upload fails, dismiss the progress dialog and show an error message
                         progressDialog.dismiss();
                         Toast.makeText(EditProfileActivity.this, "" + task.getException().toString(), Toast.LENGTH_SHORT).show();
                     }
@@ -308,27 +348,33 @@ public class EditProfileActivity extends AppCompatActivity {
         }
     }
 
+    // Method to save text data to Firebase using a HashMap
     private void saveText(String username, String name, String email, String dateofbirth, String image) {
         HashMap hashMap = new HashMap();
+
+        // Check if the username is not null and not empty
         if (username != null && !username.isEmpty()) {
-            hashMap.put("username", username);
+            hashMap.put("username", username); // If username is not empty, put it into the HashMap with key "username"
         }
 
+        // Check if the name is not null and not empty
         if (name != null && !name.isEmpty()) {
-            hashMap.put("name", name);
+            hashMap.put("name", name); // If name is not empty, put it into the HashMap with key "name"
         }
 
-
+        // Check if the email is not null and not empty
         if (email != null && !email.isEmpty()) {
-            hashMap.put("email", email);
+            hashMap.put("email", email); // If email is not empty, put it into the HashMap with key "email"
         }
 
+        // Check if the date of birth is not null and not empty
         if (dateofbirth != null && !dateofbirth.isEmpty()) {
-            hashMap.put("date-of-birth", dateofbirth);
+            hashMap.put("date-of-birth", dateofbirth); // If date of birth is not empty, put it into the HashMap with key "date-of-birth"
         }
 
+        // Check if the image URL is not null and not empty
         if (image != null && !image.isEmpty()) {
-            hashMap.put("Image", image);
+            hashMap.put("Image", image); // If image URL is not empty, put it into the HashMap with key "Image"
         }
 
 
@@ -336,12 +382,12 @@ public class EditProfileActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task task) {
                 if (task.isSuccessful()) {
-                    progressDialog.dismiss();
-                    Toast.makeText(EditProfileActivity.this, "Updated Profile!", Toast.LENGTH_SHORT).show();
+                    progressDialog.dismiss(); // Dismiss the progress dialog if the update was successful
+                    Toast.makeText(EditProfileActivity.this, "Updated Profile!", Toast.LENGTH_SHORT).show(); // Show a success message to the user
                     onBackPressed();
                 } else {
-                    progressDialog.dismiss();
-                    Toast.makeText(EditProfileActivity.this, "" + task.getException().toString(), Toast.LENGTH_SHORT).show();
+                    progressDialog.dismiss(); // Dismiss the progress dialog if the update failed
+                    Toast.makeText(EditProfileActivity.this, "" + task.getException().toString(), Toast.LENGTH_SHORT).show(); // Show an error message to the user with the exception message
                 }
             }
         });
@@ -349,20 +395,21 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
 
+    // Method to open the gallery and select an image
     private void selectImageFromGallery() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        activityResultLauncher.launch(intent);
+        Intent intent = new Intent(); // Create a new Intent object
+        intent.setType("image/*"); // Set the type of data to be retrieved to images
+        intent.setAction(Intent.ACTION_GET_CONTENT); // Set the action to be performed to get content (retrieve data from another activity)
+        activityResultLauncher.launch(intent); // Launch the intent using the activityResultLauncher to get the result (selected image)
     }
 
-
+    // ActivityResultLauncher to handle the result of the image selection
     ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult o) {
-            assert o.getData() != null;
-            uri = o.getData().getData();
-            profile_image.setImageURI(uri);
+            assert o.getData() != null; // Ensure that the result data is not null
+            uri = o.getData().getData(); // Get the URI of the selected image from the result data
+            profile_image.setImageURI(uri); // Set the selected image URI to the profile_image ImageView to display it
         }
     });
 }
