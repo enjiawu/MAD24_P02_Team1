@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -70,6 +71,7 @@ public class RecipeDetailsActivity extends AppCompatActivity implements Navigati
     MenuItem nav_home, nav_recipes, nav_search;
     ConstraintLayout recipeDetailsLayout, nutritionLabelLayout;
     MaterialButton buttonNutritionLabel;
+    ImageButton btnFavorite;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -172,8 +174,12 @@ public class RecipeDetailsActivity extends AppCompatActivity implements Navigati
             textView_fat_value.setText(details[1] != null ? details[1] : "N/A");
             textView_calories_value.setText(details[2] != null ? details[2] : "N/A");
             textView_daily_requirements_coverage_value.setText(details[3] != null ? details[3] : "N/A");
-            // Loading image using Picasso
-            Picasso.get().load(response.image).into(imageView_meal_image);
+            // Loading image using Picasso, if null, use placeholder
+            if (response.image != null && !response.image.isEmpty()) {
+                Picasso.get().load(response.image).into(imageView_meal_image);
+            } else {
+                imageView_meal_image.setImageResource(R.drawable.pocketchef_logo_transparent);
+            }
             // Use custom layout for recycler view
             recycler_meal_ingredients.setHasFixedSize(true);
             recycler_meal_ingredients.setLayoutManager(new LinearLayoutManager(RecipeDetailsActivity.this, LinearLayoutManager.HORIZONTAL, false));
@@ -208,7 +214,13 @@ public class RecipeDetailsActivity extends AppCompatActivity implements Navigati
     };
 
     // This is to check functionality first before implementation
-    private final RecipeClickListener recipeClickListener = id -> Toast.makeText(RecipeDetailsActivity.this, "id", Toast.LENGTH_SHORT).show();
+    private final RecipeClickListener recipeClickListener = id -> {
+        Intent intent = new Intent(RecipeDetailsActivity.this, RecipeDetailsActivity.class);
+        intent.putExtra("id", id);
+        finish(); // Finish the current activity
+        startActivity(intent); // Start the same activity with the new intent
+    };
+
 
     private final InstructionsListener instructionsListener = new InstructionsListener() {
         @Override
@@ -253,7 +265,6 @@ public class RecipeDetailsActivity extends AppCompatActivity implements Navigati
     }
 
     // Add to favorite list, by Wenya
-    MaterialButton btnFavorite;
     List<String> categories;
     private void showFavoriteDialog() {
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_add_to_favorites, null);
