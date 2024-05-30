@@ -93,6 +93,9 @@ Through our platform, users will gain access to tools and resources to plan meal
 #### Calorie Counter - Ggwendolynn - [ ]
 #### Virtual Pantry - Timothy - [ ]
 #### Generated Shopping List - Wenya - [ ]
+### Limitations of API:
+#### [recipes/complexSearch](https://spoonacular.com/food-api/docs#Search-Recipes-Complex)
+- When the user inputs "apple" for the query and excludeIngredients parameters, the API still returns recipes with apples. However, all other food options work, like entering cheese or chicken for both parameters. 
 ### Acknowledgements:
 - Video tutorial for motion layout:
 https://www.youtube.com/watch?v=o8c1RO3WgBA&list=PLWz5rJ2EKKc-bcyUTIFAr97ZtRkwM7S4y&ab_channel=AndroidDevelopers

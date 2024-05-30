@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     MaterialToolbar toolbar;
-    MenuItem nav_home, nav_recipes, nav_search;
+    MenuItem nav_home, nav_recipes, nav_search, nav_logout;
 
     CardView cardView1, cardView2, cardView3, cardView4;
     //cardView5, cardView6;
@@ -101,6 +101,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(nav_home);
+
+
         // Custom setOnTouchListener for swipe gestures (in-built Gesture Detector is not working)
         motionLayout.setOnTouchListener(new View.OnTouchListener() {
             private float startX;
@@ -156,10 +158,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     // Retrieve data safely
-                    String username = snapshot.child("name").getValue(String.class);
+                    String name = snapshot.child("name").getValue(String.class);
 
                     // Update UI if values are not null or empty
-                    if (username != null && !username.isEmpty()) {
+                    if (name != null && !name.isEmpty()) {
+                        usernameTv.setText(name);
+                    } else {
+                        String username = snapshot.child("username").getValue(String.class);
                         usernameTv.setText(username);
                     }
                 } else {
@@ -214,6 +219,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         nav_home = navigationView.getMenu().findItem(R.id.nav_home);
         nav_recipes = navigationView.getMenu().findItem(R.id.nav_recipes);
         nav_search = navigationView.getMenu().findItem(R.id.nav_search);
+        nav_logout = navigationView.getMenu().findItem(R.id.nav_logout);
         cardView1 =findViewById(R.id.cardView1);
         cardView2 = findViewById(R.id.cardView2);
         cardView3 = findViewById(R.id.cardView3);
@@ -241,16 +247,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent intent2 = new Intent(MainActivity.this, AdvancedSearchActivity.class);
             finish();
             startActivity(intent2);
-        } else if (itemId == R.id.nav_profile){
+        } else if (itemId == R.id.nav_profile) {
             Intent intent3 = new Intent(MainActivity.this, ProfileActivity.class);
             finish();
             startActivity(intent3);
-        }else if(itemId == R.id.nav_favourites){
-            Intent intent3 = new Intent(MainActivity.this, CreateCategoryActivity.class);
+        } else if (itemId == R.id.nav_logout) {
+            FirebaseAuth.getInstance().signOut();
+            Intent intent4 = new Intent(MainActivity.this, LoginActivity.class);
             finish();
-            startActivity(intent3);
+            startActivity(intent4);
         }
-
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }

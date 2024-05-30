@@ -34,11 +34,13 @@ import sg.edu.np.mad.pocketchef.Models.User;
 
 public class ProfileActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     //".write": "auth !== null && auth.uid === $uid"
+    // Declare UI elements
     CircleImageView profile_image;
     TextView usernameTv;
     TextView nameTv, EmailTv, dobTv;
     ImageView editProfile;
 
+    // Firebase Authentication and References
     FirebaseAuth mAuth;
     FirebaseUser mUser;
 
@@ -56,12 +58,14 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        mAuth = FirebaseAuth.getInstance();
-        mUser = mAuth.getCurrentUser();
         // Initialize Firebase Database
+        mAuth = FirebaseAuth.getInstance();
+        // Get current user
+        mUser = mAuth.getCurrentUser();
+        // Initialize Firebase Database reference for user data
         mUserRef = FirebaseDatabase.getInstance().getReference("users");
 
-
+        // Initialize UI elements
         editProfile = findViewById(R.id.editProfile);
         profile_image = findViewById(R.id.profile_image);
         usernameTv = findViewById(R.id.usernameTv);
@@ -69,15 +73,16 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
         EmailTv = findViewById(R.id.EmailTv);
         dobTv = findViewById(R.id.dobTv);
 
-
+        // Set click listener for edit profile button
         editProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Open EditProfileActivity when edit profile button is clicked
                 startActivity(new Intent(ProfileActivity.this, EditProfileActivity.class));
             }
         });
 
-
+        // Load user profile data from Firebase
         loadProfile();
         setupViews();
     }
@@ -99,6 +104,7 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
         navigationView.setCheckedItem(nav_home);
     }
 
+    // Method to load user profile data from Firebase
     private void loadProfile() {
         // Read data from Firebase Database
         mUserRef.child(mUser.getUid()).addValueEventListener(new ValueEventListener() {
@@ -149,7 +155,7 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Log.e(TAG, "DatabaseError: " + error.getMessage());
+                Log.e(TAG, "DatabaseError: " + error.getMessage()); // Handle database error
             }
         });
     }
@@ -157,6 +163,7 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
     @Override
     protected void onResume() {
         super.onResume();
+        // Refresh profile data when activity resumes
         loadProfile();
     }
 

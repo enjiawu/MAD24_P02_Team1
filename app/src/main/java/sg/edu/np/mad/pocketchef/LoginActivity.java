@@ -2,6 +2,7 @@
     
     
     import android.content.Intent;
+    import android.net.Uri;
     import android.os.Bundle;
     import android.text.Editable;
     import android.text.TextWatcher;
@@ -24,7 +25,10 @@
     import androidx.core.splashscreen.SplashScreen;
     import androidx.core.view.ViewCompat;
     import androidx.core.view.WindowInsetsCompat;
-    
+
+    import com.google.android.gms.tasks.OnCompleteListener;
+    import com.google.android.gms.tasks.OnSuccessListener;
+    import com.google.android.gms.tasks.Task;
     import com.google.android.material.button.MaterialButton;
     import com.google.android.material.datepicker.MaterialDatePicker;
     import com.google.android.material.textfield.TextInputEditText;
@@ -36,7 +40,11 @@
     import com.google.firebase.database.DatabaseReference;
     import com.google.firebase.database.FirebaseDatabase;
     import com.google.firebase.database.ValueEventListener;
-    
+    import com.google.firebase.storage.FirebaseStorage;
+    import com.google.firebase.storage.StorageReference;
+    import com.google.firebase.storage.UploadTask;
+
+    import java.io.File;
     import java.time.LocalDate;
     import java.time.ZoneOffset;
     import java.time.format.DateTimeFormatter;
@@ -49,6 +57,7 @@
     public class LoginActivity extends AppCompatActivity {
     
         private FirebaseAuth mAuth;
+        StorageReference mStorageRef;
         private String uid = "";
         private String username = "";
         private String email = "";
@@ -64,11 +73,29 @@
         private Boolean validEmail = false;
         private Boolean validPassword = false;
         private Boolean validConfirmPassword = false;
-        private MaterialButton createAccount;
+
     
         private String passwordLogInText = "";
         private String usernameEmailLogInText = "";
-    
+
+        ViewAnimator viewAnimator;
+        MaterialButton signUp;
+        MaterialButton createAccount;
+        View logInView;
+        MaterialButton cancelSignUp;
+        TextInputEditText dobEditText;
+        TextView setProfilePictureText;
+        ImageView setProfilePicture;
+        MaterialButton logIn;
+        TextInputLayout usernameSignUp;
+        TextInputLayout emailSignUp;
+        TextInputLayout passwordSignUp;
+        TextInputLayout confirmPasswordSignUp;
+        TextInputLayout usernameEmailLogIn;
+        TextInputLayout passwordLogIn;
+        TextInputLayout nameSignUp;
+        TextInputLayout profileDescriptionSignUp;
+        MaterialButton startCooking;
     
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -81,13 +108,17 @@
                 v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
                 return insets;
             });
-            ViewAnimator viewAnimator = findViewById(R.id.viewAnimator);
+
+//            Initialise views
+            FindViews();
+
+//            ViewAnimator viewAnimator = findViewById(R.id.viewAnimator);
             viewAnimator.setAnimateFirstView(true);
             viewAnimator.setInAnimation(this, android.R.anim.slide_in_left);
     //        viewAnimator.setOutAnimation(this, android.R.anim.slide_out_right);
     
-            MaterialButton signUp = findViewById(R.id.signUp);
-            createAccount = findViewById(R.id.createAccount);
+//            MaterialButton signUp = findViewById(R.id.signUp);
+//            createAccount = findViewById(R.id.createAccount);
     
     //        Show next view
             class Next implements View.OnClickListener {
@@ -106,11 +137,11 @@
                     viewAnimator.showPrevious();
                 }
             }
-    
+
             signUp.setOnClickListener(new Next());
     //        createAccount.setOnClickListener(new Next());
     
-            View logInView = findViewById(R.id.logInView);
+//            View logInView = findViewById(R.id.logInView);
     
     //        Sign up
     
@@ -123,7 +154,7 @@
                 }
             });
     
-            MaterialButton cancelSignUp = findViewById(R.id.cancelSignUp);
+//            MaterialButton cancelSignUp = findViewById(R.id.cancelSignUp);
             cancelSignUp.setOnClickListener(new Back());
             String defaultDate = "01-January-2000";
     
@@ -141,7 +172,7 @@
                     .build();
     
     
-            TextInputEditText dobEditText = findViewById(R.id.dobTextEdit);
+//            TextInputEditText dobEditText = findViewById(R.id.dobTextEdit);
             dobEditText.setOnClickListener(v -> {
     //                Show date picker when field pressed
                 dobPicker.show(getSupportFragmentManager(), "tag");
@@ -153,8 +184,8 @@
                 dobEditText.setText(date);
                 dob = date;
             });
-            TextView setProfilePictureText = findViewById(R.id.setProfilePictureText);
-            ImageView setProfilePicture = findViewById(R.id.setProfilePicture);
+//            TextView setProfilePictureText = findViewById(R.id.setProfilePictureText);
+//            ImageView setProfilePicture = findViewById(R.id.setProfilePicture);
     
             // Registers a photo picker activity launcher in single-select mode.
             ActivityResultLauncher<PickVisualMediaRequest> pickMedia = registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
@@ -176,7 +207,9 @@
                 pickMedia.launch(new PickVisualMediaRequest.Builder().setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE).build());
     
             });
-    
+
+            mStorageRef = FirebaseStorage.getInstance().getReference().child("Images");
+
             // Initialize Firebase Auth
             mAuth = FirebaseAuth.getInstance();
     
@@ -187,6 +220,7 @@
             myRef.child("usernames").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                    Log.d("USernamesUsed", usedUsernames.toString());
     
     //                User value = dataSnapshot.getValue(User.class);
     
@@ -194,7 +228,7 @@
     
                     for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
                         usedUsernames.add(childSnapshot.getValue(String.class));
-                        Log.d("CHILD", Objects.requireNonNull(childSnapshot.getValue(String.class)));
+//                        Log.d("CHILD", Objects.requireNonNull(childSnapshot.getValue(String.class)));
     
                     }
     
@@ -207,6 +241,8 @@
                     Log.w("READ", "Failed to read value.", error.toException());
                 }
             });
+
+//            Log.d("TEST","HELLO");
     
             // Get list of emails in use by other users
             myRef.child("emails").addValueEventListener(new ValueEventListener() {
@@ -218,7 +254,7 @@
     
                     for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
                         usedEmails.add(childSnapshot.getValue(String.class));
-                        Log.d("CHILD", Objects.requireNonNull(childSnapshot.getValue(String.class)));
+//                        Log.d("CHILD", Objects.requireNonNull(childSnapshot.getValue(String.class)));
     
                     }
     
@@ -235,7 +271,7 @@
     
     //        Login
             //        Log in the user
-            MaterialButton logIn = findViewById(R.id.login);
+//            MaterialButton logIn = findViewById(R.id.login);
             logIn.setOnClickListener(v -> {
     //                Make sure fields are not empty
                 if (usernameEmailLogInText.strip().isEmpty()) {
@@ -304,7 +340,7 @@
             });
     //        Signup
     //        Validate username
-            TextInputLayout usernameSignUp = findViewById(R.id.usernameSignUp);
+//            TextInputLayout usernameSignUp = findViewById(R.id.usernameSignUp);
             Objects.requireNonNull(usernameSignUp.getEditText()).addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -321,7 +357,7 @@
             });
     
     //        Validate email
-            TextInputLayout emailSignUp = findViewById(R.id.emailSignUp);
+//            TextInputLayout emailSignUp = findViewById(R.id.emailSignUp);
             Objects.requireNonNull(emailSignUp.getEditText()).addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -336,8 +372,8 @@
                 }
             });
     //        Validate passwords
-            TextInputLayout passwordSignUp = findViewById(R.id.passwordSignUp);
-            TextInputLayout confirmPasswordSignUp = findViewById(R.id.confirmPasswordSignUp);
+//            TextInputLayout passwordSignUp = findViewById(R.id.passwordSignUp);
+//            TextInputLayout confirmPasswordSignUp = findViewById(R.id.confirmPasswordSignUp);
             Objects.requireNonNull(passwordSignUp.getEditText()).addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -390,7 +426,7 @@
             });
     
     //        Keep track of username / email entered
-            TextInputLayout usernameEmailLogIn = findViewById(R.id.usernameEmailLogIn);
+//            TextInputLayout usernameEmailLogIn = findViewById(R.id.usernameEmailLogIn);
             Objects.requireNonNull(usernameEmailLogIn.getEditText()).addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -405,7 +441,7 @@
             });
 
     //        Keep track of password entered
-            TextInputLayout passwordLogIn = findViewById(R.id.passwordLogIn);
+//            TextInputLayout passwordLogIn = findViewById(R.id.passwordLogIn);
             Objects.requireNonNull(passwordLogIn.getEditText()).addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -419,16 +455,47 @@
                 }
             });
 
-            TextInputLayout nameSignUp = findViewById(R.id.nameSignUp);
-            TextInputLayout profileDescriptionSignUp = findViewById(R.id.profileDescriptionSignUp);
-            MaterialButton startCooking = findViewById(R.id.startCooking);
+//            TextInputLayout nameSignUp = findViewById(R.id.nameSignUp);
+//            TextInputLayout profileDescriptionSignUp = findViewById(R.id.profileDescriptionSignUp);
+//            MaterialButton startCooking = findViewById(R.id.startCooking);
             startCooking.setOnClickListener(v -> {
     //                Update additional profile details
     //                Log.d("NEWLINE", String.valueOf(String.valueOf(profileDescriptionSignUp.getEditText().getText()).contains("\n")));
                 myRef.child("users").child(uid).child("name").setValue(Objects.requireNonNull(nameSignUp.getEditText()).getText().toString());
                 myRef.child("users").child(uid).child("date-of-birth").setValue(dob);
-                myRef.child("users").child(uid).child("profile-picture").setValue(profilePicture);
+//                myRef.child("users").child(uid).child("profile-picture").setValue(profilePicture);
                 myRef.child("users").child(uid).child("profile-description").setValue(String.valueOf(Objects.requireNonNull(profileDescriptionSignUp.getEditText()).getText()));
+
+
+                mStorageRef.child(mAuth.getCurrentUser().getUid()).putFile(Uri.parse(profilePicture)).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                        if (task.isSuccessful()) {
+
+                        } else {
+
+                            Toast.makeText(LoginActivity.this, "Unable to upload profile picture", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+//                StorageReference storageRef = storage.getReference();
+//                Uri file = Uri.parse(profilePicture);
+//                StorageReference riversRef = storageRef.child("images/"+file.getLastPathSegment());
+//                uploadTask = riversRef.putFile(file);
+//
+//// Register observers to listen for when the download is done or if it fails
+//                uploadTask.addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception exception) {
+//                        // Handle unsuccessful uploads
+//                    }
+//                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                    @Override
+//                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                        // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+//                        // ...
+//                    }
+//                });
     
                 Intent logIn12 = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(logIn12);
@@ -524,5 +591,26 @@
     //        Allow account creation if all inputs are valid
             createAccount.setEnabled(validUsername && validEmail && validPassword && validConfirmPassword);
     
+        }
+
+        private void FindViews() {
+            viewAnimator = findViewById(R.id.viewAnimator);
+            signUp = findViewById(R.id.signUp);
+            createAccount = findViewById(R.id.createAccount);
+            logInView = findViewById(R.id.logInView);
+            cancelSignUp = findViewById(R.id.cancelSignUp);
+            dobEditText = findViewById(R.id.dobTextEdit);
+            setProfilePictureText = findViewById(R.id.setProfilePictureText);
+            setProfilePicture = findViewById(R.id.setProfilePicture);
+            logIn = findViewById(R.id.login);
+            usernameSignUp = findViewById(R.id.usernameSignUp);
+            emailSignUp = findViewById(R.id.emailSignUp);
+            passwordSignUp = findViewById(R.id.passwordSignUp);
+            confirmPasswordSignUp = findViewById(R.id.confirmPasswordSignUp);
+            usernameEmailLogIn = findViewById(R.id.usernameEmailLogIn);
+            passwordLogIn = findViewById(R.id.passwordLogIn);
+            nameSignUp = findViewById(R.id.nameSignUp);
+            profileDescriptionSignUp = findViewById(R.id.profileDescriptionSignUp);
+            startCooking = findViewById(R.id.startCooking);
         }
     }
