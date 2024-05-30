@@ -2,6 +2,7 @@
     
     
     import android.content.Intent;
+    import android.net.Uri;
     import android.os.Bundle;
     import android.text.Editable;
     import android.text.TextWatcher;
@@ -24,7 +25,10 @@
     import androidx.core.splashscreen.SplashScreen;
     import androidx.core.view.ViewCompat;
     import androidx.core.view.WindowInsetsCompat;
-    
+
+    import com.google.android.gms.tasks.OnCompleteListener;
+    import com.google.android.gms.tasks.OnSuccessListener;
+    import com.google.android.gms.tasks.Task;
     import com.google.android.material.button.MaterialButton;
     import com.google.android.material.datepicker.MaterialDatePicker;
     import com.google.android.material.textfield.TextInputEditText;
@@ -36,7 +40,11 @@
     import com.google.firebase.database.DatabaseReference;
     import com.google.firebase.database.FirebaseDatabase;
     import com.google.firebase.database.ValueEventListener;
-    
+    import com.google.firebase.storage.FirebaseStorage;
+    import com.google.firebase.storage.StorageReference;
+    import com.google.firebase.storage.UploadTask;
+
+    import java.io.File;
     import java.time.LocalDate;
     import java.time.ZoneOffset;
     import java.time.format.DateTimeFormatter;
@@ -49,6 +57,7 @@
     public class LoginActivity extends AppCompatActivity {
     
         private FirebaseAuth mAuth;
+        StorageReference mStorageRef;
         private String uid = "";
         private String username = "";
         private String email = "";
@@ -198,7 +207,9 @@
                 pickMedia.launch(new PickVisualMediaRequest.Builder().setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE).build());
     
             });
-    
+
+            mStorageRef = FirebaseStorage.getInstance().getReference().child("Images");
+
             // Initialize Firebase Auth
             mAuth = FirebaseAuth.getInstance();
     
@@ -209,7 +220,7 @@
             myRef.child("usernames").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    Log.d("USernamesUsed", usedUsernames.toString());
+//                    Log.d("USernamesUsed", usedUsernames.toString());
     
     //                User value = dataSnapshot.getValue(User.class);
     
@@ -217,7 +228,7 @@
     
                     for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
                         usedUsernames.add(childSnapshot.getValue(String.class));
-                        Log.d("CHILD", Objects.requireNonNull(childSnapshot.getValue(String.class)));
+//                        Log.d("CHILD", Objects.requireNonNull(childSnapshot.getValue(String.class)));
     
                     }
     
@@ -231,7 +242,7 @@
                 }
             });
 
-            Log.d("TEST","HELLO");
+//            Log.d("TEST","HELLO");
     
             // Get list of emails in use by other users
             myRef.child("emails").addValueEventListener(new ValueEventListener() {
@@ -243,7 +254,7 @@
     
                     for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
                         usedEmails.add(childSnapshot.getValue(String.class));
-                        Log.d("CHILD", Objects.requireNonNull(childSnapshot.getValue(String.class)));
+//                        Log.d("CHILD", Objects.requireNonNull(childSnapshot.getValue(String.class)));
     
                     }
     
@@ -452,8 +463,39 @@
     //                Log.d("NEWLINE", String.valueOf(String.valueOf(profileDescriptionSignUp.getEditText().getText()).contains("\n")));
                 myRef.child("users").child(uid).child("name").setValue(Objects.requireNonNull(nameSignUp.getEditText()).getText().toString());
                 myRef.child("users").child(uid).child("date-of-birth").setValue(dob);
-                myRef.child("users").child(uid).child("profile-picture").setValue(profilePicture);
+//                myRef.child("users").child(uid).child("profile-picture").setValue(profilePicture);
                 myRef.child("users").child(uid).child("profile-description").setValue(String.valueOf(Objects.requireNonNull(profileDescriptionSignUp.getEditText()).getText()));
+
+
+                mStorageRef.child(mAuth.getCurrentUser().getUid()).putFile(Uri.parse(profilePicture)).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                        if (task.isSuccessful()) {
+
+                        } else {
+
+                            Toast.makeText(LoginActivity.this, "Unable to upload profile picture", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+//                StorageReference storageRef = storage.getReference();
+//                Uri file = Uri.parse(profilePicture);
+//                StorageReference riversRef = storageRef.child("images/"+file.getLastPathSegment());
+//                uploadTask = riversRef.putFile(file);
+//
+//// Register observers to listen for when the download is done or if it fails
+//                uploadTask.addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception exception) {
+//                        // Handle unsuccessful uploads
+//                    }
+//                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                    @Override
+//                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                        // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+//                        // ...
+//                    }
+//                });
     
                 Intent logIn12 = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(logIn12);
