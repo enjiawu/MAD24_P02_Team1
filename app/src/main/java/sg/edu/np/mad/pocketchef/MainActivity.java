@@ -35,9 +35,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Picasso;
-
-import sg.edu.np.mad.pocketchef.Models.FavoriteRecipe;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     boolean isReady = false;
@@ -53,12 +50,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     MaterialToolbar toolbar;
     MenuItem nav_home, nav_recipes, nav_search;
 
-    CardView cardView1, cardView2, cardView3, cardView4, cardView5, cardView6;
+    CardView cardView1, cardView2, cardView3, cardView4;
+    //cardView5, cardView6;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        SplashScreen.installSplashScreen(this);
         View content = findViewById(android.R.id.content);
         content.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             @Override
@@ -177,38 +174,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
         // Card View On CLick Listener for RecipeActivity
-        cardView1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, RecipeActivity.class);
-                startActivity(intent);
-            }
+        cardView1.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, RecipeActivity.class);
+            startActivity(intent);
         });
         // Card View On Click Listener for AdvancedSearchActivity
-        cardView2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, AdvancedSearchActivity.class);
-                startActivity(intent);
-            }
+        cardView2.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, AdvancedSearchActivity.class);
+            startActivity(intent);
         });
 
         // Card View On Click Listener for Favourites
-        cardView3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, FavoriteRecipesActivity.class);
-                startActivity(intent);
-            }
+        cardView3.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, FavoriteRecipesActivity.class);
+            startActivity(intent);
         });
 
         // Card View On Click Listener for ProfileActivity
-        cardView4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
-                startActivity(intent);
-            }
+        cardView4.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+            startActivity(intent);
         });
     }
 

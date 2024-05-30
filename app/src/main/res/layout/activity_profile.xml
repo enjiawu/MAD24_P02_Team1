@@ -6,8 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".ProfileActivity"
-    tools:openDrawer="start">
+    tools:context=".ProfileActivity">
 
     <!--  NavigationView  -->
     <com.google.android.material.navigation.NavigationView
@@ -98,7 +97,7 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="8dp"
             android:text="Full Name"
-            android:textColor="@color/primary"
+            android:textColor="@color/paletteorange"
             android:textSize="22sp"
             app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toBottomOf="@+id/view"/>
 
@@ -118,7 +117,7 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="8dp"
             android:text="test@gmail.com"
-            android:textColor="@color/primary"
+            android:textColor="@color/paletteorange"
             android:textSize="22sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view"/>
@@ -140,7 +139,7 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="8dp"
             android:text="00/00/00"
-            android:textColor="@color/primary"
+            android:textColor="@color/paletteorange"
             android:textSize="22sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view"/>

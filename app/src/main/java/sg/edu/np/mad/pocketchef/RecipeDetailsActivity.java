@@ -2,8 +2,6 @@ package sg.edu.np.mad.pocketchef;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -30,14 +28,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.navigation.NavigationView;
-import com.kongzue.dialogx.dialogs.MessageDialog;
-import com.kongzue.dialogx.dialogs.PopTip;
-import com.kongzue.dialogx.dialogs.WaitDialog;
-import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
 import com.squareup.picasso.Picasso;
 
 import java.text.MessageFormat;
@@ -52,17 +45,12 @@ import sg.edu.np.mad.pocketchef.Listener.InstructionsListener;
 import sg.edu.np.mad.pocketchef.Listener.RecipeClickListener;
 import sg.edu.np.mad.pocketchef.Listener.RecipeDetailsListener;
 import sg.edu.np.mad.pocketchef.Listener.SimilarRecipesListener;
-import sg.edu.np.mad.pocketchef.Models.CategoryBean;
 import sg.edu.np.mad.pocketchef.Models.InstructionsResponse;
-import sg.edu.np.mad.pocketchef.Models.RecipeDetailsC;
 import sg.edu.np.mad.pocketchef.Models.RecipeDetailsResponse;
 import sg.edu.np.mad.pocketchef.Models.SimilarRecipeResponse;
 import sg.edu.np.mad.pocketchef.Models.SummaryParser;
-import sg.edu.np.mad.pocketchef.base.App;
-import sg.edu.np.mad.pocketchef.base.AppDatabase;
 
-public class RecipeDetailsActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class RecipeDetailsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     // Global variables for activity
     private static final long API_REQUEST_DELAY = 1000;
@@ -83,10 +71,9 @@ public class RecipeDetailsActivity extends AppCompatActivity
     ConstraintLayout recipeDetailsLayout, nutritionLabelLayout;
     MaterialButton buttonNutritionLabel;
 
-    private RecipeDetailsC recipeDetailsC;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_recipe_details);
@@ -102,8 +89,7 @@ public class RecipeDetailsActivity extends AppCompatActivity
         loadRecipeDetailsWithStaggeredApiCalls();
         // Set up nav menu
         navigationView.bringToFront();
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(RecipeDetailsActivity.this,
-                drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(RecipeDetailsActivity.this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(RecipeDetailsActivity.this);
@@ -118,42 +104,8 @@ public class RecipeDetailsActivity extends AppCompatActivity
             }
         });
 
-
-        btnFavorite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(recipeDetailsC==null){
-                    showFavoriteDialog();
-                }else{
-                    MessageDialog.show("Favorite","Whether to cancel the collection","ok"
-                    ,"cancel").setOkButtonClickListener(new OnDialogButtonClickListener<MessageDialog>() {
-                        @Override
-                        public boolean onClick(MessageDialog dialog, View v) {
-                            WaitDialog.show("loading...");
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    AppDatabase.getInstance(RecipeDetailsActivity.this)
-                                            .RecipeDetailsCDao().delete(recipeDetailsC);
-                                    recipeDetailsC=null;
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            Glide.with(RecipeDetailsActivity.this).load(R.drawable.ic_btn_star).into(btnFavorite);
-                                            btnFavorite.setImageTintList(ColorStateList.valueOf(Color.WHITE));
-                                            WaitDialog.dismiss();
-                                        }
-                                    });
-                                }
-                            }).start();
-
-                            return false;
-                        }
-                    });
-                }
-
-            }
-        });
+        //set the onclicklistener for the favorite button
+        btnFavorite.setOnClickListener(v -> showFavoriteDialog());
     }
     // Intialise objects
     private void findViews() {
@@ -173,7 +125,7 @@ public class RecipeDetailsActivity extends AppCompatActivity
         textView_meal_price = findViewById(R.id.textView_meal_price);
         // Intialise Image Views
         imageView_meal_image = findViewById(R.id.imageView_meal_image);
-        // Intialise Recycler Viewsbtn_favorite
+        // Intialise Recycler Views
         recycler_meal_ingredients = findViewById(R.id.recycler_meal_ingredients);
         recycler_meal_similar = findViewById(R.id.recycler_meal_similar);
         recycler_meal_instructions = findViewById(R.id.recycler_meal_instructions);
@@ -200,23 +152,6 @@ public class RecipeDetailsActivity extends AppCompatActivity
         instructionsManager.fetchInstructionsWithDelay(manager, instructionsListener, recipeId, 0);
         instructionsManager.fetchRecipeDetailsWithDelay(manager, recipeDetailsListener, recipeId, API_REQUEST_DELAY);
         instructionsManager.fetchSimilarRecipesWithDelay(manager, similarRecipesListener, recipeId, API_REQUEST_DELAY * 2);
-        new  Thread(new Runnable() {
-
-            @Override
-            public void run() {
-              recipeDetailsC =  AppDatabase.getInstance(RecipeDetailsActivity.this)
-                                .RecipeDetailsCDao().getByRecipeDetailsResponseId(recipeId);
-              runOnUiThread(new Runnable() {
-                  @Override
-                  public void run() {
-                      if(recipeDetailsC!=null){
-                          Glide.with(RecipeDetailsActivity.this).load(R.drawable.ic_collect).into(btnFavorite);
-                          btnFavorite.setImageTintList(ColorStateList.valueOf(Color.YELLOW));
-                      }
-                  }
-              });
-            }
-        }).start();
     }
     // Implementing the recipeDetailsListener
     private final RecipeDetailsListener recipeDetailsListener = new RecipeDetailsListener() {
@@ -239,7 +174,6 @@ public class RecipeDetailsActivity extends AppCompatActivity
             textView_daily_requirements_coverage_value.setText(details[3] != null ? details[3] : "N/A");
             // Loading image using Picasso
             Picasso.get().load(response.image).into(imageView_meal_image);
-            path = response.image;
             // Use custom layout for recycler view
             recycler_meal_ingredients.setHasFixedSize(true);
             recycler_meal_ingredients.setLayoutManager(new LinearLayoutManager(RecipeDetailsActivity.this, LinearLayoutManager.HORIZONTAL, false));
@@ -255,8 +189,6 @@ public class RecipeDetailsActivity extends AppCompatActivity
             Toast.makeText(RecipeDetailsActivity.this, message, Toast.LENGTH_SHORT).show();
         }
     };
-
-    private String path;
 
     // Implementing the similarRecipesListener
     private final SimilarRecipesListener similarRecipesListener = new SimilarRecipesListener() {
@@ -300,19 +232,12 @@ public class RecipeDetailsActivity extends AppCompatActivity
             finish();
             startActivity(intent);
         } else if (itemId == R.id.nav_recipes) {
-            Intent intent = new Intent(RecipeDetailsActivity.this, RecipeActivity.class);
-            finish();
-            startActivity(intent);
+            // Nothing happens
         } else if (itemId == R.id.nav_search) {
             Intent intent2 = new Intent(RecipeDetailsActivity.this, AdvancedSearchActivity.class);
             finish();
             startActivity(intent2);
-        }else if (itemId == R.id.nav_shoppinglist) {
-            Intent intent2 = new Intent(RecipeDetailsActivity.this, CreateCategoryActivity.class);
-            finish();
-            startActivity(intent2);
         }
-
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -327,93 +252,42 @@ public class RecipeDetailsActivity extends AppCompatActivity
                 .into(imageView_nutrition);
     }
 
-
-
-
-    // Add to favorite list
-    ImageView btnFavorite;
+    // Add to favorite list, by Wenya
+    MaterialButton btnFavorite;
     List<String> categories;
-    Spinner spinnerCategories;
     private void showFavoriteDialog() {
-
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_add_to_favorites, null);
-        spinnerCategories = dialogView.findViewById(R.id.spinner_categories);
-        Button btTextNewCategory = dialogView.findViewById(R.id.bt_new_category);
+        Spinner spinnerCategories = dialogView.findViewById(R.id.spinner_categories);
+        EditText editTextNewCategory = dialogView.findViewById(R.id.edit_new_category);
         Button buttonSave = dialogView.findViewById(R.id.button_save);
         Button buttonCancel = dialogView.findViewById(R.id.button_cancel);
-        getCategories();
+
+        categories = getCategories();
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerCategories.setAdapter(adapter);
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setView(dialogView);
         AlertDialog dialog = builder.create();
-        btTextNewCategory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent =new Intent(RecipeDetailsActivity.this, CreateCategoryActivity.class);
-                startActivity(intent);
-                dialog.dismiss();
-            }
-        });
-        buttonSave.setOnClickListener(v -> {
-            if(path==null||path.isEmpty()){
-                PopTip.show("Loading is still ongoing, please wait");
-                return;
-            }
-          RecipeDetailsC recipeDetailsC1 =new RecipeDetailsC();
-          recipeDetailsC1.recipeDetailsResponseId = recipeId;
-          Log.d("run",recipeId+"");
-          recipeDetailsC1.categoryBeanId = spinnerCategories.getSelectedItem().toString();
-          recipeDetailsC1.meal_servings =textView_meal_servings.getText().toString();
-          recipeDetailsC1.meal_ready =  textView_meal_ready.getText().toString();
-          recipeDetailsC1.meal_price = textView_meal_price.getText().toString();
-          recipeDetailsC1.meal_name = textView_meal_name.getText().toString();
-          recipeDetailsC1.imagPath =path;
-          recipeDetailsC = recipeDetailsC1;
 
-          new Thread(new Runnable() {
-              @Override
-              public void run() {
-                  WaitDialog.show("loading.....");
-                AppDatabase.getInstance(RecipeDetailsActivity.this)
-                        .RecipeDetailsCDao().insert(recipeDetailsC1);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        WaitDialog.dismiss();
-                        PopTip.show("success");
-                        Glide.with(RecipeDetailsActivity.this).load(R.drawable.ic_collect).into(btnFavorite);
-                        btnFavorite.setImageTintList(ColorStateList.valueOf(Color.YELLOW));
-                    }
-                });
-              }
-          }).start();
-          dialog.dismiss();
+        buttonSave.setOnClickListener(v -> {
+            String selectedCategory = spinnerCategories.getSelectedItem().toString();
+            String newCategory = editTextNewCategory.getText().toString().trim();
+
+            if (!newCategory.isEmpty()) {
+                categories.add(newCategory);
+                selectedCategory = newCategory;
+            }
+            dialog.dismiss();
         });
 
         buttonCancel.setOnClickListener(v -> dialog.dismiss());
 
         dialog.show();
     }
-    List<String> list;
-    private void getCategories() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                List<CategoryBean> data = AppDatabase.getInstance(RecipeDetailsActivity.this)
-                        .categoryDao().getAllCategories();
-                List<String> categories = new ArrayList<>();
-                for(int i=0;i<data.size();i++){
-                    categories.add(data.get(i).text);
-                }
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ArrayAdapter<String> adapter = new ArrayAdapter<>(RecipeDetailsActivity.this,
-                                android.R.layout.simple_spinner_item, categories);
-                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        spinnerCategories.setAdapter(adapter);
-                    }
-                });
-            }
-        }).start();
+
+    private List<String> getCategories() {
+        return new ArrayList<>(Arrays.asList("Favorite"));
     }
 }
