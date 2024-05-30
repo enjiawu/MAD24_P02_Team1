@@ -9,10 +9,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="sg.edu.np.mad.pocketchef" />
+                  <option name="mobileSdkAppId" value="1:418510847515:android:13ca43a359224db77f02be" />
+                  <option name="projectId" value="pocket-chef-cd59c" />
+                  <option name="projectNumber" value="418510847515" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
