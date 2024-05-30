@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".MainActivity"
+    tools:context=".AdvancedSearchActivity"
     tools:openDrawer="start">
 
     <com.google.android.material.navigation.NavigationView
@@ -32,8 +32,7 @@
             android:layout_height="match_parent"
             android:background="#FCFAFB"
             android:clipToPadding="false"
-            app:layoutDescription="@xml/recipe_activity_scene"
-            tools:context=".RecipeActivity">
+            app:layoutDescription="@xml/recipe_activity_scene">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
@@ -46,7 +45,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:navigationIcon="@drawable/ic_launcher_foreground" />
+            app:navigationIcon="@drawable/ic_launcher_foreground"
+            app:title="Advanced Searching"/>
 
             <!-- Search By Name -->
             <TextView

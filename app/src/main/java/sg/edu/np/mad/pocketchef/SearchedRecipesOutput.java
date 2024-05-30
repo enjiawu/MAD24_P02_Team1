@@ -250,15 +250,9 @@ public class SearchedRecipesOutput extends AppCompatActivity implements Navigati
             finish();
             startActivity(intent);
         } else if (itemId == R.id.nav_recipes) {
-            Intent intent2 = new Intent(SearchedRecipesOutput.this, RecipeActivity.class);
-            finish();
-            startActivity(intent2);
+            // Nothing happens
         } else if (itemId == R.id.nav_search) {
             Intent intent2 = new Intent(SearchedRecipesOutput.this, AdvancedSearchActivity.class);
-            finish();
-            startActivity(intent2);
-        }else if(itemId == R.id.nav_shoppinglist){
-            Intent intent2 = new Intent(SearchedRecipesOutput.this, CreateCategoryActivity.class);
             finish();
             startActivity(intent2);
         }

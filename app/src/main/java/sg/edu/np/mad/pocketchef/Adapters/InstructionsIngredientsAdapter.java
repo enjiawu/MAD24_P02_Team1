@@ -41,14 +41,10 @@ public class InstructionsIngredientsAdapter extends RecyclerView.Adapter<Instruc
         } else {
             holder.textView_instructions_step_item.setText(list.get(position).name);
             holder.textView_instructions_step_item.setSelected(true);
-            try {
-                Picasso.get().load(list.get(position).image)
-                        .fit()
-                        .centerCrop()
-                        .into(holder.imageView_instructions_step_items);
-            }catch (Exception e){
-
-            }
+            Picasso.get().load(list.get(position).image)
+                    .fit()
+                    .centerCrop()
+                    .into(holder.imageView_instructions_step_items);
         }
     }
 

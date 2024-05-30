@@ -5,7 +5,7 @@ MAD 2024 Assignment
 - S10258457C **Yeo Jin Rong**
 - S10256978E **Wu Enjia**  
 - S10256132A **Timothy Chai Weijie** 
-- S10262576 **Ggwendolynn Lee Rasni**  
+- S10262576D **Ggwendolynn Lee Rasni**  
 - S10262410A **Xue Wenya**  
 
 ## Welcome to Pocket Chef
@@ -48,15 +48,20 @@ Through our platform, users will gain access to tools and resources to plan meal
 - Successfully incorporate recycler views with horizontal scrolling for ingredients and similar recipes - [x]
 - Successfully incorporate instructions recycler viewholder - [x]
   
-#### User login system using a database - Timothy - [ ]
+#### User login system using a database - Timothy - [x]
 ##### Tasks (User login system using a database):
-- 
+- Successfully implement login and signup page in a single activity using ViewAnimator - [x]
+- Successfully implement gathering of more complex data types such as date and image - [x]
+- Successfully connect to database to add new account details and recognise user to log in - [x]
+- Successfully implement input validation and relevant error toasts for account details - [x]
 
-#### User profile - Ggwendolynn - [ ]
+#### User profile - Ggwendolynn - [X]
 ##### Tasks (User profile):
 - Successfully designed profile UI with Name, Email, DOB, and Password = [x]
-- Successfully implement the profile page with an editable page - [X]
-- Successfully connected to database for user's details - [ ]
+- Successfully implement the profile page with user data - [X]
+- Successfully implement Update Profile feature to database - [X]
+- Successfully connected to database to retrieve user's profile details - [X]
+- Successfully implement functioning connection upon user login, the profile page seamlessly retrieves data from the database - [X]
 
 #### Advanced Food Recipe Search - Enjia - [x]
 ##### Tasks (Meal Planner):
@@ -79,10 +84,18 @@ Through our platform, users will gain access to tools and resources to plan meal
 - Obtain Recipe IDs from Spoonacular API, parse into recycler views in new activity - [ ]
 - Implement onClickListener for recipes leading to RecipeDetailsActivity - [ ]
 
-#### Community page - Enjia - [ ]
-#### Caloric Counter - Ggwendolynn - [ ]
+#### Community page using SQLite with app notifications and recipe sharing to WhatsApp - Enjia - [ ]
+- Successfully implement Community Page User Interface - [ ]
+- Successfully implement functionality to let users add, delete and edit posts - [ ]
+- Successfully format recipe details to be displayed - [ ]
+- Successfully implement app notifications for posts - [ ]
+- Successfully implement recipe sharing using WhatsApp API - [ ]
+#### Calorie Counter - Ggwendolynn - [ ]
 #### Virtual Pantry - Timothy - [ ]
 #### Generated Shopping List - Wenya - [ ]
+### Limitations of API:
+#### [recipes/complexSearch](https://spoonacular.com/food-api/docs#Search-Recipes-Complex)
+- When the user inputs "apple" for the query and excludeIngredients parameters, the API still returns recipes with apples. However, all other food options work, like entering cheese or chicken for both parameters. 
 ### Acknowledgements:
 - Video tutorial for motion layout:
 https://www.youtube.com/watch?v=o8c1RO3WgBA&list=PLWz5rJ2EKKc-bcyUTIFAr97ZtRkwM7S4y&ab_channel=AndroidDevelopers

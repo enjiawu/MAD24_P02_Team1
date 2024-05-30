@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    >
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
@@ -205,16 +206,17 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
-                    android:text="Feature 3"
+                    android:text="@string/cardview3_text"
                     android:textSize="24sp" />
 
                 <ImageView
                     android:id="@+id/imageView_buttonlogo3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="15dp"
-                    app:srcCompat="@drawable/ic_launcher_foreground" />
+                    android:layout_marginTop="40dp"
+                    android:layout_marginBottom="20dp"
+                    app:srcCompat="@drawable/ic_btn_star" />
             </RelativeLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -234,19 +236,22 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
-                    android:text="Feature 4"
+                    android:text="@string/cardView_6_text"
                     android:textSize="24sp" />
 
                 <ImageView
                     android:id="@+id/imageView_buttonlogo4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="15dp"
-                    app:srcCompat="@drawable/ic_launcher_foreground" />
+                    android:layout_marginTop="40dp"
+                    android:layout_marginBottom="20dp"
+                    app:srcCompat="@drawable/mad_icons" />
             </RelativeLayout>
         </com.google.android.material.card.MaterialCardView>
 
+        <!--For Stage 2-->
+        <!--
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardView5"
             android:layout_width="0dp"
@@ -268,8 +273,8 @@
 
                 <ImageView
                     android:id="@+id/imageView_buttonlogo5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="15dp"
                     app:srcCompat="@drawable/ic_launcher_foreground" />
@@ -297,12 +302,13 @@
 
                 <ImageView
                     android:id="@+id/imageView_buttonlogo6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="15dp"
                     app:srcCompat="@drawable/ic_launcher_foreground" />
             </RelativeLayout>
         </com.google.android.material.card.MaterialCardView>
+        -->
     </androidx.constraintlayout.motion.widget.MotionLayout>
 </androidx.drawerlayout.widget.DrawerLayout>
