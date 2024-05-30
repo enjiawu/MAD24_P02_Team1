@@ -15,17 +15,18 @@
             android:icon="@drawable/ic_search_menu"
             android:title="Advanced Search" />
         <item
-            android:id="@+id/nav_shoppinglist"
-            android:icon="@drawable/ic_shopping_list"
-            android:title="shopping list" />
+            android:id="@+id/nav_favourites"
+            android:icon="@drawable/ic_btn_star"
+            android:title="Favourites" />
     </group>
         <item android:title="Profile">
             <menu>
                 <group android:checkableBehavior="single">
+                    <!--
                 <item
                     android:id="@+id/nav_login"
                     android:icon="@drawable/ic_login"
-                    android:title="Login" />
+                    android:title="Login" /> -->
                 <item
                     android:id="@+id/nav_profile"
                     android:icon="@drawable/ic_profile"
@@ -37,6 +38,7 @@
                 </group>
             </menu>
         </item>
+    <!--
     <item android:title="Additional Features">
         <menu>
             <item
@@ -52,5 +54,5 @@
                 android:icon="@drawable/pocketchef_logo"
                 android:title="feature3" />
         </menu>
-    </item>
+    </item>-->
 </menu>

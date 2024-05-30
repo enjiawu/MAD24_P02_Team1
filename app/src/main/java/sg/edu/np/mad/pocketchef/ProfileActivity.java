@@ -5,13 +5,19 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -26,7 +32,7 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import sg.edu.np.mad.pocketchef.Models.User;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     //".write": "auth !== null && auth.uid === $uid"
     CircleImageView profile_image;
     TextView usernameTv;
@@ -39,6 +45,10 @@ public class ProfileActivity extends AppCompatActivity {
     DatabaseReference mUserRef;
     private static final String TAG = "ProfileActivity";
 
+    DrawerLayout drawerLayout;
+    NavigationView navigationView;
+    MaterialToolbar toolbar;
+    MenuItem nav_home, nav_recipes, nav_search;
 
 
     @Override
@@ -69,9 +79,25 @@ public class ProfileActivity extends AppCompatActivity {
 
 
         loadProfile();
-
+        setupViews();
     }
 
+    private void setupViews() {
+        // Navigation Menu set up
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
+        toolbar = findViewById(R.id.toolbar);
+        nav_home = navigationView.getMenu().findItem(R.id.nav_home);
+        nav_recipes = navigationView.getMenu().findItem(R.id.nav_recipes);
+        nav_search = navigationView.getMenu().findItem(R.id.nav_search);
+        // Set up nav menu
+        navigationView.bringToFront();
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(ProfileActivity.this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+        navigationView.setNavigationItemSelectedListener(ProfileActivity.this);
+        navigationView.setCheckedItem(nav_home);
+    }
 
     private void loadProfile() {
         // Read data from Firebase Database
@@ -132,5 +158,36 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         loadProfile();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        int itemId = menuItem.getItemId();
+        if (itemId == R.id.nav_home) {
+            Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
+            finish();
+            startActivity(intent);
+        } else if (itemId == R.id.nav_recipes) {
+            Intent intent2 = new Intent(ProfileActivity.this, RecipeActivity.class);
+            finish();
+            startActivity(intent2);
+        } else if (itemId == R.id.nav_search) {
+            Intent intent2 = new Intent(ProfileActivity.this, AdvancedSearchActivity.class);
+            finish();
+            startActivity(intent2);
+        } else if (itemId == R.id.nav_profile){
+            //Nothing Happens
+        }
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
     }
 }
