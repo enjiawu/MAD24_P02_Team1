@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,22 +12,17 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import sg.edu.np.mad.pocketchef.Listener.RecipeClickListener;
-import sg.edu.np.mad.pocketchef.Models.Recipe;
 import sg.edu.np.mad.pocketchef.Models.SearchedRecipe;
 import sg.edu.np.mad.pocketchef.R;
-import sg.edu.np.mad.pocketchef.SearchedRecipesOutput;
 
 public class SearchedRecipesAdapter extends RecyclerView.Adapter<SearchedRecipesViewHolder>{
-    //Content object to access resource and layout inflater
 
-    Context context;
-    List<SearchedRecipe> list;
-    RecipeClickListener listener;
+    Context context; //
+    List<SearchedRecipe> list; // List to store searched recipes
+    RecipeClickListener listener; //Listener for when they click on the recipe
 
     public SearchedRecipesAdapter(Context context, List<SearchedRecipe> list, RecipeClickListener listener){
         this.context = context;
