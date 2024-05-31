@@ -15,7 +15,7 @@
         <ImageView
             android:id="@+id/imageView_instructions_step_items"
             android:layout_width="80dp"
-            android:layout_height="50dp"
+            android:layout_height="51dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:contentDescription="@string/imageView_instruction_step_items_Image"

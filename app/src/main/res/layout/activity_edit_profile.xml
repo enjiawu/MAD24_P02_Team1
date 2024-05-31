@@ -17,6 +17,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <!-- ImageView for the User's Selected Image for Profile Picture -->
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profile_image"
             android:layout_width="130dp"
@@ -31,7 +32,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.19999999" />
 
-
+        <!-- EditText for User to edit/update their name -->
         <EditText
             android:id="@+id/usernameEt"
             android:layout_width="200dp"
@@ -50,6 +51,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/profile_image" />
 
+        <!-- ImageView for Back Button to return to profile page -->
         <ImageView
             android:id="@+id/backIv"
             android:layout_width="30dp"
@@ -60,7 +62,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/baseline_arrow_back_ios_24" />
 
-
+        <!-- ImageView for Save Button to save/update profile to database etc -->
         <ImageView
             android:id="@+id/btnSave"
             android:layout_width="30dp"
@@ -73,7 +75,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
+    <!-- TextView: Label for Full Name -->
     <TextView
         android:id="@+id/name"
         android:layout_width="wrap_content"
@@ -84,6 +86,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view" />
 
+    <!-- EditText for user to edit/update their name -->
     <EditText
         android:id="@+id/nameEt"
         android:layout_width="match_parent"
@@ -103,7 +106,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view" />
 
-
+    <!-- TextView: Label for Email -->
     <TextView
         android:id="@+id/email"
         android:layout_width="wrap_content"
@@ -114,6 +117,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view" />
 
+    <!-- EditText for User to edit/update their email -->
     <EditText
         android:id="@+id/emailEt"
         android:layout_width="match_parent"
@@ -133,7 +137,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view" />
 
-
+    <!-- TextView: Label for Date of Birth -->
     <TextView
         android:id="@+id/dob"
         android:layout_width="wrap_content"
@@ -144,6 +148,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view" />
 
+    <!-- TextView for user to select their date of birth -->
     <TextView
         android:id="@+id/dobTv"
         android:layout_width="match_parent"
@@ -162,7 +167,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view" />
 
-
+    <!-- TextView for when user decides to change their password -->
     <TextView
         android:id="@+id/changePasswordTv"
         android:layout_width="match_parent"

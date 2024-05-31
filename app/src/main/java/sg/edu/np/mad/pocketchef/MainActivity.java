@@ -36,6 +36,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import sg.edu.np.mad.pocketchef.Models.FavoriteRecipe;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     boolean isReady = false;
     private MotionLayout motionLayout;
@@ -238,24 +240,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         int itemId = menuItem.getItemId();
         if (itemId == R.id.nav_home) {
-            // Nothing happens
+            // Nothing Happens
         } else if (itemId == R.id.nav_recipes) {
             Intent intent = new Intent(MainActivity.this, RecipeActivity.class);
             finish();
             startActivity(intent);
-        } else if (itemId == R.id.nav_search) {
-            Intent intent2 = new Intent(MainActivity.this, AdvancedSearchActivity.class);
+        } else if (itemId == R.id.nav_profile) {
+            Intent intent2 = new Intent(MainActivity.this, ProfileActivity.class);
             finish();
             startActivity(intent2);
-        } else if (itemId == R.id.nav_profile) {
-            Intent intent3 = new Intent(MainActivity.this, ProfileActivity.class);
+        } else if (itemId == R.id.nav_favourites) {
+            Intent intent3 = new Intent(MainActivity.this, CreateCategoryActivity.class);
             finish();
             startActivity(intent3);
-        } else if (itemId == R.id.nav_logout) {
-            FirebaseAuth.getInstance().signOut();
-            Intent intent4 = new Intent(MainActivity.this, LoginActivity.class);
+        } else if (itemId == R.id.nav_search) {
+            Intent intent4 = new Intent(MainActivity.this, AdvancedSearchActivity.class);
             finish();
             startActivity(intent4);
+        } else if (itemId == R.id.nav_logout) {
+            FirebaseAuth.getInstance().signOut();
+            Intent intent5 = new Intent(MainActivity.this, LoginActivity.class);
+            finish();
+            startActivity(intent5);
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;

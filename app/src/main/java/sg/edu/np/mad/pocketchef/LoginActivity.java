@@ -1,3 +1,4 @@
+
     package sg.edu.np.mad.pocketchef;
     
     
@@ -142,12 +143,13 @@
             SetUpListeners();
 
 //            ViewAnimator viewAnimator = findViewById(R.id.viewAnimator);
-            viewAnimator.setAnimateFirstView(true);
-            viewAnimator.setInAnimation(this, android.R.anim.slide_in_left);
-    //        viewAnimator.setOutAnimation(this, android.R.anim.slide_out_right);
-    
+        viewAnimator.setAnimateFirstView(true);
+        viewAnimator.setInAnimation(this, android.R.anim.slide_in_left);
+        //        viewAnimator.setOutAnimation(this, android.R.anim.slide_out_right);
+
 //            MaterialButton signUp = findViewById(R.id.signUp);
 //            createAccount = findViewById(R.id.createAccount);
+
     
 
 
@@ -155,20 +157,22 @@
 //            signUp.setOnClickListener(new Next());
     //        createAccount.setOnClickListener(new Next());
     
+
 //            View logInView = findViewById(R.id.logInView);
-    
-    //        Sign up
-    
-            getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
-    
-                @Override
-                public void handleOnBackPressed() {
-    //                Prevent user from using back button to go past the log in view backward
-                    if (!(viewAnimator.getCurrentView() == logInView)) viewAnimator.showPrevious();
-                }
-            });
-    
+
+        //        Sign up
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+
+            @Override
+            public void handleOnBackPressed() {
+                //                Prevent user from using back button to go past the log in view backward
+                if (!(viewAnimator.getCurrentView() == logInView)) viewAnimator.showPrevious();
+            }
+        });
+
 //            MaterialButton cancelSignUp = findViewById(R.id.cancelSignUp);
+
 //            cancelSignUp.setOnClickListener(new Back());
 //            String defaultDate = "01-January-2000";
 //
@@ -864,8 +868,10 @@
                 //                Log.d("NEWLINE", String.valueOf(String.valueOf(profileDescriptionSignUp.getEditText().getText()).contains("\n")));
                 myRef.child("users").child(uid).child("name").setValue(Objects.requireNonNull(nameSignUp.getEditText()).getText().toString());
                 myRef.child("users").child(uid).child("date-of-birth").setValue(dob);
+
 //                myRef.child("users").child(uid).child("profile-picture").setValue(profilePicture);
                 myRef.child("users").child(uid).child("profile-description").setValue(String.valueOf(Objects.requireNonNull(profileDescriptionSignUp.getEditText()).getText()));
+
 
 
                 if(profilePicture != null) {
@@ -892,3 +898,4 @@
         }
 
     }
+
