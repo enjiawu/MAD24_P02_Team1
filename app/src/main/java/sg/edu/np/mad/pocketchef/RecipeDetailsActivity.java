@@ -239,18 +239,14 @@ public class RecipeDetailsActivity extends AppCompatActivity
             textView_fat_value.setText(details[1] != null ? details[1] : "N/A");
             textView_calories_value.setText(details[2] != null ? details[2] : "N/A");
             textView_daily_requirements_coverage_value.setText(details[3] != null ? details[3] : "N/A");
-<<<<<<<<< Temporary merge branch 1
-            // Loading image using Picasso
-            Picasso.get().load(response.image).into(imageView_meal_image);
-            path = response.image;
-=========
+
             // Loading image using Picasso, if null, use placeholder
             if (response.image != null && !response.image.isEmpty()) {
                 Picasso.get().load(response.image).into(imageView_meal_image);
             } else {
                 imageView_meal_image.setImageResource(R.drawable.pocketchef_logo_transparent);
             }
->>>>>>>>> Temporary merge branch 2
+
             // Use custom layout for recycler view
             recycler_meal_ingredients.setHasFixedSize(true);
             recycler_meal_ingredients.setLayoutManager(new LinearLayoutManager(RecipeDetailsActivity.this, LinearLayoutManager.HORIZONTAL, false));
@@ -324,7 +320,7 @@ public class RecipeDetailsActivity extends AppCompatActivity
             Intent intent2 = new Intent(RecipeDetailsActivity.this, AdvancedSearchActivity.class);
             finish();
             startActivity(intent2);
-        }else if (itemId == R.id.nav_shoppinglist) {
+        }else if (itemId == R.id.nav_favourites) {
             Intent intent2 = new Intent(RecipeDetailsActivity.this, CreateCategoryActivity.class);
             finish();
             startActivity(intent2);
@@ -344,15 +340,9 @@ public class RecipeDetailsActivity extends AppCompatActivity
                 .into(imageView_nutrition);
     }
 
-<<<<<<<<< Temporary merge branch 1
-
-
 
     // Add to favorite list
-    ImageView btnFavorite;
-=========
-    // Add to favorite list, by Wenya
->>>>>>>>> Temporary merge branch 2
+   // ImageView btnFavorite;
     List<String> categories;
     Spinner spinnerCategories;
     private void showFavoriteDialog() {

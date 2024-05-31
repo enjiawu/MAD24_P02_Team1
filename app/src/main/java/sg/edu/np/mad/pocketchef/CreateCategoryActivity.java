@@ -370,7 +370,7 @@ public class CreateCategoryActivity extends AppCompatActivity  implements Naviga
             Intent intent2 = new Intent(CreateCategoryActivity.this, AdvancedSearchActivity.class);
             finish();
             startActivity(intent2);
-        }else if(itemId == R.id.nav_favorite){
+        }else if(itemId == R.id.nav_favourites){
 
         }
         drawerLayout.closeDrawer(GravityCompat.START);
