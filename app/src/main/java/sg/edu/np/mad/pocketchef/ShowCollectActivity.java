@@ -203,7 +203,7 @@ public class ShowCollectActivity extends AppCompatActivity implements Navigation
             Intent intent2 = new Intent(ShowCollectActivity.this, AdvancedSearchActivity.class);
             finish();
             startActivity(intent2);
-        }else if(itemId == R.id.nav_favorite){
+        }else if(itemId == R.id.nav_favourites){
             Intent intent2 = new Intent(ShowCollectActivity.this, CreateCategoryActivity.class);
             finish();
             startActivity(intent2);
