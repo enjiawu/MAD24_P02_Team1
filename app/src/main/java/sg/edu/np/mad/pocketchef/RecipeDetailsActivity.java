@@ -342,7 +342,6 @@ public class RecipeDetailsActivity extends AppCompatActivity
 
 
     // Add to favorite list
-   // ImageView btnFavorite;
     List<String> categories;
     Spinner spinnerCategories;
     private void showFavoriteDialog() {
