@@ -29,4 +29,7 @@ public class InstructionsManager {
     public void fetchInstructionsWithDelay(RequestManager manager, InstructionsListener listener, int id, long delay) {
         handler.postDelayed(() -> manager.getInstructions(listener, id), delay);
     }
+    public void QuerDataBase(RequestManager manager, InstructionsListener listener, int id, long delay){
+        handler.postDelayed(() -> manager.getInstructions(listener, id), delay);
+    }
 }

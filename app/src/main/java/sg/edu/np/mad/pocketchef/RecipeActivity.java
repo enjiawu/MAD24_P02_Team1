@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,7 @@ import java.util.List;
 import sg.edu.np.mad.pocketchef.Adapters.RandomRecipeAdapter;
 import sg.edu.np.mad.pocketchef.Listener.RdmRecipeRespListener;
 import sg.edu.np.mad.pocketchef.Listener.RecipeClickListener;
+import sg.edu.np.mad.pocketchef.Models.FavoriteRecipe;
 import sg.edu.np.mad.pocketchef.Models.RandomRecipeApiResponse;
 
 public class RecipeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -180,11 +182,13 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
     private void setupRandomRecipeRecyclerView(RandomRecipeApiResponse response) {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(RecipeActivity.this, 1));
-        RandomRecipeAdapter randomRecipeAdapter = new RandomRecipeAdapter(RecipeActivity.this, response.recipes, recipeClickListener);
+        RandomRecipeAdapter randomRecipeAdapter = new RandomRecipeAdapter(RecipeActivity.this,
+                response.recipes, recipeClickListener);
         recyclerView.setAdapter(randomRecipeAdapter);
     }
 
-    private final RecipeClickListener recipeClickListener = id -> startActivity(new Intent(RecipeActivity.this, RecipeDetailsActivity.class)
+    private final RecipeClickListener recipeClickListener = id ->
+            startActivity(new Intent(RecipeActivity.this, RecipeDetailsActivity.class)
             .putExtra(EXTRA_RECIPE_ID, id));
 
     @Override
@@ -195,11 +199,24 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
             finish();
             startActivity(intent);
         } else if (itemId == R.id.nav_recipes) {
-            // Nothing happens
-        } else if (itemId == R.id.nav_search) {
-            Intent intent2 = new Intent(RecipeActivity.this, AdvancedSearchActivity.class);
+            // Nothing Happens
+        } else if (itemId == R.id.nav_profile) {
+            Intent intent2 = new Intent(RecipeActivity.this, ProfileActivity.class);
             finish();
             startActivity(intent2);
+        } else if (itemId == R.id.nav_favourites) {
+            Intent intent3 = new Intent(RecipeActivity.this, CreateCategoryActivity.class);
+            finish();
+            startActivity(intent3);
+        } else if (itemId == R.id.nav_search) {
+            Intent intent4 = new Intent(RecipeActivity.this, AdvancedSearchActivity.class);
+            finish();
+            startActivity(intent4);
+        } else if (itemId == R.id.nav_logout) {
+            FirebaseAuth.getInstance().signOut();
+            Intent intent5 = new Intent(RecipeActivity.this, LoginActivity.class);
+            finish();
+            startActivity(intent5);
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;

@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,22 +12,17 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import sg.edu.np.mad.pocketchef.Listener.RecipeClickListener;
-import sg.edu.np.mad.pocketchef.Models.Recipe;
 import sg.edu.np.mad.pocketchef.Models.SearchedRecipe;
 import sg.edu.np.mad.pocketchef.R;
-import sg.edu.np.mad.pocketchef.SearchedRecipesOutput;
 
 public class SearchedRecipesAdapter extends RecyclerView.Adapter<SearchedRecipesViewHolder>{
-    //Content object to access resource and layout inflater
 
-    Context context;
-    List<SearchedRecipe> list;
-    RecipeClickListener listener;
+    Context context; //
+    List<SearchedRecipe> list; // List to store searched recipes
+    RecipeClickListener listener; //Listener for when they click on the recipe
 
     public SearchedRecipesAdapter(Context context, List<SearchedRecipe> list, RecipeClickListener listener){
         this.context = context;
@@ -50,11 +44,14 @@ public class SearchedRecipesAdapter extends RecyclerView.Adapter<SearchedRecipes
         holder.textView_title.setText(recipe.title);
         holder.textView_title.setSelected(true);
 
-        if (recipe.nutrition != null && recipe.nutrition.nutrients != null && recipe.nutrition.nutrients.size() >= 3) { //Check if got nutrition information
+        //Check if got nutrition information
+        if (recipe.nutrition != null && recipe.nutrition.nutrients != null && recipe.nutrition.nutrients.size() >= 3) {
+            //If have then format everything nicely
             holder.textView_calories.setText((int) recipe.nutrition.nutrients.get(0).amount + " " + recipe.nutrition.nutrients.get(0).unit);
             holder.textView_protein.setText((int) recipe.nutrition.nutrients.get(1).amount + " " + recipe.nutrition.nutrients.get(1).unit);
             holder.textView_carbs.setText((int) recipe.nutrition.nutrients.get(2).amount + " " + recipe.nutrition.nutrients.get(2).unit);
         } else {
+            //If don't have, then set as "N/A"
             holder.textView_calories.setText("N/A");
             holder.textView_protein.setText("N/A");
             holder.textView_carbs.setText("N/A");
@@ -62,6 +59,7 @@ public class SearchedRecipesAdapter extends RecyclerView.Adapter<SearchedRecipes
 
         Picasso.get().load(recipe.image).into(holder.imageView_food); //Use picasso to load images
 
+        //Check if user clicks on recipe, if they click then return the Id
         holder.searched_recipes_container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,7 +74,7 @@ public class SearchedRecipesAdapter extends RecyclerView.Adapter<SearchedRecipes
     } //Make sure that item count can be empty since the API might not return recipes
 }
 
-// Preparing viewholder
+// Preparing view holder
 class SearchedRecipesViewHolder extends RecyclerView.ViewHolder{
     CardView searched_recipes_container;
     TextView textView_title, textView_calories, textView_protein, textView_carbs;
