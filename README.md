@@ -1,4 +1,4 @@
-![image](https://github.com/enjiawu/MAD24_P02_Team1/assets/133361144/826a5292-c18b-4f23-97dd-67c8f00aea17)
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Pocketchef_logo.svg)
 # MAD24_P02_Team1
 MAD 2024 Assignment
 ## Students:
