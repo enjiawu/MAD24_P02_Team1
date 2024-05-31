@@ -32,7 +32,8 @@ import sg.edu.np.mad.pocketchef.Listener.SearchRecipeListener;
 import sg.edu.np.mad.pocketchef.Models.SearchedRecipeApiResponse;
 
 public class SearchedRecipesOutput extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
-    //Defining necessary variables
+
+    //Defining variables
     private ProgressBar progressBar;
     private RequestManager requestManager;
     private RecyclerView recyclerSearchedRecpies;
@@ -81,6 +82,7 @@ public class SearchedRecipesOutput extends AppCompatActivity implements Navigati
         sort = null; //Setting default to null
         sortDirection = "asc"; //Setting default to ascending
 
+        //Request Manager Variable for API
         requestManager = new RequestManager(this);
 
         //Setting up views, listeners and fetching recipes
@@ -89,6 +91,7 @@ public class SearchedRecipesOutput extends AppCompatActivity implements Navigati
         fetchSearchedRecipes();
     }
 
+    //Setting up views
     private void setupViews() {
         // Getting all the variables from xml file
         recyclerSearchedRecpies = findViewById(R.id.recycler_searched_recipes);
@@ -96,6 +99,7 @@ public class SearchedRecipesOutput extends AppCompatActivity implements Navigati
         progressBar = findViewById(R.id.progressBar);
         noRecipeFound = findViewById(R.id.no_recipe_found);
         sortBySpinner = findViewById(R.id.sort_by_spinner);
+
         // Navigation Menu set up
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
@@ -103,6 +107,7 @@ public class SearchedRecipesOutput extends AppCompatActivity implements Navigati
         nav_home = navigationView.getMenu().findItem(R.id.nav_home);
         nav_recipes = navigationView.getMenu().findItem(R.id.nav_recipes);
         nav_search = navigationView.getMenu().findItem(R.id.nav_search);
+
         // Set up nav menu
         navigationView.bringToFront();
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(SearchedRecipesOutput.this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -115,12 +120,12 @@ public class SearchedRecipesOutput extends AppCompatActivity implements Navigati
     // Setting up listeners
     public void setupListeners(){
         //Check if expandSearchButton has been clicked
-        expandSearchButton.setOnClickListener(v -> { //Go back to AdvancedSearchActivity
+        expandSearchButton.setOnClickListener(v -> { //If it has been clicked, o back to AdvancedSearchActivity
             Intent SearchedRecipeintent = new Intent(SearchedRecipesOutput.this, AdvancedSearchActivity.class);
             startActivity(SearchedRecipeintent);
         });
 
-        //Check if user chose to sort recipes
+        //Check if user chooses to sort recipes
         sortBySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -173,6 +178,8 @@ public class SearchedRecipesOutput extends AppCompatActivity implements Navigati
     public void fetchSearchedRecipes() {
         progressBar.setVisibility(View.VISIBLE); // Making the progress bar visible as the recipes get searched
         requestManager.getSearchedRecipes(new SearchRecipeListener() { //API Response
+
+            // Fetching API response
             @Override
             public void didFetch(SearchedRecipeApiResponse response, String message) {
                 // Log the API response
@@ -186,6 +193,8 @@ public class SearchedRecipesOutput extends AppCompatActivity implements Navigati
                     Toast.makeText(SearchedRecipesOutput.this, "Failed to fetch recipes", Toast.LENGTH_SHORT).show();
                 }
             }
+
+            // If got error
             @Override
             public void didError(String message) {
                 // Handle API errors
@@ -195,6 +204,7 @@ public class SearchedRecipesOutput extends AppCompatActivity implements Navigati
         }, query, excludeIngredients, minCarbs, maxCarbs, minProtein, maxProtein, minCalories, maxCalories, diet, intolerances, sort, sortDirection);
     }
 
+    //For the menu
     @Override
     public void onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -230,7 +240,7 @@ public class SearchedRecipesOutput extends AppCompatActivity implements Navigati
             progressBar.setVisibility(View.GONE);
 
         } else {
-            Log.d(TAG, "Response or recipes are null"); //For debugging
+            Log.d(TAG, "Response or recipes are null"); // Log for recipes or response that is null
         }
     }
 
