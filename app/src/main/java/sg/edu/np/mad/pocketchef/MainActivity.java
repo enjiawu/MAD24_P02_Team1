@@ -248,7 +248,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent intent2 = new Intent(MainActivity.this, AdvancedSearchActivity.class);
             finish();
             startActivity(intent2);
-        } else if(itemId == R.id.nav_favorite){
+        } else if(itemId == R.id.nav_favourites){
             Intent intent2 = new Intent(MainActivity.this, CreateCategoryActivity.class);
             finish();
             startActivity(intent2);
