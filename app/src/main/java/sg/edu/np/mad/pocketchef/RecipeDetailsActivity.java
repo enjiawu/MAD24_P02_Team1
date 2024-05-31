@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -83,7 +82,6 @@ public class RecipeDetailsActivity extends AppCompatActivity
     MenuItem nav_home, nav_recipes, nav_search;
     ConstraintLayout recipeDetailsLayout, nutritionLabelLayout;
     MaterialButton buttonNutritionLabel;
-    ImageButton btnFavorite;
 
     private RecipeDetailsC recipeDetailsC;
 
@@ -120,7 +118,6 @@ public class RecipeDetailsActivity extends AppCompatActivity
             }
         });
 
-
         btnFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,7 +125,7 @@ public class RecipeDetailsActivity extends AppCompatActivity
                     showFavoriteDialog();
                 }else{
                     MessageDialog.show("Favorite","Whether to cancel the collection","ok"
-                    ,"cancel").setOkButtonClickListener(new OnDialogButtonClickListener<MessageDialog>() {
+                            ,"cancel").setOkButtonClickListener(new OnDialogButtonClickListener<MessageDialog>() {
                         @Override
                         public boolean onClick(MessageDialog dialog, View v) {
                             WaitDialog.show("loading...");
@@ -206,17 +203,17 @@ public class RecipeDetailsActivity extends AppCompatActivity
 
             @Override
             public void run() {
-              recipeDetailsC =  AppDatabase.getInstance(RecipeDetailsActivity.this)
-                                .RecipeDetailsCDao().getByRecipeDetailsResponseId(recipeId);
-              runOnUiThread(new Runnable() {
-                  @Override
-                  public void run() {
-                      if(recipeDetailsC!=null){
-                          Glide.with(RecipeDetailsActivity.this).load(R.drawable.ic_collect).into(btnFavorite);
-                          btnFavorite.setImageTintList(ColorStateList.valueOf(Color.YELLOW));
-                      }
-                  }
-              });
+                recipeDetailsC =  AppDatabase.getInstance(RecipeDetailsActivity.this)
+                        .RecipeDetailsCDao().getByRecipeDetailsResponseId(recipeId);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(recipeDetailsC!=null){
+                            Glide.with(RecipeDetailsActivity.this).load(R.drawable.ic_collect).into(btnFavorite);
+                            btnFavorite.setImageTintList(ColorStateList.valueOf(Color.YELLOW));
+                        }
+                    }
+                });
             }
         }).start();
     }
@@ -239,14 +236,9 @@ public class RecipeDetailsActivity extends AppCompatActivity
             textView_fat_value.setText(details[1] != null ? details[1] : "N/A");
             textView_calories_value.setText(details[2] != null ? details[2] : "N/A");
             textView_daily_requirements_coverage_value.setText(details[3] != null ? details[3] : "N/A");
-
-            // Loading image using Picasso, if null, use placeholder
-            if (response.image != null && !response.image.isEmpty()) {
-                Picasso.get().load(response.image).into(imageView_meal_image);
-            } else {
-                imageView_meal_image.setImageResource(R.drawable.pocketchef_logo_transparent);
-            }
-
+            // Loading image using Picasso
+            Picasso.get().load(response.image).into(imageView_meal_image);
+            path = response.image;
             // Use custom layout for recycler view
             recycler_meal_ingredients.setHasFixedSize(true);
             recycler_meal_ingredients.setLayoutManager(new LinearLayoutManager(RecipeDetailsActivity.this, LinearLayoutManager.HORIZONTAL, false));
@@ -283,13 +275,7 @@ public class RecipeDetailsActivity extends AppCompatActivity
     };
 
     // This is to check functionality first before implementation
-    private final RecipeClickListener recipeClickListener = id -> {
-        Intent intent = new Intent(RecipeDetailsActivity.this, RecipeDetailsActivity.class);
-        intent.putExtra("id", id);
-        finish(); // Finish the current activity
-        startActivity(intent); // Start the same activity with the new intent
-    };
-
+    private final RecipeClickListener recipeClickListener = id -> Toast.makeText(RecipeDetailsActivity.this, "id", Toast.LENGTH_SHORT).show();
 
     private final InstructionsListener instructionsListener = new InstructionsListener() {
         @Override
@@ -341,7 +327,10 @@ public class RecipeDetailsActivity extends AppCompatActivity
     }
 
 
+
+
     // Add to favorite list
+    ImageView btnFavorite;
     List<String> categories;
     Spinner spinnerCategories;
     private void showFavoriteDialog() {
@@ -368,35 +357,35 @@ public class RecipeDetailsActivity extends AppCompatActivity
                 PopTip.show("Loading is still ongoing, please wait");
                 return;
             }
-          RecipeDetailsC recipeDetailsC1 =new RecipeDetailsC();
-          recipeDetailsC1.recipeDetailsResponseId = recipeId;
-          Log.d("run",recipeId+"");
-          recipeDetailsC1.categoryBeanId = spinnerCategories.getSelectedItem().toString();
-          recipeDetailsC1.meal_servings =textView_meal_servings.getText().toString();
-          recipeDetailsC1.meal_ready =  textView_meal_ready.getText().toString();
-          recipeDetailsC1.meal_price = textView_meal_price.getText().toString();
-          recipeDetailsC1.meal_name = textView_meal_name.getText().toString();
-          recipeDetailsC1.imagPath =path;
-          recipeDetailsC = recipeDetailsC1;
+            RecipeDetailsC recipeDetailsC1 =new RecipeDetailsC();
+            recipeDetailsC1.recipeDetailsResponseId = recipeId;
+            Log.d("run",recipeId+"");
+            recipeDetailsC1.categoryBeanId = spinnerCategories.getSelectedItem().toString();
+            recipeDetailsC1.meal_servings =textView_meal_servings.getText().toString();
+            recipeDetailsC1.meal_ready =  textView_meal_ready.getText().toString();
+            recipeDetailsC1.meal_price = textView_meal_price.getText().toString();
+            recipeDetailsC1.meal_name = textView_meal_name.getText().toString();
+            recipeDetailsC1.imagPath =path;
+            recipeDetailsC = recipeDetailsC1;
 
-          new Thread(new Runnable() {
-              @Override
-              public void run() {
-                  WaitDialog.show("loading.....");
-                AppDatabase.getInstance(RecipeDetailsActivity.this)
-                        .RecipeDetailsCDao().insert(recipeDetailsC1);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        WaitDialog.dismiss();
-                        PopTip.show("success");
-                        Glide.with(RecipeDetailsActivity.this).load(R.drawable.ic_collect).into(btnFavorite);
-                        btnFavorite.setImageTintList(ColorStateList.valueOf(Color.YELLOW));
-                    }
-                });
-              }
-          }).start();
-          dialog.dismiss();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    WaitDialog.show("loading.....");
+                    AppDatabase.getInstance(RecipeDetailsActivity.this)
+                            .RecipeDetailsCDao().insert(recipeDetailsC1);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            WaitDialog.dismiss();
+                            PopTip.show("success");
+                            Glide.with(RecipeDetailsActivity.this).load(R.drawable.ic_collect).into(btnFavorite);
+                            btnFavorite.setImageTintList(ColorStateList.valueOf(Color.YELLOW));
+                        }
+                    });
+                }
+            }).start();
+            dialog.dismiss();
         });
 
         buttonCancel.setOnClickListener(v -> dialog.dismiss());
