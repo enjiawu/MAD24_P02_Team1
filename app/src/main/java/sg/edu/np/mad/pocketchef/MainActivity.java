@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SplashScreen.installSplashScreen(this);
         View content = findViewById(android.R.id.content);
         content.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             @Override
@@ -247,7 +248,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent intent2 = new Intent(MainActivity.this, AdvancedSearchActivity.class);
             finish();
             startActivity(intent2);
-        } else if (itemId == R.id.nav_profile) {
+        } else if(itemId == R.id.nav_favorite){
+            Intent intent2 = new Intent(MainActivity.this, CreateCategoryActivity.class);
+            finish();
+            startActivity(intent2);
+        }
+        else if (itemId == R.id.nav_profile) {
             Intent intent3 = new Intent(MainActivity.this, ProfileActivity.class);
             finish();
             startActivity(intent3);
