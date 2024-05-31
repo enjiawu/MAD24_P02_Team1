@@ -34,6 +34,7 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.kongzue.dialogx.dialogs.MessageDialog;
 import com.kongzue.dialogx.dialogs.PopTip;
 import com.kongzue.dialogx.dialogs.WaitDialog;
@@ -298,18 +299,27 @@ public class RecipeDetailsActivity extends AppCompatActivity
             Intent intent = new Intent(RecipeDetailsActivity.this, MainActivity.class);
             finish();
             startActivity(intent);
-        } else if (itemId == R.id.nav_recipes) {
-            Intent intent = new Intent(RecipeDetailsActivity.this, RecipeActivity.class);
+        } else if (itemId == R.id.nav_profile) {
+            Intent intent2 = new Intent(RecipeDetailsActivity.this, ProfileActivity.class);
             finish();
-            startActivity(intent);
+            startActivity(intent2);
+        } else if (itemId == R.id.nav_favourites) {
+            Intent intent3 = new Intent(RecipeDetailsActivity.this, CreateCategoryActivity.class);
+            finish();
+            startActivity(intent3);
         } else if (itemId == R.id.nav_search) {
-            Intent intent2 = new Intent(RecipeDetailsActivity.this, AdvancedSearchActivity.class);
+            Intent intent4 = new Intent(RecipeDetailsActivity.this, AdvancedSearchActivity.class);
             finish();
-            startActivity(intent2);
-        }else if (itemId == R.id.nav_favourites) {
-            Intent intent2 = new Intent(RecipeDetailsActivity.this, CreateCategoryActivity.class);
+            startActivity(intent4);
+        } else if (itemId == R.id.nav_logout) {
+            FirebaseAuth.getInstance().signOut();
+            Intent intent5 = new Intent(RecipeDetailsActivity.this, LoginActivity.class);
             finish();
-            startActivity(intent2);
+            startActivity(intent5);
+        } else if (itemId == R.id.nav_recipes) {
+            Intent intent6 = new Intent(RecipeDetailsActivity.this, RecipeActivity.class);
+            finish();
+            startActivity(intent6);
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);
