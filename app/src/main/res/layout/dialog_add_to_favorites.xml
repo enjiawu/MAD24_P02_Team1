@@ -24,7 +24,7 @@
         android:id="@+id/bt_new_category"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="create category"
+        android:text="Create New Category"
         />
 
     <LinearLayout

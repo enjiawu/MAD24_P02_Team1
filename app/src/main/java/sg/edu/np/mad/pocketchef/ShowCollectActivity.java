@@ -86,7 +86,7 @@ public class ShowCollectActivity extends AppCompatActivity implements Navigation
                         if(otherCollectname==null||otherCollectname.isEmpty()){
                             name =new String[0];
                         }else{
-                           name = otherCollectname.toArray(new String[0]);
+                            name = otherCollectname.toArray(new String[0]);
                         }
                         String[] mergedArray = new String[name.length + 1];
                         int i=0;
@@ -104,7 +104,7 @@ public class ShowCollectActivity extends AppCompatActivity implements Navigation
                                         public void run() {
                                             recipe.categoryBeanId = otherCollectname.get(index-1);
                                             AppDatabase.getInstance(ShowCollectActivity.this)
-                                                            .RecipeDetailsCDao().update(recipe);
+                                                    .RecipeDetailsCDao().update(recipe);
                                             runOnUiThread(new Runnable() {
                                                 @Override
                                                 public void run() {
@@ -162,7 +162,7 @@ public class ShowCollectActivity extends AppCompatActivity implements Navigation
         new Thread(new Runnable() {
             @Override
             public void run() {
-               data = AppDatabase.getInstance(ShowCollectActivity.this).RecipeDetailsCDao()
+                data = AppDatabase.getInstance(ShowCollectActivity.this).RecipeDetailsCDao()
                         .getByCategoryBeanId(name);
                 runOnUiThread(new Runnable() {
                     @Override
@@ -180,8 +180,8 @@ public class ShowCollectActivity extends AppCompatActivity implements Navigation
                         .categoryDao().getAllCategories();
                 for(int i=0;i<otherCollect.size();i++){
                     if(!otherCollect.get(i).text.equals(name)){
-                       String collect_name = otherCollect.get(i).text;
-                       otherCollectname.add(collect_name);
+                        String collect_name = otherCollect.get(i).text;
+                        otherCollectname.add(collect_name);
                     }
                 }
             }
@@ -203,7 +203,7 @@ public class ShowCollectActivity extends AppCompatActivity implements Navigation
             Intent intent2 = new Intent(ShowCollectActivity.this, AdvancedSearchActivity.class);
             finish();
             startActivity(intent2);
-        }else if(itemId == R.id.nav_shoppinglist){
+        }else if(itemId == R.id.nav_favorite){
             Intent intent2 = new Intent(ShowCollectActivity.this, CreateCategoryActivity.class);
             finish();
             startActivity(intent2);

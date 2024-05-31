@@ -202,7 +202,7 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
             Intent intent2 = new Intent(RecipeActivity.this, AdvancedSearchActivity.class);
             finish();
             startActivity(intent2);
-        }else if(itemId == R.id.nav_shoppinglist){
+        }else if(itemId == R.id.nav_favorite){
             Intent intent2 = new Intent(RecipeActivity.this, CreateCategoryActivity.class);
             finish();
             startActivity(intent2);

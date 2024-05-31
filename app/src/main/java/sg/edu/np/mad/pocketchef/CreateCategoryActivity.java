@@ -220,7 +220,7 @@ public class CreateCategoryActivity extends AppCompatActivity  implements Naviga
                         });
                     }else if(!cetegoryBean.imagePath.equals("a")){
                         holder.tvStr.setText(cetegoryBean.text);
-                        if(path.equals("default")){
+                        if(cetegoryBean.imagePath.equals("default")){
                             Glide.with(CreateCategoryActivity.this)
                                     .load(R.drawable.pocketchef_logo)
                                     .into(holder.ivStr);
@@ -370,7 +370,7 @@ public class CreateCategoryActivity extends AppCompatActivity  implements Naviga
             Intent intent2 = new Intent(CreateCategoryActivity.this, AdvancedSearchActivity.class);
             finish();
             startActivity(intent2);
-        }else if(itemId == R.id.nav_shoppinglist){
+        }else if(itemId == R.id.nav_favorite){
 
         }
         drawerLayout.closeDrawer(GravityCompat.START);

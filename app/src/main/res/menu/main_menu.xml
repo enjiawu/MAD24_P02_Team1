@@ -15,13 +15,13 @@
             android:icon="@drawable/ic_search_menu"
             android:title="Advanced Search" />
         <item
-            android:id="@+id/nav_shoppinglist"
+            android:id="@+id/nav_favorite"
             android:icon="@drawable/ic_shopping_list"
-            android:title="shopping list" />
+            android:title="Favorite List" />
     </group>
-        <item android:title="Profile">
-            <menu>
-                <group android:checkableBehavior="single">
+    <item android:title="Profile">
+        <menu>
+            <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/nav_login"
                     android:icon="@drawable/ic_login"
@@ -34,9 +34,9 @@
                     android:id="@+id/nav_logout"
                     android:icon="@drawable/ic_logout"
                     android:title="Logout" />
-                </group>
-            </menu>
-        </item>
+            </group>
+        </menu>
+    </item>
     <item android:title="Additional Features">
         <menu>
             <item

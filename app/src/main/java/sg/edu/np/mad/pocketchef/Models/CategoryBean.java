@@ -8,7 +8,7 @@ import org.checkerframework.common.aliasing.qual.Unique;
 @Entity
 public class CategoryBean {
     @PrimaryKey(autoGenerate = true)
-    public int id; // 通常，我们会为每个实体添加一个主键
+    public int id;
 
     public CategoryBean(String imagePath, String text) {
         this.imagePath = imagePath;
