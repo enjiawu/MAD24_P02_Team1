@@ -30,6 +30,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
 import com.kongzue.albumdialog.PhotoAlbumDialog;
 import com.kongzue.albumdialog.util.DialogImplCallback;
 import com.kongzue.albumdialog.util.SelectPhotoCallback;
@@ -355,6 +356,7 @@ public class CreateCategoryActivity extends AppCompatActivity  implements Naviga
                 .build());
     }
 
+    //For menu
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         int itemId = menuItem.getItemId();
@@ -367,11 +369,20 @@ public class CreateCategoryActivity extends AppCompatActivity  implements Naviga
             finish();
             startActivity(intent2);
         } else if (itemId == R.id.nav_search) {
-            Intent intent2 = new Intent(CreateCategoryActivity.this, AdvancedSearchActivity.class);
+            Intent intent3 = new Intent(CreateCategoryActivity.this, AdvancedSearchActivity.class);
             finish();
-            startActivity(intent2);
-        }else if(itemId == R.id.nav_favourites){
-
+            startActivity(intent3);
+        } else if (itemId == R.id.nav_profile) {
+            Intent intent4 = new Intent(CreateCategoryActivity.this, ProfileActivity.class);
+            finish();
+            startActivity(intent4);
+        } else if (itemId == R.id.nav_favourites){
+            // Nothing Happens
+        } else if (itemId == R.id.nav_logout) {
+            FirebaseAuth.getInstance().signOut();
+            Intent intent5 = new Intent(CreateCategoryActivity.this, LoginActivity.class);
+            finish();
+            startActivity(intent5);
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;

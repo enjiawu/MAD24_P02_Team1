@@ -16,6 +16,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+
+import sg.edu.np.mad.pocketchef.Models.FavoriteRecipe;
 
 public class AdvancedSearchActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -206,12 +209,21 @@ public class AdvancedSearchActivity extends AppCompatActivity implements Navigat
             Intent intent2 = new Intent(AdvancedSearchActivity.this, RecipeActivity.class);
             finish();
             startActivity(intent2);
+        } else if (itemId == R.id.nav_favourites) {
+            Intent intent3 = new Intent(AdvancedSearchActivity.this, CreateCategoryActivity.class);
+            finish();
+            startActivity(intent3);
         } else if (itemId == R.id.nav_search) {
-            // Nothing happens
-        }else if (itemId == R.id.nav_profile){
-        Intent intent3 = new Intent(AdvancedSearchActivity.this, ProfileActivity.class);
-        finish();
-        startActivity(intent3);
+            // Nothing Happens
+        } else if (itemId == R.id.nav_profile) {
+            Intent intent4 = new Intent(AdvancedSearchActivity.this, ProfileActivity.class);
+            finish();
+            startActivity(intent4);
+        } else if (itemId == R.id.nav_logout) {
+            FirebaseAuth.getInstance().signOut();
+            Intent intent5 = new Intent(AdvancedSearchActivity.this, LoginActivity.class);
+            finish();
+            startActivity(intent5);
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;

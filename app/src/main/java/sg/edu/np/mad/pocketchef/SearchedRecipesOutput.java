@@ -25,10 +25,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import sg.edu.np.mad.pocketchef.Adapters.SearchedRecipesAdapter;
 import sg.edu.np.mad.pocketchef.Listener.RecipeClickListener;
 import sg.edu.np.mad.pocketchef.Listener.SearchRecipeListener;
+import sg.edu.np.mad.pocketchef.Models.FavoriteRecipe;
 import sg.edu.np.mad.pocketchef.Models.SearchedRecipeApiResponse;
 
 public class SearchedRecipesOutput extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
@@ -260,15 +262,23 @@ public class SearchedRecipesOutput extends AppCompatActivity implements Navigati
             Intent intent2 = new Intent(SearchedRecipesOutput.this, RecipeActivity.class);
             finish();
             startActivity(intent2);
-        } else if (itemId == R.id.nav_search) {
-            // Nothing happens
-        } else if (itemId == R.id.nav_profile){
-            Intent intent3 = new Intent(SearchedRecipesOutput.this, ProfileActivity.class);
+        } else if (itemId == R.id.nav_favourites) {
+            Intent intent3 = new Intent(SearchedRecipesOutput.this, CreateCategoryActivity.class);
             finish();
             startActivity(intent3);
+        } else if (itemId == R.id.nav_search) {
+            // Nothing Happens
+        } else if (itemId == R.id.nav_profile) {
+            Intent intent4 = new Intent(SearchedRecipesOutput.this, ProfileActivity.class);
+            finish();
+            startActivity(intent4);
+        } else if (itemId == R.id.nav_logout) {
+            FirebaseAuth.getInstance().signOut();
+            Intent intent5 = new Intent(SearchedRecipesOutput.this, LoginActivity.class);
+            finish();
+            startActivity(intent5);
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
-
 }

@@ -30,6 +30,7 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import sg.edu.np.mad.pocketchef.Models.FavoriteRecipe;
 import sg.edu.np.mad.pocketchef.Models.User;
 
 public class ProfileActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -187,16 +188,21 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
             Intent intent2 = new Intent(ProfileActivity.this, RecipeActivity.class);
             finish();
             startActivity(intent2);
-        } else if (itemId == R.id.nav_search) {
-            Intent intent2 = new Intent(ProfileActivity.this, AdvancedSearchActivity.class);
-            finish();
-            startActivity(intent2);
-        } else if (itemId == R.id.nav_profile){
-            //Nothing Happens
-        } else if(itemId == R.id.nav_favourites){
+        } else if (itemId == R.id.nav_favourites) {
             Intent intent3 = new Intent(ProfileActivity.this, CreateCategoryActivity.class);
             finish();
             startActivity(intent3);
+        } else if (itemId == R.id.nav_search) {
+            Intent intent4 = new Intent(ProfileActivity.this, AdvancedSearchActivity.class);
+            finish();
+            startActivity(intent4);
+        } else if (itemId == R.id.nav_profile) {
+            // Nothing Happens
+        } else if (itemId == R.id.nav_logout) {
+            FirebaseAuth.getInstance().signOut();
+            Intent intent5 = new Intent(ProfileActivity.this, LoginActivity.class);
+            finish();
+            startActivity(intent5);
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
