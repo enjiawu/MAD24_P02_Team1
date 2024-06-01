@@ -106,6 +106,13 @@ https://www.youtube.com/watch?v=o8c1RO3WgBA&list=PLWz5rJ2EKKc-bcyUTIFAr97ZtRkwM7
 https://www.youtube.com/watch?v=pnDgGNKoe4w&ab_channel=JohnWilker
 - Tool to convert json to java classes
 https://json2csharp.com/
+- Video tutorial for Picking image from gallery:
+  https://www.youtube.com/watch?v=nOtlFl1aUCw
+- Video tutorial for context menu on long press:
+  https://www.youtube.com/watch?v=BZ_UrcFOCTc
+- Data access Object pattern:
+  https://www.tutorialspoint.com/design_pattern/data_access_object_pattern.htm
+------------------------------------------------
 - Picasso dependency for image loading from API:
 https://github.com/square/picasso
 - Retrofit dependency for API calling:
@@ -116,12 +123,20 @@ https://github.com/square/retrofit/tree/trunk/retrofit-converters/gson
 https://m3.material.io/
 - Glide an image loading and cache library
 https://github.com/bumptech/glide
-- Jsoup a javal html parser 
-- https://github.com/bumptech/glide
-- Video tutorial for Picking image from gallery:
-  https://www.youtube.com/watch?v=nOtlFl1aUCw
-- Video tutorial for context menu on long press:
-  https://www.youtube.com/watch?v=BZ_UrcFOCTc
-- Data access Object pattern:
-  https://www.tutorialspoint.com/design_pattern/data_access_object_pattern.htm
+- Jsoup a java to html parser 
+  https://jsoup.org/download
+- Firebase for database
+https://firebase.google.com/
+- CircleImageView
+  https://github.com/hdodenhof/CircleImageView
+- Android Splashscreen
+https://developer.android.com/jetpack/androidx/releases/core
+- Android AppCompat
+  https://developer.android.com/jetpack/androidx/releases/appcompat
+- Android Room
+  https://developer.android.com/jetpack/androidx/releases/room
+- Kongzue DialogX
+  https://github.com/kongzue/DialogX
+- Kongzue DialogX Album Dialog and File Dialog
+  https://github.com/kongzue/DialogXSample
 
