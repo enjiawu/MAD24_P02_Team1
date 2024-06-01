@@ -102,8 +102,28 @@ Through our platform, users will gain access to tools and resources to plan meal
 - Some inputs do not generate the correct recipe details when the query and excludeIngredients parameters are both entered. For example, when the user inputs "apple" for the query and excludeIngredients parameters, the API still returns recipes with apples. However, all other food options work, like entering cheese or chicken for both parameters. 
 ---------------------------------------------
 ### Screenshots of Application:
-#### 1) Login: ![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/MAD Images/Login.png)
+#### 1) Login: 
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/Login.png)
 - Users will key in their user name and email to log in. Users are also able to opt to sign up and create a new account
+#### 2) Signup: 
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/Signup.png)
+- Users will input their Username, email, password to create their account
+#### 3) Menu (Start): 
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/Menu1.png)
+- Starting menu for application. To proceed to buttons, User has to swipe downwards to trigger animation to load buttons
+#### 4) Menu (End): 
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/Menu2.png)
+- Menu with buttons displayed after swiping. To go back to previous menu, user has to swipe upwards to trigger animation to hide buttons
+#### 5) Random Recipes: 
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/RandomRecipes.png)
+- Random Recipes features. 10 random recipes are displayed for the user to browse. Upon clicking on the recipe, Users are redirected to Recipe Details
+#### 5) Recipe Details: 
+  ![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/RecipeDetails.png)
+  ![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/RecipeDetails2.png)
+  ![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/RecipeDetails3.png)
+- Details for the Recipe given, displaying instructions, ingredients, equipment and similar recipes required. 
+
+---------------------------------------------
 ### Acknowledgements:
 - Video tutorial for motion layout:
 https://www.youtube.com/watch?v=o8c1RO3WgBA&list=PLWz5rJ2EKKc-bcyUTIFAr97ZtRkwM7S4y&ab_channel=AndroidDevelopers
@@ -117,6 +137,7 @@ https://json2csharp.com/
 - Data access Object pattern:
   https://www.tutorialspoint.com/design_pattern/data_access_object_pattern.htm
 ------------------------------------------------
+### Dependencies Utilised:
 - Picasso dependency for image loading from API:
 https://github.com/square/picasso
 - Retrofit dependency for API calling:
