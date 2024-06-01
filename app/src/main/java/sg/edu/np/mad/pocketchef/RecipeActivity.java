@@ -174,7 +174,8 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
             @Override
             public void didError(String message) {
                 progressBar.setVisibility(View.GONE);
-                Toast.makeText(RecipeActivity.this, message, Toast.LENGTH_SHORT).show();
+                String additionalMessage = "Please check API Key Quota";
+                Toast.makeText(RecipeActivity.this, message + ". " + additionalMessage, Toast.LENGTH_SHORT).show();
             }
         }, tags);
     }
