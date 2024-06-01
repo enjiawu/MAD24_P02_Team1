@@ -41,7 +41,6 @@ public class InstructionsEquipmentsAdapter extends RecyclerView.Adapter<Instruct
             Equipment equipment = list.get(position);
             holder.textView_instructions_step_item.setText(equipment.name);
             holder.textView_instructions_step_item.setSelected(true);
-
             // Check if the image URL is not null
             if (equipment.image != null && !equipment.image.isEmpty()) {
                 holder.imageView_instructions_step_items.setVisibility(View.VISIBLE); // Ensure ImageView is visible
