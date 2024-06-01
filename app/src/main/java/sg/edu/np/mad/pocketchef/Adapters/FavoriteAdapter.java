@@ -12,7 +12,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
-public abstract class FavoriteAdapter<V extends ViewBinding,T> extends RecyclerView.Adapter<FavoriteViewHolder<V>> {
+public abstract class FavoriteAdapter<V extends ViewBinding, T> extends RecyclerView.Adapter<FavoriteViewHolder<V>> {
 
     private List<T> data;
 
@@ -45,7 +45,7 @@ public abstract class FavoriteAdapter<V extends ViewBinding,T> extends RecyclerV
             Method inflate = clazz.getDeclaredMethod("inflate", LayoutInflater.class, ViewGroup.class, boolean.class);
             bind = (V) inflate.invoke(null, LayoutInflater.from(parent.getContext()), parent, false);
         } catch (Exception e) {
-           e.printStackTrace();
+            e.printStackTrace();
         }
         return bind;
     }
@@ -72,7 +72,7 @@ public abstract class FavoriteAdapter<V extends ViewBinding,T> extends RecyclerV
     }
 
     // method to set text to a TextView
-    public FavoriteAdapter setText(TextView textView, String data){
+    public FavoriteAdapter setText(TextView textView, String data) {
         textView.setText(data);
         return this;
     }
@@ -81,6 +81,7 @@ public abstract class FavoriteAdapter<V extends ViewBinding,T> extends RecyclerV
 // class for view holder
 class FavoriteViewHolder<V extends ViewBinding> extends RecyclerView.ViewHolder {
     public V bind;
+
     public FavoriteViewHolder(V bind) {
         super(bind.getRoot());
         this.bind = bind;

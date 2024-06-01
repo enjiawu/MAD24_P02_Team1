@@ -4,8 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.HandlerThread;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
@@ -20,7 +20,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.core.graphics.Insets;
-import androidx.core.splashscreen.SplashScreen;
 import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -35,8 +34,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import sg.edu.np.mad.pocketchef.Models.FavoriteRecipe;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     boolean isReady = false;
@@ -85,12 +82,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         usernameTv = findViewById(R.id.textView_username);
 
         FindViews(); // Initialize views after setContentView()
-        loadProfile(); //Load usernamae
+        loadProfile(); //Load username
 
         // Set toolbar as action bar
         setSupportActionBar(toolbar);
-        // Hide and Show Items
-        Menu menu = navigationView.getMenu();
 
         //Not sure if this is needed
         //menu.findItem(R.id.nav_logout).setVisible(false);
@@ -221,7 +216,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         nav_recipes = navigationView.getMenu().findItem(R.id.nav_recipes);
         nav_search = navigationView.getMenu().findItem(R.id.nav_search);
         nav_logout = navigationView.getMenu().findItem(R.id.nav_logout);
-        cardView1 =findViewById(R.id.cardView1);
+        cardView1 = findViewById(R.id.cardView1);
         cardView2 = findViewById(R.id.cardView2);
         cardView3 = findViewById(R.id.cardView3);
         cardView4 = findViewById(R.id.cardView4);
@@ -232,8 +227,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void dismissSplashScreen() {
-        new Handler().postDelayed(() -> isReady = true, 3000);
+        HandlerThread handlerThread = new HandlerThread("HandlerThread");
+        handlerThread.start();
+        Handler handler = new Handler(handlerThread.getLooper());
+        handler.postDelayed(() -> isReady = true, 3000);
     }
+
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {

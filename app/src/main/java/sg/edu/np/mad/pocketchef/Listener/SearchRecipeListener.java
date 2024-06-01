@@ -7,5 +7,6 @@ import sg.edu.np.mad.pocketchef.Models.SearchedRecipeApiResponse;
 
 public interface SearchRecipeListener {
     void didFetch(SearchedRecipeApiResponse response, String message);
+
     void didError(String message);
 }

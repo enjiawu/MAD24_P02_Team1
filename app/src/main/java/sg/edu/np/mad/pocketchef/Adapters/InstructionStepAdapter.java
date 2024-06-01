@@ -15,7 +15,7 @@ import java.util.List;
 import sg.edu.np.mad.pocketchef.Models.Step;
 import sg.edu.np.mad.pocketchef.R;
 
-public class InstructionStepAdapter extends RecyclerView.Adapter<InstructionStepViewHolder>{
+public class InstructionStepAdapter extends RecyclerView.Adapter<InstructionStepViewHolder> {
     final Context context;
     final List<Step> list;
 
@@ -37,12 +37,12 @@ public class InstructionStepAdapter extends RecyclerView.Adapter<InstructionStep
         // Ingredients recycler view
         holder.recycler_instruction_ingredients.setHasFixedSize(true);
         holder.recycler_instruction_ingredients.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
-        InstructionsIngredientsAdapter instructionsIngredientsAdapter= new InstructionsIngredientsAdapter(context, list.get(position).ingredients);
+        InstructionsIngredientsAdapter instructionsIngredientsAdapter = new InstructionsIngredientsAdapter(context, list.get(position).ingredients);
         holder.recycler_instruction_ingredients.setAdapter(instructionsIngredientsAdapter);
         // Equipmments recycler view
         holder.recycler_instruction_equipments.setHasFixedSize(true);
         holder.recycler_instruction_equipments.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
-        InstructionsEquipmentsAdapter instructionsEquipmentsAdapter= new InstructionsEquipmentsAdapter(context, list.get(position).equipment);
+        InstructionsEquipmentsAdapter instructionsEquipmentsAdapter = new InstructionsEquipmentsAdapter(context, list.get(position).equipment);
         holder.recycler_instruction_equipments.setAdapter(instructionsEquipmentsAdapter);
     }
 
@@ -57,6 +57,7 @@ class InstructionStepViewHolder extends RecyclerView.ViewHolder {
     final TextView textView_instructions_step_title;
     final RecyclerView recycler_instruction_equipments;
     final RecyclerView recycler_instruction_ingredients;
+
     public InstructionStepViewHolder(@NonNull View itemView) {
         super(itemView);
         textView_instructions_step_number = itemView.findViewById(R.id.textView_instructions_step_number);
