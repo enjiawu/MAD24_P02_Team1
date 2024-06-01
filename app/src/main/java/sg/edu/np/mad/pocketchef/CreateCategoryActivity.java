@@ -92,7 +92,7 @@ public class CreateCategoryActivity extends AppCompatActivity implements Navigat
         binding.bt.setOnClickListener(v -> {
             String et = editText.getText().toString();
             if (et.isEmpty()) {
-                PopTip.show("Please enter the name of the new type");
+                PopTip.show("Please enter category name!");
                 return;
             }
             if (path.isEmpty()) {
@@ -215,7 +215,7 @@ public class CreateCategoryActivity extends AppCompatActivity implements Navigat
                         }
 
                         holder.categoryList.setOnLongClickListener(v -> {
-                            String[] text = new String[]{"Edit images", "Edit category name"
+                            String[] text = new String[]{"Edit category image", "Edit category name"
                                     , "Delete category"};
                             BottomMenu.show(text)
                                     .setMessage(Html.fromHtml("<b>Edit Category</b>"))
@@ -270,8 +270,8 @@ public class CreateCategoryActivity extends AppCompatActivity implements Navigat
 
     // set category name
     private void setCategoryBeanName(CategoryBean categoryBean) {
-        new InputDialog("edit", "Please enter a new category name",
-                "ok", "cancel", "")
+        new InputDialog("Edit Category Name", "Please enter a new category name",
+                "Save", "Cancel", "")
                 .setCancelable(false)
                 .setOkButton((baseDialog, v, inputStr) -> {
                     if (inputStr.isEmpty()) {
