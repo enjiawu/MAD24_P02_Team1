@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.Html;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -54,32 +55,48 @@ import java.util.zip.Inflater;
 
 import sg.edu.np.mad.pocketchef.Models.CategoryBean;
 
-import sg.edu.np.mad.pocketchef.base.AppDatabase;
-import sg.edu.np.mad.pocketchef.base.CommonAdapter;
+import sg.edu.np.mad.pocketchef.FavoriteDatabase;
+import sg.edu.np.mad.pocketchef.Adapters.FavoriteAdapter;
 import sg.edu.np.mad.pocketchef.databinding.ActivityCreateCategoryBinding;
-import sg.edu.np.mad.pocketchef.databinding.ItemCreatecategoryBinding;
+import sg.edu.np.mad.pocketchef.databinding.ItemCreateCategoryBinding;
 
 public class CreateCategoryActivity extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener  {
 
     private ActivityCreateCategoryBinding binding;
     MenuItem nav_home, nav_recipes, nav_search;
-    private CommonAdapter<ItemCreatecategoryBinding, CategoryBean> commonAdapter;
+
+    // Adapter for display categories
+    private FavoriteAdapter
+            <ItemCreateCategoryBinding, CategoryBean> favoriteAdapter;
+
+    // layout and view elements
     DrawerLayout drawerLayout;
-    private List<CategoryBean> datalist;
     MaterialToolbar toolbar;
     NavigationView navigationView;
 
+    // data list for categories
+    private List<CategoryBean> datalist;
+
+    //activity result launcher for picking media
     private ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // enable edge to edge method
         EdgeToEdge.enable(this);
+
+        // inflate using view binding
         binding = ActivityCreateCategoryBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        // initialize toolbar, drawer layout and nav view
         toolbar = findViewById(R.id.toolbar);
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
+
+        // get menu items and set listener
         nav_home = navigationView.getMenu().findItem(R.id.nav_home);
         navigationView.bringToFront();
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(CreateCategoryActivity.this,
@@ -88,25 +105,29 @@ public class CreateCategoryActivity extends AppCompatActivity  implements Naviga
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(CreateCategoryActivity.this);
         navigationView.setCheckedItem(nav_home);
+
+        // initialize UI element and path variable
         init();
         path="";
+
+         // button click listener
         binding.bt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String ed = editText.getText().toString();
-                if(ed.isEmpty()){
+                String et = editText.getText().toString();
+                if(et.isEmpty()){
                     PopTip.show("Please enter the name of the new type");
                     return;
                 }
                 if(path.isEmpty()){
                     path = "default";
                 }
-                CategoryBean categoryBean =new CategoryBean(path,ed);
+                CategoryBean categoryBean =new CategoryBean(path,et);
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
                         try {
-                            AppDatabase.getInstance(CreateCategoryActivity.this)
+                            FavoriteDatabase.getInstance(CreateCategoryActivity.this)
                                     .categoryDao().insertCategory(categoryBean);
                         }catch (Exception e){
                             PopTip.show("Addition failed");
@@ -119,7 +140,7 @@ public class CreateCategoryActivity extends AppCompatActivity  implements Naviga
                                 datalist.remove(datalist.size()-1);
                                 datalist.add(categoryBean);
                                 datalist.add(new CategoryBean("a","a"));
-                                commonAdapter.setData(datalist);
+                                favoriteAdapter.setData(datalist);
                                 editText.setText("");
                                 path="";
                             }
@@ -129,10 +150,14 @@ public class CreateCategoryActivity extends AppCompatActivity  implements Naviga
                 }).start();
             }
         });
+
+        // register activity result launcher
         register();
     }
     ActivityResultLauncher<PickVisualMediaRequest>    pickMedia2;
     private CategoryBean categoryBean;
+
+    // initialize register activity result launcher
     private void register(){
         pickMedia2 =
                 registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
@@ -140,7 +165,7 @@ public class CreateCategoryActivity extends AppCompatActivity  implements Naviga
                         path = uri.toString();
                         Glide.with(CreateCategoryActivity.this)
                                 .load(uri).into(iv);
-                        commonAdapter.notifyDataSetChanged();
+                        favoriteAdapter.notifyDataSetChanged();
                     } else {
 
                     }
@@ -152,12 +177,12 @@ public class CreateCategoryActivity extends AppCompatActivity  implements Naviga
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                AppDatabase.getInstance(CreateCategoryActivity.this)
+                                FavoriteDatabase.getInstance(CreateCategoryActivity.this)
                                         .categoryDao().updateCategory(categoryBean);
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        commonAdapter.notifyDataSetChanged();
+                                        favoriteAdapter.notifyDataSetChanged();
                                     }
                                 });
                             }
@@ -169,11 +194,14 @@ public class CreateCategoryActivity extends AppCompatActivity  implements Naviga
     }
     private TextInputEditText editText;
     private ImageView iv;
+
+    // initialize UI element and adapter
     private void init(){
+        // set up recycleview
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
         binding.rv.setLayoutManager(gridLayoutManager);
         binding.rv.setItemViewCacheSize(100);
-        commonAdapter = new CommonAdapter<ItemCreatecategoryBinding, CategoryBean>(new ArrayList<>()) {
+        favoriteAdapter = new FavoriteAdapter<ItemCreateCategoryBinding, CategoryBean>(new ArrayList<>()) {
             @Override
             protected int getType(int position) {
                 if(datalist==null||datalist.isEmpty()||datalist.size()-1==position){
@@ -184,12 +212,12 @@ public class CreateCategoryActivity extends AppCompatActivity  implements Naviga
             }
 
             @Override
-            protected void show(ItemCreatecategoryBinding holder, int position, CategoryBean cetegoryBean) {
-                holder.cl.setVisibility(View.GONE);
-                holder.addLl.setVisibility(View.GONE);
+            protected void show(ItemCreateCategoryBinding holder, int position, CategoryBean cetegoryBean) {
+                holder.categoryList.setVisibility(View.GONE);
+                holder.addCategoryLayout.setVisibility(View.GONE);
                 if(getItemViewType(position)==-1){
-                    holder.addLl.setVisibility(View.VISIBLE);
-                    holder.cl.setVisibility(View.GONE);
+                    holder.addCategoryLayout.setVisibility(View.VISIBLE);
+                    holder.categoryList.setVisibility(View.GONE);
                     try {
                         holder.addPicture.setImageResource(R.drawable.baseline_add_24);
                     }catch (Exception e){
@@ -202,14 +230,14 @@ public class CreateCategoryActivity extends AppCompatActivity  implements Naviga
                             openPicture(  holder.addPicture);
                         }
                     });
-                    editText = holder.edAdd;
+                    editText = holder.addCategoryName;
                 }else{
-                    holder.addLl.setVisibility(View.GONE);
-                    holder.cl.setVisibility(View.VISIBLE);
+                    holder.addCategoryLayout.setVisibility(View.GONE);
+                    holder.categoryList.setVisibility(View.VISIBLE);
                     if(cetegoryBean.imagePath.equals("Favorite")){
-                        holder.tvStr.setText("Favorite");
-                        holder.ivStr.setImageResource(R.drawable.pocketchef_logo);
-                        holder.cl.setOnClickListener(new View.OnClickListener() {
+                        holder.tvCategoryText.setText("Favorite");
+                        holder.ivCategoryImage.setImageResource(R.drawable.pocketchef_logo);
+                        holder.categoryList.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 Intent intent =new Intent(CreateCategoryActivity.this,
@@ -220,24 +248,24 @@ public class CreateCategoryActivity extends AppCompatActivity  implements Naviga
                             }
                         });
                     }else if(!cetegoryBean.imagePath.equals("a")){
-                        holder.tvStr.setText(cetegoryBean.text);
+                        holder.tvCategoryText.setText(cetegoryBean.text);
                         if(cetegoryBean.imagePath.equals("default")){
                             Glide.with(CreateCategoryActivity.this)
                                     .load(R.drawable.pocketchef_logo)
-                                    .into(holder.ivStr);
+                                    .into(holder.ivCategoryImage);
                         }else{
                             Glide.with(CreateCategoryActivity.this)
                                     .load(cetegoryBean.imagePath)
-                                    .into(holder.ivStr);
+                                    .into(holder.ivCategoryImage);
                         }
 
-                        holder.cl.setOnLongClickListener(new View.OnLongClickListener() {
+                        holder.categoryList.setOnLongClickListener(new View.OnLongClickListener() {
                             @Override
                             public boolean onLongClick(View v) {
-                                String[] text = new String[]{"edit images", "edit category name"
-                                        ,"delete category"};
+                                String[] text = new String[]{"Edit images", "Edit category name"
+                                        ,"Delete category"};
                                 BottomMenu.show(text)
-                                        .setMessage("Edit")
+                                        .setMessage(Html.fromHtml("<b>Edit Category</b>"))
                                         .setOnMenuItemClickListener(new OnMenuItemClickListener<BottomMenu>() {
                                             @Override
                                             public boolean onClick(BottomMenu dialog, CharSequence text, int index) {
@@ -250,16 +278,16 @@ public class CreateCategoryActivity extends AppCompatActivity  implements Naviga
                                                     new Thread(new Runnable() {
                                                         @Override
                                                         public void run() {
-                                                            AppDatabase.getInstance(CreateCategoryActivity.this)
+                                                            FavoriteDatabase.getInstance(CreateCategoryActivity.this)
                                                                     .RecipeDetailsCDao().deleteByCategoryBeanId(cetegoryBean.text);
-                                                            AppDatabase.getInstance(CreateCategoryActivity.this
+                                                            FavoriteDatabase.getInstance(CreateCategoryActivity.this
                                                             ).categoryDao().deleteCategory(cetegoryBean);
                                                             datalist.remove(cetegoryBean);
                                                             runOnUiThread(new Runnable() {
                                                                 @Override
                                                                 public void run() {
                                                                     WaitDialog.dismiss();
-                                                                    commonAdapter.notifyItemRemoved(position);
+                                                                    favoriteAdapter.notifyItemRemoved(position);
                                                                 }
                                                             });
                                                         }
@@ -272,7 +300,7 @@ public class CreateCategoryActivity extends AppCompatActivity  implements Naviga
                                 return true;
                             }
                         });
-                        holder.cl.setOnClickListener(new View.OnClickListener() {
+                        holder.categoryList.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 Intent intent =new Intent(CreateCategoryActivity.this,
@@ -286,11 +314,11 @@ public class CreateCategoryActivity extends AppCompatActivity  implements Naviga
                 }
             }
         };
-        binding.rv.setAdapter(commonAdapter);
+        binding.rv.setAdapter(favoriteAdapter);
         new Thread(new Runnable() {
             @Override
             public void run() {
-                datalist= AppDatabase.getInstance(CreateCategoryActivity.this)
+                datalist= FavoriteDatabase.getInstance(CreateCategoryActivity.this)
                         .categoryDao().getAllCategories();
                 if(datalist==null||datalist.isEmpty()){
                     datalist =new ArrayList<>();
@@ -300,7 +328,7 @@ public class CreateCategoryActivity extends AppCompatActivity  implements Naviga
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        commonAdapter.setData(datalist);
+                        favoriteAdapter.setData(datalist);
                     }
                 });
 
@@ -308,6 +336,7 @@ public class CreateCategoryActivity extends AppCompatActivity  implements Naviga
         }).start();
     }
 
+    // set category name
     private void setCategoryBeanName(CategoryBean categoryBean){
         new InputDialog("edit", "Please enter a new category name",
                 "ok", "cancel", "")
@@ -320,11 +349,11 @@ public class CreateCategoryActivity extends AppCompatActivity  implements Naviga
                             return true;
                         }
                         categoryBean.text = inputStr;
-                        commonAdapter.notifyDataSetChanged();
+                        favoriteAdapter.notifyDataSetChanged();
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                AppDatabase.getInstance(CreateCategoryActivity.this)
+                                FavoriteDatabase.getInstance(CreateCategoryActivity.this)
                                         .categoryDao().updateCategory(categoryBean);
                             }
                         }).start();
@@ -340,6 +369,7 @@ public class CreateCategoryActivity extends AppCompatActivity  implements Naviga
 
     }
 
+    // open picture for catergory
     private void openPicture(CategoryBean categoryBean){
         this.categoryBean = categoryBean;
 
@@ -349,6 +379,8 @@ public class CreateCategoryActivity extends AppCompatActivity  implements Naviga
     }
 
     private String path="";
+
+    // open picture for adding a new category
     private void openPicture(ImageView iv){
         this.iv = iv;
         pickMedia2.launch(new PickVisualMediaRequest.Builder()
@@ -356,7 +388,7 @@ public class CreateCategoryActivity extends AppCompatActivity  implements Naviga
                 .build());
     }
 
-    //For menu
+    // handle menu nav item selection
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         int itemId = menuItem.getItemId();
