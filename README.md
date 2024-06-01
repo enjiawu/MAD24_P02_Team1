@@ -100,6 +100,10 @@ Through our platform, users will gain access to tools and resources to plan meal
 ### Limitations of API:
 #### Advanced Searching - [recipes/complexSearch](https://spoonacular.com/food-api/docs#Search-Recipes-Complex)
 - Some inputs do not generate the correct recipe details when the query and excludeIngredients parameters are both entered. For example, when the user inputs "apple" for the query and excludeIngredients parameters, the API still returns recipes with apples. However, all other food options work, like entering cheese or chicken for both parameters. 
+---------------------------------------------
+### Screenshots of Application:
+#### 1) Login: ![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/MAD Images/Login.png)
+- Users will key in their user name and email to log in. Users are also able to opt to sign up and create a new account
 ### Acknowledgements:
 - Video tutorial for motion layout:
 https://www.youtube.com/watch?v=o8c1RO3WgBA&list=PLWz5rJ2EKKc-bcyUTIFAr97ZtRkwM7S4y&ab_channel=AndroidDevelopers
