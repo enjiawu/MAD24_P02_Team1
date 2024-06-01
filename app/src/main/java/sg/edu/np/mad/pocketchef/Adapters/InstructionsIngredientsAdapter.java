@@ -36,26 +36,26 @@ public class InstructionsIngredientsAdapter extends RecyclerView.Adapter<Instruc
     public void onBindViewHolder(@NonNull InstructionIngredientsViewHolder holder, int position) {
         if (list.isEmpty()) {
             holder.textView_instructions_step_item.setText("No Ingredients");
-            // Optionally hide the imageView_instructions_step_items if needed
-            holder.imageView_instructions_step_items.setVisibility(View.GONE);
+            holder.imageView_instructions_step_items.setVisibility(View.GONE); // Optionally hide the ImageView
         } else {
-            holder.textView_instructions_step_item.setText(list.get(position).name);
+            Ingredient ingredient = list.get(position);
+            holder.textView_instructions_step_item.setText(ingredient.name);
             holder.textView_instructions_step_item.setSelected(true);
 
-            // Check if the image path is not null and not empty
-            if (list.get(position).image != null && !list.get(position).image.isEmpty()) {
-                Picasso.get()
-                        .load(list.get(position).image)
+            // Check if the image URL is not null
+            if (ingredient.image != null && !ingredient.image.isEmpty()) {
+                holder.imageView_instructions_step_items.setVisibility(View.VISIBLE); // Ensure ImageView is visible
+                Picasso.get().load(ingredient.image)
                         .fit()
                         .centerCrop()
                         .into(holder.imageView_instructions_step_items);
             } else {
-                // Handle the case where the image URL is null or empty
-                holder.imageView_instructions_step_items.setImageResource(R.drawable.pocketchef_logo_transparent);
+                holder.imageView_instructions_step_items.setVisibility(View.GONE); // Hide ImageView if image URL is null
+                // Optionally, set a placeholder image if you want to show something instead of hiding
+                // holder.imageView_instructions_step_items.setImageResource(R.drawable.placeholder_image); as an example
             }
         }
     }
-
     @Override
     public int getItemCount() {
         return Math.max(1, list.size());

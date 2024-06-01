@@ -1,4 +1,4 @@
-![image](https://github.com/enjiawu/MAD24_P02_Team1/assets/133361144/826a5292-c18b-4f23-97dd-67c8f00aea17)
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Pocketchef_logo.svg)
 # MAD24_P02_Team1
 MAD 2024 Assignment
 ## Students:
@@ -39,6 +39,7 @@ Through our platform, users will gain access to tools and resources to plan meal
 ## Features
 ### Stage 1
 #### Splash Screen on App Launch - Jin Rong - [x]
+#### Drawable Menu implemented in various pages - Jin Rong & Enjia - [x]
 #### Main Menu with motion layout functionality - Jin Rong - [x]
 #### Random Recipe Browsing, filtered by tags, provided by Spoonacular API - Jin Rong - [x]
 ##### Tasks (Recipe Browser):
@@ -70,9 +71,12 @@ Through our platform, users will gain access to tools and resources to plan meal
 - Successfully display searched Recipes in UI - [x]
 - Successfully implement sorting of searched recipes - [x]
 
-#### Shopping List - Wenya - [ ]
-##### Tasks (Shopping List):
-- 
+#### Favorite List - Wenya - [x]
+##### Tasks (Favorite List):
+- Successfully designed favorite list UI with category image, category name and adding or removing category- [x]
+- Successfully implement Data Model for favorite category and favorite recipes - [x]
+- Successfully implement favorite functionality, able to favorite or unfavorite recipes into different categories and store them in the database - [x]
+- Successfully use DOA (Data Access Object) to store and retrieve favorite recipes data - [x]
 ---
 ### Stage 2
 #### Image Classification utilising TFLite model and Voice Recognition, recommend recipes based on input- Jin Rong - [ ]
@@ -93,6 +97,9 @@ Through our platform, users will gain access to tools and resources to plan meal
 #### Calorie Counter - Ggwendolynn - [ ]
 #### Virtual Pantry - Timothy - [ ]
 #### Generated Shopping List - Wenya - [ ]
+### Limitations of API:
+#### Advanced Searching - [recipes/complexSearch](https://spoonacular.com/food-api/docs#Search-Recipes-Complex)
+- Some inputs do not generate the correct recipe details when the query and excludeIngredients parameters are both entered. For example, when the user inputs "apple" for the query and excludeIngredients parameters, the API still returns recipes with apples. However, all other food options work, like entering cheese or chicken for both parameters. 
 ### Acknowledgements:
 - Video tutorial for motion layout:
 https://www.youtube.com/watch?v=o8c1RO3WgBA&list=PLWz5rJ2EKKc-bcyUTIFAr97ZtRkwM7S4y&ab_channel=AndroidDevelopers
@@ -111,4 +118,10 @@ https://m3.material.io/
 https://github.com/bumptech/glide
 - Jsoup a javal html parser 
 - https://github.com/bumptech/glide
+- Video tutorial for Picking image from gallery:
+  https://www.youtube.com/watch?v=nOtlFl1aUCw
+- Video tutorial for context menu on long press:
+  https://www.youtube.com/watch?v=BZ_UrcFOCTc
+- Data access Object pattern:
+  https://www.tutorialspoint.com/design_pattern/data_access_object_pattern.htm
 
