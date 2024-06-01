@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.HandlerThread;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -226,8 +227,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void dismissSplashScreen() {
-        new Handler().postDelayed(() -> isReady = true, 3000);
+        HandlerThread handlerThread = new HandlerThread("HandlerThread");
+        handlerThread.start();
+        Handler handler = new Handler(handlerThread.getLooper());
+        handler.postDelayed(() -> isReady = true, 3000);
     }
+
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
