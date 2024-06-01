@@ -193,7 +193,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Card View On Click Listener for Favourites
         cardView3.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, FavoriteRecipesActivity.class);
+            Intent intent = new Intent(MainActivity.this, CreateCategoryActivity.class);
             startActivity(intent);
         });
 
