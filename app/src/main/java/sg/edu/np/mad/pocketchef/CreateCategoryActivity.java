@@ -6,6 +6,7 @@ import android.text.Html;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
@@ -183,7 +184,7 @@ public class CreateCategoryActivity extends AppCompatActivity implements Navigat
                     try {
                         holder.addPicture.setImageResource(R.drawable.baseline_add_24);
                     } catch (Exception e) {
-
+                        Toast.makeText(CreateCategoryActivity.this, (CharSequence) e, Toast.LENGTH_SHORT).show();
                     }
 
                     holder.addPicture.setOnClickListener(v -> openPicture(holder.addPicture));
