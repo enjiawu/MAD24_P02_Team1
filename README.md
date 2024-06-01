@@ -75,7 +75,8 @@ Through our platform, users will gain access to tools and resources to plan meal
 ##### Tasks (Favorite List):
 - Successfully designed favorite list UI with category image, category name and adding or removing category- [x]
 - Successfully implement Data Model for favorite category and favorite recipes - [x]
-- Successfully implement favorite functionality, able to make recipes as favorite or unfavorite and store them in database - [x]
+- Successfully implement favorite functionality, able to favorite or unfavorite recipes into different categories and store them in the database - [x]
+- Successfully use DOA (Data Access Object) to store and retrieve favorite recipes data - [x]
 ---
 ### Stage 2
 #### Image Classification utilising TFLite model and Voice Recognition, recommend recipes based on input- Jin Rong - [ ]
@@ -117,4 +118,10 @@ https://m3.material.io/
 https://github.com/bumptech/glide
 - Jsoup a javal html parser 
 - https://github.com/bumptech/glide
+- Video tutorial for Picking image from gallery:
+  https://www.youtube.com/watch?v=nOtlFl1aUCw
+- Video tutorial for context menu on long press:
+  https://www.youtube.com/watch?v=BZ_UrcFOCTc
+- Data access Object pattern:
+  https://www.tutorialspoint.com/design_pattern/data_access_object_pattern.htm
 
