@@ -39,6 +39,7 @@ Through our platform, users will gain access to tools and resources to plan meal
 ## Features
 ### Stage 1
 #### Splash Screen on App Launch - Jin Rong - [x]
+#### Drawable Menu implemented in various pages - Jin Rong & Enjia - [x]
 #### Main Menu with motion layout functionality - Jin Rong - [x]
 #### Random Recipe Browsing, filtered by tags, provided by Spoonacular API - Jin Rong - [x]
 ##### Tasks (Recipe Browser):
