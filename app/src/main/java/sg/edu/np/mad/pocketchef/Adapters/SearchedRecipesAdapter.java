@@ -12,19 +12,20 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 import sg.edu.np.mad.pocketchef.Listener.RecipeClickListener;
 import sg.edu.np.mad.pocketchef.Models.SearchedRecipe;
 import sg.edu.np.mad.pocketchef.R;
 
-public class SearchedRecipesAdapter extends RecyclerView.Adapter<SearchedRecipesViewHolder>{
+public class SearchedRecipesAdapter extends RecyclerView.Adapter<SearchedRecipesViewHolder> {
 
     Context context; //
     List<SearchedRecipe> list; // List to store searched recipes
     RecipeClickListener listener; //Listener for when they click on the recipe
 
-    public SearchedRecipesAdapter(Context context, List<SearchedRecipe> list, RecipeClickListener listener){
+    public SearchedRecipesAdapter(Context context, List<SearchedRecipe> list, RecipeClickListener listener) {
         this.context = context;
         this.list = list;
         this.listener = listener;
@@ -32,7 +33,7 @@ public class SearchedRecipesAdapter extends RecyclerView.Adapter<SearchedRecipes
 
     @NonNull
     @Override
-    public SearchedRecipesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
+    public SearchedRecipesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new SearchedRecipesViewHolder(LayoutInflater.from(context).inflate(R.layout.list_searched_recipe, parent, false));
     }
 
@@ -75,7 +76,7 @@ public class SearchedRecipesAdapter extends RecyclerView.Adapter<SearchedRecipes
 }
 
 // Preparing view holder
-class SearchedRecipesViewHolder extends RecyclerView.ViewHolder{
+class SearchedRecipesViewHolder extends RecyclerView.ViewHolder {
     CardView searched_recipes_container;
     TextView textView_title, textView_calories, textView_protein, textView_carbs;
     ImageView imageView_food;

@@ -26,9 +26,6 @@ import androidx.core.splashscreen.SplashScreen;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.textfield.TextInputEditText;
@@ -42,9 +39,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
-import java.io.File;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
@@ -81,23 +76,12 @@ public class LoginActivity extends AppCompatActivity {
     private String usernameEmailLogInText = "";
 
     ViewAnimator viewAnimator;
-    MaterialButton signUp;
-    MaterialButton createAccount;
+    MaterialButton signUp, createAccount, cancelSignUp, logIn, startCooking;
     View logInView;
-    MaterialButton cancelSignUp;
     TextInputEditText dobEditText;
     TextView setProfilePictureText;
     ImageView setProfilePicture;
-    MaterialButton logIn;
-    TextInputLayout usernameSignUp;
-    TextInputLayout emailSignUp;
-    TextInputLayout passwordSignUp;
-    TextInputLayout confirmPasswordSignUp;
-    TextInputLayout usernameEmailLogIn;
-    TextInputLayout passwordLogIn;
-    TextInputLayout nameSignUp;
-    TextInputLayout profileDescriptionSignUp;
-    MaterialButton startCooking;
+    TextInputLayout usernameSignUp, emailSignUp, passwordSignUp, confirmPasswordSignUp, usernameEmailLogIn, passwordLogIn, nameSignUp, profileDescriptionSignUp;
     MaterialDatePicker<Long> dobPicker;
     ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
 
@@ -159,7 +143,6 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
-
         // Registers a photo picker activity launcher in single-select mode.
         pickMedia = registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
 //            Callback invoked after user selects an image or closes picker
@@ -176,6 +159,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
     }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -185,6 +169,7 @@ public class LoginActivity extends AppCompatActivity {
             currentUser.reload();
         }
     }
+
     //    Validate various user inputs
     public void Validate(String type, TextInputLayout textInputLayout, TextInputLayout... passwordInputLayout) {
         boolean valid;
@@ -205,7 +190,7 @@ public class LoginActivity extends AppCompatActivity {
                     break;
                 }
 
-                for (int i = 0; i < username.length() ; i++) {
+                for (int i = 0; i < username.length(); i++) {
                     if (!Character.isLetterOrDigit(username.charAt(i))) {
                         validUsername = false;
                         textInputLayout.setError("No special characters allowed");
@@ -353,7 +338,7 @@ public class LoginActivity extends AppCompatActivity {
         myRef.child("usernames").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                    Log.d("USernamesUsed", usedUsernames.toString());
+//                    Log.d("UsernamesUsed", usedUsernames.toString());
 
                 //                User value = dataSnapshot.getValue(User.class);
 
@@ -400,11 +385,11 @@ public class LoginActivity extends AppCompatActivity {
 
         logIn.setOnClickListener(v -> {
             //                Make sure fields are not empty
-            if (usernameEmailLogInText.strip().isEmpty()) {
+            if (usernameEmailLogInText.trim().isEmpty()) {
                 Toast.makeText(LoginActivity.this, "Fill in your username/email.",
                         Toast.LENGTH_SHORT).show();
 
-            } else if (passwordLogInText.strip().isEmpty()) {
+            } else if (passwordLogInText.trim().isEmpty()) {
                 Toast.makeText(LoginActivity.this, "Fill in your account password.",
                         Toast.LENGTH_SHORT).show();
 
@@ -432,6 +417,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 myRef.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
                     boolean usernameFound = false;
+
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
 //                        Log.d("LISTENER", String.valueOf(snapshot.getChildren()));
@@ -479,9 +465,11 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
+
             @Override
             public void afterTextChanged(Editable s) {
 
@@ -493,9 +481,11 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
+
             @Override
             public void afterTextChanged(Editable s) {
                 email = s.toString();
@@ -506,9 +496,11 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
+
             @Override
             public void afterTextChanged(Editable s) {
                 password = s.toString();
@@ -519,9 +511,11 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
+
             @Override
             public void afterTextChanged(Editable s) {
                 confirmPassword = s.toString();
@@ -556,9 +550,11 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
+
             @Override
             public void afterTextChanged(Editable s) {
                 usernameEmailLogInText = s.toString();
@@ -568,9 +564,11 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
+
             @Override
             public void afterTextChanged(Editable s) {
                 passwordLogInText = s.toString();
@@ -586,21 +584,16 @@ public class LoginActivity extends AppCompatActivity {
             myRef.child("users").child(uid).child("profile-description").setValue(String.valueOf(Objects.requireNonNull(profileDescriptionSignUp.getEditText()).getText()));
 
 
+            if (profilePicture != null) {
+                mStorageRef.child(mAuth.getCurrentUser().getUid()).putFile(Uri.parse(profilePicture)).addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
 
-            if(profilePicture != null) {
-                mStorageRef.child(mAuth.getCurrentUser().getUid()).putFile(Uri.parse(profilePicture)).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                        if (task.isSuccessful()) {
+                    } else {
 
-                        } else {
-
-                            Toast.makeText(LoginActivity.this, "Unable to upload profile picture", Toast.LENGTH_SHORT).show();
-                        }
+                        Toast.makeText(LoginActivity.this, "Unable to upload profile picture", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
-
 
 
             Intent logIn12 = new Intent(LoginActivity.this, MainActivity.class);

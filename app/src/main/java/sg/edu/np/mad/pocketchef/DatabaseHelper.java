@@ -120,7 +120,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COLUMN_IMAGE, user.getImage());
 
         String whereClause = COLUMN_ID + "=?";
-        String[] whereArgs = {user.getId()+""};
+        String[] whereArgs = {user.getId() + ""};
 
         // Update the row and get the number of rows affected
         int rowsAffected = db.update(TABLE_USERS, values, whereClause, whereArgs);

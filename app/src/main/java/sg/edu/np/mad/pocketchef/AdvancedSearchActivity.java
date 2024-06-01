@@ -18,9 +18,7 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
-import sg.edu.np.mad.pocketchef.Models.FavoriteRecipe;
-
-public class AdvancedSearchActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class AdvancedSearchActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     //Defining variables
     //For menu
@@ -32,24 +30,9 @@ public class AdvancedSearchActivity extends AppCompatActivity implements Navigat
     //For user input
     private Spinner dietSpinner;
     private Spinner intolerancesSpinner;
-    private EditText queryEdit;
-    private EditText excludeIngredientsEdit;
-    private EditText minCarbsEdit;
-    private EditText maxCarbsEdit;
-    private EditText minProteinEdit;
-    private EditText maxProteinEdit;
-    private EditText minCaloriesEdit;
-    private EditText maxCaloriesEdit;
-    private String query;
-    private String excludeIngredients;
-    private Integer minCarbs;
-    private Integer maxCarbs;
-    private Integer minProtein;
-    private Integer maxProtein;
-    private Integer minCalories;
-    private Integer maxCalories;
-    private String diet;
-    private String intolerances;
+    private EditText queryEdit, excludeIngredientsEdit, minCarbsEdit, maxCarbsEdit, minProteinEdit, maxProteinEdit, minCaloriesEdit, maxCaloriesEdit;
+    private String query, excludeIngredients, diet, intolerances;
+    private Integer minCarbs, maxCarbs, minProtein, maxProtein, minCalories, maxCalories;
     private Button searchButton; //Button for user to search for recipe
 
 
@@ -68,7 +51,7 @@ public class AdvancedSearchActivity extends AppCompatActivity implements Navigat
     private void setupViews() {
         // Getting all the variables from xml file
         dietSpinner = findViewById(R.id.diet_spinner);
-        intolerancesSpinner =findViewById(R.id.intolerances_spinner);
+        intolerancesSpinner = findViewById(R.id.intolerances_spinner);
         searchButton = findViewById(R.id.searchButton);
 
         // Navigation Menu set up
@@ -89,7 +72,7 @@ public class AdvancedSearchActivity extends AppCompatActivity implements Navigat
     }
 
     // Setting up listeners
-    public void setupListeners(){
+    public void setupListeners() {
         //Check if search button has been clicked
         searchButton.setOnClickListener(v -> {
             // Getting user inputs
@@ -153,7 +136,7 @@ public class AdvancedSearchActivity extends AppCompatActivity implements Navigat
 
             try {
                 diet = dietSpinner.getSelectedItem().toString();
-                if (diet.equals("None")){ //If user doesn't select anything, throw error to make diet null
+                if (diet.equals("None")) { //If user doesn't select anything, throw error to make diet null
                     throw new Exception();
                 }
             } catch (Exception ex) {
@@ -162,7 +145,7 @@ public class AdvancedSearchActivity extends AppCompatActivity implements Navigat
 
             try {
                 intolerances = intolerancesSpinner.getSelectedItem().toString();
-                if (intolerances.equals("None")){ //If user doesn't select anything, throw error to make intolerances null
+                if (intolerances.equals("None")) { //If user doesn't select anything, throw error to make intolerances null
                     throw new Exception();
                 }
             } catch (Exception ex) {
@@ -172,16 +155,16 @@ public class AdvancedSearchActivity extends AppCompatActivity implements Navigat
             //Sending the data to Advanced Search Activity
             Intent intent = new Intent(AdvancedSearchActivity.this, SearchedRecipesOutput.class);
             Bundle userInput = new Bundle(); //Bundling all the userInputs after they've gone through data validation
-            userInput.putString("query",query);
-            userInput.putString("excludeIngredients",excludeIngredients);
-            userInput.putInt("minCarbs",minCarbs);
-            userInput.putInt("maxCarbs",maxCarbs);
-            userInput.putInt("minProtein",minProtein);
-            userInput.putInt("maxProtein",maxProtein);
-            userInput.putInt("minCalories",minCalories);
-            userInput.putInt("maxCalories",maxCalories);
-            userInput.putString("diet",diet);
-            userInput.putString("intolerances",intolerances);
+            userInput.putString("query", query);
+            userInput.putString("excludeIngredients", excludeIngredients);
+            userInput.putInt("minCarbs", minCarbs);
+            userInput.putInt("maxCarbs", maxCarbs);
+            userInput.putInt("minProtein", minProtein);
+            userInput.putInt("maxProtein", maxProtein);
+            userInput.putInt("minCalories", minCalories);
+            userInput.putInt("maxCalories", maxCalories);
+            userInput.putString("diet", diet);
+            userInput.putString("intolerances", intolerances);
             intent.putExtras(userInput);
             startActivity(intent);
         });

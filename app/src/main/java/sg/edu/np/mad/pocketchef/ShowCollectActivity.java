@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.MenuItem;
-import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -21,7 +20,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.kongzue.dialogx.dialogs.BottomMenu;
 import com.kongzue.dialogx.dialogs.PopTip;
 import com.kongzue.dialogx.dialogs.WaitDialog;
-import com.kongzue.dialogx.interfaces.OnMenuItemClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +42,8 @@ public class ShowCollectActivity extends AppCompatActivity implements Navigation
     private List<CategoryBean> otherCollect;
     private List<String> otherCollectname;
 
-    private FavoriteAdapter<ListRandomRecipeBinding,RecipeDetailsC> favoriteAdapter;
+    private FavoriteAdapter<ListRandomRecipeBinding, RecipeDetailsC> favoriteAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,7 +78,7 @@ public class ShowCollectActivity extends AppCompatActivity implements Navigation
         binding.recyclerViewFavorites.setLayoutManager(new LinearLayoutManager(this));
 
         // initialize the favorite adapter
-        favoriteAdapter =new FavoriteAdapter<ListRandomRecipeBinding, RecipeDetailsC>(new ArrayList<>()) {
+        favoriteAdapter = new FavoriteAdapter<ListRandomRecipeBinding, RecipeDetailsC>(new ArrayList<>()) {
             @Override
             protected int getType(int position) {
                 return 0;
@@ -97,83 +96,62 @@ public class ShowCollectActivity extends AppCompatActivity implements Navigation
                 holder.textViewTime.setText(recipe.meal_price);
 
                 // set long click listener for each item
-                holder.randomListContainer.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
-                        String title = "Remove this recipe";
-                        String[] name;
-                        if(otherCollectname==null||otherCollectname.isEmpty()){
-                            name =new String[0];
-                        }else{
-                            name = otherCollectname.toArray(new String[0]);
-                        }
-                        String[] mergedArray = new String[name.length + 1];
-                        int i=0;
-                        mergedArray[0] = title;
-                        for (i = 1; i <=name.length; i++) {
-                            mergedArray[i] = "Move to " +name[i-1];
-                        }
-
-                        // show buttom menu
-                        BottomMenu.show(mergedArray).setMessage(Html.fromHtml("<b>Edit Recipe</b>")).setOnMenuItemClickListener(new OnMenuItemClickListener<BottomMenu>() {
-                            @Override
-                            public boolean onClick(BottomMenu dialog, CharSequence text, int index) {
-                                if(index!=0){
-                                    // update category and notify adapter
-                                    WaitDialog.show("loading...");
-                                    new Thread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            recipe.categoryBeanId = otherCollectname.get(index-1);
-                                            FavoriteDatabase.getInstance(ShowCollectActivity.this)
-                                                    .RecipeDetailsCDao().update(recipe);
-                                            runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    WaitDialog.dismiss();
-                                                    data.remove(recipe);
-                                                    favoriteAdapter.notifyDataSetChanged();
-                                                    PopTip.show("Successfully edit!");
-                                                }
-                                            });
-                                        }
-                                    }).start();
-                                }else if(index==0){
-                                    // delete item and notify adapter
-                                    WaitDialog.show("loading...");
-                                    new Thread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            FavoriteDatabase.getInstance(ShowCollectActivity.this)
-                                                    .RecipeDetailsCDao().delete(recipe);
-                                            data.remove(recipe);
-                                            runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    WaitDialog.dismiss();
-                                                    favoriteAdapter.notifyDataSetChanged();
-                                                    PopTip.show("Successfully Delete!");
-                                                }
-                                            });
-                                        }
-                                    }).start();
-                                }
-                                return false;
-                            }
-                        });
-                        return true;
+                holder.randomListContainer.setOnLongClickListener(v -> {
+                    String title = "Remove this recipe";
+                    String[] name;
+                    if (otherCollectname == null || otherCollectname.isEmpty()) {
+                        name = new String[0];
+                    } else {
+                        name = otherCollectname.toArray(new String[0]);
                     }
+                    String[] mergedArray = new String[name.length + 1];
+                    int i = 0;
+                    mergedArray[0] = title;
+                    for (i = 1; i <= name.length; i++) {
+                        mergedArray[i] = "Move to " + name[i - 1];
+                    }
+
+                    // show buttom menu
+                    BottomMenu.show(mergedArray).setMessage(Html.fromHtml("<b>Edit Recipe</b>")).setOnMenuItemClickListener((dialog, text, index) -> {
+                        if (index != 0) {
+                            // update category and notify adapter
+                            WaitDialog.show("loading...");
+                            new Thread(() -> {
+                                recipe.categoryBeanId = otherCollectname.get(index - 1);
+                                FavoriteDatabase.getInstance(ShowCollectActivity.this)
+                                        .RecipeDetailsCDao().update(recipe);
+                                runOnUiThread(() -> {
+                                    WaitDialog.dismiss();
+                                    data.remove(recipe);
+                                    favoriteAdapter.notifyDataSetChanged();
+                                    PopTip.show("Successfully edit!");
+                                });
+                            }).start();
+                        } else if (index == 0) {
+                            // delete item and notify adapter
+                            WaitDialog.show("loading...");
+                            new Thread(() -> {
+                                FavoriteDatabase.getInstance(ShowCollectActivity.this)
+                                        .RecipeDetailsCDao().delete(recipe);
+                                data.remove(recipe);
+                                runOnUiThread(() -> {
+                                    WaitDialog.dismiss();
+                                    favoriteAdapter.notifyDataSetChanged();
+                                    PopTip.show("Successfully Delete!");
+                                });
+                            }).start();
+                        }
+                        return false;
+                    });
+                    return true;
                 });
 
                 //set click listener for each item
-                holder.randomListContainer.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        // start recipeDetailActivity
-                        Intent intent =new Intent(ShowCollectActivity.this,RecipeDetailsActivity.class);
-                        intent.putExtra(EXTRA_RECIPE_ID, recipe.recipeDetailsResponseId+"");
-                        startActivity(intent);
-                    }
+                holder.randomListContainer.setOnClickListener(v -> {
+                    // start recipeDetailActivity
+                    Intent intent = new Intent(ShowCollectActivity.this, RecipeDetailsActivity.class);
+                    intent.putExtra(EXTRA_RECIPE_ID, recipe.recipeDetailsResponseId + "");
+                    startActivity(intent);
                 });
             }
         };
@@ -182,41 +160,32 @@ public class ShowCollectActivity extends AppCompatActivity implements Navigation
         binding.recyclerViewFavorites.setAdapter(favoriteAdapter);
         init(); // initialize data
     }
+
     List<RecipeDetailsC> data;
     private static final String EXTRA_RECIPE_ID = "id";
-    private void init(){
+
+    private void init() {
         // get category name from intent
-        String name  = getIntent().getStringExtra("id");
+        String name = getIntent().getStringExtra("id");
         // set toolbar title
         toolbar.setTitle(name);
 
         // load data from database in a background thread
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                data = FavoriteDatabase.getInstance(ShowCollectActivity.this).RecipeDetailsCDao()
-                        .getByCategoryBeanId(name);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        favoriteAdapter.setData(data);
-                    }
-                });
-            }
+        new Thread(() -> {
+            data = FavoriteDatabase.getInstance(ShowCollectActivity.this).RecipeDetailsCDao()
+                    .getByCategoryBeanId(name);
+            runOnUiThread(() -> favoriteAdapter.setData(data));
         }).start();
 
         // get other category names
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                otherCollectname = new ArrayList<>();
-                otherCollect = FavoriteDatabase.getInstance(ShowCollectActivity.this)
-                        .categoryDao().getAllCategories();
-                for(int i=0;i<otherCollect.size();i++){
-                    if(!otherCollect.get(i).text.equals(name)){
-                        String collect_name = otherCollect.get(i).text;
-                        otherCollectname.add(collect_name);
-                    }
+        new Thread(() -> {
+            otherCollectname = new ArrayList<>();
+            otherCollect = FavoriteDatabase.getInstance(ShowCollectActivity.this)
+                    .categoryDao().getAllCategories();
+            for (int i = 0; i < otherCollect.size(); i++) {
+                if (!otherCollect.get(i).text.equals(name)) {
+                    String collect_name = otherCollect.get(i).text;
+                    otherCollectname.add(collect_name);
                 }
             }
         }).start();
@@ -238,7 +207,7 @@ public class ShowCollectActivity extends AppCompatActivity implements Navigation
             Intent intent2 = new Intent(ShowCollectActivity.this, AdvancedSearchActivity.class);
             finish();
             startActivity(intent2);
-        }else if(itemId == R.id.nav_favourites){
+        } else if (itemId == R.id.nav_favourites) {
             Intent intent2 = new Intent(ShowCollectActivity.this, CreateCategoryActivity.class);
             finish();
             startActivity(intent2);

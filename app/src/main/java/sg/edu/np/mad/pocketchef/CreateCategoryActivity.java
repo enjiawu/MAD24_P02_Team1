@@ -1,15 +1,10 @@
 package sg.edu.np.mad.pocketchef;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.text.Html;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
@@ -19,48 +14,30 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
 import androidx.core.view.GravityCompat;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
-import com.kongzue.albumdialog.PhotoAlbumDialog;
-import com.kongzue.albumdialog.util.DialogImplCallback;
-import com.kongzue.albumdialog.util.SelectPhotoCallback;
-import com.kongzue.dialogx.dialogs.BottomDialog;
 import com.kongzue.dialogx.dialogs.BottomMenu;
-import com.kongzue.dialogx.dialogs.FullScreenDialog;
 import com.kongzue.dialogx.dialogs.InputDialog;
 import com.kongzue.dialogx.dialogs.PopTip;
 import com.kongzue.dialogx.dialogs.WaitDialog;
-import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
-import com.kongzue.dialogx.interfaces.OnInputDialogButtonClickListener;
-import com.kongzue.dialogx.interfaces.OnMenuItemClickListener;
 
-import org.checkerframework.checker.units.qual.C;
-
-import java.io.IOException;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.zip.Inflater;
 
 import sg.edu.np.mad.pocketchef.Models.CategoryBean;
 
-import sg.edu.np.mad.pocketchef.FavoriteDatabase;
 import sg.edu.np.mad.pocketchef.Adapters.FavoriteAdapter;
 import sg.edu.np.mad.pocketchef.databinding.ActivityCreateCategoryBinding;
 import sg.edu.np.mad.pocketchef.databinding.ItemCreateCategoryBinding;
 
-public class CreateCategoryActivity extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener  {
+public class CreateCategoryActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private ActivityCreateCategoryBinding binding;
     MenuItem nav_home, nav_recipes, nav_search;
@@ -108,57 +85,49 @@ public class CreateCategoryActivity extends AppCompatActivity  implements Naviga
 
         // initialize UI element and path variable
         init();
-        path="";
+        path = "";
 
-         // button click listener
-        binding.bt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String et = editText.getText().toString();
-                if(et.isEmpty()){
-                    PopTip.show("Please enter the name of the new type");
+        // button click listener
+        binding.bt.setOnClickListener(v -> {
+            String et = editText.getText().toString();
+            if (et.isEmpty()) {
+                PopTip.show("Please enter the name of the new type");
+                return;
+            }
+            if (path.isEmpty()) {
+                path = "default";
+            }
+            CategoryBean categoryBean = new CategoryBean(path, et);
+            new Thread(() -> {
+                try {
+                    FavoriteDatabase.getInstance(CreateCategoryActivity.this)
+                            .categoryDao().insertCategory(categoryBean);
+                } catch (Exception e) {
+                    PopTip.show("Addition failed");
                     return;
                 }
-                if(path.isEmpty()){
-                    path = "default";
-                }
-                CategoryBean categoryBean =new CategoryBean(path,et);
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            FavoriteDatabase.getInstance(CreateCategoryActivity.this)
-                                    .categoryDao().insertCategory(categoryBean);
-                        }catch (Exception e){
-                            PopTip.show("Addition failed");
-                            return;
-                        }
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                PopTip.show("Success");
-                                datalist.remove(datalist.size()-1);
-                                datalist.add(categoryBean);
-                                datalist.add(new CategoryBean("a","a"));
-                                favoriteAdapter.setData(datalist);
-                                editText.setText("");
-                                path="";
-                            }
-                        });
+                runOnUiThread(() -> {
+                    PopTip.show("Success");
+                    datalist.remove(datalist.size() - 1);
+                    datalist.add(categoryBean);
+                    datalist.add(new CategoryBean("a", "a"));
+                    favoriteAdapter.setData(datalist);
+                    editText.setText("");
+                    path = "";
+                });
 
-                    }
-                }).start();
-            }
+            }).start();
         });
 
         // register activity result launcher
         register();
     }
-    ActivityResultLauncher<PickVisualMediaRequest>    pickMedia2;
+
+    ActivityResultLauncher<PickVisualMediaRequest> pickMedia2;
     private CategoryBean categoryBean;
 
     // initialize register activity result launcher
-    private void register(){
+    private void register() {
         pickMedia2 =
                 registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
                     if (uri != null) {
@@ -174,29 +143,22 @@ public class CreateCategoryActivity extends AppCompatActivity  implements Naviga
                 registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
                     if (uri != null) {
                         categoryBean.imagePath = uri.toString();
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                FavoriteDatabase.getInstance(CreateCategoryActivity.this)
-                                        .categoryDao().updateCategory(categoryBean);
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        favoriteAdapter.notifyDataSetChanged();
-                                    }
-                                });
-                            }
+                        new Thread(() -> {
+                            FavoriteDatabase.getInstance(CreateCategoryActivity.this)
+                                    .categoryDao().updateCategory(categoryBean);
+                            runOnUiThread(() -> favoriteAdapter.notifyDataSetChanged());
                         }).start();
                     } else {
 
                     }
                 });
     }
+
     private TextInputEditText editText;
     private ImageView iv;
 
     // initialize UI element and adapter
-    private void init(){
+    private void init() {
         // set up recycleview
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
         binding.rv.setLayoutManager(gridLayoutManager);
@@ -204,9 +166,9 @@ public class CreateCategoryActivity extends AppCompatActivity  implements Naviga
         favoriteAdapter = new FavoriteAdapter<ItemCreateCategoryBinding, CategoryBean>(new ArrayList<>()) {
             @Override
             protected int getType(int position) {
-                if(datalist==null||datalist.isEmpty()||datalist.size()-1==position){
+                if (datalist == null || datalist.isEmpty() || datalist.size() - 1 == position) {
                     return -1;
-                }else{
+                } else {
                     return position;
                 }
             }
@@ -215,150 +177,111 @@ public class CreateCategoryActivity extends AppCompatActivity  implements Naviga
             protected void show(ItemCreateCategoryBinding holder, int position, CategoryBean cetegoryBean) {
                 holder.categoryList.setVisibility(View.GONE);
                 holder.addCategoryLayout.setVisibility(View.GONE);
-                if(getItemViewType(position)==-1){
+                if (getItemViewType(position) == -1) {
                     holder.addCategoryLayout.setVisibility(View.VISIBLE);
                     holder.categoryList.setVisibility(View.GONE);
                     try {
                         holder.addPicture.setImageResource(R.drawable.baseline_add_24);
-                    }catch (Exception e){
+                    } catch (Exception e) {
 
                     }
 
-                    holder.addPicture.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            openPicture(  holder.addPicture);
-                        }
-                    });
+                    holder.addPicture.setOnClickListener(v -> openPicture(holder.addPicture));
                     editText = holder.addCategoryName;
-                }else{
+                } else {
                     holder.addCategoryLayout.setVisibility(View.GONE);
                     holder.categoryList.setVisibility(View.VISIBLE);
-                    if(cetegoryBean.imagePath.equals("Favorite")){
+                    if (cetegoryBean.imagePath.equals("Favorite")) {
                         holder.tvCategoryText.setText("Favorite");
                         holder.ivCategoryImage.setImageResource(R.drawable.pocketchef_logo);
-                        holder.categoryList.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent intent =new Intent(CreateCategoryActivity.this,
-                                        ShowCollectActivity.class);
-                                intent.putExtra("id",cetegoryBean.text);
-                                finish();
-                                startActivity(intent);
-                            }
+                        holder.categoryList.setOnClickListener(v -> {
+                            Intent intent = new Intent(CreateCategoryActivity.this,
+                                    ShowCollectActivity.class);
+                            intent.putExtra("id", cetegoryBean.text);
+                            finish();
+                            startActivity(intent);
                         });
-                    }else if(!cetegoryBean.imagePath.equals("a")){
+                    } else if (!cetegoryBean.imagePath.equals("a")) {
                         holder.tvCategoryText.setText(cetegoryBean.text);
-                        if(cetegoryBean.imagePath.equals("default")){
+                        if (cetegoryBean.imagePath.equals("default")) {
                             Glide.with(CreateCategoryActivity.this)
                                     .load(R.drawable.pocketchef_logo)
                                     .into(holder.ivCategoryImage);
-                        }else{
+                        } else {
                             Glide.with(CreateCategoryActivity.this)
                                     .load(cetegoryBean.imagePath)
                                     .into(holder.ivCategoryImage);
                         }
 
-                        holder.categoryList.setOnLongClickListener(new View.OnLongClickListener() {
-                            @Override
-                            public boolean onLongClick(View v) {
-                                String[] text = new String[]{"Edit images", "Edit category name"
-                                        ,"Delete category"};
-                                BottomMenu.show(text)
-                                        .setMessage(Html.fromHtml("<b>Edit Category</b>"))
-                                        .setOnMenuItemClickListener(new OnMenuItemClickListener<BottomMenu>() {
-                                            @Override
-                                            public boolean onClick(BottomMenu dialog, CharSequence text, int index) {
-                                                if(index == 0){
-                                                    openPicture(cetegoryBean);
-                                                }else if(index==1){
-                                                    setCategoryBeanName(cetegoryBean);
-                                                }else if(index==2){
-                                                    WaitDialog.show("loading...");
-                                                    new Thread(new Runnable() {
-                                                        @Override
-                                                        public void run() {
-                                                            FavoriteDatabase.getInstance(CreateCategoryActivity.this)
-                                                                    .RecipeDetailsCDao().deleteByCategoryBeanId(cetegoryBean.text);
-                                                            FavoriteDatabase.getInstance(CreateCategoryActivity.this
-                                                            ).categoryDao().deleteCategory(cetegoryBean);
-                                                            datalist.remove(cetegoryBean);
-                                                            runOnUiThread(new Runnable() {
-                                                                @Override
-                                                                public void run() {
-                                                                    WaitDialog.dismiss();
-                                                                    favoriteAdapter.notifyItemRemoved(position);
-                                                                }
-                                                            });
-                                                        }
-                                                    }).start();
-                                                }
-                                                dialog.dismiss();
-                                                return true;
-                                            }
-                                        });
-                                return true;
-                            }
+                        holder.categoryList.setOnLongClickListener(v -> {
+                            String[] text = new String[]{"Edit images", "Edit category name"
+                                    , "Delete category"};
+                            BottomMenu.show(text)
+                                    .setMessage(Html.fromHtml("<b>Edit Category</b>"))
+                                    .setOnMenuItemClickListener((dialog, text1, index) -> {
+                                        if (index == 0) {
+                                            openPicture(cetegoryBean);
+                                        } else if (index == 1) {
+                                            setCategoryBeanName(cetegoryBean);
+                                        } else if (index == 2) {
+                                            WaitDialog.show("loading...");
+                                            new Thread(() -> {
+                                                FavoriteDatabase.getInstance(CreateCategoryActivity.this)
+                                                        .RecipeDetailsCDao().deleteByCategoryBeanId(cetegoryBean.text);
+                                                FavoriteDatabase.getInstance(CreateCategoryActivity.this
+                                                ).categoryDao().deleteCategory(cetegoryBean);
+                                                datalist.remove(cetegoryBean);
+                                                runOnUiThread(() -> {
+                                                    WaitDialog.dismiss();
+                                                    favoriteAdapter.notifyItemRemoved(position);
+                                                });
+                                            }).start();
+                                        }
+                                        dialog.dismiss();
+                                        return true;
+                                    });
+                            return true;
                         });
-                        holder.categoryList.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent intent =new Intent(CreateCategoryActivity.this,
-                                        ShowCollectActivity.class);
-                                intent.putExtra("id",cetegoryBean.text);
-                                finish();
-                                startActivity(intent);
-                            }
+                        holder.categoryList.setOnClickListener(v -> {
+                            Intent intent = new Intent(CreateCategoryActivity.this,
+                                    ShowCollectActivity.class);
+                            intent.putExtra("id", cetegoryBean.text);
+                            finish();
+                            startActivity(intent);
                         });
                     }
                 }
             }
         };
         binding.rv.setAdapter(favoriteAdapter);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                datalist= FavoriteDatabase.getInstance(CreateCategoryActivity.this)
-                        .categoryDao().getAllCategories();
-                if(datalist==null||datalist.isEmpty()){
-                    datalist =new ArrayList<>();
-                }
-                CategoryBean categoryBean =new CategoryBean("a","a");
-                datalist.add(categoryBean);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        favoriteAdapter.setData(datalist);
-                    }
-                });
-
+        new Thread(() -> {
+            datalist = FavoriteDatabase.getInstance(CreateCategoryActivity.this)
+                    .categoryDao().getAllCategories();
+            if (datalist == null || datalist.isEmpty()) {
+                datalist = new ArrayList<>();
             }
+            CategoryBean categoryBean = new CategoryBean("a", "a");
+            datalist.add(categoryBean);
+            runOnUiThread(() -> favoriteAdapter.setData(datalist));
+
         }).start();
     }
 
     // set category name
-    private void setCategoryBeanName(CategoryBean categoryBean){
+    private void setCategoryBeanName(CategoryBean categoryBean) {
         new InputDialog("edit", "Please enter a new category name",
                 "ok", "cancel", "")
                 .setCancelable(false)
-                .setOkButton(new OnInputDialogButtonClickListener<InputDialog>() {
-                    @Override
-                    public boolean onClick(InputDialog baseDialog, View v, String inputStr) {
-                        if(inputStr.isEmpty()){
-                            PopTip.show("Input cannot be empty");
-                            return true;
-                        }
-                        categoryBean.text = inputStr;
-                        favoriteAdapter.notifyDataSetChanged();
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                FavoriteDatabase.getInstance(CreateCategoryActivity.this)
-                                        .categoryDao().updateCategory(categoryBean);
-                            }
-                        }).start();
-                        return false;
+                .setOkButton((baseDialog, v, inputStr) -> {
+                    if (inputStr.isEmpty()) {
+                        PopTip.show("Input cannot be empty");
+                        return true;
                     }
+                    categoryBean.text = inputStr;
+                    favoriteAdapter.notifyDataSetChanged();
+                    new Thread(() -> FavoriteDatabase.getInstance(CreateCategoryActivity.this)
+                            .categoryDao().updateCategory(categoryBean)).start();
+                    return false;
                 })
                 .show();
     }
@@ -370,7 +293,7 @@ public class CreateCategoryActivity extends AppCompatActivity  implements Naviga
     }
 
     // open picture for catergory
-    private void openPicture(CategoryBean categoryBean){
+    private void openPicture(CategoryBean categoryBean) {
         this.categoryBean = categoryBean;
 
         pickMedia.launch(new PickVisualMediaRequest.Builder()
@@ -378,10 +301,10 @@ public class CreateCategoryActivity extends AppCompatActivity  implements Naviga
                 .build());
     }
 
-    private String path="";
+    private String path = "";
 
     // open picture for adding a new category
-    private void openPicture(ImageView iv){
+    private void openPicture(ImageView iv) {
         this.iv = iv;
         pickMedia2.launch(new PickVisualMediaRequest.Builder()
                 .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
@@ -408,7 +331,7 @@ public class CreateCategoryActivity extends AppCompatActivity  implements Naviga
             Intent intent4 = new Intent(CreateCategoryActivity.this, ProfileActivity.class);
             finish();
             startActivity(intent4);
-        } else if (itemId == R.id.nav_favourites){
+        } else if (itemId == R.id.nav_favourites) {
             // Nothing Happens
         } else if (itemId == R.id.nav_logout) {
             FirebaseAuth.getInstance().signOut();

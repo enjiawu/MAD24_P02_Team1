@@ -20,7 +20,7 @@ import sg.edu.np.mad.pocketchef.Models.Recipe;
 import sg.edu.np.mad.pocketchef.R;
 
 
-public class RandomRecipeAdapter extends RecyclerView.Adapter<RandomRecipeViewHolder>{
+public class RandomRecipeAdapter extends RecyclerView.Adapter<RandomRecipeViewHolder> {
     // Context object to access resources and layout inflator
     final Context context;
     final List<Recipe> list;
@@ -38,14 +38,15 @@ public class RandomRecipeAdapter extends RecyclerView.Adapter<RandomRecipeViewHo
     public RandomRecipeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new RandomRecipeViewHolder(LayoutInflater.from(context).inflate(R.layout.list_random_recipe, parent, false));
     }
+
     //Override method to input items from api to RandomRecipeViewHolder
     @Override
     public void onBindViewHolder(@NonNull RandomRecipeViewHolder holder, int position) {
         holder.textView_title.setText(list.get(position).title);
         holder.textView_title.setSelected(true);
-        holder.textView_upvote.setText(list.get(position).aggregateLikes+" Upvotes");
-        holder.textView_servings.setText(list.get(position).servings+" Servings");
-        holder.textView_time.setText(list.get(position).readyInMinutes+" Minutes");
+        holder.textView_upvote.setText(list.get(position).aggregateLikes + " Upvotes");
+        holder.textView_servings.setText(list.get(position).servings + " Servings");
+        holder.textView_time.setText(list.get(position).readyInMinutes + " Minutes");
         // Use picasso to load images
         Picasso.get().load(list.get(position).image).into(holder.imageView_food);
 
