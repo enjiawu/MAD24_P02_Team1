@@ -70,9 +70,11 @@ Through our platform, users will gain access to tools and resources to plan meal
 - Successfully display searched Recipes in UI - [x]
 - Successfully implement sorting of searched recipes - [x]
 
-#### Shopping List - Wenya - [ ]
-##### Tasks (Shopping List):
-- 
+#### Favorite List - Wenya - [ ]
+##### Tasks (Favorite List):
+- Successfully designed favorite list UI with category image, category name and adding or removing category- [x]
+- Successfully implement Data Model for favorite category and favorite recipes - [x]
+- Successfully implement favorite functionality, able to make recipes as favorite or unfavorite and store them in database - [x]
 ---
 ### Stage 2
 #### Image Classification utilising TFLite model and Voice Recognition, recommend recipes based on input- Jin Rong - [ ]
