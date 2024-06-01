@@ -94,7 +94,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //Not sure if this is needed
         //menu.findItem(R.id.nav_logout).setVisible(false);
-        //menu.findItem(R.id.nav_favourites).setVisible(false);
 
         // Set up navigation view
         navigationView.bringToFront();

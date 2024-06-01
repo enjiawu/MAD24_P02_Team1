@@ -1,10 +1,10 @@
-package sg.edu.np.mad.pocketchef.base;
+package sg.edu.np.mad.pocketchef.Models;
 
 import android.app.Application;
 
 import com.kongzue.dialogx.DialogX;
 
-public class App extends Application {
+public class Favorite extends Application {
 
     @Override
     public void onCreate() {
