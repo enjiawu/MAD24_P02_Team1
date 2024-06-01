@@ -211,6 +211,10 @@ public class ShowCollectActivity extends AppCompatActivity implements Navigation
             Intent intent2 = new Intent(ShowCollectActivity.this, CreateCategoryActivity.class);
             finish();
             startActivity(intent2);
+        }else if (itemId == R.id.nav_profile) {
+                Intent intent4 = new Intent(ShowCollectActivity.this, ProfileActivity.class);
+                finish();
+                startActivity(intent4);
         } else if (itemId == R.id.nav_logout) {
             FirebaseAuth.getInstance().signOut();
             Intent intent5 = new Intent(ShowCollectActivity.this, LoginActivity.class);
