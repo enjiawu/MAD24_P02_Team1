@@ -5,12 +5,12 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -35,16 +35,19 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.kongzue.dialogx.dialogs.InputDialog;
 import com.kongzue.dialogx.dialogs.MessageDialog;
 import com.kongzue.dialogx.dialogs.PopTip;
 import com.kongzue.dialogx.dialogs.WaitDialog;
 import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
+import com.kongzue.dialogx.interfaces.OnInputDialogButtonClickListener;
 import com.squareup.picasso.Picasso;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import sg.edu.np.mad.pocketchef.Adapters.IngredientsAdapater;
 import sg.edu.np.mad.pocketchef.Adapters.InstructionsAdapter;
@@ -59,8 +62,7 @@ import sg.edu.np.mad.pocketchef.Models.RecipeDetailsC;
 import sg.edu.np.mad.pocketchef.Models.RecipeDetailsResponse;
 import sg.edu.np.mad.pocketchef.Models.SimilarRecipeResponse;
 import sg.edu.np.mad.pocketchef.Models.SummaryParser;
-import sg.edu.np.mad.pocketchef.base.App;
-import sg.edu.np.mad.pocketchef.base.AppDatabase;
+import sg.edu.np.mad.pocketchef.FavoriteDatabase;
 
 public class RecipeDetailsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -83,8 +85,8 @@ public class RecipeDetailsActivity extends AppCompatActivity
     MenuItem nav_home, nav_recipes, nav_search;
     ConstraintLayout recipeDetailsLayout, nutritionLabelLayout;
     MaterialButton buttonNutritionLabel;
-
-    private RecipeDetailsC recipeDetailsC;
+    RecipeDetailsC recipeDetailsC;
+    ImageView btnFavorite;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,30 +121,34 @@ public class RecipeDetailsActivity extends AppCompatActivity
             }
         });
 
+        // Set up the OnClickListener for the Favorite button
         btnFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(recipeDetailsC==null){
                     showFavoriteDialog();
-                }else{
-                    MessageDialog.show("Favorite","Whether to cancel the collection","ok"
-                            ,"cancel").setOkButtonClickListener(new OnDialogButtonClickListener<MessageDialog>() {
+                } else{
+                    // if recipe is already favorited, confirm unfavorite
+                    MessageDialog.show("Unfavorite recipe","Are you sure you want to unfavorite this recipe?","Yes"
+                            ,"No").setOkButtonClickListener(new OnDialogButtonClickListener<MessageDialog>() {
                         @Override
                         public boolean onClick(MessageDialog dialog, View v) {
                             WaitDialog.show("loading...");
                             new Thread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    AppDatabase.getInstance(RecipeDetailsActivity.this)
+                                    // delete recipe from favorites
+                                    FavoriteDatabase.getInstance(RecipeDetailsActivity.this)
                                             .RecipeDetailsCDao().delete(recipeDetailsC);
-                                    recipeDetailsC=null;
+                                    recipeDetailsC=null; // update fsvorite status
                                     runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            Glide.with(RecipeDetailsActivity.this).load(R.drawable.ic_btn_star).into(btnFavorite);
-                                            btnFavorite.setImageTintList(ColorStateList.valueOf(Color.WHITE));
-                                            WaitDialog.dismiss();
-                                        }
+                                            @Override
+                                            public void run() {
+                                                // update favorite button appearance
+                                                Glide.with(RecipeDetailsActivity.this).load(R.drawable.ic_btn_star).into(btnFavorite);
+                                                btnFavorite.setImageTintList(ColorStateList.valueOf(Color.WHITE));
+                                                WaitDialog.dismiss();
+                                            }
                                     });
                                 }
                             }).start();
@@ -190,9 +196,11 @@ public class RecipeDetailsActivity extends AppCompatActivity
         imageView_nutrition = findViewById(R.id.imageView_nutrition);
         // Intialise Button
         buttonNutritionLabel = findViewById(R.id.button_Nutrition_Label);
-        // intialise favorite button
+        // Intialise favorite button
         btnFavorite = findViewById(R.id.btn_favorite);
     }
+
+    // load recipe details with staggered APL calls
     private void loadRecipeDetailsWithStaggeredApiCalls() {
         progressBar.setVisibility(View.VISIBLE);
         manager = new RequestManager(this);
@@ -201,14 +209,15 @@ public class RecipeDetailsActivity extends AppCompatActivity
         instructionsManager.fetchRecipeDetailsWithDelay(manager, recipeDetailsListener, recipeId, API_REQUEST_DELAY);
         instructionsManager.fetchSimilarRecipesWithDelay(manager, similarRecipesListener, recipeId, API_REQUEST_DELAY * 2);
         new  Thread(new Runnable() {
-
             @Override
             public void run() {
-                recipeDetailsC =  AppDatabase.getInstance(RecipeDetailsActivity.this)
+                // check if recipe is favorited
+                recipeDetailsC =  FavoriteDatabase.getInstance(RecipeDetailsActivity.this)
                         .RecipeDetailsCDao().getByRecipeDetailsResponseId(recipeId);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        // if favorited, update favorite button appearance
                         if(recipeDetailsC!=null){
                             Glide.with(RecipeDetailsActivity.this).load(R.drawable.ic_collect).into(btnFavorite);
                             btnFavorite.setImageTintList(ColorStateList.valueOf(Color.YELLOW));
@@ -299,16 +308,20 @@ public class RecipeDetailsActivity extends AppCompatActivity
             Intent intent = new Intent(RecipeDetailsActivity.this, MainActivity.class);
             finish();
             startActivity(intent);
-        } else if (itemId == R.id.nav_profile) {
-            Intent intent2 = new Intent(RecipeDetailsActivity.this, ProfileActivity.class);
+        } else if (itemId == R.id.nav_recipes) {
+            Intent intent = new Intent(RecipeDetailsActivity.this, RecipeActivity.class);
+            finish();
+            startActivity(intent);
+        } else if (itemId == R.id.nav_search) {
+            Intent intent2 = new Intent(RecipeDetailsActivity.this, AdvancedSearchActivity.class);
             finish();
             startActivity(intent2);
-        } else if (itemId == R.id.nav_favourites) {
-            Intent intent3 = new Intent(RecipeDetailsActivity.this, CreateCategoryActivity.class);
+        }else if (itemId == R.id.nav_favourites) {
+            Intent intent4 = new Intent(RecipeDetailsActivity.this, CreateCategoryActivity.class);
             finish();
-            startActivity(intent3);
-        } else if (itemId == R.id.nav_search) {
-            Intent intent4 = new Intent(RecipeDetailsActivity.this, AdvancedSearchActivity.class);
+            startActivity(intent4);
+        } else if (itemId == R.id.nav_profile) {
+            Intent intent4 = new Intent(RecipeDetailsActivity.this, ProfileActivity.class);
             finish();
             startActivity(intent4);
         } else if (itemId == R.id.nav_logout) {
@@ -316,11 +329,8 @@ public class RecipeDetailsActivity extends AppCompatActivity
             Intent intent5 = new Intent(RecipeDetailsActivity.this, LoginActivity.class);
             finish();
             startActivity(intent5);
-        } else if (itemId == R.id.nav_recipes) {
-            Intent intent6 = new Intent(RecipeDetailsActivity.this, RecipeActivity.class);
-            finish();
-            startActivity(intent6);
         }
+
 
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
@@ -340,9 +350,10 @@ public class RecipeDetailsActivity extends AppCompatActivity
 
 
     // Add to favorite list
-    ImageView btnFavorite;
     List<String> categories;
     Spinner spinnerCategories;
+
+    // show dialog to add to favorites
     private void showFavoriteDialog() {
 
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_add_to_favorites, null);
@@ -357,14 +368,49 @@ public class RecipeDetailsActivity extends AppCompatActivity
         btTextNewCategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent =new Intent(RecipeDetailsActivity.this, CreateCategoryActivity.class);
-                startActivity(intent);
                 dialog.dismiss();
+                new InputDialog("Add New Category", "Enter a name for the new category", "Save","Cancel")
+                        .setCancelButton(new OnInputDialogButtonClickListener<InputDialog>() {
+                            @Override
+                            public boolean onClick(InputDialog inputDialog, View view, String s) {
+                                inputDialog.dismiss();
+                                return false;
+                            }
+                        })
+                        .setOkButton(new OnInputDialogButtonClickListener<InputDialog>() {
+                            @Override
+                            public boolean onClick(InputDialog inputDialog, View view, String s) {
+                                if(TextUtils.isEmpty(s)){
+                                    PopTip.show("Input cannot be empty");
+                                    return false;
+                                }
+
+                                WaitDialog.show("loading.....");
+                                ExecutorService executorService = Executors.newSingleThreadExecutor();
+                                executorService.execute(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        CategoryBean categoryBean =new CategoryBean("default",s);
+                                        FavoriteDatabase.getInstance(RecipeDetailsActivity.this)
+                                                .categoryDao().insertCategory(categoryBean);
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                WaitDialog.dismiss();
+                                                PopTip.show("Successfully Added!");
+                                            }
+                                        });
+                                    }
+                                });
+                                return false;
+                            }
+                        }).show();
             }
         });
+
         buttonSave.setOnClickListener(v -> {
             if(path==null||path.isEmpty()){
-                PopTip.show("Loading is still ongoing, please wait");
+                PopTip.show("Loading still ongoing, please wait!");
                 return;
             }
             RecipeDetailsC recipeDetailsC1 =new RecipeDetailsC();
@@ -375,20 +421,20 @@ public class RecipeDetailsActivity extends AppCompatActivity
             recipeDetailsC1.meal_ready =  textView_meal_ready.getText().toString();
             recipeDetailsC1.meal_price = textView_meal_price.getText().toString();
             recipeDetailsC1.meal_name = textView_meal_name.getText().toString();
-            recipeDetailsC1.imagPath =path;
+            recipeDetailsC1.imagPath = path;
             recipeDetailsC = recipeDetailsC1;
 
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    WaitDialog.show("loading.....");
-                    AppDatabase.getInstance(RecipeDetailsActivity.this)
+                    WaitDialog.show("loading...");
+                    FavoriteDatabase.getInstance(RecipeDetailsActivity.this)
                             .RecipeDetailsCDao().insert(recipeDetailsC1);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             WaitDialog.dismiss();
-                            PopTip.show("success");
+                            PopTip.show("Successfully Favorite!");
                             Glide.with(RecipeDetailsActivity.this).load(R.drawable.ic_collect).into(btnFavorite);
                             btnFavorite.setImageTintList(ColorStateList.valueOf(Color.YELLOW));
                         }
@@ -403,11 +449,13 @@ public class RecipeDetailsActivity extends AppCompatActivity
         dialog.show();
     }
     List<String> list;
+
+    // retrieve categories from database
     private void getCategories() {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                List<CategoryBean> data = AppDatabase.getInstance(RecipeDetailsActivity.this)
+                List<CategoryBean> data = FavoriteDatabase.getInstance(RecipeDetailsActivity.this)
                         .categoryDao().getAllCategories();
                 List<String> categories = new ArrayList<>();
                 for(int i=0;i<data.size();i++){
@@ -416,6 +464,7 @@ public class RecipeDetailsActivity extends AppCompatActivity
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        // populate spinner with categories
                         ArrayAdapter<String> adapter = new ArrayAdapter<>(RecipeDetailsActivity.this,
                                 android.R.layout.simple_spinner_item, categories);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
