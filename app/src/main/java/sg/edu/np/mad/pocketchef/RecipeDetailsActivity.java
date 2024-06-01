@@ -34,6 +34,7 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.kongzue.dialogx.dialogs.InputDialog;
 import com.kongzue.dialogx.dialogs.MessageDialog;
 import com.kongzue.dialogx.dialogs.PopTip;
@@ -316,10 +317,20 @@ public class RecipeDetailsActivity extends AppCompatActivity
             finish();
             startActivity(intent2);
         }else if (itemId == R.id.nav_favourites) {
-            Intent intent2 = new Intent(RecipeDetailsActivity.this, CreateCategoryActivity.class);
+            Intent intent4 = new Intent(RecipeDetailsActivity.this, CreateCategoryActivity.class);
             finish();
-            startActivity(intent2);
+            startActivity(intent4);
+        } else if (itemId == R.id.nav_profile) {
+            Intent intent4 = new Intent(RecipeDetailsActivity.this, ProfileActivity.class);
+            finish();
+            startActivity(intent4);
+        } else if (itemId == R.id.nav_logout) {
+            FirebaseAuth.getInstance().signOut();
+            Intent intent5 = new Intent(RecipeDetailsActivity.this, LoginActivity.class);
+            finish();
+            startActivity(intent5);
         }
+
 
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
