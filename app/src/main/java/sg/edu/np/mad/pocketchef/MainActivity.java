@@ -35,6 +35,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.List;
+
+import sg.edu.np.mad.pocketchef.Models.CategoryBean;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     boolean isReady = false;
     private MotionLayout motionLayout;
@@ -145,6 +149,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
+    private void CreateDefaultFavorites(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                List<CategoryBean> list = FavoriteDatabase.getInstance(MainActivity.this).categoryDao().getAllCategories();
+                if(list==null||list.isEmpty()){
+                    CategoryBean categoryBean =new CategoryBean("Favorite","Favorite");
+                    FavoriteDatabase.getInstance(MainActivity.this).categoryDao().insertCategory(categoryBean);
+                }
+            }
+        }).start();
+}
 
     //To get username
     private void loadProfile() {

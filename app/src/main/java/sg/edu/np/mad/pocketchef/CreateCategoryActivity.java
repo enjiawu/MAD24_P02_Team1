@@ -31,6 +31,8 @@ import com.kongzue.dialogx.dialogs.WaitDialog;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import sg.edu.np.mad.pocketchef.Models.CategoryBean;
 
@@ -92,7 +94,7 @@ public class CreateCategoryActivity extends AppCompatActivity implements Navigat
         binding.bt.setOnClickListener(v -> {
             String et = editText.getText().toString();
             if (et.isEmpty()) {
-                PopTip.show("Please enter the name of the new type");
+                PopTip.show("Please enter category name!");
                 return;
             }
             if (path.isEmpty()) {
@@ -215,7 +217,7 @@ public class CreateCategoryActivity extends AppCompatActivity implements Navigat
                         }
 
                         holder.categoryList.setOnLongClickListener(v -> {
-                            String[] text = new String[]{"Edit images", "Edit category name"
+                            String[] text = new String[]{"Edit category image", "Edit category name"
                                     , "Delete category"};
                             BottomMenu.show(text)
                                     .setMessage(Html.fromHtml("<b>Edit Category</b>"))
@@ -264,24 +266,35 @@ public class CreateCategoryActivity extends AppCompatActivity implements Navigat
             CategoryBean categoryBean = new CategoryBean("a", "a");
             datalist.add(categoryBean);
             runOnUiThread(() -> favoriteAdapter.setData(datalist));
-
         }).start();
     }
 
     // set category name
     private void setCategoryBeanName(CategoryBean categoryBean) {
-        new InputDialog("edit", "Please enter a new category name",
-                "ok", "cancel", "")
+        new InputDialog("Edit Category Name", "Please enter a new category name",
+                "Save", "Cancel", "")
                 .setCancelable(false)
                 .setOkButton((baseDialog, v, inputStr) -> {
                     if (inputStr.isEmpty()) {
                         PopTip.show("Input cannot be empty");
                         return true;
                     }
+                    String oldstr = categoryBean.text;
                     categoryBean.text = inputStr;
-                    favoriteAdapter.notifyDataSetChanged();
-                    new Thread(() -> FavoriteDatabase.getInstance(CreateCategoryActivity.this)
-                            .categoryDao().updateCategory(categoryBean)).start();
+                    ExecutorService executorService = Executors.newSingleThreadExecutor();
+                    executorService.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            FavoriteDatabase.getInstance(CreateCategoryActivity.this)
+                                    .categoryDao().updateCategoryAndRelatedRecipeDetails(categoryBean,oldstr);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    favoriteAdapter.notifyDataSetChanged();
+                                }
+                            });
+                        }
+                    });
                     return false;
                 })
                 .show();
@@ -296,7 +309,6 @@ public class CreateCategoryActivity extends AppCompatActivity implements Navigat
     // open picture for catergory
     private void openPicture(CategoryBean categoryBean) {
         this.categoryBean = categoryBean;
-
         pickMedia.launch(new PickVisualMediaRequest.Builder()
                 .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
                 .build());
