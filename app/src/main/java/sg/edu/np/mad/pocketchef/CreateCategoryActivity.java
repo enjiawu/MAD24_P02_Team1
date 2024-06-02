@@ -31,6 +31,8 @@ import com.kongzue.dialogx.dialogs.WaitDialog;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import sg.edu.np.mad.pocketchef.Models.CategoryBean;
 
@@ -264,7 +266,6 @@ public class CreateCategoryActivity extends AppCompatActivity implements Navigat
             CategoryBean categoryBean = new CategoryBean("a", "a");
             datalist.add(categoryBean);
             runOnUiThread(() -> favoriteAdapter.setData(datalist));
-
         }).start();
     }
 
@@ -278,10 +279,22 @@ public class CreateCategoryActivity extends AppCompatActivity implements Navigat
                         PopTip.show("Input cannot be empty");
                         return true;
                     }
+                    String oldstr = categoryBean.text;
                     categoryBean.text = inputStr;
-                    favoriteAdapter.notifyDataSetChanged();
-                    new Thread(() -> FavoriteDatabase.getInstance(CreateCategoryActivity.this)
-                            .categoryDao().updateCategory(categoryBean)).start();
+                    ExecutorService executorService = Executors.newSingleThreadExecutor();
+                    executorService.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            FavoriteDatabase.getInstance(CreateCategoryActivity.this)
+                                    .categoryDao().updateCategoryAndRelatedRecipeDetails(categoryBean,oldstr);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    favoriteAdapter.notifyDataSetChanged();
+                                }
+                            });
+                        }
+                    });
                     return false;
                 })
                 .show();
@@ -296,7 +309,6 @@ public class CreateCategoryActivity extends AppCompatActivity implements Navigat
     // open picture for catergory
     private void openPicture(CategoryBean categoryBean) {
         this.categoryBean = categoryBean;
-
         pickMedia.launch(new PickVisualMediaRequest.Builder()
                 .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
                 .build());
