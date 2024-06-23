@@ -1,6 +1,7 @@
 package sg.edu.np.mad.pocketchef;
 
 import android.content.Context;
+
 import androidx.annotation.NonNull;
 
 import java.util.List;
@@ -90,6 +91,7 @@ public class RequestManager {
                 }
                 listener.didFetch(response.body(), response.message());
             }
+
             @Override
             public void onFailure(@NonNull Call<List<SimilarRecipeResponse>> call, @NonNull Throwable throwable) {
                 listener.didError(throwable.getMessage());
@@ -119,7 +121,7 @@ public class RequestManager {
     }
 
     //Method to call API for searched recipes
-    public void getSearchedRecipes(SearchRecipeListener listener, String query, String excludeIngredients, int minCarbs, int maxCarbs, int minProtein, int maxProtein, int minCalories, int maxCalories, String diet, String intolerances, String sort, String sortDirection){
+    public void getSearchedRecipes(SearchRecipeListener listener, String query, String excludeIngredients, int minCarbs, int maxCarbs, int minProtein, int maxProtein, int minCalories, int maxCalories, String diet, String intolerances, String sort, String sortDirection) {
 
         CallSearchedRecipes callSearchedRecipes = retrofit.create(CallSearchedRecipes.class);
         Call<SearchedRecipeApiResponse> call = callSearchedRecipes.callSearchedRecipes(context.getString(R.string.api_key),
@@ -186,7 +188,7 @@ public class RequestManager {
     // Method to GET Instructions from API
     private interface CallInstructions {
         @GET("recipes/{id}/analyzedInstructions")
-        Call<List<InstructionsResponse>> callInstructions (
+        Call<List<InstructionsResponse>> callInstructions(
                 @Path("id") int id,
                 @Query("apiKey") String apiKey
         );

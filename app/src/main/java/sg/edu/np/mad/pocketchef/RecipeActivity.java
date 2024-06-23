@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +55,7 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_recipe);
-        // Intialise views and listener
+        // Initialise views and listener
         setupViews();
         setupListeners();
         requestManager = new RequestManager(this);
@@ -131,6 +132,7 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
             }
         });
     }
+
     // Methods for scrolling function, transition motion layout
     private boolean hasScrolledEnough() {
         LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
@@ -149,6 +151,7 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
         }
         return false;
     }
+
     private void transitionMotionLayoutToEnd() {
         MotionLayout motionLayout = findViewById(R.id.main);
         motionLayout.transitionToEnd();
@@ -158,6 +161,7 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
         MotionLayout motionLayout = findViewById(R.id.main);
         motionLayout.transitionToStart();
     }
+
     // Methods to call API
     // Methods to fetch RandomRecipes
     private void fetchRandomRecipes() {
@@ -172,7 +176,8 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
             @Override
             public void didError(String message) {
                 progressBar.setVisibility(View.GONE);
-                Toast.makeText(RecipeActivity.this, message, Toast.LENGTH_SHORT).show();
+                String additionalMessage = "Please check API Key Quota";
+                Toast.makeText(RecipeActivity.this, message + ". " + additionalMessage, Toast.LENGTH_SHORT).show();
             }
         }, tags);
     }
@@ -180,12 +185,14 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
     private void setupRandomRecipeRecyclerView(RandomRecipeApiResponse response) {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(RecipeActivity.this, 1));
-        RandomRecipeAdapter randomRecipeAdapter = new RandomRecipeAdapter(RecipeActivity.this, response.recipes, recipeClickListener);
+        RandomRecipeAdapter randomRecipeAdapter = new RandomRecipeAdapter(RecipeActivity.this,
+                response.recipes, recipeClickListener);
         recyclerView.setAdapter(randomRecipeAdapter);
     }
 
-    private final RecipeClickListener recipeClickListener = id -> startActivity(new Intent(RecipeActivity.this, RecipeDetailsActivity.class)
-            .putExtra(EXTRA_RECIPE_ID, id));
+    private final RecipeClickListener recipeClickListener = id ->
+            startActivity(new Intent(RecipeActivity.this, RecipeDetailsActivity.class)
+                    .putExtra(EXTRA_RECIPE_ID, id));
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -195,15 +202,29 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
             finish();
             startActivity(intent);
         } else if (itemId == R.id.nav_recipes) {
-            // Nothing happens
-        } else if (itemId == R.id.nav_search) {
-            Intent intent2 = new Intent(RecipeActivity.this, AdvancedSearchActivity.class);
+            // Nothing Happens
+        } else if (itemId == R.id.nav_profile) {
+            Intent intent2 = new Intent(RecipeActivity.this, ProfileActivity.class);
             finish();
             startActivity(intent2);
+        } else if (itemId == R.id.nav_favourites) {
+            Intent intent3 = new Intent(RecipeActivity.this, CreateCategoryActivity.class);
+            finish();
+            startActivity(intent3);
+        } else if (itemId == R.id.nav_search) {
+            Intent intent4 = new Intent(RecipeActivity.this, AdvancedSearchActivity.class);
+            finish();
+            startActivity(intent4);
+        } else if (itemId == R.id.nav_logout) {
+            FirebaseAuth.getInstance().signOut();
+            Intent intent5 = new Intent(RecipeActivity.this, LoginActivity.class);
+            finish();
+            startActivity(intent5);
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
+
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
         super.onPointerCaptureChanged(hasCapture);

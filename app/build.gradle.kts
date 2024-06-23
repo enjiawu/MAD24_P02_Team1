@@ -27,6 +27,11 @@ android {
             )
         }
     }
+
+    buildFeatures {
+        viewBinding = true
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -57,4 +62,11 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    val dialogx_version = "0.0.50.beta2"
+    implementation("com.github.kongzue.DialogX:DialogX:${dialogx_version}")
+    implementation("com.github.kongzue.DialogXSample:AlbumDialog:0.0.12")
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+    implementation("androidx.room:room-runtime:2.6.1")
+    annotationProcessor("androidx.room:room-compiler:2.6.1")
+    implementation("com.github.kongzue.DialogXSample:FileDialog:0.0.12")
 }

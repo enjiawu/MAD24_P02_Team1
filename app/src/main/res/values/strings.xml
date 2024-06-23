@@ -143,5 +143,6 @@
     <string name="emailSignUp_text">Email</string>
     <string name="usernameSignUp_text">Username</string>
     <string name="SignUp_text">Sign up</string>
+    <string name="no_equipments_text">No Equipments</string>
 
 </resources>

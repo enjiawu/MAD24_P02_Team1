@@ -4,8 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.HandlerThread;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
@@ -20,7 +20,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.core.graphics.Insets;
-import androidx.core.splashscreen.SplashScreen;
 import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -36,6 +35,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.List;
+
+import sg.edu.np.mad.pocketchef.Models.CategoryBean;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     boolean isReady = false;
     private MotionLayout motionLayout;
@@ -48,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     MaterialToolbar toolbar;
-    MenuItem nav_home, nav_recipes, nav_search;
+    MenuItem nav_home, nav_recipes, nav_search, nav_logout;
 
     CardView cardView1, cardView2, cardView3, cardView4;
     //cardView5, cardView6;
@@ -83,16 +86,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         usernameTv = findViewById(R.id.textView_username);
 
         FindViews(); // Initialize views after setContentView()
-        loadProfile(); //Load usernamae
+        loadProfile(); //Load username
 
         // Set toolbar as action bar
         setSupportActionBar(toolbar);
-        // Hide and Show Items
-        Menu menu = navigationView.getMenu();
 
         //Not sure if this is needed
         //menu.findItem(R.id.nav_logout).setVisible(false);
-        //menu.findItem(R.id.nav_favourites).setVisible(false);
 
         // Set up navigation view
         navigationView.bringToFront();
@@ -101,6 +101,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(nav_home);
+
+
         // Custom setOnTouchListener for swipe gestures (in-built Gesture Detector is not working)
         motionLayout.setOnTouchListener(new View.OnTouchListener() {
             private float startX;
@@ -147,6 +149,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
+    private void CreateDefaultFavorites(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                List<CategoryBean> list = FavoriteDatabase.getInstance(MainActivity.this).categoryDao().getAllCategories();
+                if(list==null||list.isEmpty()){
+                    CategoryBean categoryBean =new CategoryBean("Favorite","Favorite");
+                    FavoriteDatabase.getInstance(MainActivity.this).categoryDao().insertCategory(categoryBean);
+                }
+            }
+        }).start();
+}
 
     //To get username
     private void loadProfile() {
@@ -156,10 +170,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     // Retrieve data safely
-                    String username = snapshot.child("name").getValue(String.class);
+                    String name = snapshot.child("name").getValue(String.class);
 
                     // Update UI if values are not null or empty
-                    if (username != null && !username.isEmpty()) {
+                    if (name != null && !name.isEmpty()) {
+                        usernameTv.setText(name);
+                    } else {
+                        String username = snapshot.child("username").getValue(String.class);
                         usernameTv.setText(username);
                     }
                 } else {
@@ -186,7 +203,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Card View On Click Listener for Favourites
         cardView3.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, FavoriteRecipesActivity.class);
+            Intent intent = new Intent(MainActivity.this, CreateCategoryActivity.class);
             startActivity(intent);
         });
 
@@ -214,7 +231,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         nav_home = navigationView.getMenu().findItem(R.id.nav_home);
         nav_recipes = navigationView.getMenu().findItem(R.id.nav_recipes);
         nav_search = navigationView.getMenu().findItem(R.id.nav_search);
-        cardView1 =findViewById(R.id.cardView1);
+        nav_logout = navigationView.getMenu().findItem(R.id.nav_logout);
+        cardView1 = findViewById(R.id.cardView1);
         cardView2 = findViewById(R.id.cardView2);
         cardView3 = findViewById(R.id.cardView3);
         cardView4 = findViewById(R.id.cardView4);
@@ -225,26 +243,39 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void dismissSplashScreen() {
-        new Handler().postDelayed(() -> isReady = true, 3000);
+        HandlerThread handlerThread = new HandlerThread("HandlerThread");
+        handlerThread.start();
+        Handler handler = new Handler(handlerThread.getLooper());
+        handler.postDelayed(() -> isReady = true, 3000);
     }
+
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         int itemId = menuItem.getItemId();
         if (itemId == R.id.nav_home) {
-            // Nothing happens
+            // Nothing Happens
         } else if (itemId == R.id.nav_recipes) {
             Intent intent = new Intent(MainActivity.this, RecipeActivity.class);
             finish();
             startActivity(intent);
-        } else if (itemId == R.id.nav_search) {
-            Intent intent2 = new Intent(MainActivity.this, AdvancedSearchActivity.class);
+        } else if (itemId == R.id.nav_profile) {
+            Intent intent2 = new Intent(MainActivity.this, ProfileActivity.class);
             finish();
             startActivity(intent2);
-        } else if (itemId == R.id.nav_profile){
-            Intent intent3 = new Intent(MainActivity.this, ProfileActivity.class);
+        } else if (itemId == R.id.nav_favourites) {
+            Intent intent3 = new Intent(MainActivity.this, CreateCategoryActivity.class);
             finish();
             startActivity(intent3);
+        } else if (itemId == R.id.nav_search) {
+            Intent intent4 = new Intent(MainActivity.this, AdvancedSearchActivity.class);
+            finish();
+            startActivity(intent4);
+        } else if (itemId == R.id.nav_logout) {
+            FirebaseAuth.getInstance().signOut();
+            Intent intent5 = new Intent(MainActivity.this, LoginActivity.class);
+            finish();
+            startActivity(intent5);
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;

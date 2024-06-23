@@ -1,7 +1,5 @@
 package sg.edu.np.mad.pocketchef;
 
-import static android.app.PendingIntent.getActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -10,7 +8,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import androidx.activity.EdgeToEdge;
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,10 +16,11 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
-public class AdvancedSearchActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class AdvancedSearchActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
     //Defining variables
-
     //For menu
     DrawerLayout drawerLayout;
     NavigationView navigationView;
@@ -32,25 +30,10 @@ public class AdvancedSearchActivity extends AppCompatActivity implements Navigat
     //For user input
     private Spinner dietSpinner;
     private Spinner intolerancesSpinner;
-    private EditText queryEdit;
-    private EditText excludeIngredientsEdit;
-    private EditText minCarbsEdit;
-    private EditText maxCarbsEdit;
-    private EditText minProteinEdit;
-    private EditText maxProteinEdit;
-    private EditText minCaloriesEdit;
-    private EditText maxCaloriesEdit;
-    private String query;
-    private String excludeIngredients;
-    private Integer minCarbs;
-    private Integer maxCarbs;
-    private Integer minProtein;
-    private Integer maxProtein;
-    private Integer minCalories;
-    private Integer maxCalories;
-    private String diet;
-    private String intolerances;
-    private Button searchButton;
+    private EditText queryEdit, excludeIngredientsEdit, minCarbsEdit, maxCarbsEdit, minProteinEdit, maxProteinEdit, minCaloriesEdit, maxCaloriesEdit;
+    private String query, excludeIngredients, diet, intolerances;
+    private Integer minCarbs, maxCarbs, minProtein, maxProtein, minCalories, maxCalories;
+    private Button searchButton; //Button for user to search for recipe
 
 
     @Override
@@ -58,16 +41,19 @@ public class AdvancedSearchActivity extends AppCompatActivity implements Navigat
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_advanced_search);
-        //Settting up views and listeners
+
+        //Setting up views and listeners
         setupViews();
         setupListeners();
     }
 
     //Setting up views
     private void setupViews() {
+        // Getting all the variables from xml file
         dietSpinner = findViewById(R.id.diet_spinner);
-        intolerancesSpinner =findViewById(R.id.intolerances_spinner);
+        intolerancesSpinner = findViewById(R.id.intolerances_spinner);
         searchButton = findViewById(R.id.searchButton);
+
         // Navigation Menu set up
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
@@ -75,6 +61,7 @@ public class AdvancedSearchActivity extends AppCompatActivity implements Navigat
         nav_home = navigationView.getMenu().findItem(R.id.nav_home);
         nav_recipes = navigationView.getMenu().findItem(R.id.nav_recipes);
         nav_search = navigationView.getMenu().findItem(R.id.nav_search);
+
         // Set up nav menu
         navigationView.bringToFront();
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(AdvancedSearchActivity.this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -85,7 +72,7 @@ public class AdvancedSearchActivity extends AppCompatActivity implements Navigat
     }
 
     // Setting up listeners
-    public void setupListeners(){
+    public void setupListeners() {
         //Check if search button has been clicked
         searchButton.setOnClickListener(v -> {
             // Getting user inputs
@@ -98,7 +85,7 @@ public class AdvancedSearchActivity extends AppCompatActivity implements Navigat
             minCaloriesEdit = findViewById(R.id.editMinCalories);
             maxCaloriesEdit = findViewById(R.id.editMaxCalories);
 
-            //Data validation to see if there are inputs, if don't have assign default value
+            //Data validation to see if there are inputs, if don't have assign default values
             try {
                 query = queryEdit.getText().toString();
             } catch (Exception ex) {
@@ -149,7 +136,7 @@ public class AdvancedSearchActivity extends AppCompatActivity implements Navigat
 
             try {
                 diet = dietSpinner.getSelectedItem().toString();
-                if (diet.equals("None")){
+                if (diet.equals("None")) { //If user doesn't select anything, throw error to make diet null
                     throw new Exception();
                 }
             } catch (Exception ex) {
@@ -158,7 +145,7 @@ public class AdvancedSearchActivity extends AppCompatActivity implements Navigat
 
             try {
                 intolerances = intolerancesSpinner.getSelectedItem().toString();
-                if (intolerances.equals("None")){
+                if (intolerances.equals("None")) { //If user doesn't select anything, throw error to make intolerances null
                     throw new Exception();
                 }
             } catch (Exception ex) {
@@ -167,22 +154,23 @@ public class AdvancedSearchActivity extends AppCompatActivity implements Navigat
 
             //Sending the data to Advanced Search Activity
             Intent intent = new Intent(AdvancedSearchActivity.this, SearchedRecipesOutput.class);
-            Bundle userInput = new Bundle();
-            userInput.putString("query",query);
-            userInput.putString("excludeIngredients",excludeIngredients);
-            userInput.putInt("minCarbs",minCarbs);
-            userInput.putInt("maxCarbs",maxCarbs);
-            userInput.putInt("minProtein",minProtein);
-            userInput.putInt("maxProtein",maxProtein);
-            userInput.putInt("minCalories",minCalories);
-            userInput.putInt("maxCalories",maxCalories);
-            userInput.putString("diet",diet);
-            userInput.putString("intolerances",intolerances);
+            Bundle userInput = new Bundle(); //Bundling all the userInputs after they've gone through data validation
+            userInput.putString("query", query);
+            userInput.putString("excludeIngredients", excludeIngredients);
+            userInput.putInt("minCarbs", minCarbs);
+            userInput.putInt("maxCarbs", maxCarbs);
+            userInput.putInt("minProtein", minProtein);
+            userInput.putInt("maxProtein", maxProtein);
+            userInput.putInt("minCalories", minCalories);
+            userInput.putInt("maxCalories", maxCalories);
+            userInput.putString("diet", diet);
+            userInput.putString("intolerances", intolerances);
             intent.putExtras(userInput);
             startActivity(intent);
         });
     }
 
+    // For the menu
     @Override
     public void onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -204,12 +192,21 @@ public class AdvancedSearchActivity extends AppCompatActivity implements Navigat
             Intent intent2 = new Intent(AdvancedSearchActivity.this, RecipeActivity.class);
             finish();
             startActivity(intent2);
+        } else if (itemId == R.id.nav_favourites) {
+            Intent intent3 = new Intent(AdvancedSearchActivity.this, CreateCategoryActivity.class);
+            finish();
+            startActivity(intent3);
         } else if (itemId == R.id.nav_search) {
-            // Nothing happens
-        }else if (itemId == R.id.nav_profile){
-        Intent intent3 = new Intent(AdvancedSearchActivity.this, ProfileActivity.class);
-        finish();
-        startActivity(intent3);
+            // Nothing Happens
+        } else if (itemId == R.id.nav_profile) {
+            Intent intent4 = new Intent(AdvancedSearchActivity.this, ProfileActivity.class);
+            finish();
+            startActivity(intent4);
+        } else if (itemId == R.id.nav_logout) {
+            FirebaseAuth.getInstance().signOut();
+            Intent intent5 = new Intent(AdvancedSearchActivity.this, LoginActivity.class);
+            finish();
+            startActivity(intent5);
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
