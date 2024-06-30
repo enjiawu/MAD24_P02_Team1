@@ -1,12 +1,9 @@
 package sg.edu.np.mad.pocketchef;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,11 +24,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
-import java.util.List;
-
 import de.hdodenhof.circleimageview.CircleImageView;
-import sg.edu.np.mad.pocketchef.Models.FavoriteRecipe;
-import sg.edu.np.mad.pocketchef.Models.User;
 
 public class ProfileActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     //".write": "auth !== null && auth.uid === $uid"
@@ -75,12 +68,9 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
         dobTv = findViewById(R.id.dobTv);
 
         // Set click listener for edit profile button
-        editProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Open EditProfileActivity when edit profile button is clicked
-                startActivity(new Intent(ProfileActivity.this, EditProfileActivity.class));
-            }
+        editProfile.setOnClickListener(v -> {
+            // Open EditProfileActivity when edit profile button is clicked
+            startActivity(new Intent(ProfileActivity.this, EditProfileActivity.class));
         });
 
         // Load user profile data from Firebase

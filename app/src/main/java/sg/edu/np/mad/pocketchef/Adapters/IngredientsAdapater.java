@@ -41,8 +41,14 @@ public class IngredientsAdapater extends RecyclerView.Adapter<IngredientsViewHol
         holder.textView_ingredients_name.setSelected(true);
         holder.textView_ingredients_quantity.setSelected(true);
         holder.textView_ingredients_quantity.setText(list.get(position).original);
-        //
-        Picasso.get().load("https://spoonacular.com/cdn/ingredients_100x100/" + list.get(position).image).into(holder.imageView_ingredients);
+        if (list.get(position) != null && list.get(position).image != null) {
+            Picasso.get()
+                    .load("https://spoonacular.com/cdn/ingredients_100x100/" + list.get(position).image)
+                    .into(holder.imageView_ingredients);
+        } else {
+            // Optionally handle the case where the image URL is null
+            holder.imageView_ingredients.setImageResource(R.drawable.pocketchef_logo_transparent);
+        }
     }
 
     @Override
