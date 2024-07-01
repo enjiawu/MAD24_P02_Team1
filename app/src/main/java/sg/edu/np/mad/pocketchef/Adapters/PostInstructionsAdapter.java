@@ -38,7 +38,7 @@ public class PostInstructionsAdapter extends RecyclerView.Adapter<PostInstructio
     public void onBindViewHolder(@NonNull PostInstructionsViewHolder holder, int position) {
         addInstruction();
 
-        TextInputEditText editText = holder.inputLayout.findViewById(R.id.instructionsInput);
+        TextInputEditText editText = holder.inputLayout.findViewById(R.id.input);
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -87,7 +87,7 @@ public class PostInstructionsAdapter extends RecyclerView.Adapter<PostInstructio
 
     public void addInstruction() {
         TextInputLayout inputLayout = (TextInputLayout) LayoutInflater.from(context).inflate(R.layout.input_box, null);
-        TextInputEditText editText = inputLayout.findViewById(R.id.instructionsInput);
+        TextInputEditText editText = inputLayout.findViewById(R.id.input);
         instructions.add(inputLayout);
     }
 }
@@ -97,6 +97,6 @@ class PostInstructionsViewHolder extends RecyclerView.ViewHolder {
 
     public PostInstructionsViewHolder(View itemView) {
         super(itemView);
-        inputLayout = itemView.findViewById(R.id.instructionsInputBox);
+        inputLayout = itemView.findViewById(R.id.inputBox);
     }
 }

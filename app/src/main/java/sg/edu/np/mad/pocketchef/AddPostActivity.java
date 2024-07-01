@@ -3,6 +3,7 @@ package sg.edu.np.mad.pocketchef;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -29,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AddPostActivity extends AppCompatActivity {
+    private ActivityResultLauncher<Intent> resultLauncher;
     private ImageView backButton, recipeImage, addImageIcon;
     private TextView addRecipeImageText;
     private LinearLayout inputLayout, instructionInputLayout, ingredientsInputLayout, equipmentInputLayout;
@@ -41,6 +43,9 @@ public class AddPostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_add_post);
+
+        //Register user to get gallery access
+        registerUser();
 
         //Setting up views and listeners
         setupViews();
@@ -78,20 +83,29 @@ public class AddPostActivity extends AppCompatActivity {
         addImageIcon = findViewById(R.id.addRecipeImageIcon);
         addRecipeImageText = findViewById(R.id.addRecipeImageText);
 
-        // Add the initial input boxes
+        // Add the initial input boxes and set up listeners for them
         TextInputLayout InstructionsInputBox = (TextInputLayout) getLayoutInflater().inflate(R.layout.input_box, null);
         instructionInputLayout.addView(InstructionsInputBox);
         instructionsInputBoxes.add(InstructionsInputBox);
+        TextInputEditText instructionsEditText = InstructionsInputBox.findViewById(R.id.input);
+        textChangeListener(instructionsEditText);
+        textDelete(instructionsEditText, instructionInputLayout, instructionsInputBoxes);
 
         TextInputLayout IngredientInputBox = (TextInputLayout) getLayoutInflater().inflate(R.layout.input_box, null);
         IngredientInputBox.setHint("Enter Ingredient");
         ingredientsInputLayout.addView(IngredientInputBox);
         ingredientsInputBoxes.add(IngredientInputBox);
+        TextInputEditText ingredientsEditText = IngredientInputBox.findViewById(R.id.input);
+        textChangeListener(ingredientsEditText);
+        textDelete(ingredientsEditText, ingredientsInputLayout, ingredientsInputBoxes);
 
         TextInputLayout EquipmentInputBox = (TextInputLayout) getLayoutInflater().inflate(R.layout.input_box, null);
         EquipmentInputBox.setHint("Enter Equipment");
         equipmentInputLayout.addView(EquipmentInputBox);
         equipmentInputBoxes.add(EquipmentInputBox);
+        TextInputEditText equipmentEditText = EquipmentInputBox.findViewById(R.id.input);
+        textChangeListener(equipmentEditText);
+        textDelete(equipmentEditText, equipmentInputLayout, equipmentInputBoxes);
     }
 
     // Setting up listeners
@@ -145,6 +159,14 @@ public class AddPostActivity extends AppCompatActivity {
             }
         });;
 
+        // Setting up text change listeners for the input fields
+        textChangeListener(recipeTitleInput);
+        textChangeListener(proteinInput);
+        textChangeListener(fatInput);
+        textChangeListener(caloriesInput);
+        textChangeListener(servingsInput);
+        textChangeListener(prepTimeInput);
+        textChangeListener(costPerServingInput);
     }
 
     // Function to add new input box
@@ -170,7 +192,7 @@ public class AddPostActivity extends AppCompatActivity {
 
         // Check if subsequent input boxes have been filled
         for (TextInputLayout inputBox : inputBoxes) {
-            TextInputEditText editText = inputBox.findViewById(R.id.instructionsInput);
+            TextInputEditText editText = inputBox.findViewById(R.id.input);
             if (editText.getText().toString().trim().isEmpty()) {
                 inputBox.setError("Please fill this field");
                 isValid = false;
@@ -185,32 +207,13 @@ public class AddPostActivity extends AppCompatActivity {
             inputLayout.addView(inputBox);
             inputBoxes.add(inputBox);
 
-            TextInputEditText editText = inputBox.findViewById(R.id.instructionsInput);
-            textChangeListener(editText, inputLayout, inputBoxes);
+            TextInputEditText editText = inputBox.findViewById(R.id.input);
+            textChangeListener(editText);
+            textDelete(editText, inputLayout, inputBoxes);
         }
     }
 
-    private void textChangeListener(TextInputEditText editText, LinearLayout inputLayout, List<TextInputLayout> inputBoxes){ // Function to check if the input in the input box has been changed
-        editText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                TextInputLayout parentLayout = (TextInputLayout) editText.getParent().getParent();
-                if (s.toString().trim().isEmpty()) {
-                    parentLayout.setError("Please fill this field");
-                } else {
-                    parentLayout.setError(null);
-                    parentLayout.setErrorEnabled(false);
-                }
-            }
-        });
+    private void textDelete(TextInputEditText editText, LinearLayout inputLayout, List<TextInputLayout> inputBoxes){ // Function to check if the input in the input box has been deleted for instructions, ingredients and equipment
 
         editText.setOnKeyListener(new View.OnKeyListener() {
             @Override
@@ -230,11 +233,59 @@ public class AddPostActivity extends AppCompatActivity {
         });
     }
 
+    private void textChangeListener(TextInputEditText editText){ {
+      // Function to check if the input in the input box has been changed
+            editText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    TextInputLayout parentLayout = (TextInputLayout) editText.getParent().getParent();
+                    if (s.toString().trim().isEmpty()) {
+                        parentLayout.setError("Please fill this field");
+                    } else {
+                        parentLayout.setError(null);
+                        parentLayout.setErrorEnabled(false);
+                    }
+                }
+            });
+        }
+    }
+
     // Function to allow user to select image from gallery
     private void selectImageFromGallery() {
-
-
+        Intent intent = new Intent(MediaStore.ACTION_PICK_IMAGES);
+        resultLauncher.launch(intent);
     }
+
+    // Register user for image
+    private void registerUser(){
+        resultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        try{
+                            Uri imageUri = result.getData().getData();
+                            recipeImage.setImageURI(imageUri);
+                            // Make the text and icon invisible
+                            addImageIcon.setVisibility(View.GONE);
+                            addRecipeImageText.setVisibility(View.GONE);
+                        }
+                        catch (Exception e){ //Throw error if the user didnt select any image
+                            Toast.makeText(AddPostActivity.this, "No Image Selected", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+        );
+    }
+
 
     private boolean validateData() {
         boolean isValid = true;
@@ -249,6 +300,10 @@ public class AddPostActivity extends AppCompatActivity {
         }
 
         // Check if image has been added
+        if (recipeImage.getDrawable() == null) {
+            Toast.makeText(this, "Please add a recipe image", Toast.LENGTH_SHORT).show();
+            isValid = false;
+        }
 
         // Check if protein has been filled
         if (proteinInput.getText().toString().trim().isEmpty()) {
@@ -305,22 +360,34 @@ public class AddPostActivity extends AppCompatActivity {
         }
 
         // Check if step-by-step instructions have been added
-        if (instructionsInputBoxes.isEmpty()) {
-            Toast.makeText(this, "Please add step-by-step instructions", Toast.LENGTH_SHORT).show();
+        if (instructionsInputBoxes.get(0).getEditText().getText().toString().trim().isEmpty()) {
+            instructionsInputBoxes.get(0).setError("Please add step-by-step instructions");
             isValid = false;
+        } else {
+            instructionsInputBoxes.get(0).setError(null);
+            instructionsInputBoxes.get(0).setErrorEnabled(false);
         }
 
         // Check if ingredients have been added
-        if (ingredientsInputBoxes.isEmpty()) {
-            Toast.makeText(this, "Please add ingredients", Toast.LENGTH_SHORT).show();
+        if (ingredientsInputBoxes.get(0).getEditText().getText().toString().trim().isEmpty()) {
+            ingredientsInputBoxes.get(0).setError("Please add ingredients");
             isValid = false;
+        } else {
+            ingredientsInputBoxes.get(0).setError(null);
+            ingredientsInputBoxes.get(0).setErrorEnabled(false);
         }
-
         return isValid;
     }
 
     // Function to post recipe
-    private void postRecipe(){}
+    private void postRecipe() {
+
+
+        // Go to community activity and see new post
+        Intent intent = new Intent(AddPostActivity.this, CommunityActivity.class);
+        finish();
+        startActivity(intent);
+    }
 
 }
 
