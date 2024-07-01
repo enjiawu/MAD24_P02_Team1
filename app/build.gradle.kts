@@ -12,8 +12,8 @@ android {
         applicationId = "sg.edu.np.mad.pocketchef"
         minSdk = 33
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 8
+        versionName = "1.42"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -22,8 +22,8 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                    getDefaultProguardFile("proguard-android-optimize.txt"),
+                    "proguard-rules.pro"
             )
         }
     }
@@ -64,9 +64,8 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
     val dialogx_version = "0.0.50.beta2"
     implementation("com.github.kongzue.DialogX:DialogX:${dialogx_version}")
-    implementation("com.github.kongzue.DialogXSample:AlbumDialog:0.0.12")
     implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation("androidx.room:room-runtime:2.6.1")
     annotationProcessor("androidx.room:room-compiler:2.6.1")
-    implementation("com.github.kongzue.DialogXSample:FileDialog:0.0.12")
+    implementation ("com.guolindev.permissionx:permissionx:1.7.1")
 }

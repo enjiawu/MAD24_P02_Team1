@@ -10,12 +10,12 @@ public class CategoryBean {
     @PrimaryKey(autoGenerate = true)
     public int id;
 
+    public String imagePath;
+    @Unique
+    public String text;
+
     public CategoryBean(String imagePath, String text) {
         this.imagePath = imagePath;
         this.text = text;
     }
-
-    public String imagePath;
-    @Unique
-    public String text;
 }
