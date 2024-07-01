@@ -24,6 +24,18 @@
             android:name=".ShowCollectActivity"
             android:exported="false" />
         <activity
+            android:name=".AddPostActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CommunityActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".CreateCategoryActivity"
             android:exported="false" />
         <activity
