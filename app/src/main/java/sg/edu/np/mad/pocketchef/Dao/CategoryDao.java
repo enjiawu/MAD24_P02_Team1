@@ -22,9 +22,9 @@ public interface CategoryDao {
     @Update
     void updateCategory(CategoryBean category);
 
-// method to retrieve all categories from database
-@Query("SELECT * FROM CategoryBean")
-List<CategoryBean> getAllCategories();
+    // method to retrieve all categories from database
+    @Query("SELECT * FROM CategoryBean")
+    List<CategoryBean> getAllCategories();
 
     // method to delete category from database
     @Delete
