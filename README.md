@@ -96,6 +96,10 @@ Through our platform, users will gain access to tools and resources to plan meal
 - Successfully implement recipe sharing using WhatsApp API - [ ]
 #### Calorie Counter - Ggwendolynn - [ ]
 #### Virtual Pantry - Timothy - [ ]
+- Successfully implement Nested Recycler view - [ ]
+- Successfully parse ingredients through API to fetch images - [ ]
+- Successfully fetch and display recipes from API - [ ]
+- Successfully store pantry items in database - [ ]
 #### Generated Shopping List - Wenya - [ ]
 ### Limitations of API:
 #### Advanced Searching - [recipes/complexSearch](https://spoonacular.com/food-api/docs#Search-Recipes-Complex)
