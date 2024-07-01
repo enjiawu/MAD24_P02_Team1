@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -24,9 +23,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,22 +34,18 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
 import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import sg.edu.np.mad.pocketchef.Models.User;
-import sg.edu.np.mad.pocketchef.Models.Utils;
 
 public class EditProfileActivity extends AppCompatActivity {
 
     // Declare UI elements
     CircleImageView profile_image;
-    EditText usernameEt;
-    EditText nameEt, emailEt;
+    EditText usernameEt, nameEt, emailEt;
     TextView dobTv;
     Uri uri;
     ImageView btnSave, backIv;
@@ -105,44 +97,19 @@ public class EditProfileActivity extends AppCompatActivity {
         // Set click listeners for UI elements
 
         // When profile image is clicked, launch image selection from gallery
-        profile_image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectImageFromGallery();
-            }
-        });
+        profile_image.setOnClickListener(v -> selectImageFromGallery());
 
         // When save button is clicked, save user data
-        btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveData();
-            }
-        });
+        btnSave.setOnClickListener(v -> saveData());
 
         // When date of birth text view is clicked, allow user to select date
-        dobTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectDat();
-            }
-        });
+        dobTv.setOnClickListener(v -> selectDat());
 
         // When back button is clicked, navigate back to previous activity
-        backIv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        backIv.setOnClickListener(v -> onBackPressed());
 
         // When change password text view is clicked, initiate password change process
-        changePasswordTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                changePassword();
-            }
-        });
+        changePasswordTv.setOnClickListener(v -> changePassword());
         // Load user profile data from Firebase
         loadProfile();
     }
@@ -165,22 +132,19 @@ public class EditProfileActivity extends AppCompatActivity {
 
 
         // Set click listener for the "Change Password" button
-        buttonChangePassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Retrieve the new and old passwords entered by the user
-                String newPassword = newPasswordEt.getText().toString();
-                String oldPassword = oldPasswordEt.getText().toString();
-                // Check if the new password is not empty
-                if (!TextUtils.isEmpty(newPassword)) {
-                    // Call the changePassword method to change the user's password
-                    // Dismiss the dialog after changing the password
-                    changePassword(oldPassword, newPassword, alertDialog);
-                    alertDialog.dismiss();
-                } else {
-                    // Show a toast message if the new password is empty
-                    Toast.makeText(getApplicationContext(), "Please enter a new password", Toast.LENGTH_SHORT).show();
-                }
+        buttonChangePassword.setOnClickListener(v -> {
+            // Retrieve the new and old passwords entered by the user
+            String newPassword = newPasswordEt.getText().toString();
+            String oldPassword = oldPasswordEt.getText().toString();
+            // Check if the new password is not empty
+            if (!TextUtils.isEmpty(newPassword)) {
+                // Call the changePassword method to change the user's password
+                // Dismiss the dialog after changing the password
+                changePassword(oldPassword, newPassword, alertDialog);
+                alertDialog.dismiss();
+            } else {
+                // Show a toast message if the new password is empty
+                Toast.makeText(getApplicationContext(), "Please enter a new password", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -292,18 +256,14 @@ public class EditProfileActivity extends AppCompatActivity {
         int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH); // Get the current day of the month from the Calendar instance
 
         // Create a new DatePickerDialog with the current date as default
+        // Method called when a date is set by the user
         DatePickerDialog datePickerDialog = new DatePickerDialog(this, // Set an OnDateSetListener to handle the date selection event
-                new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    // Method called when a date is set by the user
-                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        // Do something with the selected date
-                        String selectedDate = dayOfMonth + "/" + (month + 1) + "/" + year;
-                        // Store the selected date in the variable dob
-                        dob = selectedDate;
-                        // Update the dobTv TextView to display the selected date
-                        dobTv.setText(dob);
-                    }
+                (view, year1, month1, dayOfMonth1) -> {
+                    // Do something with the selected date
+                    // Store the selected date in the variable dob
+                    dob = dayOfMonth1 + "/" + (month1 + 1) + "/" + year1;
+                    // Update the dobTv TextView to display the selected date
+                    dobTv.setText(dob);
                 }, year, month, dayOfMonth);
         datePickerDialog.show();
     }
@@ -326,23 +286,17 @@ public class EditProfileActivity extends AppCompatActivity {
         } else {
             // If an image is selected, save both the image and text data
             progressDialog.show();
-            mStorageRef.child(mUser.getUid()).putFile(uri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        // If image upload is successful, get the download URL of the uploaded image
-                        mStorageRef.child(mUser.getUid()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                // Once download URL is obtained, save both the text and image data
-                                saveText(username, name, email, dob, uri.toString());
-                            }
-                        });
-                    } else {
-                        // If image upload fails, dismiss the progress dialog and show an error message
-                        progressDialog.dismiss();
-                        Toast.makeText(EditProfileActivity.this, "" + task.getException().toString(), Toast.LENGTH_SHORT).show();
-                    }
+            mStorageRef.child(mUser.getUid()).putFile(uri).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    // If image upload is successful, get the download URL of the uploaded image
+                    mStorageRef.child(mUser.getUid()).getDownloadUrl().addOnSuccessListener(uri -> {
+                        // Once download URL is obtained, save both the text and image data
+                        saveText(username, name, email, dob, uri.toString());
+                    });
+                } else {
+                    // If image upload fails, dismiss the progress dialog and show an error message
+                    progressDialog.dismiss();
+                    Toast.makeText(EditProfileActivity.this, task.getException().toString(), Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -378,17 +332,14 @@ public class EditProfileActivity extends AppCompatActivity {
         }
 
 
-        mUserRef.child(mUser.getUid()).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener() {
-            @Override
-            public void onComplete(@NonNull Task task) {
-                if (task.isSuccessful()) {
-                    progressDialog.dismiss(); // Dismiss the progress dialog if the update was successful
-                    Toast.makeText(EditProfileActivity.this, "Updated Profile!", Toast.LENGTH_SHORT).show(); // Show a success message to the user
-                    onBackPressed();
-                } else {
-                    progressDialog.dismiss(); // Dismiss the progress dialog if the update failed
-                    Toast.makeText(EditProfileActivity.this, "" + task.getException().toString(), Toast.LENGTH_SHORT).show(); // Show an error message to the user with the exception message
-                }
+        mUserRef.child(mUser.getUid()).updateChildren(hashMap).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                progressDialog.dismiss(); // Dismiss the progress dialog if the update was successful
+                Toast.makeText(EditProfileActivity.this, "Updated Profile!", Toast.LENGTH_SHORT).show(); // Show a success message to the user
+                onBackPressed();
+            } else {
+                progressDialog.dismiss(); // Dismiss the progress dialog if the update failed
+                Toast.makeText(EditProfileActivity.this, "" + task.getException().toString(), Toast.LENGTH_SHORT).show(); // Show an error message to the user with the exception message
             }
         });
 

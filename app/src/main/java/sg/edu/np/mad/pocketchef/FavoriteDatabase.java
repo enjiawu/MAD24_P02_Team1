@@ -15,12 +15,13 @@ import sg.edu.np.mad.pocketchef.Models.RecipeDetailsC;
 public abstract class FavoriteDatabase extends RoomDatabase {
     // define abstract method for DAOs
     public abstract CategoryDao categoryDao();
+
     public abstract RecipeDetailsCDao RecipeDetailsCDao();
 
     // singleton instance of the database
     private static volatile FavoriteDatabase instance;
 
-    // get instance of database (singlenton pattern)
+    // get instance of database (singleton pattern)
     public static FavoriteDatabase getInstance(Context context) {
         if (instance == null) {
             // synchronize to ensure thread safety

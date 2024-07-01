@@ -32,7 +32,6 @@ import java.util.List;
 import sg.edu.np.mad.pocketchef.Adapters.RandomRecipeAdapter;
 import sg.edu.np.mad.pocketchef.Listener.RdmRecipeRespListener;
 import sg.edu.np.mad.pocketchef.Listener.RecipeClickListener;
-import sg.edu.np.mad.pocketchef.Models.FavoriteRecipe;
 import sg.edu.np.mad.pocketchef.Models.RandomRecipeApiResponse;
 
 public class RecipeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -56,7 +55,7 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_recipe);
-        // Intialise views and listener
+        // Initialise views and listener
         setupViews();
         setupListeners();
         requestManager = new RequestManager(this);
@@ -133,6 +132,7 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
             }
         });
     }
+
     // Methods for scrolling function, transition motion layout
     private boolean hasScrolledEnough() {
         LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
@@ -151,6 +151,7 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
         }
         return false;
     }
+
     private void transitionMotionLayoutToEnd() {
         MotionLayout motionLayout = findViewById(R.id.main);
         motionLayout.transitionToEnd();
@@ -160,6 +161,7 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
         MotionLayout motionLayout = findViewById(R.id.main);
         motionLayout.transitionToStart();
     }
+
     // Methods to call API
     // Methods to fetch RandomRecipes
     private void fetchRandomRecipes() {
@@ -174,7 +176,8 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
             @Override
             public void didError(String message) {
                 progressBar.setVisibility(View.GONE);
-                Toast.makeText(RecipeActivity.this, message, Toast.LENGTH_SHORT).show();
+                String additionalMessage = "Please check API Key Quota";
+                Toast.makeText(RecipeActivity.this, message + ". " + additionalMessage, Toast.LENGTH_SHORT).show();
             }
         }, tags);
     }
@@ -189,7 +192,7 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
 
     private final RecipeClickListener recipeClickListener = id ->
             startActivity(new Intent(RecipeActivity.this, RecipeDetailsActivity.class)
-            .putExtra(EXTRA_RECIPE_ID, id));
+                    .putExtra(EXTRA_RECIPE_ID, id));
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -221,6 +224,7 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
+
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
         super.onPointerCaptureChanged(hasCapture);

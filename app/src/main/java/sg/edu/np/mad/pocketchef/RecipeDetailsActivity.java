@@ -39,8 +39,6 @@ import com.kongzue.dialogx.dialogs.InputDialog;
 import com.kongzue.dialogx.dialogs.MessageDialog;
 import com.kongzue.dialogx.dialogs.PopTip;
 import com.kongzue.dialogx.dialogs.WaitDialog;
-import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
-import com.kongzue.dialogx.interfaces.OnInputDialogButtonClickListener;
 import com.squareup.picasso.Picasso;
 
 import java.text.MessageFormat;
@@ -62,7 +60,6 @@ import sg.edu.np.mad.pocketchef.Models.RecipeDetailsC;
 import sg.edu.np.mad.pocketchef.Models.RecipeDetailsResponse;
 import sg.edu.np.mad.pocketchef.Models.SimilarRecipeResponse;
 import sg.edu.np.mad.pocketchef.Models.SummaryParser;
-import sg.edu.np.mad.pocketchef.FavoriteDatabase;
 
 public class RecipeDetailsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -122,50 +119,39 @@ public class RecipeDetailsActivity extends AppCompatActivity
         });
 
         // Set up the OnClickListener for the Favorite button
-        btnFavorite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(recipeDetailsC==null){
-                    showFavoriteDialog();
-                } else{
-                    // if recipe is already favorited, confirm unfavorite
-                    MessageDialog.show("Unfavorite recipe","Are you sure you want to unfavorite this recipe?","Yes"
-                            ,"No").setOkButtonClickListener(new OnDialogButtonClickListener<MessageDialog>() {
-                        @Override
-                        public boolean onClick(MessageDialog dialog, View v) {
-                            WaitDialog.show("loading...");
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    // delete recipe from favorites
-                                    FavoriteDatabase.getInstance(RecipeDetailsActivity.this)
-                                            .RecipeDetailsCDao().delete(recipeDetailsC);
-                                    recipeDetailsC=null; // update fsvorite status
-                                    runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                // update favorite button appearance
-                                                Glide.with(RecipeDetailsActivity.this).load(R.drawable.ic_btn_star).into(btnFavorite);
-                                                btnFavorite.setImageTintList(ColorStateList.valueOf(Color.WHITE));
-                                                WaitDialog.dismiss();
-                                            }
-                                    });
-                                }
-                            }).start();
+        btnFavorite.setOnClickListener(v -> {
+            if (recipeDetailsC == null) {
+                showFavoriteDialog();
+            } else {
+                // if recipe is already favorite, confirm favorite
+                MessageDialog.show("Favorite recipe", "Are you sure you want to favorite this recipe?", "Yes"
+                        , "No").setOkButtonClickListener((dialog, v1) -> {
+                    WaitDialog.show("loading...");
+                    new Thread(() -> {
+                        // delete recipe from favorites
+                        FavoriteDatabase.getInstance(RecipeDetailsActivity.this)
+                                .RecipeDetailsCDao().delete(recipeDetailsC);
+                        recipeDetailsC = null; // update favorite status
+                        runOnUiThread(() -> {
+                            // update favorite button appearance
+                            Glide.with(RecipeDetailsActivity.this).load(R.drawable.ic_btn_star).into(btnFavorite);
+                            btnFavorite.setImageTintList(ColorStateList.valueOf(Color.WHITE));
+                            WaitDialog.dismiss();
+                        });
+                    }).start();
 
-                            return false;
-                        }
-                    });
-                }
-
+                    return false;
+                });
             }
+
         });
     }
-    // Intialise objects
+
+    // Initialise objects
     private void findViews() {
-        // Intialise Progress Bar
+        // Initialise Progress Bar
         progressBar = findViewById(R.id.progressBar);
-        // Intialise Text Views
+        // Initialise Text Views
         textView_meal_name = findViewById(R.id.textView_meal_name);
         textView_meal_source = findViewById(R.id.textView_meal_source);
         // Text Views in Grid Layout
@@ -177,9 +163,9 @@ public class RecipeDetailsActivity extends AppCompatActivity
         textView_meal_servings = findViewById(R.id.textView_meal_servings);
         textView_meal_ready = findViewById(R.id.textView_meal_ready);
         textView_meal_price = findViewById(R.id.textView_meal_price);
-        // Intialise Image Views
+        // Initialise Image Views
         imageView_meal_image = findViewById(R.id.imageView_meal_image);
-        // Intialise Recycler Viewsbtn_favorite
+        // Initialise Recycler Views btn_favorite
         recycler_meal_ingredients = findViewById(R.id.recycler_meal_ingredients);
         recycler_meal_similar = findViewById(R.id.recycler_meal_similar);
         recycler_meal_instructions = findViewById(R.id.recycler_meal_instructions);
@@ -192,15 +178,15 @@ public class RecipeDetailsActivity extends AppCompatActivity
         nav_search = navigationView.getMenu().findItem(R.id.nav_search);
         recipeDetailsLayout = findViewById(R.id.recipe_details);
         nutritionLabelLayout = findViewById(R.id.nutrition_dialog_layout);
-        //Intialise Nutritional Image
+        //Initialise Nutritional Image
         imageView_nutrition = findViewById(R.id.imageView_nutrition);
-        // Intialise Button
+        // Initialise Button
         buttonNutritionLabel = findViewById(R.id.button_Nutrition_Label);
-        // Intialise favorite button
+        // Initialise favorite button
         btnFavorite = findViewById(R.id.btn_favorite);
     }
 
-    // load recipe details with staggered APL calls
+    // Load recipe details with staggered APL calls for better performance (Jin Rong), and also check if recipe is favorite (Wenya)
     private void loadRecipeDetailsWithStaggeredApiCalls() {
         progressBar.setVisibility(View.VISIBLE);
         manager = new RequestManager(this);
@@ -208,25 +194,20 @@ public class RecipeDetailsActivity extends AppCompatActivity
         instructionsManager.fetchInstructionsWithDelay(manager, instructionsListener, recipeId, 0);
         instructionsManager.fetchRecipeDetailsWithDelay(manager, recipeDetailsListener, recipeId, API_REQUEST_DELAY);
         instructionsManager.fetchSimilarRecipesWithDelay(manager, similarRecipesListener, recipeId, API_REQUEST_DELAY * 2);
-        new  Thread(new Runnable() {
-            @Override
-            public void run() {
-                // check if recipe is favorited
-                recipeDetailsC =  FavoriteDatabase.getInstance(RecipeDetailsActivity.this)
-                        .RecipeDetailsCDao().getByRecipeDetailsResponseId(recipeId);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        // if favorited, update favorite button appearance
-                        if(recipeDetailsC!=null){
-                            Glide.with(RecipeDetailsActivity.this).load(R.drawable.ic_collect).into(btnFavorite);
-                            btnFavorite.setImageTintList(ColorStateList.valueOf(Color.YELLOW));
-                        }
-                    }
-                });
-            }
+        new Thread(() -> {
+            // check if recipe is favorite
+            recipeDetailsC = FavoriteDatabase.getInstance(RecipeDetailsActivity.this)
+                    .RecipeDetailsCDao().getByRecipeDetailsResponseId(recipeId);
+            runOnUiThread(() -> {
+                // if favorite, update favorite button appearance
+                if (recipeDetailsC != null) {
+                    Glide.with(RecipeDetailsActivity.this).load(R.drawable.ic_collect).into(btnFavorite);
+                    btnFavorite.setImageTintList(ColorStateList.valueOf(Color.YELLOW));
+                }
+            });
         }).start();
     }
+
     // Implementing the recipeDetailsListener
     private final RecipeDetailsListener recipeDetailsListener = new RecipeDetailsListener() {
         @Override
@@ -252,7 +233,7 @@ public class RecipeDetailsActivity extends AppCompatActivity
             // Use custom layout for recycler view
             recycler_meal_ingredients.setHasFixedSize(true);
             recycler_meal_ingredients.setLayoutManager(new LinearLayoutManager(RecipeDetailsActivity.this, LinearLayoutManager.HORIZONTAL, false));
-            // Use adapater
+            // Use adapter
             ingredientsAdapater = new IngredientsAdapater(RecipeDetailsActivity.this, response.extendedIngredients);
             recycler_meal_ingredients.setAdapter(ingredientsAdapater);
 
@@ -261,7 +242,8 @@ public class RecipeDetailsActivity extends AppCompatActivity
         @Override
         public void didError(String message) {
             progressBar.setVisibility(View.GONE);
-            Toast.makeText(RecipeDetailsActivity.this, message, Toast.LENGTH_SHORT).show();
+            String additionalMessage = "Please check API Key Quota";
+            Toast.makeText(RecipeDetailsActivity.this, message + ". " + additionalMessage, Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -280,12 +262,19 @@ public class RecipeDetailsActivity extends AppCompatActivity
         // This is to check functionality first before implementation
         @Override
         public void didError(String message) {
-            Toast.makeText(RecipeDetailsActivity.this, "message", Toast.LENGTH_SHORT).show();
+            String additionalMessage = "Please check API Key Quota";
+            Toast.makeText(RecipeDetailsActivity.this, message + ". " + additionalMessage, Toast.LENGTH_SHORT).show();
         }
     };
 
-    // This is to check functionality first before implementation
-    private final RecipeClickListener recipeClickListener = id -> Toast.makeText(RecipeDetailsActivity.this, "id", Toast.LENGTH_SHORT).show();
+    // Implementing listeners
+    // Implementing listeners
+    private final RecipeClickListener recipeClickListener = id ->{
+        Intent intent = new Intent(RecipeDetailsActivity.this, RecipeDetailsActivity.class);
+        intent.putExtra("id", id);
+        finish(); // Finish the current activity
+        startActivity(intent);// Start the same activity with the new intent
+    };
 
     private final InstructionsListener instructionsListener = new InstructionsListener() {
         @Override
@@ -316,7 +305,7 @@ public class RecipeDetailsActivity extends AppCompatActivity
             Intent intent2 = new Intent(RecipeDetailsActivity.this, AdvancedSearchActivity.class);
             finish();
             startActivity(intent2);
-        }else if (itemId == R.id.nav_favourites) {
+        } else if (itemId == R.id.nav_favourites) {
             Intent intent4 = new Intent(RecipeDetailsActivity.this, CreateCategoryActivity.class);
             finish();
             startActivity(intent4);
@@ -347,10 +336,8 @@ public class RecipeDetailsActivity extends AppCompatActivity
     }
 
 
-
-
     // Add to favorite list
-    List<String> categories;
+
     Spinner spinnerCategories;
 
     // show dialog to add to favorites
@@ -365,81 +352,60 @@ public class RecipeDetailsActivity extends AppCompatActivity
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setView(dialogView);
         AlertDialog dialog = builder.create();
-        btTextNewCategory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                new InputDialog("Add New Category", "Enter a name for the new category", "Save","Cancel")
-                        .setCancelButton(new OnInputDialogButtonClickListener<InputDialog>() {
-                            @Override
-                            public boolean onClick(InputDialog inputDialog, View view, String s) {
-                                inputDialog.dismiss();
-                                return false;
-                            }
-                        })
-                        .setOkButton(new OnInputDialogButtonClickListener<InputDialog>() {
-                            @Override
-                            public boolean onClick(InputDialog inputDialog, View view, String s) {
-                                if(TextUtils.isEmpty(s)){
-                                    PopTip.show("Input cannot be empty");
-                                    return false;
-                                }
+        btTextNewCategory.setOnClickListener(v -> {
+            dialog.dismiss();
+            new InputDialog("Add New Category", "Enter a name for the new category", "Save", "Cancel")
+                    .setCancelButton((inputDialog, view, s) -> {
+                        inputDialog.dismiss();
+                        return false;
+                    })
+                    .setOkButton((inputDialog, view, s) -> {
+                        if (TextUtils.isEmpty(s)) {
+                            PopTip.show("Input cannot be empty");
+                            return false;
+                        }
 
-                                WaitDialog.show("loading.....");
-                                ExecutorService executorService = Executors.newSingleThreadExecutor();
-                                executorService.execute(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        CategoryBean categoryBean =new CategoryBean("default",s);
-                                        FavoriteDatabase.getInstance(RecipeDetailsActivity.this)
-                                                .categoryDao().insertCategory(categoryBean);
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                WaitDialog.dismiss();
-                                                PopTip.show("Successfully Added!");
-                                            }
-                                        });
-                                    }
-                                });
-                                return false;
-                            }
-                        }).show();
-            }
+                        WaitDialog.show("loading.....");
+                        ExecutorService executorService = Executors.newSingleThreadExecutor();
+                        executorService.execute(() -> {
+                            CategoryBean categoryBean = new CategoryBean("default", s);
+                            FavoriteDatabase.getInstance(RecipeDetailsActivity.this)
+                                    .categoryDao().insertCategory(categoryBean);
+                            runOnUiThread(() -> {
+                                WaitDialog.dismiss();
+                                PopTip.show("Successfully Added!");
+                            });
+                        });
+                        return false;
+                    }).show();
         });
 
         buttonSave.setOnClickListener(v -> {
-            if(path==null||path.isEmpty()){
+            if (path == null || path.isEmpty()) {
                 PopTip.show("Loading still ongoing, please wait!");
                 return;
             }
-            RecipeDetailsC recipeDetailsC1 =new RecipeDetailsC();
+            RecipeDetailsC recipeDetailsC1 = new RecipeDetailsC();
             recipeDetailsC1.recipeDetailsResponseId = recipeId;
-            Log.d("run",recipeId+"");
+            Log.d("run", recipeId + "");
             recipeDetailsC1.categoryBeanId = spinnerCategories.getSelectedItem().toString();
-            recipeDetailsC1.meal_servings =textView_meal_servings.getText().toString();
-            recipeDetailsC1.meal_ready =  textView_meal_ready.getText().toString();
+            recipeDetailsC1.meal_servings = textView_meal_servings.getText().toString();
+            recipeDetailsC1.meal_ready = textView_meal_ready.getText().toString();
             recipeDetailsC1.meal_price = textView_meal_price.getText().toString();
             recipeDetailsC1.meal_name = textView_meal_name.getText().toString();
             recipeDetailsC1.imagPath = path;
             recipeDetailsC = recipeDetailsC1;
 
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    WaitDialog.show("loading...");
-                    FavoriteDatabase.getInstance(RecipeDetailsActivity.this)
-                            .RecipeDetailsCDao().insert(recipeDetailsC1);
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            WaitDialog.dismiss();
-                            PopTip.show("Successfully Favorite!");
-                            Glide.with(RecipeDetailsActivity.this).load(R.drawable.ic_collect).into(btnFavorite);
-                            btnFavorite.setImageTintList(ColorStateList.valueOf(Color.YELLOW));
-                        }
-                    });
-                }
+            new Thread(() -> {
+                WaitDialog.show("loading...");
+                FavoriteDatabase.getInstance(RecipeDetailsActivity.this)
+                        .RecipeDetailsCDao().insert(recipeDetailsC1);
+                runOnUiThread(() -> {
+                    WaitDialog.dismiss();
+                    PopTip.show("Successfully Favorite!");
+                    Glide.with(RecipeDetailsActivity.this).load(R.drawable.ic_collect).into(btnFavorite);
+                    btnFavorite.setImageTintList(ColorStateList.valueOf(Color.YELLOW));
+                });
             }).start();
             dialog.dismiss();
         });
@@ -448,30 +414,24 @@ public class RecipeDetailsActivity extends AppCompatActivity
 
         dialog.show();
     }
-    List<String> list;
+
 
     // retrieve categories from database
     private void getCategories() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                List<CategoryBean> data = FavoriteDatabase.getInstance(RecipeDetailsActivity.this)
-                        .categoryDao().getAllCategories();
-                List<String> categories = new ArrayList<>();
-                for(int i=0;i<data.size();i++){
-                    categories.add(data.get(i).text);
-                }
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        // populate spinner with categories
-                        ArrayAdapter<String> adapter = new ArrayAdapter<>(RecipeDetailsActivity.this,
-                                android.R.layout.simple_spinner_item, categories);
-                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        spinnerCategories.setAdapter(adapter);
-                    }
-                });
+        new Thread(() -> {
+            List<CategoryBean> data = FavoriteDatabase.getInstance(RecipeDetailsActivity.this)
+                    .categoryDao().getAllCategories();
+            List<String> categories = new ArrayList<>();
+            for (int i = 0; i < data.size(); i++) {
+                categories.add(data.get(i).text);
             }
+            runOnUiThread(() -> {
+                // populate spinner with categories
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(RecipeDetailsActivity.this,
+                        android.R.layout.simple_spinner_item, categories);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinnerCategories.setAdapter(adapter);
+            });
         }).start();
     }
 }

@@ -1,8 +1,6 @@
 package sg.edu.np.mad.pocketchef;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,7 +13,7 @@ import java.util.List;
 import sg.edu.np.mad.pocketchef.Models.Database;
 import sg.edu.np.mad.pocketchef.Models.FavoriteRecipe;
 
-// activity to display favorite recepies
+// activity to display favorite recipes
 public class FavoriteRecipesActivity extends AppCompatActivity {
     RecyclerView recyclerViewFavorites;
 

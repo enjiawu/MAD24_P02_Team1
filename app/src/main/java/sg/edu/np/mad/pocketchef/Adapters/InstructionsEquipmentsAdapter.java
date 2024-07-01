@@ -35,13 +35,12 @@ public class InstructionsEquipmentsAdapter extends RecyclerView.Adapter<Instruct
     @Override
     public void onBindViewHolder(@NonNull InstructionsEquipmentsViewHolder holder, int position) {
         if (list.isEmpty()) {
-            holder.textView_instructions_step_item.setText("No Equipments");
+            holder.textView_instructions_step_item.setText(R.string.no_equipments_text);
             holder.imageView_instructions_step_items.setVisibility(View.GONE); // Optionally hide the ImageView
         } else {
             Equipment equipment = list.get(position);
             holder.textView_instructions_step_item.setText(equipment.name);
             holder.textView_instructions_step_item.setSelected(true);
-
             // Check if the image URL is not null
             if (equipment.image != null && !equipment.image.isEmpty()) {
                 holder.imageView_instructions_step_items.setVisibility(View.VISIBLE); // Ensure ImageView is visible
@@ -66,6 +65,7 @@ public class InstructionsEquipmentsAdapter extends RecyclerView.Adapter<Instruct
 class InstructionsEquipmentsViewHolder extends RecyclerView.ViewHolder {
     final ImageView imageView_instructions_step_items;
     final TextView textView_instructions_step_item;
+
     public InstructionsEquipmentsViewHolder(@NonNull View itemView) {
         super(itemView);
         imageView_instructions_step_items = itemView.findViewById(R.id.imageView_instructions_step_items);

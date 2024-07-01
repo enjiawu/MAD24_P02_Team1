@@ -30,7 +30,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import sg.edu.np.mad.pocketchef.Adapters.SearchedRecipesAdapter;
 import sg.edu.np.mad.pocketchef.Listener.RecipeClickListener;
 import sg.edu.np.mad.pocketchef.Listener.SearchRecipeListener;
-import sg.edu.np.mad.pocketchef.Models.FavoriteRecipe;
 import sg.edu.np.mad.pocketchef.Models.SearchedRecipeApiResponse;
 
 public class SearchedRecipesOutput extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{

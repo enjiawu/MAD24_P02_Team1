@@ -49,6 +49,7 @@ public class InstructionsAdapter extends RecyclerView.Adapter<InstructionsViewHo
 class InstructionsViewHolder extends RecyclerView.ViewHolder {
     final TextView textView_instruction_name;
     final RecyclerView recycler_instruction_steps;
+
     public InstructionsViewHolder(@NonNull View itemView) {
         super(itemView);
         textView_instruction_name = itemView.findViewById(R.id.textView_instruction_name);
