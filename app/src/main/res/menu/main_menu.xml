@@ -18,6 +18,10 @@
             android:id="@+id/nav_favourites"
             android:icon="@drawable/ic_favorite_list"
             android:title="Favorite List" />
+        <item
+            android:id="@+id/nav_pantry"
+            android:icon="@drawable/ic_favorite_list"
+            android:title="Pantry" />
     </group>
         <item android:title="Profile">
             <menu>
