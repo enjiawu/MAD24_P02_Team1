@@ -124,7 +124,7 @@ public class RecipeDetailsActivity extends AppCompatActivity
                 showFavoriteDialog();
             } else {
                 // if recipe is already favorite, confirm favorite
-                MessageDialog.show("Favorite recipe", "Are you sure you want to favorite this recipe?", "Yes"
+                MessageDialog.show("Unfavorite recipe", "Are you sure you want to unfavorite this recipe?", "Yes"
                         , "No").setOkButtonClickListener((dialog, v1) -> {
                     WaitDialog.show("loading...");
                     new Thread(() -> {
