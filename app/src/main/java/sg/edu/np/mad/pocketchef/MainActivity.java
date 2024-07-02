@@ -267,6 +267,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent intent3 = new Intent(MainActivity.this, CreateCategoryActivity.class);
             finish();
             startActivity(intent3);
+        } else if (itemId == R.id.nav_pantry) {
+            Intent intent3 = new Intent(MainActivity.this, PantryActivity.class);
+            finish();
+            startActivity(intent3);
         } else if (itemId == R.id.nav_search) {
             Intent intent4 = new Intent(MainActivity.this, AdvancedSearchActivity.class);
             finish();
