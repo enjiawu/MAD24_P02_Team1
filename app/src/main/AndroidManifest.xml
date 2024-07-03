@@ -43,7 +43,7 @@
             android:exported="false" />
         <activity
             android:name=".SearchedRecipesOutput"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".RecipeActivity"
             android:exported="false" />
@@ -52,6 +52,9 @@
             android:exported="false" />
         <activity
             android:name=".EditProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PantryActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
