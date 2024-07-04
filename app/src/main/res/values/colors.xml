@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="paletteblack">#FF000000</color>
+    <color name="palettewhite">#FFFFFFFF</color>
+    <color name="palettebeige">#f5eace</color>
+    <color name="paletteblue">#1d828e</color>
+    <color name="paletteorange">#feac5d</color>
+    <color name="palettetext">#140F1F</color>
+    <color name="palettedarkblue">#001219</color>
+    <color name="transparent">#00FFFFFF</color>
+</resources>

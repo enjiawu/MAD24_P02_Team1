@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "418510847515",
+    "firebase_url": "https://pocket-chef-cd59c-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "pocket-chef-cd59c",
+    "storage_bucket": "pocket-chef-cd59c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:418510847515:android:13ca43a359224db77f02be",
+        "android_client_info": {
+          "package_name": "sg.edu.np.mad.pocketchef"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB0C5XQInNbttEPIBMXgWdgOWlLdtywHe0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

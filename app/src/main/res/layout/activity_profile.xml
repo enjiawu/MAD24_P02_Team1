@@ -1,0 +1,157 @@
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".ProfileActivity">
+
+    <!--  NavigationView  -->
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:headerLayout="@layout/header"
+        app:menu="@menu/main_menu"/>
+
+    <LinearLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:background="@drawable/bg_card"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <!--  Material Toolbar for Navigation Menu  -->
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@color/paletteblue"
+                android:minHeight="?attr/actionBarSize"
+                app:contentInsetStart="0dp"
+                app:title="Profile"
+                app:contentInsetStartWithNavigation="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" app:navigationIcon="@drawable/ic_launcher_foreground"/>
+
+            <!-- ImageView for the User's Selected Image for Profile Picture -->
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profile_image"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:src="@drawable/profile"
+                app:civ_border_color="#FFFFFF"
+                app:civ_border_width="2dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toBottomOf="@+id/toolbar"
+                app:layout_constraintVertical_bias="0.329"/>
+
+            <!-- TextView to display User's Username -->
+            <TextView
+                android:id="@+id/usernameTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Username"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toBottomOf="@+id/profile_image"/>
+
+            <!-- ImageView for user to edit their profile (in edit profile page) -->
+            <ImageView
+                android:id="@+id/editProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="24dp"
+                app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@+id/toolbar" app:srcCompat="@drawable/baseline_edit_square_24"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- TextView: Label for User's Full Name -->
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            android:text="Full Name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view"/>
+
+        <!-- TextView to display User's Full Name -->
+        <TextView
+            android:id="@+id/nameTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
+            android:text="Full Name"
+            android:textColor="@color/paletteorange"
+            android:textSize="22sp"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toBottomOf="@+id/view"/>
+
+        <!-- TextView: Label for User's Email -->
+        <TextView
+            android:id="@+id/email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            android:text="Email"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toBottomOf="@+id/view"/>
+
+        <!-- TextView to display User's Email -->
+        <TextView
+            android:id="@+id/EmailTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
+            android:text="test@gmail.com"
+            android:textColor="@color/paletteorange"
+            android:textSize="22sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view"/>
+
+        <!-- TextView: Label for User's Date of Birth -->
+        <TextView
+            android:id="@+id/dob"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            android:text="Date of Birth"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view"/>
+
+        <!-- TextView to display User's Date of Birth -->
+        <TextView
+            android:id="@+id/dobTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
+            android:text="00/00/00"
+            android:textColor="@color/paletteorange"
+            android:textSize="22sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view"/>
+
+    </LinearLayout>
+</androidx.drawerlayout.widget.DrawerLayout>
