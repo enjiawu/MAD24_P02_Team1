@@ -42,13 +42,13 @@
                 </group>
             </menu>
         </item>
-    <!--
+
     <item android:title="Additional Features">
         <menu>
             <item
-                android:id="@+id/nav_addfeature1"
+                android:id="@+id/nav_community"
                 android:icon="@drawable/pocketchef_logo"
-                android:title="feature1" />
+                android:title="Community" />
             <item
                 android:id="@+id/nav_addfeature2"
                 android:icon="@drawable/pocketchef_logo"
@@ -58,5 +58,5 @@
                 android:icon="@drawable/pocketchef_logo"
                 android:title="feature3" />
         </menu>
-    </item>-->
+    </item>
 </menu>
