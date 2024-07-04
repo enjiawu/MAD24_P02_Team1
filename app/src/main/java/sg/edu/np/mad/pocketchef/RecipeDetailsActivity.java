@@ -124,7 +124,7 @@ public class RecipeDetailsActivity extends AppCompatActivity
                 showFavoriteDialog();
             } else {
                 // if recipe is already favorite, confirm favorite
-                MessageDialog.show("Favorite recipe", "Are you sure you want to favorite this recipe?", "Yes"
+                MessageDialog.show("Unfavorite recipe", "Are you sure you want to unfavorite this recipe?", "Yes"
                         , "No").setOkButtonClickListener((dialog, v1) -> {
                     WaitDialog.show("loading...");
                     new Thread(() -> {
@@ -268,7 +268,13 @@ public class RecipeDetailsActivity extends AppCompatActivity
     };
 
     // Implementing listeners
-    private final RecipeClickListener recipeClickListener = id -> Toast.makeText(RecipeDetailsActivity.this, "id", Toast.LENGTH_SHORT).show();
+    // Implementing listeners
+    private final RecipeClickListener recipeClickListener = id ->{
+        Intent intent = new Intent(RecipeDetailsActivity.this, RecipeDetailsActivity.class);
+        intent.putExtra("id", id);
+        finish(); // Finish the current activity
+        startActivity(intent);// Start the same activity with the new intent
+    };
 
     private final InstructionsListener instructionsListener = new InstructionsListener() {
         @Override
