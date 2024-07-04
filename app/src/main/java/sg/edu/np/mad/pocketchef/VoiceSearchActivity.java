@@ -3,6 +3,7 @@ package sg.edu.np.mad.pocketchef;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -25,6 +26,7 @@ public class VoiceSearchActivity extends AppCompatActivity {
     private static final String LANGUAGE_MODEL = RecognizerIntent.LANGUAGE_MODEL_FREE_FORM;
     private TextView textRecognizedInput;
     private Button buttonStartRecognition;
+    private Button buttonSearchRecipes;
     private Set<String> foodKeywords;
 
     private final ActivityResultLauncher<Intent> speechRecognitionLauncher = registerForActivityResult(
@@ -46,14 +48,20 @@ public class VoiceSearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_voice_search);
 
+        // Initialize views
         textRecognizedInput = findViewById(R.id.text_recognized_input);
         buttonStartRecognition = findViewById(R.id.button_start_recognition);
+        buttonSearchRecipes = findViewById(R.id.button_search_recipes);
 
+        // Load food keywords
         foodKeywords = loadFoodKeywords();
 
+        // Set click listeners
         buttonStartRecognition.setOnClickListener(v -> startSpeechRecognition());
+        buttonSearchRecipes.setOnClickListener(v -> searchRecipes());
     }
 
+    // Start speech recognition process
     private void startSpeechRecognition() {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, LANGUAGE_MODEL);
@@ -64,16 +72,26 @@ public class VoiceSearchActivity extends AppCompatActivity {
         }
     }
 
+    // Filter recognized text for food-related keywords
     private void filterFoodRelatedWords(String recognizedText) {
-        String lowerCaseRecognizedText = recognizedText.toLowerCase();
+        String lowerCaseRecognizedText = recognizedText.toLowerCase(Locale.ROOT);
         for (String keyword : foodKeywords) {
-            if (lowerCaseRecognizedText.contains(keyword.toLowerCase())) {
+            if (lowerCaseRecognizedText.contains(keyword.toLowerCase(Locale.ROOT))) {
                 textRecognizedInput.setText(keyword);
-                break;
+                return; // Exit early after finding the first match
             }
         }
     }
 
+    // Navigate to the recipes search activity
+    private void searchRecipes() {
+        String recognizedText = textRecognizedInput.getText().toString();
+        Intent intent = new Intent(VoiceSearchActivity.this, SearchedQueryRecipesOutput.class);
+        intent.putExtra("SEARCH_QUERY", recognizedText);
+        startActivity(intent);
+    }
+
+    // Load food keywords from a raw resource file
     private Set<String> loadFoodKeywords() {
         Set<String> keywords = new HashSet<>();
         try (InputStream inputStream = getResources().openRawResource(R.raw.ingredient_to_index);
@@ -86,7 +104,8 @@ public class VoiceSearchActivity extends AppCompatActivity {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            // Log the error for debugging purposes
+            Log.e("VoiceSearchActivity", "Error loading food keywords", e);
         }
         return keywords;
     }
