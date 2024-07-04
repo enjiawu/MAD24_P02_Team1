@@ -176,4 +176,5 @@
     </string-array>
     <string name="comment">Comments</string>
     <string name="addComment">Add comment...</string>
+    <string name="resultTextView_placeholder">Placeholder</string>
 </resources>
