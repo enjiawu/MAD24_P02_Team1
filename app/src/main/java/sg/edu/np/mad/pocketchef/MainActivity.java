@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     MaterialToolbar toolbar;
     MenuItem nav_home, nav_recipes, nav_search, nav_logout;
 
-    CardView cardView1, cardView2, cardView3, cardView4;
+    CardView cardView1, cardView2, cardView3, cardView4, cardView5, cardView6, cardView7, cardView8;
     //cardView5, cardView6;
 
     @SuppressLint("ClickableViewAccessibility")
@@ -212,6 +212,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
             startActivity(intent);
         });
+
+        // Card View On Click Listener for ImageSearchActivity
+        cardView5.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, ImageSearchActivity.class);
+            startActivity(intent);
+        });
+
+        // Card View On Click Listener for ProfileActivity
+        cardView6.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, VoiceSearchActivity.class);
+            startActivity(intent);
+        });
+
     }
 
     @Override
@@ -236,10 +249,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         cardView2 = findViewById(R.id.cardView2);
         cardView3 = findViewById(R.id.cardView3);
         cardView4 = findViewById(R.id.cardView4);
-
-        //For Stage 2
-        //cardView5 = findViewById(R.id.cardView5);
-        //cardView6 = findViewById(R.id.cardView6);
+        cardView5 = findViewById(R.id.cardView5);
+        cardView6 = findViewById(R.id.cardView6);
+        cardView7 = findViewById(R.id.cardView7);
+        cardView8 = findViewById(R.id.cardView8);
     }
 
     private void dismissSplashScreen() {

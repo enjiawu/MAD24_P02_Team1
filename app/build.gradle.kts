@@ -30,6 +30,7 @@ android {
 
     buildFeatures {
         viewBinding = true
+        mlModelBinding = true
     }
 
     compileOptions {
@@ -54,11 +55,22 @@ dependencies {
     implementation("org.jsoup:jsoup:1.14.3")
     implementation("androidx.core:core-splashscreen:1.0.0-alpha01")
     implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("com.google.mlkit:image-labeling:17.0.8")
+    implementation("org.tensorflow:tensorflow-lite:2.14.0")
+    implementation ("org.tensorflow:tensorflow-lite-gpu:2.8.0")
+    implementation ("org.tensorflow:tensorflow-lite-select-tf-ops:2.8.0")
+    implementation ("org.tensorflow:tensorflow-lite-support:0.3.1")
+    implementation ("org.tensorflow:tensorflow-lite-metadata:0.3.0")
+    implementation ("org.tensorflow:tensorflow-lite-task-text:0.2.0")
+    implementation ("com.google.code.gson:gson:2.8.8")
+    implementation ("com.google.guava:guava:31.0.1-android")
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
     implementation(libs.firebase.storage)
+    implementation(libs.tensorflow.lite.support)
+    implementation(libs.tensorflow.lite.metadata)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
