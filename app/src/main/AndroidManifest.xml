@@ -21,7 +21,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.pocketchef"
-        tools:targetApi="33">
+        tools:targetApi="33" >
+        <activity
+            android:name=".PostDetailsActivity"
+            android:exported="false" />
         <activity
             android:name=".ProfileActivity"
             android:exported="false" />
@@ -31,6 +34,13 @@
         <activity
             android:name=".ShowCollectActivity"
             android:exported="false" />
+        <activity
+            android:name=".AddPostActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CommunityActivity"
+            android:exported="false" >
+        </activity>
         <activity
             android:name=".CreateCategoryActivity"
             android:exported="false" />
@@ -70,6 +80,7 @@
             android:theme="@style/Theme.StartApp">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
