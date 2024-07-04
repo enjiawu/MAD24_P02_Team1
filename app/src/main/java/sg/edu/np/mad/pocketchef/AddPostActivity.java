@@ -108,6 +108,12 @@ public class AddPostActivity extends AppCompatActivity {
         textDelete(equipmentEditText, equipmentInputLayout, equipmentInputBoxes);
     }
 
+    /*
+    * Potential features to add:
+    * Drag and drop step by step instructions for easier reorganisation
+    * Allow users to save their post draft
+    */
+
     // Setting up listeners
     public void setupListeners() {
         // Check if back button has been clicked

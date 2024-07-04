@@ -174,4 +174,6 @@
         <item>Popularity (Asc)</item>
         <item>Popularity (Desc)</item>
     </string-array>
+    <string name="comment">Comments</string>
+    <string name="addComment">Add comment...</string>
 </resources>
