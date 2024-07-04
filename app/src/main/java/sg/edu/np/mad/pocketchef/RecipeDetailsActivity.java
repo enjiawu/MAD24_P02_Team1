@@ -34,6 +34,7 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.kongzue.dialogx.dialogs.InputDialog;
 import com.kongzue.dialogx.dialogs.MessageDialog;
@@ -212,6 +213,8 @@ public class RecipeDetailsActivity extends AppCompatActivity
     private final RecipeDetailsListener recipeDetailsListener = new RecipeDetailsListener() {
         @Override
         public void didFetch(RecipeDetailsResponse response, String message) {
+            // Show a Snackbar message indicating that search is in progress
+            Snackbar.make(findViewById(android.R.id.content), "Displaying Recipe Details", Snackbar.LENGTH_SHORT).show();
             progressBar.setVisibility(View.GONE);
             // Replace with API response json data
             textView_meal_name.setText(response.title);

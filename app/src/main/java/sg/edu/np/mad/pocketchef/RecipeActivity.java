@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
@@ -165,6 +166,8 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
     // Methods to call API
     // Methods to fetch RandomRecipes
     private void fetchRandomRecipes() {
+        // Show a Snackbar message indicating that search is in progress
+        Snackbar.make(findViewById(android.R.id.content), "Searching Random Recipes", Snackbar.LENGTH_SHORT).show();
         progressBar.setVisibility(View.VISIBLE);
         requestManager.getRandomRecipes(new RdmRecipeRespListener() {
             @Override
