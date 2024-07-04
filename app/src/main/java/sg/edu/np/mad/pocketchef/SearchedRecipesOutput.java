@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 
 import sg.edu.np.mad.pocketchef.Adapters.SearchedRecipesAdapter;
@@ -177,6 +178,8 @@ public class SearchedRecipesOutput extends AppCompatActivity implements Navigati
 
     //Reading User Inputs and searching for the recipe
     public void fetchSearchedRecipes() {
+        // Show a Snackbar message indicating that search is in progress
+        Snackbar.make(findViewById(android.R.id.content), "Searching Recipes ...", Snackbar.LENGTH_SHORT).show();
         progressBar.setVisibility(View.VISIBLE); // Making the progress bar visible as the recipes get searched
         requestManager.getSearchedRecipes(new SearchRecipeListener() { //API Response
 

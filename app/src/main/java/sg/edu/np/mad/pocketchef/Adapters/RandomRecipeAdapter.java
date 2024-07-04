@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import sg.edu.np.mad.pocketchef.Listener.RecipeClickListener;
@@ -26,7 +27,7 @@ public class RandomRecipeAdapter extends RecyclerView.Adapter<RandomRecipeViewHo
     final List<Recipe> list;
     final RecipeClickListener listener;
 
-    public RandomRecipeAdapter(Context context, List<Recipe> list, RecipeClickListener listener) {
+    public RandomRecipeAdapter(Context context, ArrayList<Recipe> list, RecipeClickListener listener) {
         this.context = context;
         this.list = list;
         this.listener = listener;
