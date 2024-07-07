@@ -25,6 +25,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.Firebase;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +43,12 @@ public class AddPostActivity extends AppCompatActivity {
     private TextInputLayout recipeTitleBox, fatInfoBox, proteinInfoBox, caloriesInfoBox, prepTimeInfoBox, costPerServingInfoBox, servingsInputBox;
     private Button addMoreStepsButton, addMoreIngredients, addMoreEquipment, postButton;
     private List<TextInputLayout> inputBoxes, instructionsInputBoxes  = new ArrayList<>(), ingredientsInputBoxes  = new ArrayList<>(), equipmentInputBoxes = new ArrayList<>();
+
+    // Database
+    private FirebaseAuth mAuth;
+    FirebaseDatabase database;
+    DatabaseReference myRef;
+    StorageReference mStorageRef;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,6 +117,10 @@ public class AddPostActivity extends AppCompatActivity {
         TextInputEditText equipmentEditText = EquipmentInputBox.findViewById(R.id.input);
         textChangeListener(equipmentEditText);
         textDelete(equipmentEditText, equipmentInputLayout, equipmentInputBoxes);
+
+        //Firebase setup
+        mAuth = FirebaseAuth.getInstance();
+
     }
 
     /*
