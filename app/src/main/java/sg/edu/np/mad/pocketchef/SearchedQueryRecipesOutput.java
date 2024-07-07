@@ -6,7 +6,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
 import com.google.android.material.snackbar.Snackbar;
+
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -32,14 +34,14 @@ public class SearchedQueryRecipesOutput extends AppCompatActivity implements Nav
     private static final String EXTRA_RECIPE_ID = "id";
     private static final int SCROLL_THRESHOLD = 2;
 
-    private RequestManager requestManager;
-    private RecyclerView recyclerView;
-    private ProgressBar progressBar;
-    private String searchQuery;
-
-    private DrawerLayout drawerLayout;
-    private NavigationView navigationView;
-    private MaterialToolbar toolbar;
+    RequestManager requestManager;
+    RecyclerView recyclerView;
+    ProgressBar progressBar;
+    String searchQuery;
+    DrawerLayout drawerLayout;
+    NavigationView navigationView;
+    MaterialToolbar toolbar;
+    MenuItem nav_home, nav_recipes, nav_search, nav_logout, nav_profile, nav_favourites, nav_community, nav_pantry, nav_complex_search;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +71,17 @@ public class SearchedQueryRecipesOutput extends AppCompatActivity implements Nav
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         toolbar = findViewById(R.id.toolbar);
+
+        // Set up menu items
+        nav_home = navigationView.getMenu().findItem(R.id.nav_home);
+        nav_recipes = navigationView.getMenu().findItem(R.id.nav_recipes);
+        nav_search = navigationView.getMenu().findItem(R.id.nav_search);
+        nav_logout = navigationView.getMenu().findItem(R.id.nav_logout);
+        nav_profile = navigationView.getMenu().findItem(R.id.nav_profile);
+        nav_favourites = navigationView.getMenu().findItem(R.id.nav_favourites);
+        nav_community = navigationView.getMenu().findItem(R.id.nav_community);
+        nav_pantry = navigationView.getMenu().findItem(R.id.nav_pantry);
+        nav_complex_search = navigationView.getMenu().findItem(R.id.nav_complex_search);
 
         // Set up nav menu
         navigationView.bringToFront();
@@ -191,6 +204,18 @@ public class SearchedQueryRecipesOutput extends AppCompatActivity implements Nav
             Intent intent5 = new Intent(SearchedQueryRecipesOutput.this, LoginActivity.class);
             finish();
             startActivity(intent5);
+        } else if (itemId == R.id.nav_community) {
+            Intent intent6 = new Intent(SearchedQueryRecipesOutput.this, CommunityActivity.class);
+            finish();
+            startActivity(intent6);
+        } else if (itemId == R.id.nav_pantry) {
+            Intent intent7 = new Intent(SearchedQueryRecipesOutput.this, PantryActivity.class);
+            finish();
+            startActivity(intent7);
+        } else if (itemId == R.id.nav_complex_search) {
+            Intent intent8 = new Intent(SearchedQueryRecipesOutput.this, ComplexSearchActivity.class);
+            finish();
+            startActivity(intent8);
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
