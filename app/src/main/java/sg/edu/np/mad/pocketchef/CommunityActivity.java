@@ -6,6 +6,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -16,12 +17,32 @@ import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.checkerframework.checker.units.qual.C;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import sg.edu.np.mad.pocketchef.Adapters.CommunityAdapter;
+import sg.edu.np.mad.pocketchef.Adapters.SearchedRecipesAdapter;
+import sg.edu.np.mad.pocketchef.Listener.PostClickListener;
+import sg.edu.np.mad.pocketchef.Models.Post;
+import sg.edu.np.mad.pocketchef.Models.SearchedRecipeApiResponse;
 
 public class CommunityActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     //Menu
@@ -31,7 +52,14 @@ public class CommunityActivity extends AppCompatActivity implements NavigationVi
     MenuItem nav_home, nav_recipes, nav_search;
 
     // XML Variables
+    private ProgressBar progressBar;
     private ImageView addPostButton;
+
+    // Database
+    FirebaseAuth mAuth;
+    FirebaseDatabase database;
+    DatabaseReference postsRef;
+    StorageReference storageReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +90,16 @@ public class CommunityActivity extends AppCompatActivity implements NavigationVi
         navigationView.setCheckedItem(nav_home);
 
         //Getting all the variables from the xml file
+        progressBar = findViewById(R.id.progressBar);
         addPostButton = findViewById(R.id.addPostButton);
+
+        //Firebase database setup
+        mAuth = FirebaseAuth.getInstance();
+        storageReference = FirebaseStorage.getInstance().getReference().child("PostImages");
+        database = FirebaseDatabase.getInstance("https://pocket-chef-cd59c-default-rtdb.asia-southeast1.firebasedatabase.app/");
+        postsRef = database.getReference("posts");
+
+        setupSearchedRecipeRecyclerView();
     }
 
     // Setting up listeners
@@ -75,6 +112,43 @@ public class CommunityActivity extends AppCompatActivity implements NavigationVi
             startActivity(intent);
         });
     }
+
+    // Loading community posts
+    public void setupSearchedRecipeRecyclerView() {
+        progressBar.setVisibility(View.VISIBLE); // Making the progress bar visible as the  posts get loaded
+
+        postsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<Post> posts = new ArrayList<>();
+                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                    Post post = postSnapshot.getValue(Post.class);
+                    posts.add(post);
+                }
+
+                // Create an instance of the adapter
+                CommunityAdapter adapter = new CommunityAdapter(CommunityActivity.this, posts, new PostClickListener() {
+                    @Override
+                    public void onPostClicked(String postKey) {
+                        // Handle post click here
+                    }
+                });
+
+                // Set the adapter to the RecyclerView
+                RecyclerView recyclerView = findViewById(R.id.post_recycler_view);
+                recyclerView.setAdapter(adapter);
+
+                // Making the progress bar disappear after posts get loaded
+                progressBar.setVisibility(View.GONE);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle error here
+            }
+        });
+    }
+
+
 
     // For the menu
     @Override
