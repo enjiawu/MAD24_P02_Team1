@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 
 import sg.edu.np.mad.pocketchef.Adapters.SearchedRecipesAdapter;
@@ -43,7 +44,7 @@ public class SearchedRecipesOutput extends AppCompatActivity implements Navigati
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     MaterialToolbar toolbar;
-    MenuItem nav_home, nav_recipes, nav_search;
+    MenuItem nav_home, nav_recipes, nav_search, nav_logout, nav_profile, nav_favourites, nav_community, nav_pantry, nav_complex_search;
 
     //For search inputs
     private String query;
@@ -108,6 +109,12 @@ public class SearchedRecipesOutput extends AppCompatActivity implements Navigati
         nav_home = navigationView.getMenu().findItem(R.id.nav_home);
         nav_recipes = navigationView.getMenu().findItem(R.id.nav_recipes);
         nav_search = navigationView.getMenu().findItem(R.id.nav_search);
+        nav_logout = navigationView.getMenu().findItem(R.id.nav_logout);
+        nav_profile = navigationView.getMenu().findItem(R.id.nav_profile);
+        nav_favourites = navigationView.getMenu().findItem(R.id.nav_favourites);
+        nav_community = navigationView.getMenu().findItem(R.id.nav_community);
+        nav_pantry = navigationView.getMenu().findItem(R.id.nav_pantry);
+        nav_complex_search = navigationView.getMenu().findItem(R.id.nav_complex_search);
 
         // Set up nav menu
         navigationView.bringToFront();
@@ -177,6 +184,8 @@ public class SearchedRecipesOutput extends AppCompatActivity implements Navigati
 
     //Reading User Inputs and searching for the recipe
     public void fetchSearchedRecipes() {
+        // Show a Snackbar message indicating that search is in progress
+        Snackbar.make(findViewById(android.R.id.content), "Searching Recipes ...", Snackbar.LENGTH_SHORT).show();
         progressBar.setVisibility(View.VISIBLE); // Making the progress bar visible as the recipes get searched
         requestManager.getSearchedRecipes(new SearchRecipeListener() { //API Response
 
@@ -276,6 +285,18 @@ public class SearchedRecipesOutput extends AppCompatActivity implements Navigati
             Intent intent5 = new Intent(SearchedRecipesOutput.this, LoginActivity.class);
             finish();
             startActivity(intent5);
+        } else if (itemId == R.id.nav_community) {
+            Intent intent6 = new Intent(SearchedRecipesOutput.this, CommunityActivity.class);
+            finish();
+            startActivity(intent6);
+        } else if (itemId == R.id.nav_pantry) {
+            Intent intent7 = new Intent(SearchedRecipesOutput.this, PantryActivity.class);
+            finish();
+            startActivity(intent7);
+        } else if (itemId == R.id.nav_complex_search) {
+            Intent intent8 = new Intent(SearchedRecipesOutput.this, AdvancedSearchActivity.class);
+            finish();
+            startActivity(intent8);
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;

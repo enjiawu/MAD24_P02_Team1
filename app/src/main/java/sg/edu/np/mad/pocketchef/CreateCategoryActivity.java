@@ -1,6 +1,9 @@
 package sg.edu.np.mad.pocketchef;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.MenuItem;
@@ -15,6 +18,8 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -28,6 +33,8 @@ import com.kongzue.dialogx.dialogs.BottomMenu;
 import com.kongzue.dialogx.dialogs.InputDialog;
 import com.kongzue.dialogx.dialogs.PopTip;
 import com.kongzue.dialogx.dialogs.WaitDialog;
+import com.permissionx.guolindev.PermissionX;
+import com.permissionx.guolindev.callback.RequestCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,8 +49,10 @@ import sg.edu.np.mad.pocketchef.databinding.ItemCreateCategoryBinding;
 
 public class CreateCategoryActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    private static final int REQUEST_CODE_PERMISSIONS = 101;
+
     private ActivityCreateCategoryBinding binding;
-    MenuItem nav_home, nav_recipes, nav_search;
+    MenuItem nav_home;
 
     // Adapter for display categories
     private FavoriteAdapter
@@ -85,11 +94,10 @@ public class CreateCategoryActivity extends AppCompatActivity implements Navigat
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(CreateCategoryActivity.this);
         navigationView.setCheckedItem(nav_home);
-
+        CreateDefaultFavorites();
         // initialize UI element and path variable
         init();
         path = "";
-
         // button click listener
         binding.bt.setOnClickListener(v -> {
             String et = editText.getText().toString();
@@ -126,10 +134,28 @@ public class CreateCategoryActivity extends AppCompatActivity implements Navigat
         register();
     }
 
+    private void CreateDefaultFavorites(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                List<CategoryBean> list = FavoriteDatabase.getInstance(CreateCategoryActivity.this)
+                        .categoryDao()
+                        .getAllCategories();
+                if(list==null||list.isEmpty()){
+                    CategoryBean categoryBean =new CategoryBean("Favorite","Favorite");
+                    FavoriteDatabase.getInstance(CreateCategoryActivity.this).categoryDao()
+                            .insertCategory(categoryBean);
+                }
+            }
+        }).start();
+    }
+
+
     ActivityResultLauncher<PickVisualMediaRequest> pickMedia2;
     private CategoryBean categoryBean;
 
     // initialize register activity result launcher
+
     private void register() {
         pickMedia2 =
                 registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
@@ -139,7 +165,7 @@ public class CreateCategoryActivity extends AppCompatActivity implements Navigat
                                 .load(uri).into(iv);
                         favoriteAdapter.notifyDataSetChanged();
                     } else {
-
+                        Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show();
                     }
                 });
         pickMedia =
@@ -152,7 +178,7 @@ public class CreateCategoryActivity extends AppCompatActivity implements Navigat
                             runOnUiThread(() -> favoriteAdapter.notifyDataSetChanged());
                         }).start();
                     } else {
-
+                        Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -189,7 +215,7 @@ public class CreateCategoryActivity extends AppCompatActivity implements Navigat
                         Toast.makeText(CreateCategoryActivity.this, (CharSequence) e, Toast.LENGTH_SHORT).show();
                     }
 
-                    holder.addPicture.setOnClickListener(v -> openPicture(holder.addPicture));
+                    holder.addPicture.setOnClickListener(v -> checkPermissionsAndOpenPicture(holder.addPicture));
                     editText = holder.addCategoryName;
                 } else {
                     holder.addCategoryLayout.setVisibility(View.GONE);
@@ -223,7 +249,7 @@ public class CreateCategoryActivity extends AppCompatActivity implements Navigat
                                     .setMessage(Html.fromHtml("<b>Edit Category</b>"))
                                     .setOnMenuItemClickListener((dialog, text1, index) -> {
                                         if (index == 0) {
-                                            openPicture(cetegoryBean);
+                                            checkPermissionsAndOpenPicture(cetegoryBean);
                                         } else if (index == 1) {
                                             setCategoryBeanName(cetegoryBean);
                                         } else if (index == 2) {
@@ -269,6 +295,78 @@ public class CreateCategoryActivity extends AppCompatActivity implements Navigat
         }).start();
     }
 
+    private String path = "";
+
+    // Check permissions and request if not granted
+    private void checkPermissionsAndOpenPicture(ImageView iv) {
+        this.iv = iv;
+        PermissionX.init(this)
+                .permissions(Manifest.permission.READ_MEDIA_IMAGES)
+                .onExplainRequestReason((scope, deniedList) -> {
+                    String message = "Permission needed to access images";
+                    scope.showRequestReasonDialog(deniedList, message, "Allow", "Deny");
+                })
+                .onForwardToSettings((scope, deniedList) -> {
+                    String message = "You need to allow permissions in Settings manually";
+                    scope.showForwardToSettingsDialog(deniedList, message, "Settings", "Cancel");
+                })
+                .request((allGranted, grantedList, deniedList) -> {
+                    if (allGranted) {
+                        // Launch image picker
+                        pickMedia2.launch(new PickVisualMediaRequest.Builder()
+                                .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                                .build());
+                    } else {
+                        Toast.makeText(this, "Permissions denied: " + deniedList, Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void checkPermissionsAndOpenPicture(CategoryBean categoryBean) {
+        this.categoryBean = categoryBean;
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_MEDIA_IMAGES},
+                    REQUEST_CODE_PERMISSIONS);
+        } else {
+            openPicture(categoryBean);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CODE_PERMISSIONS) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (iv != null) {
+                    openPicture(iv);
+                } else if (categoryBean != null) {
+                    openPicture(categoryBean);
+                }
+            } else {
+                Toast.makeText(this, "Permission is denied. Please allow permission to access your gallery.", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    // open picture for catergory
+    private void openPicture(CategoryBean categoryBean) {
+        this.categoryBean = categoryBean;
+        pickMedia.launch(new PickVisualMediaRequest.Builder()
+                .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                .build());
+    }
+
+    // open picture for adding a new category
+    private void openPicture(ImageView iv) {
+        this.iv = iv;
+        pickMedia2.launch(new PickVisualMediaRequest.Builder()
+                .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                .build());
+    }
+
+
     // set category name
     private void setCategoryBeanName(CategoryBean categoryBean) {
         new InputDialog("Edit Category Name", "Please enter a new category name",
@@ -304,24 +402,6 @@ public class CreateCategoryActivity extends AppCompatActivity implements Navigat
     protected void onDestroy() {
         super.onDestroy();
 
-    }
-
-    // open picture for catergory
-    private void openPicture(CategoryBean categoryBean) {
-        this.categoryBean = categoryBean;
-        pickMedia.launch(new PickVisualMediaRequest.Builder()
-                .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
-                .build());
-    }
-
-    private String path = "";
-
-    // open picture for adding a new category
-    private void openPicture(ImageView iv) {
-        this.iv = iv;
-        pickMedia2.launch(new PickVisualMediaRequest.Builder()
-                .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
-                .build());
     }
 
     // handle menu nav item selection

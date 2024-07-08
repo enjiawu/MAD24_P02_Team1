@@ -34,6 +34,7 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.kongzue.dialogx.dialogs.InputDialog;
 import com.kongzue.dialogx.dialogs.MessageDialog;
@@ -79,7 +80,7 @@ public class RecipeDetailsActivity extends AppCompatActivity
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     MaterialToolbar toolbar;
-    MenuItem nav_home, nav_recipes, nav_search;
+    MenuItem nav_home, nav_recipes, nav_search, nav_logout, nav_profile, nav_favourites, nav_community, nav_pantry, nav_complex_search;
     ConstraintLayout recipeDetailsLayout, nutritionLabelLayout;
     MaterialButton buttonNutritionLabel;
     RecipeDetailsC recipeDetailsC;
@@ -124,7 +125,7 @@ public class RecipeDetailsActivity extends AppCompatActivity
                 showFavoriteDialog();
             } else {
                 // if recipe is already favorite, confirm favorite
-                MessageDialog.show("Favorite recipe", "Are you sure you want to favorite this recipe?", "Yes"
+                MessageDialog.show("Unfavorite recipe", "Are you sure you want to unfavorite this recipe?", "Yes"
                         , "No").setOkButtonClickListener((dialog, v1) -> {
                     WaitDialog.show("loading...");
                     new Thread(() -> {
@@ -173,9 +174,17 @@ public class RecipeDetailsActivity extends AppCompatActivity
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         toolbar = findViewById(R.id.toolbar);
+        // Initialise Menu
         nav_home = navigationView.getMenu().findItem(R.id.nav_home);
         nav_recipes = navigationView.getMenu().findItem(R.id.nav_recipes);
         nav_search = navigationView.getMenu().findItem(R.id.nav_search);
+        nav_logout = navigationView.getMenu().findItem(R.id.nav_logout);
+        nav_profile = navigationView.getMenu().findItem(R.id.nav_profile);
+        nav_favourites = navigationView.getMenu().findItem(R.id.nav_favourites);
+        nav_community = navigationView.getMenu().findItem(R.id.nav_community);
+        nav_pantry = navigationView.getMenu().findItem(R.id.nav_pantry);
+        nav_complex_search = navigationView.getMenu().findItem(R.id.nav_complex_search);
+        // Initialise Layout
         recipeDetailsLayout = findViewById(R.id.recipe_details);
         nutritionLabelLayout = findViewById(R.id.nutrition_dialog_layout);
         //Initialise Nutritional Image
@@ -212,6 +221,8 @@ public class RecipeDetailsActivity extends AppCompatActivity
     private final RecipeDetailsListener recipeDetailsListener = new RecipeDetailsListener() {
         @Override
         public void didFetch(RecipeDetailsResponse response, String message) {
+            // Show a Snackbar message indicating that search is in progress
+            Snackbar.make(findViewById(android.R.id.content), "Displaying Recipe Details", Snackbar.LENGTH_SHORT).show();
             progressBar.setVisibility(View.GONE);
             // Replace with API response json data
             textView_meal_name.setText(response.title);
@@ -268,7 +279,13 @@ public class RecipeDetailsActivity extends AppCompatActivity
     };
 
     // Implementing listeners
-    private final RecipeClickListener recipeClickListener = id -> Toast.makeText(RecipeDetailsActivity.this, "id", Toast.LENGTH_SHORT).show();
+    // Implementing listeners
+    private final RecipeClickListener recipeClickListener = id ->{
+        Intent intent = new Intent(RecipeDetailsActivity.this, RecipeDetailsActivity.class);
+        intent.putExtra("id", id);
+        finish(); // Finish the current activity
+        startActivity(intent);// Start the same activity with the new intent
+    };
 
     private final InstructionsListener instructionsListener = new InstructionsListener() {
         @Override
@@ -312,9 +329,19 @@ public class RecipeDetailsActivity extends AppCompatActivity
             Intent intent5 = new Intent(RecipeDetailsActivity.this, LoginActivity.class);
             finish();
             startActivity(intent5);
+        } else if (itemId == R.id.nav_community) {
+            Intent intent6 = new Intent(RecipeDetailsActivity.this, CommunityActivity.class);
+            finish();
+            startActivity(intent6);
+        } else if (itemId == R.id.nav_pantry) {
+            Intent intent7 = new Intent(RecipeDetailsActivity.this, PantryActivity.class);
+            finish();
+            startActivity(intent7);
+        } else if (itemId == R.id.nav_complex_search) {
+            Intent intent8 = new Intent(RecipeDetailsActivity.this, ComplexSearchActivity.class);
+            finish();
+            startActivity(intent8);
         }
-
-
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }

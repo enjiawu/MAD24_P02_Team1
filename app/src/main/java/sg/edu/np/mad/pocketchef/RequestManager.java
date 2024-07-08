@@ -18,11 +18,13 @@ import sg.edu.np.mad.pocketchef.Listener.InstructionsListener;
 import sg.edu.np.mad.pocketchef.Listener.RdmRecipeRespListener;
 import sg.edu.np.mad.pocketchef.Listener.RecipeDetailsListener;
 import sg.edu.np.mad.pocketchef.Listener.SearchRecipeListener;
+import sg.edu.np.mad.pocketchef.Listener.SearchRecipeQueryListener;
 import sg.edu.np.mad.pocketchef.Listener.SimilarRecipesListener;
 import sg.edu.np.mad.pocketchef.Models.InstructionsResponse;
 import sg.edu.np.mad.pocketchef.Models.RandomRecipeApiResponse;
 import sg.edu.np.mad.pocketchef.Models.RecipeDetailsResponse;
 import sg.edu.np.mad.pocketchef.Models.SearchedRecipeApiResponse;
+import sg.edu.np.mad.pocketchef.Models.SearchedRecipeQueryApiResponse;
 import sg.edu.np.mad.pocketchef.Models.SimilarRecipeResponse;
 
 public class RequestManager {
@@ -155,6 +157,35 @@ public class RequestManager {
         });
     }
 
+    //Method to call API for searched recipes
+    public void getSearchedRecipesQuery(SearchRecipeQueryListener listener, String query) {
+        CallSearchedRecipesQuery callSearchedRecipesQuery = retrofit.create(CallSearchedRecipesQuery.class);
+        Call<SearchedRecipeQueryApiResponse> call = callSearchedRecipesQuery.callSearchedRecipesQuery(
+                context.getString(R.string.api_key),
+                query
+        );
+        call.enqueue(new Callback<SearchedRecipeQueryApiResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<SearchedRecipeQueryApiResponse> call, @NonNull Response<SearchedRecipeQueryApiResponse> response) {
+                if (response.isSuccessful()) {
+                    SearchedRecipeQueryApiResponse responseBody = response.body();
+                    if (responseBody != null) {
+                        listener.didFetch(responseBody, response.message());
+                    } else {
+                        listener.didError("Response body is null");
+                    }
+                } else {
+                    listener.didError("Request failed: " + response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<SearchedRecipeQueryApiResponse> call, @NonNull Throwable throwable) {
+                listener.didError("Network error: " + throwable.getMessage());
+            }
+        });
+    }
+
 
     // Method to GET random recipes from API
     private interface CallRandomRecipes {
@@ -214,4 +245,11 @@ public class RequestManager {
         );
     }
 
+    private interface CallSearchedRecipesQuery {
+        @GET("recipes/complexSearch")
+        Call<SearchedRecipeQueryApiResponse> callSearchedRecipesQuery(
+                @Query("apiKey") String apiKey,
+                @Query("query") String query
+        );
+    }
 }
