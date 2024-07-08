@@ -28,7 +28,7 @@ public class CommunityActivity extends AppCompatActivity implements NavigationVi
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     MaterialToolbar toolbar;
-    MenuItem nav_home, nav_recipes, nav_search;
+    MenuItem nav_home, nav_recipes, nav_search, nav_logout, nav_profile, nav_favourites, nav_community, nav_pantry, nav_complex_search;
 
     // XML Variables
     private ImageView addPostButton;
@@ -52,6 +52,12 @@ public class CommunityActivity extends AppCompatActivity implements NavigationVi
         nav_home = navigationView.getMenu().findItem(R.id.nav_home);
         nav_recipes = navigationView.getMenu().findItem(R.id.nav_recipes);
         nav_search = navigationView.getMenu().findItem(R.id.nav_search);
+        nav_pantry = navigationView.getMenu().findItem(R.id.nav_pantry);
+        nav_complex_search = navigationView.getMenu().findItem(R.id.nav_complex_search);
+        nav_logout = navigationView.getMenu().findItem(R.id.nav_logout);
+        nav_profile = navigationView.getMenu().findItem(R.id.nav_profile);
+        nav_favourites = navigationView.getMenu().findItem(R.id.nav_favourites);
+        nav_community = navigationView.getMenu().findItem(R.id.nav_community);
 
         // Set up nav menu
         navigationView.bringToFront();
@@ -117,6 +123,10 @@ public class CommunityActivity extends AppCompatActivity implements NavigationVi
             startActivity(intent6);
         } else if (itemId == R.id.nav_community) {
             // Nothing Happens
+        } else if (itemId == R.id.nav_complex_search) {
+            Intent intent7 = new Intent(CommunityActivity.this, ComplexSearchActivity.class);
+            finish();
+            startActivity(intent7);
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;

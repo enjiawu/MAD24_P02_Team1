@@ -45,7 +45,7 @@ import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class CombinedSearchActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class ComplexSearchActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = "CombinedSearchActivity";
     private DrawerLayout drawerLayout;
@@ -59,7 +59,7 @@ public class CombinedSearchActivity extends AppCompatActivity implements Navigat
     private Set<String> foodKeywords;
     NavigationView navigationView;
     MaterialToolbar toolbar;
-    MenuItem nav_home, nav_recipes, nav_search, nav_logout, nav_profile, nav_favourites, nav_community, nav_combined_search, nav_pantry;
+    MenuItem nav_home, nav_recipes, nav_search, nav_logout, nav_profile, nav_favourites, nav_community, nav_pantry, nav_complex_search;
 
     private final ActivityResultLauncher<Intent> cameraLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -113,7 +113,7 @@ public class CombinedSearchActivity extends AppCompatActivity implements Navigat
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_combined_search);
+        setContentView(R.layout.activity_complex_search);
 
         // Initialize views
         imageView = findViewById(R.id.imageView);
@@ -134,7 +134,7 @@ public class CombinedSearchActivity extends AppCompatActivity implements Navigat
         nav_favourites = navigationView.getMenu().findItem(R.id.nav_favourites);
         nav_pantry = navigationView.getMenu().findItem(R.id.nav_pantry);
         nav_community = navigationView.getMenu().findItem(R.id.nav_community);
-        nav_combined_search = navigationView.getMenu().findItem(R.id.nav_combined_search);
+        nav_complex_search = navigationView.getMenu().findItem(R.id.nav_complex_search);
 
         // Create executor service for background tasks
         executorService = Executors.newFixedThreadPool(2);
@@ -168,7 +168,7 @@ public class CombinedSearchActivity extends AppCompatActivity implements Navigat
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-        navigationView.setNavigationItemSelectedListener(CombinedSearchActivity.this);
+        navigationView.setNavigationItemSelectedListener(ComplexSearchActivity.this);
         navigationView.setCheckedItem(nav_home);
     }
 
@@ -210,9 +210,9 @@ public class CombinedSearchActivity extends AppCompatActivity implements Navigat
     private void loadModelAndLabels() {
         executorService.execute(() -> {
             try {
-                MappedByteBuffer tfliteModel = FileUtil.loadMappedFile(CombinedSearchActivity.this, "food101_mobilenet_quant.tflite");
+                MappedByteBuffer tfliteModel = FileUtil.loadMappedFile(ComplexSearchActivity.this, "food101_mobilenet_quant.tflite");
                 tflite = new Interpreter(tfliteModel);
-                labels = FileUtil.loadLabels(CombinedSearchActivity.this, "labels.txt");
+                labels = FileUtil.loadLabels(ComplexSearchActivity.this, "labels.txt");
             } catch (IOException e) {
                 Log.e(TAG, "Error loading TFLite model or labels", e);
             }
@@ -288,7 +288,7 @@ public class CombinedSearchActivity extends AppCompatActivity implements Navigat
     }
 
     private void navigateToAnotherActivity() {
-        Intent intent = new Intent(CombinedSearchActivity.this, SearchedQueryRecipesOutput.class);
+        Intent intent = new Intent(ComplexSearchActivity.this, SearchedQueryRecipesOutput.class);
         String searchQuery;
 
         if (isClassifiedLabelUpdated) {
@@ -320,42 +320,38 @@ public class CombinedSearchActivity extends AppCompatActivity implements Navigat
         if (itemId == R.id.nav_home) {
             // Nothing Happens
         } else if (itemId == R.id.nav_recipes) {
-            Intent intent = new Intent(CombinedSearchActivity.this, RecipeActivity.class);
+            Intent intent = new Intent(ComplexSearchActivity.this, RecipeActivity.class);
             finish();
             startActivity(intent);
         } else if (itemId == R.id.nav_profile) {
-            Intent intent2 = new Intent(CombinedSearchActivity.this, ProfileActivity.class);
+            Intent intent2 = new Intent(ComplexSearchActivity.this, ProfileActivity.class);
             finish();
             startActivity(intent2);
         } else if (itemId == R.id.nav_favourites) {
-            Intent intent3 = new Intent(CombinedSearchActivity.this, CreateCategoryActivity.class);
+            Intent intent3 = new Intent(ComplexSearchActivity.this, CreateCategoryActivity.class);
             finish();
             startActivity(intent3);
         } else if (itemId == R.id.nav_pantry) {
-            Intent intent3 = new Intent(CombinedSearchActivity.this, PantryActivity.class);
+            Intent intent3 = new Intent(ComplexSearchActivity.this, PantryActivity.class);
             finish();
             startActivity(intent3);
         } else if (itemId == R.id.nav_search) {
-            Intent intent4 = new Intent(CombinedSearchActivity.this, AdvancedSearchActivity.class);
+            Intent intent4 = new Intent(ComplexSearchActivity.this, AdvancedSearchActivity.class);
             finish();
             startActivity(intent4);
         } else if (itemId == R.id.nav_logout) {
             FirebaseAuth.getInstance().signOut();
-            Intent intent5 = new Intent(CombinedSearchActivity.this, LoginActivity.class);
+            Intent intent5 = new Intent(ComplexSearchActivity.this, LoginActivity.class);
             finish();
             startActivity(intent5);
         } else if (itemId == R.id.nav_community) {
-            Intent intent6 = new Intent(CombinedSearchActivity.this, CommunityActivity.class);
+            Intent intent6 = new Intent(ComplexSearchActivity.this, CommunityActivity.class);
             finish();
             startActivity(intent6);
-        } else if (itemId == R.id.nav_combined_search) {
-            Intent intent7 = new Intent(CombinedSearchActivity.this, CombinedSearchActivity.class);
+        } else if (itemId == R.id.nav_complex_search) {
+            Intent intent7 = new Intent(ComplexSearchActivity.this, ComplexSearchActivity.class);
             finish();
             startActivity(intent7);
-        } else if (itemId == R.id.nav_pantry) {
-            Intent intent8 = new Intent(CombinedSearchActivity.this, PantryActivity.class);
-            finish();
-            startActivity(intent8);
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;

@@ -50,7 +50,7 @@
                 android:icon="@drawable/pocketchef_logo"
                 android:title="Community" />
             <item
-                android:id="@+id/nav_combined_search"
+                android:id="@+id/nav_complex_search"
                 android:icon="@drawable/pocketchef_logo"
                 android:title="Combined Search" />
             <item
