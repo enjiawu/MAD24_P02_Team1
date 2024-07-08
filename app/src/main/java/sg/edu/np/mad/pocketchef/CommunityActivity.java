@@ -126,6 +126,8 @@ public class CommunityActivity extends AppCompatActivity implements NavigationVi
                     posts.add(post);
                 }
 
+                Post post1 = {};
+
                 // Create an instance of the adapter
                 CommunityAdapter adapter = new CommunityAdapter(CommunityActivity.this, posts, new PostClickListener() {
                     @Override
