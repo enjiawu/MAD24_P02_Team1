@@ -79,14 +79,18 @@ Through our platform, users will gain access to tools and resources to plan meal
 - Successfully use DOA (Data Access Object) to store and retrieve favorite recipes data - [x]
 ---
 ### Stage 2
-#### Image Classification utilising TFLite model and Voice Recognition, recommend recipes based on input- Jin Rong - [ ]
-- Successfully implement tensorflow lite model - [ ]
-- Successfully implement camera intent to capture image (take photo or use gallery) - [ ]
-- Successfully utilise tensorflow lite model to predict image with high accuracy (sufficiently high confidence at 100 epoch) - [ ]
-- Successfully implement voice recognition using Android Native Speech Recogniser - [ ]
-- Successfully parse voice into a string that correlates with a library - [ ]
-- Obtain Recipe IDs from Spoonacular API, parse into recycler views in new activity - [ ]
-- Implement onClickListener for recipes leading to RecipeDetailsActivity - [ ]
+#### Image Classification utilising TFLite model and Voice Recognition, recommend recipes based on input- Jin Rong - [X]
+- Successfully implement tensorflow lite model - [X]
+- Successfully implement camera intent to capture image (take photo or use gallery) - [X]
+- Successfully utilise tensorflow lite model to predict image with high accuracy (sufficiently high confidence at 100 epoch) - [X]
+- Successfully implement voice recognition using Android Native Speech Recogniser - [X]
+- Successfully parse voice into a string that correlates with a library - [X]
+- Create new activity SearchedRecipeQueryOutput - [X]
+- Obtain Recipes successfully from spoonacular api, prompting with query pasesed from intent, and adapt into recycler view - [X]
+- Implement onClickListener for recipes leading to RecipeDetailsActivity - [X]
+Optional:
+- Consolidate both activities into one activity - [X]
+- UI/UX improvements, such as button animation and transitions - []
 
 #### Community page using SQLite with app notifications and recipe sharing to WhatsApp - Enjia - [ ]
 - Successfully implement Community Page User Interface - [ ]
@@ -187,6 +191,8 @@ https://json2csharp.com/
   https://www.youtube.com/watch?v=BZ_UrcFOCTc
 - Data access Object pattern:
   https://www.tutorialspoint.com/design_pattern/data_access_object_pattern.htm
+- Additional Github Repository for Jin Rong's ML Code:
+https://github.com/EdricYeo117/MAD_Assignment_Stage2_MLPythonCode
 ------------------------------------------------
 ### Dependencies Utilised:
 - Picasso dependency for image loading from API:
