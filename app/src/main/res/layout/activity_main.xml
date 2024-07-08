@@ -20,7 +20,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/palettebeige"
-        app:layoutDescription="@xml/activity_main_scene">
+        app:layoutDescription="@xml/activity_main_scene"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
@@ -133,15 +134,17 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardView1"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_margin="10dp"
             android:visibility="gone"
-            app:layout_constraintHeight_default="wrap"
-            app:layout_constraintWidth_percent="0.45">
+            app:layout_constraintHeight_default="percent"
+            app:layout_constraintHeight_percent="0.1">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                app:layout_constraintHeight_default="percent"
+                app:layout_constraintHeight_percent="0.1">
 
                 <TextView
                     android:id="@+id/cardView1_title_text"
@@ -180,9 +183,11 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardView2"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_margin="10dp"
-            android:visibility="gone">
+            android:visibility="gone"
+            app:layout_constraintHeight_default="percent"
+            app:layout_constraintHeight_percent="0.2">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -225,11 +230,11 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardView3"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_margin="10dp"
             android:visibility="gone"
-            app:layout_constraintHeight_default="wrap"
-            app:layout_constraintWidth_percent="0.45">
+            app:layout_constraintHeight_default="percent"
+            app:layout_constraintHeight_percent="0.2">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -264,7 +269,7 @@
                         android:layout_height="100dp"
                         android:layout_marginBottom="20dp"
                         android:scaleType="centerInside"
-                        app:srcCompat="@drawable/ic_favorite_list"/>
+                        app:srcCompat="@drawable/ic_favorite_list" />
                 </FrameLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -272,11 +277,11 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardView4"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_margin="10dp"
             android:visibility="gone"
-            app:layout_constraintHeight_default="wrap"
-            app:layout_constraintWidth_percent="0.45">
+            app:layout_constraintHeight_default="percent"
+            app:layout_constraintHeight_percent="0.2">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -311,7 +316,7 @@
                         android:layout_height="100dp"
                         android:layout_marginBottom="20dp"
                         android:scaleType="centerInside"
-                        app:srcCompat="@drawable/ic_profile"/>
+                        app:srcCompat="@drawable/ic_profile" />
                 </FrameLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -319,11 +324,11 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardView5"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_margin="10dp"
             android:visibility="gone"
-            app:layout_constraintHeight_default="wrap"
-            app:layout_constraintWidth_percent="0.45">
+            app:layout_constraintHeight_default="percent"
+            app:layout_constraintHeight_percent="0.2">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -366,11 +371,11 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardView6"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_margin="10dp"
             android:visibility="gone"
-            app:layout_constraintHeight_default="wrap"
-            app:layout_constraintWidth_percent="0.45">
+            app:layout_constraintHeight_default="percent"
+            app:layout_constraintHeight_percent="0.2">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -413,11 +418,11 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardView7"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_margin="10dp"
             android:visibility="gone"
-            app:layout_constraintHeight_default="wrap"
-            app:layout_constraintWidth_percent="0.45">
+            app:layout_constraintHeight_default="percent"
+            app:layout_constraintHeight_percent="0.2">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -460,11 +465,11 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardView8"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_margin="10dp"
             android:visibility="gone"
-            app:layout_constraintHeight_default="wrap"
-            app:layout_constraintWidth_percent="0.45">
+            app:layout_constraintHeight_default="percent"
+            app:layout_constraintHeight_percent="0.2">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -499,10 +504,9 @@
                         android:layout_height="100dp"
                         android:layout_marginBottom="20dp"
                         android:scaleType="centerInside"
-                        app:srcCompat="@drawable/ic_launcher_foreground"/>
+                        app:srcCompat="@drawable/ic_launcher_foreground" />
                 </FrameLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
-
     </androidx.constraintlayout.motion.widget.MotionLayout>
 </androidx.drawerlayout.widget.DrawerLayout>

@@ -40,7 +40,7 @@
             android:exported="false" />
         <activity
             android:name=".CommunityActivity"
-            android:exported="false"></activity>
+            android:exported="false"/>
         <activity
             android:name=".CreateCategoryActivity"
             android:exported="false" />
