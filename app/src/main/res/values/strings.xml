@@ -182,4 +182,6 @@
     <string name="textView_welcome_message_text">Welcome Back,</string>
     <string name="cardView3_title_text">Favourites\n</string>
     <string name="cardView_4_text">Profile\n</string>
+    <string name="cardView3_text">Favourites</string>
+    <string name="cardView4_text">Pantry</string>
 </resources>
