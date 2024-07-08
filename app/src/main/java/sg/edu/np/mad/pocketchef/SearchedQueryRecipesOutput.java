@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.activity.EdgeToEdge;
@@ -24,9 +25,12 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.List;
+
 import sg.edu.np.mad.pocketchef.Adapters.SearchedRecipesAdapter;
 import sg.edu.np.mad.pocketchef.Listener.RecipeClickListener;
 import sg.edu.np.mad.pocketchef.Listener.SearchRecipeQueryListener;
+import sg.edu.np.mad.pocketchef.Models.SearchedRecipe;
 import sg.edu.np.mad.pocketchef.Models.SearchedRecipeQueryApiResponse;
 
 public class SearchedQueryRecipesOutput extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -42,6 +46,7 @@ public class SearchedQueryRecipesOutput extends AppCompatActivity implements Nav
     NavigationView navigationView;
     MaterialToolbar toolbar;
     MenuItem nav_home, nav_recipes, nav_search, nav_logout, nav_profile, nav_favourites, nav_community, nav_pantry, nav_complex_search;
+    MaterialCardView cardView_no_recipe_found;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +76,7 @@ public class SearchedQueryRecipesOutput extends AppCompatActivity implements Nav
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         toolbar = findViewById(R.id.toolbar);
+        cardView_no_recipe_found = findViewById(R.id.cardView_no_recipe_found);
 
         // Set up menu items
         nav_home = navigationView.getMenu().findItem(R.id.nav_home);
@@ -167,10 +173,19 @@ public class SearchedQueryRecipesOutput extends AppCompatActivity implements Nav
             recyclerView.setHasFixedSize(true);
             recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
 
-            SearchedRecipesAdapter searchedRecipesAdapter = new SearchedRecipesAdapter(this,
-                    response.getRecipes(), recipeClickListener);
+            List<SearchedRecipe> recipes = response.getRecipes();
+            if (recipes == null || recipes.isEmpty()) {
+                cardView_no_recipe_found.setVisibility(View.VISIBLE);
+                recyclerView.setVisibility(View.GONE);
+            } else {
+                cardView_no_recipe_found.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
 
-            recyclerView.setAdapter(searchedRecipesAdapter);
+                SearchedRecipesAdapter searchedRecipesAdapter = new SearchedRecipesAdapter(this,
+                        recipes, recipeClickListener);
+
+                recyclerView.setAdapter(searchedRecipesAdapter);
+            }
         }
     }
 

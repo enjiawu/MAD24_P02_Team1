@@ -214,13 +214,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Card View On Click Listener for ImageSearchActivity
         cardView5.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, ImageSearchActivity.class);
+            Intent intent = new Intent(MainActivity.this, ComplexSearchActivity.class);
             startActivity(intent);
         });
 
         // Card View On Click Listener for ProfileActivity
         cardView6.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, VoiceSearchActivity.class);
+            Intent intent = new Intent(MainActivity.this, CommunityActivity.class);
             startActivity(intent);
         });
 
