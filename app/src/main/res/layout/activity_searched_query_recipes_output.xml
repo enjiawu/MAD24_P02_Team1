@@ -44,18 +44,6 @@
                 app:navigationIcon="@drawable/ic_launcher_foreground"
                 app:title="Queried Recipes" />
 
-            <!-- Spinner to filter recipes -->
-            <Spinner
-                android:id="@+id/spinner_tags"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:entries="@array/tags"
-                android:minHeight="48dp"
-                android:textAlignment="center"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
             <!-- RecyclerView for recipes -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_query_recipes"
@@ -72,17 +60,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                android:visibility="gone"
                 android:padding="16dp"
-                app:cardCornerRadius="8dp"
                 app:cardBackgroundColor="@color/palettebeige"
+                app:cardCornerRadius="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <!-- TextView that will be displayed if no recipes found -->
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/no_recipe_found"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -91,7 +78,7 @@
                     android:textAlignment="center"
                     android:textColor="@color/black"
                     android:textSize="20sp"
-                    android:visibility="visible" />
+                    android:visibility="gone"/>
             </com.google.android.material.card.MaterialCardView>
 
         </androidx.constraintlayout.motion.widget.MotionLayout>
