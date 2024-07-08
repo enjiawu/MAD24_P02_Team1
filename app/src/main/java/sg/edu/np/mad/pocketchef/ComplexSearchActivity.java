@@ -1,6 +1,10 @@
 package sg.edu.np.mad.pocketchef;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.Manifest;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -39,16 +43,19 @@ import java.io.InputStreamReader;
 import java.nio.MappedByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class ComplexSearchActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private static final String TAG = "CombinedSearchActivity";
+    private static final String TAG = "ComplexSearchActivity";
+    private static final int REQUEST_CODE_PERMISSIONS = 101;
     private DrawerLayout drawerLayout;
     private ImageView imageView;
     private MaterialTextView resultTextView;
@@ -167,13 +174,23 @@ public class ComplexSearchActivity extends AppCompatActivity implements Navigati
                 imageView.setImageBitmap(resizedBitmap);
                 classifyImage(resizedBitmap);
             } else {
-                openCamera();
+                if (checkAndRequestCameraPermissions()) {
+                    openCamera();
+                }
             }
         });
 
-        cardView_open_gallery.setOnClickListener(view -> openGallery());
+        cardView_open_gallery.setOnClickListener(view -> {
+            if (checkAndRequestGalleryPermissions()) {
+                openGallery();
+            }
+        });
 
-        cardView_start_recognition.setOnClickListener(v -> startSpeechRecognition());
+        cardView_start_recognition.setOnClickListener(v -> {
+            if (checkAndRequestVoicePermissions()) {
+                startSpeechRecognition();
+            }
+        });
 
         cardView_search_recipes.setOnClickListener(v -> navigateToSearchedQueryRecipes());
         // Set up navigation view
@@ -185,6 +202,44 @@ public class ComplexSearchActivity extends AppCompatActivity implements Navigati
         navigationView.setCheckedItem(nav_home);
     }
 
+    private boolean checkAndRequestCameraPermissions() {
+        List<String> listPermissionsNeeded = new ArrayList<>();
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.CAMERA);
+        }
+
+        if (!listPermissionsNeeded.isEmpty()) {
+            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[0]), REQUEST_CODE_PERMISSIONS);
+            return false;
+        }
+        return true;
+    }
+
+    private boolean checkAndRequestGalleryPermissions() {
+        List<String> listPermissionsNeeded = new ArrayList<>();
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+        }
+
+        if (!listPermissionsNeeded.isEmpty()) {
+            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[0]), REQUEST_CODE_PERMISSIONS);
+            return false;
+        }
+        return true;
+    }
+
+    private boolean checkAndRequestVoicePermissions() {
+        List<String> listPermissionsNeeded = new ArrayList<>();
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.RECORD_AUDIO);
+        }
+
+        if (!listPermissionsNeeded.isEmpty()) {
+            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[0]), REQUEST_CODE_PERMISSIONS);
+            return false;
+        }
+        return true;
+    }
 
     private void openCamera() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -210,14 +265,24 @@ public class ComplexSearchActivity extends AppCompatActivity implements Navigati
     }
 
     private void filterFoodRelatedWords(String recognizedText) {
-        String lowerCaseRecognizedText = recognizedText.toLowerCase(Locale.ROOT);
-        for (String keyword : foodKeywords) {
-            if (lowerCaseRecognizedText.contains(keyword.toLowerCase(Locale.ROOT))) {
-                resultTextView.setText(keyword);
-                isClassifiedLabelUpdated = false; // Recognized text was updated last
-                return;
+        String[] words = recognizedText.split("\\s+");
+        List<String> filteredWords = new ArrayList<>();
+        for (String word : words) {
+            if (foodKeywords.contains(word.toLowerCase())) {
+                filteredWords.add(word);
             }
         }
+        String filteredResult = String.join(" ", filteredWords);
+        updateUIWithFilteredResult(filteredResult);
+    }
+
+    private void updateUIWithFilteredResult(String filteredResult) {
+        runOnUiThread(() -> {
+            resultTextView.setText(filteredResult);
+            if (!filteredResult.isEmpty()) {
+                isClassifiedLabelUpdated = false;
+            }
+        });
     }
 
     private void loadModelAndLabels() {
@@ -234,6 +299,7 @@ public class ComplexSearchActivity extends AppCompatActivity implements Navigati
 
     private void classifyImage(Bitmap bitmap) {
         executorService.execute(() -> {
+            String resultMessage;
             try {
                 TensorImage tensorImage = new TensorImage();
                 tensorImage.load(bitmap);
@@ -247,15 +313,22 @@ public class ComplexSearchActivity extends AppCompatActivity implements Navigati
                 classifiedLabel = labels.get(maxIndex);
                 float confidenceValue = outputArray[maxIndex];
                 float confidenceLevel = (confidenceValue / 255) * 100;
-                String result = String.format("This is probably a %s : %.2f%% confidence level", classifiedLabel, confidenceLevel);
-
-                runOnUiThread(() -> {
-                    resultTextView.setText(result);
-                    isClassifiedLabelUpdated = true; // Classified label was updated last
-                });
+                resultMessage = String.format("This is probably a %s : %.2f%% confidence level", classifiedLabel, confidenceLevel);
             } catch (Exception e) {
                 Log.e(TAG, "Error during image classification", e);
-                runOnUiThread(() -> resultTextView.setText("Error classifying image"));
+                resultMessage = "Error classifying image";
+            }
+
+            // Update UI with the classification result
+            updateUIWithClassificationResult(resultMessage);
+        });
+    }
+
+    private void updateUIWithClassificationResult(String resultMessage) {
+        runOnUiThread(() -> {
+            resultTextView.setText(resultMessage);
+            if (!resultMessage.startsWith("Error")) {
+                isClassifiedLabelUpdated = true; // Assuming the classification was successful
             }
         });
     }
@@ -277,9 +350,7 @@ public class ComplexSearchActivity extends AppCompatActivity implements Navigati
     }
 
     private Bitmap resizeBitmap(Bitmap bitmap) {
-        int newWidth = 224;
-        int newHeight = 224;
-        return Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true);
+        return Bitmap.createScaledBitmap(bitmap, 224, 224, true);
     }
 
     private Set<String> loadFoodKeywords() {
@@ -373,5 +444,31 @@ public class ComplexSearchActivity extends AppCompatActivity implements Navigati
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
         super.onPointerCaptureChanged(hasCapture);
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CODE_PERMISSIONS) {
+            Map<String, Integer> perms = new HashMap<>();
+            perms.put(Manifest.permission.CAMERA, PackageManager.PERMISSION_GRANTED);
+            perms.put(Manifest.permission.READ_EXTERNAL_STORAGE, PackageManager.PERMISSION_GRANTED);
+            perms.put(Manifest.permission.RECORD_AUDIO, PackageManager.PERMISSION_GRANTED);
+
+            for (int i = 0; i < permissions.length; i++) {
+                perms.put(permissions[i], grantResults[i]);
+            }
+
+            boolean allPermissionsGranted = true;
+            for (int value : perms.values()) {
+                if (value != PackageManager.PERMISSION_GRANTED) {
+                    allPermissionsGranted = false;
+                    break;
+                }
+            }
+
+            if (!allPermissionsGranted) {
+                Log.e(TAG, "Some permissions are not granted!");
+            }
+        }
     }
 }
