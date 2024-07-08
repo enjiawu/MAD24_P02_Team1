@@ -9,6 +9,7 @@ import android.provider.MediaStore;
 import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -16,11 +17,11 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -57,6 +58,9 @@ public class ComplexSearchActivity extends AppCompatActivity implements Navigati
     private boolean isClassifiedLabelUpdated = false; // Flag to track which data was updated last
     private String classifiedLabel;
     private Set<String> foodKeywords;
+
+    CardView  cardView_open_camera, cardView_open_gallery, cardView_start_recognition, cardView_search_recipes;
+    FrameLayout frameLayout_image_camera, frameLayout_image_gallery, frameLayout_image_voice, frameLayout_image_recipes;
     NavigationView navigationView;
     MaterialToolbar toolbar;
     MenuItem nav_home, nav_recipes, nav_search, nav_logout, nav_profile, nav_favourites, nav_community, nav_pantry, nav_complex_search;
@@ -118,11 +122,8 @@ public class ComplexSearchActivity extends AppCompatActivity implements Navigati
         // Initialize views
         imageView = findViewById(R.id.imageView);
         resultTextView = findViewById(R.id.resultTextView);
-        MaterialButton galleryButton = findViewById(R.id.galleryButton);
-        MaterialButton cameraButton = findViewById(R.id.cameraButton);
-        MaterialButton buttonStartRecognition = findViewById(R.id.button_start_recognition);
-        MaterialButton buttonSearchRecipes = findViewById(R.id.button_search_recipes);
 
+        // Intialise drawable menu
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         toolbar = findViewById(R.id.toolbar);
@@ -136,6 +137,18 @@ public class ComplexSearchActivity extends AppCompatActivity implements Navigati
         nav_community = navigationView.getMenu().findItem(R.id.nav_community);
         nav_complex_search = navigationView.getMenu().findItem(R.id.nav_complex_search);
 
+        // Intialise cardViews
+        cardView_open_camera = findViewById(R.id.cardView_open_camera);
+        cardView_open_gallery = findViewById(R.id.cardView_open_gallery);
+        cardView_start_recognition = findViewById(R.id.cardView_start_recognition);
+        cardView_search_recipes = findViewById(R.id.cardView_search_recipes);
+
+        // Intialise frameLayout
+        frameLayout_image_camera = findViewById(R.id.frameLayout_image_camera);
+        frameLayout_image_gallery = findViewById(R.id.frameLayout_image_gallery);
+        frameLayout_image_voice = findViewById(R.id.frameLayout_image_voice);
+        frameLayout_image_recipes = findViewById(R.id.frameLayout_image_recipes);
+
         // Create executor service for background tasks
         executorService = Executors.newFixedThreadPool(2);
 
@@ -146,7 +159,7 @@ public class ComplexSearchActivity extends AppCompatActivity implements Navigati
         foodKeywords = loadFoodKeywords();
 
         // Set click listeners for search, camera, gallery, and voice recognition buttons
-        cameraButton.setOnClickListener(view -> {
+        cardView_open_camera.setOnClickListener(view -> {
             if (isEmulator()) {
                 // Use a predefined image for testing on emulator
                 Bitmap imageBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.test);
@@ -158,11 +171,11 @@ public class ComplexSearchActivity extends AppCompatActivity implements Navigati
             }
         });
 
-        galleryButton.setOnClickListener(view -> openGallery());
+        cardView_open_gallery.setOnClickListener(view -> openGallery());
 
-        buttonStartRecognition.setOnClickListener(v -> startSpeechRecognition());
+        cardView_start_recognition.setOnClickListener(v -> startSpeechRecognition());
 
-        buttonSearchRecipes.setOnClickListener(v -> navigateToAnotherActivity());
+        cardView_search_recipes.setOnClickListener(v -> navigateToSearchedQueryRecipes());
         // Set up navigation view
         navigationView.bringToFront();
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -287,7 +300,7 @@ public class ComplexSearchActivity extends AppCompatActivity implements Navigati
         return keywords;
     }
 
-    private void navigateToAnotherActivity() {
+    private void navigateToSearchedQueryRecipes() {
         Intent intent = new Intent(ComplexSearchActivity.this, SearchedQueryRecipesOutput.class);
         String searchQuery;
 
