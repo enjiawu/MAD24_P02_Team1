@@ -2,6 +2,7 @@ package sg.edu.np.mad.pocketchef;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -41,6 +42,7 @@ import java.util.List;
 import sg.edu.np.mad.pocketchef.Adapters.CommunityAdapter;
 import sg.edu.np.mad.pocketchef.Adapters.SearchedRecipesAdapter;
 import sg.edu.np.mad.pocketchef.Listener.PostClickListener;
+import sg.edu.np.mad.pocketchef.Models.Comment;
 import sg.edu.np.mad.pocketchef.Models.Post;
 import sg.edu.np.mad.pocketchef.Models.SearchedRecipeApiResponse;
 
@@ -112,6 +114,7 @@ public class CommunityActivity extends AppCompatActivity implements NavigationVi
     public void setupListeners() {
         // Check if add post button has been clicked
         addPostButton.setOnClickListener(v -> {
+            Log.d("Community", "Working");
             // Go to add post activity
             Intent intent = new Intent(CommunityActivity.this, AddPostActivity.class);
             finish();
@@ -132,18 +135,15 @@ public class CommunityActivity extends AppCompatActivity implements NavigationVi
                     posts.add(post);
                 }
 
-                Post post1 = {};
-
-                // Create an instance of the adapter
+                // Set the adapter to the RecyclerView
+                RecyclerView recyclerView = findViewById(R.id.post_recycler_view);
+                recyclerView.setLayoutManager(new LinearLayoutManager(CommunityActivity.this));
                 CommunityAdapter adapter = new CommunityAdapter(CommunityActivity.this, posts, new PostClickListener() {
                     @Override
                     public void onPostClicked(String postKey) {
                         // Handle post click here
                     }
                 });
-
-                // Set the adapter to the RecyclerView
-                RecyclerView recyclerView = findViewById(R.id.post_recycler_view);
                 recyclerView.setAdapter(adapter);
 
                 // Making the progress bar disappear after posts get loaded
@@ -155,8 +155,6 @@ public class CommunityActivity extends AppCompatActivity implements NavigationVi
             }
         });
     }
-
-
 
     // For the menu
     @Override

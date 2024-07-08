@@ -2,29 +2,22 @@ package sg.edu.np.mad.pocketchef.Models;
 
 import com.google.firebase.database.ServerValue;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class Post {
-    private String postKey;
-    private String title;
-    private String recipeImage;
-    private float protein;
-    private float fat;
-    private float calories;
-    private float servings;
-    private float prepTime;
-    private float costPerServing;
-    private List<String> instructions;
-    private List<String> ingredients;
-    private List<String> equipment;
-    private String userId;
-    private String username;
-    private String userPhoto;
+    private String postKey, title, recipeImage, username, userId, profilePicture;
+    private float protein, fat, calories, servings, prepTime, costPerServing;
+    private List<String> instructions, ingredients, equipment, likesUsers;
     private Object timeStamp;
     private List<Comment> comments;
     private int likes;
 
-    public Post(String title, String recipeImage, float protein, float fat, float calories, float servings, float prepTime, float costPerServing, List<String> instructions, List<String> ingredients, List<String> equipment, String userId, String username, String userPhoto, List<Comment> comments, int likes) {
+    public Post(String title, String recipeImage, float protein, float fat, float calories, float servings, float prepTime, float costPerServing, List<String> instructions, List<String> ingredients, List<String> equipment, String username, List<Comment> comments, String userId, String profilePicture) {
         this.title = title;
         this.recipeImage = recipeImage;
         this.protein = protein;
@@ -36,12 +29,13 @@ public class Post {
         this.instructions = instructions;
         this.ingredients = ingredients;
         this.equipment = equipment;
-        this.userId = userId;
         this.username = username;
-        this.userPhoto = userPhoto;
         this.timeStamp = ServerValue.TIMESTAMP;
         this.comments = comments;
         this.likes = 0;
+        this.likesUsers = new ArrayList<>();
+        this.userId = userId;
+        this.profilePicture = profilePicture;
     }
 
     public Post() {
@@ -143,28 +137,12 @@ public class Post {
         this.equipment = equipment;
     }
 
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
     public String getUsername() {
         return username;
     }
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getUserPhoto() {
-        return userPhoto;
-    }
-
-    public void setUserPhoto(String userPhoto) {
-        this.userPhoto = userPhoto;
     }
 
     public Object getTimeStamp() {
@@ -189,5 +167,37 @@ public class Post {
 
     public void setLikes(int likes) {
         this.likes = likes;
+    }
+
+    public List<String> getLikesUsers() {
+        return likesUsers;
+    }
+
+    public void setLikesUsers(List<String> likesUsers) {
+        this.likesUsers = likesUsers;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
+    }
+
+    // To format date for posts
+    public String formatDate() {
+        long timeStampSeconds = (Long) timeStamp / 1000; // Convert milliseconds to seconds
+        Date date = new Date(timeStampSeconds * 1000); // Create Date object
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        return dateFormat.format(date);
     }
 }

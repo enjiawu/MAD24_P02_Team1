@@ -80,6 +80,9 @@
             android:name=".SearchedQueryRecipesOutput"
             android:exported="true" />
         <activity
+            android:name=".ComplexSearchActivity"
+            android:exported="false" />
+        <activity
             android:name=".LoginActivity"
             android:exported="true"
             android:theme="@style/Theme.StartApp">

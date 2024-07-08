@@ -5,14 +5,12 @@ public class Comment {
     private String comment;
     private String userId;
     private String username;
-    private String userProfilePicture;
 
     public Comment(String commentId, String comment, String userId, String username, String userProfilePicture) {
         this.commentId = commentId;
         this.comment = comment;
         this.userId = userId;
         this.username = username;
-        this.userProfilePicture = userProfilePicture;
     }
 
     public Comment() {
@@ -48,13 +46,5 @@ public class Comment {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getUserProfilePicture() {
-        return userProfilePicture;
-    }
-
-    public void setUserProfilePicture(String userProfilePicture) {
-        this.userProfilePicture = userProfilePicture;
     }
 }

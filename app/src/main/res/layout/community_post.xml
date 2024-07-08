@@ -32,9 +32,9 @@
             android:layout_marginHorizontal="10dp">
 
             <ImageView
-                android:id="@+id/userProfilePicture"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:id="@+id/profile_picture"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_marginVertical="8dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/pocketchef_logo" />
@@ -88,6 +88,7 @@
                 android:orientation="vertical">
 
                 <ImageView
+                    android:id="@+id/likes_image"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/baseline_thumb_up_off_alt_24"/>

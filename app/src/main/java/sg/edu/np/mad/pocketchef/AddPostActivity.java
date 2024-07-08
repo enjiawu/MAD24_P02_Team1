@@ -1,5 +1,7 @@
 package sg.edu.np.mad.pocketchef;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -33,11 +35,15 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +62,7 @@ public class AddPostActivity extends AppCompatActivity {
     private List<TextInputLayout> inputBoxes, instructionsInputBoxes  = new ArrayList<>(), ingredientsInputBoxes  = new ArrayList<>(), equipmentInputBoxes = new ArrayList<>();
     private Uri imageUri;
     private ProgressBar progressBar;
+    private String currentUsername, currentUserId, currentProfilePictureUrl;
 
     // Database
     FirebaseAuth mAuth;
@@ -141,7 +148,6 @@ public class AddPostActivity extends AppCompatActivity {
         myRef = database.getReference("posts").push();
         // Get current user
         currentUser = mAuth.getCurrentUser();
-
         mUserRef = FirebaseDatabase.getInstance().getReference("users");
     }
 
@@ -466,62 +472,69 @@ public class AddPostActivity extends AppCompatActivity {
                             }
                         }
 
-                        // Get the user ID
-                        String userId = currentUser.getUid();
-                        String username = currentUser.getDisplayName();
-
-                        // Get the user's profile picture URL (if available)
-                        Uri userPhotoUrl = currentUser.getPhotoUrl();
-                        String userPhoto = (userPhotoUrl != null) ? userPhotoUrl.toString() : null;
-
-                        //Create post object
-                        Post post = new Post(
-                                recipeTitleInput.getText().toString().trim(),
-                                imageDownloadLink,
-                                Float.parseFloat(proteinInput.getText().toString().trim()),
-                                Float.parseFloat(fatInput.getText().toString().trim()),
-                                Float.parseFloat(caloriesInput.getText().toString().trim()),
-                                Float.parseFloat(servingsInput.getText().toString().trim()),
-                                Float.parseFloat(prepTimeInput.getText().toString().trim()),
-                                Float.parseFloat(costPerServingInput.getText().toString().trim()),
-                                instructions,
-                                ingredients,
-                                equipment,
-                                userId,
-                                username,
-                                userPhoto,
-                                new ArrayList<Comment>(),
-                                0
-                        );
-
-                        // Get post unique ID and update post key
-                        String key = myRef.getKey();
-                        post.setPostKey(key);
-
-                        // Add post data to firebase database
-                        myRef.setValue(post).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        mUserRef.child(currentUser.getUid()).addValueEventListener(new ValueEventListener() {
                             @Override
-                            public void onSuccess(Void unused) {
-                                Toast.makeText(AddPostActivity.this, "Post has been published", Toast.LENGTH_SHORT).show();
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if (snapshot.exists()) {
+                                    // Retrieve data safely
+                                    String username = snapshot.child("username").getValue(String.class);
+                                    String profilePictureUrl = snapshot.child("profile-picture").getValue(String.class);
+
+                                    // Get username and user id of the user who made the post
+                                    currentUsername = username;
+                                    currentUserId = currentUser.getUid();
+                                    currentProfilePictureUrl = profilePictureUrl;
+
+                                    // Create post object
+                                    Post post = new Post(
+                                            recipeTitleInput.getText().toString().trim(),
+                                            imageDownloadLink,
+                                            Float.parseFloat(proteinInput.getText().toString().trim()),
+                                            Float.parseFloat(fatInput.getText().toString().trim()),
+                                            Float.parseFloat(caloriesInput.getText().toString().trim()),
+                                            Float.parseFloat(servingsInput.getText().toString().trim()),
+                                            Float.parseFloat(prepTimeInput.getText().toString().trim()),
+                                            Float.parseFloat(costPerServingInput.getText().toString().trim()),
+                                            instructions,
+                                            ingredients,
+                                            equipment,
+                                            currentUsername,
+                                            new ArrayList<Comment>(),
+                                            currentUserId,
+                                            currentProfilePictureUrl
+                                    );
+
+                                    // Add post data to firebase database
+                                    myRef.setValue(post).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void unused) {
+                                            Toast.makeText(AddPostActivity.this, "Post has been published", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+
+                                    progressBar.setVisibility(View.GONE);
+
+                                    new Handler().postDelayed(new Runnable() { // Delay by 2 seconds so they can see the message
+                                        @Override
+                                        public void run() {
+                                            // Go to community activity and see new post
+                                            Intent intent = new Intent(AddPostActivity.this, CommunityActivity.class);
+                                            finish();
+                                            startActivity(intent);
+                                        }
+                                    }, 1000); // 2000 milliseconds = 2 seconds
+                                } else {
+                                    Log.w(TAG, "DataSnapshot does not exist");
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                Log.e(TAG, "DatabaseError: " + error.getMessage()); // Handle database error
                             }
                         });
 
-                        progressBar.setVisibility(View.GONE);
 
-                        new Handler().postDelayed(new Runnable() { // Delay by 2 seconds so they can see the message
-                            @Override
-                            public void run() {
-                                // Go to community activity and see new post
-                                Intent intent = new Intent(AddPostActivity.this, CommunityActivity.class);
-                                finish();
-                                startActivity(intent);
-                            }
-                        }, 2000); // 2000 milliseconds = 2 seconds
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d("Database", "Error with database");
                     }
                 });
             }
