@@ -184,4 +184,8 @@
     <string name="cardView_4_text">Profile\n</string>
     <string name="cardView3_text">Favourites</string>
     <string name="cardView4_text">Pantry</string>
+    <string name="list_random_recipe_imageView_food_contentdesc">Food Image</string>
+    <string name="textView_upvote_text">1 Upvote</string>
+    <string name="textView_time_text">2 hours\n</string>
+    <string name="textView_no_image_available">No Image Available</string>
 </resources>

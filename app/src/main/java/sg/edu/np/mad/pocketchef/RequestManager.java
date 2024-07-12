@@ -138,7 +138,8 @@ public class RequestManager {
                 diet,
                 intolerances,
                 sort,
-                sortDirection
+                sortDirection,
+                true
         );
         call.enqueue(new Callback<SearchedRecipeApiResponse>() {
             @Override
@@ -242,7 +243,8 @@ public class RequestManager {
                 @Query("diet") String diet,
                 @Query("intolerances") String intolerances,
                 @Query("sort") String sort,
-                @Query("sortDirection") String sortDirection
+                @Query("sortDirection") String sortDirection,
+                @Query("addRecipeNutrition") boolean addRecipeNutrition
         );
     }
 

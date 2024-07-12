@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    android:background="@color/white"
+    android:background="@drawable/card_background"
     android:elevation="8dp">
 
     <LinearLayout
@@ -12,12 +12,16 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <!-- Recipe Title -->
         <TextView
             android:id="@+id/textView_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ellipsize="marquee"
+            android:ellipsize="end"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:marqueeRepeatLimit="marquee_forever"
+            android:maxLines="2"
             android:padding="8dp"
             android:scrollHorizontally="true"
             android:singleLine="true"
@@ -26,20 +30,29 @@
             android:textSize="24sp"
             android:textStyle="bold" />
 
-        <ImageView
-            android:id="@+id/imageView_food"
+        <!-- Food Image -->
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:layout_marginVertical="8dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/pocketchef_logo" />
+            android:layout_marginVertical="8dp">
 
+            <ImageView
+                android:id="@+id/imageView_food"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/list_random_recipe_imageView_food_contentdesc"
+                android:scaleType="centerCrop"
+                android:src="@drawable/pocketchef_logo" />
+        </FrameLayout>
+
+        <!-- Nutrition Information -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:baselineAligned="false"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="8dp">
 
+            <!-- Calories -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -51,9 +64,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/calories"
-                    android:textStyle="bold"
                     android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/textView_calories"
@@ -65,6 +78,7 @@
                     android:textSize="14sp" />
             </LinearLayout>
 
+            <!-- Protein -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -76,21 +90,21 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/protein"
-                    android:textStyle="bold"
                     android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/textView_protein"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:padding="4dp"
                     android:text="@string/textView_servings_text"
                     android:textColor="@color/black"
-                    android:textSize="14sp"
-                    android:padding="4dp"/>
-
+                    android:textSize="14sp" />
             </LinearLayout>
 
+            <!-- Carbs -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -102,9 +116,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/carbs"
-                    android:textStyle="bold"
                     android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/textView_carbs"

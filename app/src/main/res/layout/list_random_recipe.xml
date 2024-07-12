@@ -1,12 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/random_list_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    android:background="@color/white"
-    android:elevation="8dp">
+    android:background="@drawable/card_background"
+    android:elevation="4dp"
+    android:radius="16dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,6 +17,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:marqueeRepeatLimit="marquee_forever"
             android:padding="8dp"
             android:scrollHorizontally="true"
@@ -27,18 +28,44 @@
             android:textSize="24sp"
             android:textStyle="bold" />
 
-        <ImageView
-            android:id="@+id/imageView_food"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginVertical="8dp"
-            android:scaleType="centerCrop" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp">
+
+            <ImageView
+                android:id="@+id/imageView_food"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:contentDescription="@string/list_random_recipe_imageView_food_contentdesc"
+                android:scaleType="centerCrop"
+                android:src="@drawable/pocketchef_logo" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/textView_no_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@color/paletteorange"
+                    android:text="@string/textView_no_image_available"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:visibility="gone"/>
+            </com.google.android.material.card.MaterialCardView>
+        </FrameLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:baselineAligned="false"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="8dp">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -78,11 +105,10 @@
                     android:id="@+id/textView_upvote"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/textView_servings_text"
+                    android:padding="4dp"
+                    android:text="@string/textView_upvote_text"
                     android:textColor="@color/black"
-                    android:textSize="14sp"
-                    android:padding="4dp"/>
-
+                    android:textSize="14sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -102,7 +128,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="4dp"
-                    android:text="@string/textView_servings_text"
+                    android:text="@string/textView_time_text"
                     android:textColor="@color/black"
                     android:textSize="14sp" />
             </LinearLayout>
