@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
         android:allowBackup="true"
@@ -21,7 +21,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.pocketchef"
-        tools:targetApi="33" >
+        tools:targetApi="33">
         <activity
             android:name=".PostDetailsActivity"
             android:exported="false" />
@@ -39,13 +39,7 @@
             android:exported="false" />
         <activity
             android:name=".CommunityActivity"
-            android:exported="true" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:exported="false"/>
         <activity
             android:name=".CreateCategoryActivity"
             android:exported="false" />
@@ -71,13 +65,10 @@
             android:name=".MainActivity"
             android:exported="true" />
         <activity
-            android:name=".ImageSearchActivity"
-            android:exported="true" />
-        <activity
-            android:name=".VoiceSearchActivity"
-            android:exported="true" />
-        <activity
             android:name=".SearchedQueryRecipesOutput"
+            android:exported="true" />
+        <activity
+            android:name=".ComplexSearchActivity"
             android:exported="true" />
         <activity
             android:name=".ComplexSearchActivity"

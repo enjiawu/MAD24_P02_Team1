@@ -1,19 +1,22 @@
 package sg.edu.np.mad.pocketchef;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -22,8 +25,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.gson.Gson;
 
+import sg.edu.np.mad.pocketchef.Adapters.RandomRecipeAdapter;
 import sg.edu.np.mad.pocketchef.Adapters.SearchedRecipesAdapter;
 import sg.edu.np.mad.pocketchef.Listener.RecipeClickListener;
 import sg.edu.np.mad.pocketchef.Listener.SearchRecipeQueryListener;
@@ -35,13 +41,15 @@ public class SearchedQueryRecipesOutput extends AppCompatActivity implements Nav
     private static final int SCROLL_THRESHOLD = 2;
 
     RequestManager requestManager;
-    RecyclerView recyclerView;
+    RecyclerView recyclerView_query_recipes;
     ProgressBar progressBar;
     String searchQuery;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     MaterialToolbar toolbar;
     MenuItem nav_home, nav_recipes, nav_search, nav_logout, nav_profile, nav_favourites, nav_community, nav_pantry, nav_complex_search;
+    MaterialCardView cardView_no_recipe_found;
+    MaterialTextView textView_no_recipe_found;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +59,6 @@ public class SearchedQueryRecipesOutput extends AppCompatActivity implements Nav
 
         // Initialise views and listener
         setupViews();
-        setupListeners();
 
         requestManager = new RequestManager(this);
 
@@ -66,11 +73,13 @@ public class SearchedQueryRecipesOutput extends AppCompatActivity implements Nav
     }
 
     private void setupViews() {
-        recyclerView = findViewById(R.id.recycler_query_recipes);
+        recyclerView_query_recipes = findViewById(R.id.recycler_query_recipes);
         progressBar = findViewById(R.id.progressBar);
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         toolbar = findViewById(R.id.toolbar);
+        cardView_no_recipe_found = findViewById(R.id.cardView_no_recipe_found);
+        textView_no_recipe_found = findViewById(R.id.no_recipe_found);
 
         // Set up menu items
         nav_home = navigationView.getMenu().findItem(R.id.nav_home);
@@ -92,55 +101,6 @@ public class SearchedQueryRecipesOutput extends AppCompatActivity implements Nav
         navigationView.setNavigationItemSelectedListener(this);
     }
 
-    private void setupListeners() {
-        if (recyclerView != null) {
-            recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                @Override
-                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                    super.onScrolled(recyclerView, dx, dy);
-                    if (dy > 0 && hasScrolledEnough()) { // Scrolling downwards
-                        transitionMotionLayoutToEnd();
-                    } else if (dy < 0 && shouldTransitionToStart()) { // Scrolling upwards
-                        transitionMotionLayoutToStart();
-                    }
-                }
-            });
-        }
-    }
-
-    // Methods for scrolling function, transition motion layout
-    private boolean hasScrolledEnough() {
-        LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-        if (layoutManager != null && recyclerView.getAdapter() != null) {
-            int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
-            return lastVisibleItemPosition >= SCROLL_THRESHOLD;
-        }
-        return false;
-    }
-
-    private boolean shouldTransitionToStart() {
-        LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-        if (layoutManager != null) {
-            int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
-            return firstVisibleItemPosition <= SCROLL_THRESHOLD;
-        }
-        return false;
-    }
-
-    private void transitionMotionLayoutToEnd() {
-        MotionLayout motionLayout = findViewById(R.id.main);
-        if (motionLayout != null) {
-            motionLayout.transitionToEnd();
-        }
-    }
-
-    private void transitionMotionLayoutToStart() {
-        MotionLayout motionLayout = findViewById(R.id.main);
-        if (motionLayout != null) {
-            motionLayout.transitionToStart();
-        }
-    }
-
     // Method to fetch recipes based on the search query
     private void fetchRecipes(String query) {
         // Show a Snackbar message indicating that search is in progress
@@ -150,7 +110,8 @@ public class SearchedQueryRecipesOutput extends AppCompatActivity implements Nav
             @Override
             public void didFetch(SearchedRecipeQueryApiResponse response, String message) {
                 progressBar.setVisibility(View.GONE);
-                setupRecipeRecyclerView(response);
+                Log.d(TAG, "API Response: " + response.toString());
+                setupSearchedQueryRecipeRecyclerView(response);
             }
 
             @Override
@@ -162,15 +123,30 @@ public class SearchedQueryRecipesOutput extends AppCompatActivity implements Nav
         }, query); // Passing only the query parameter
     }
 
-    private void setupRecipeRecyclerView(SearchedRecipeQueryApiResponse response) {
-        if (recyclerView != null) {
-            recyclerView.setHasFixedSize(true);
-            recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
+    //Setting up recycler view to show searched recipes
+    private void setupSearchedQueryRecipeRecyclerView(SearchedRecipeQueryApiResponse response) {
+        recyclerView_query_recipes.setHasFixedSize(true);
 
-            SearchedRecipesAdapter searchedRecipesAdapter = new SearchedRecipesAdapter(this,
-                    response.getRecipes(), recipeClickListener);
+        if (response != null && response.getRecipes() != null) {
+            recyclerView_query_recipes.setLayoutManager(new GridLayoutManager(SearchedQueryRecipesOutput.this, 1));
+            SearchedRecipesAdapter searchedQueryRecipesAdapter = new SearchedRecipesAdapter(SearchedQueryRecipesOutput.this, response.getRecipes(), recipeClickListener);
+            recyclerView_query_recipes.setAdapter(searchedQueryRecipesAdapter);
+            // Log the JSON object
+            Log.d(TAG, "Response JSON: " + new Gson().toJson(response));
+            if (searchedQueryRecipesAdapter.getItemCount() == 0) {
+                textView_no_recipe_found.setVisibility(View.VISIBLE);
+                cardView_no_recipe_found.setVisibility(View.GONE);
+            } else {
+                textView_no_recipe_found.setVisibility(View.GONE);
+                cardView_no_recipe_found.setVisibility(View.GONE);
+            }
 
-            recyclerView.setAdapter(searchedRecipesAdapter);
+            progressBar.setVisibility(View.GONE);
+        } else {
+            Log.d(TAG, "Response or recipes are null");
+            textView_no_recipe_found.setVisibility(View.VISIBLE);
+            cardView_no_recipe_found.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
         }
     }
 
