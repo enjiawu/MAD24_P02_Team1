@@ -32,6 +32,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -72,7 +73,8 @@ public class ComplexSearchActivity extends AppCompatActivity implements Navigati
     private Interpreter tflite;
     private List<String> labels;
     private ExecutorService executorService;
-    private boolean isClassifiedLabelUpdated = false; // Flag to track which data was updated last
+    private boolean isClassifiedLabelUpdated = false;
+    private boolean isRecognizedTextUpdated = false;
     private String classifiedLabel;
     private Set<String> foodKeywords;
 
@@ -371,11 +373,14 @@ public class ComplexSearchActivity extends AppCompatActivity implements Navigati
     // Function to update UI with filtered result
     private void updateUIWithFilteredResult(String filteredResult) {
         runOnUiThread(() -> {
-            resultTextView.setText(filteredResult);
-            resultTextView.setVisibility(View.VISIBLE);
-            if (!filteredResult.isEmpty()) {
-                isClassifiedLabelUpdated = false;
+            String displayMessage = filteredResult;
+            if (displayMessage == null || displayMessage.trim().isEmpty()) {
+                displayMessage = "Please try another image or voice search";
+            } else {
+                isClassifiedLabelUpdated = true;
             }
+            resultTextView.setText(displayMessage);
+            resultTextView.setVisibility(View.VISIBLE);
         });
     }
 
@@ -402,6 +407,7 @@ public class ComplexSearchActivity extends AppCompatActivity implements Navigati
         // Execute the classification process in a background thread
         executorService.execute(() -> {
             String resultMessage;
+            boolean showSnackbar = false;
             try {
                 // Load the bitmap into a TensorImage object
                 TensorImage tensorImage = new TensorImage();
@@ -422,26 +428,39 @@ public class ComplexSearchActivity extends AppCompatActivity implements Navigati
                 float confidenceValue = outputArray[maxIndex];
                 // Convert confidence value to percentage, max confidence value is 255
                 float confidenceLevel = (confidenceValue / 255) * 100;
-                // Format the result message
-                resultMessage = String.format("This is probably a %s : %.2f%% confidence level", classifiedLabel, confidenceLevel);
+                // Check if confidence value is less than 5%
+                if (confidenceLevel < 5) {
+                    resultMessage = "TensorFlow model unable to classify image";
+                    showSnackbar = true;
+                } else {
+                    // Format the result message
+                    resultMessage = String.format("This is probably a %s : %.2f%% confidence level", classifiedLabel, confidenceLevel);
+                }
             } catch (Exception e) {
                 // Log error if issue classifying image
                 Log.e(TAG, "Error during image classification", e);
                 resultMessage = "Error classifying image";
+                showSnackbar = true;
             }
             // Update UI with the classification result
-            updateUIWithClassificationResult(resultMessage);
+            updateUIWithClassificationResult(resultMessage, showSnackbar);
         });
     }
 
     // Function to update UI with classification result
-    private void updateUIWithClassificationResult(String resultMessage) {
+    private void updateUIWithClassificationResult(String resultMessage, boolean showSnackbar) {
         runOnUiThread(() -> {
-            resultTextView.setText(resultMessage);
-            resultTextView.setVisibility(View.VISIBLE);
-            if (!resultMessage.startsWith("Error")) {
+            String displayMessage = resultMessage;
+            if (displayMessage == null || displayMessage.trim().isEmpty()) {
+                displayMessage = "Error classifying image";
+            }
+            if (showSnackbar) {
+                Snackbar.make(resultTextView, "Please try image classification again", Snackbar.LENGTH_LONG).show();
+            } else {
                 isClassifiedLabelUpdated = true;
             }
+            resultTextView.setText(displayMessage);
+            resultTextView.setVisibility(View.VISIBLE);
         });
     }
 
@@ -502,12 +521,11 @@ public class ComplexSearchActivity extends AppCompatActivity implements Navigati
     }
 
     private void navigateToSearchedQueryRecipes() {
-        String searchQuery;
-
+        String searchQuery = null;
         if (isClassifiedLabelUpdated) {
             // Classified label was updated last
             searchQuery = classifiedLabel;
-        } else {
+        } else if (isRecognizedTextUpdated) {
             // Recognized text was updated last
             searchQuery = resultTextView.getText().toString();
         }

@@ -19,6 +19,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,8 +27,10 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.gson.Gson;
 
 import sg.edu.np.mad.pocketchef.Adapters.RandomRecipeAdapter;
+import sg.edu.np.mad.pocketchef.Adapters.SearchedRecipesAdapter;
 import sg.edu.np.mad.pocketchef.Listener.RecipeClickListener;
 import sg.edu.np.mad.pocketchef.Listener.SearchRecipeQueryListener;
 import sg.edu.np.mad.pocketchef.Models.SearchedRecipeQueryApiResponse;
@@ -124,31 +127,25 @@ public class SearchedQueryRecipesOutput extends AppCompatActivity implements Nav
     private void setupSearchedQueryRecipeRecyclerView(SearchedRecipeQueryApiResponse response) {
         recyclerView_query_recipes.setHasFixedSize(true);
 
-        // Check if response object is not null and if it contains recipes
         if (response != null && response.getRecipes() != null) {
-            // Set the layout manager
-            recyclerView_query_recipes.setLayoutManager(new LinearLayoutManager(SearchedQueryRecipesOutput.this));
-
-            // Initialize adapter
-            RandomRecipeAdapter searchedQueryRecipesAdapter = new RandomRecipeAdapter(SearchedQueryRecipesOutput.this, response.getRecipes(), recipeClickListener);
-
-            // Attach adapter
+            recyclerView_query_recipes.setLayoutManager(new GridLayoutManager(SearchedQueryRecipesOutput.this, 1));
+            SearchedRecipesAdapter searchedQueryRecipesAdapter = new SearchedRecipesAdapter(SearchedQueryRecipesOutput.this, response.getRecipes(), recipeClickListener);
             recyclerView_query_recipes.setAdapter(searchedQueryRecipesAdapter);
-
-            // Check if there are no recipes found
+            // Log the JSON object
+            Log.d(TAG, "Response JSON: " + new Gson().toJson(response));
             if (searchedQueryRecipesAdapter.getItemCount() == 0) {
                 textView_no_recipe_found.setVisibility(View.VISIBLE);
+                cardView_no_recipe_found.setVisibility(View.GONE);
             } else {
-                cardView_no_recipe_found.setVisibility(View.GONE); // Hide "no recipes found" card
+                textView_no_recipe_found.setVisibility(View.GONE);
+                cardView_no_recipe_found.setVisibility(View.GONE);
             }
 
-            // Making the progress bar disappear after recipes get searchedcard
             progressBar.setVisibility(View.GONE);
-
         } else {
-            // Handle case where response or recipes are null
             Log.d(TAG, "Response or recipes are null");
-            textView_no_recipe_found.setVisibility(View.VISIBLE); // Show "no recipes found" message
+            textView_no_recipe_found.setVisibility(View.VISIBLE);
+            cardView_no_recipe_found.setVisibility(View.GONE);
             progressBar.setVisibility(View.GONE);
         }
     }
