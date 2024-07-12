@@ -88,6 +88,15 @@ Through our platform, users will gain access to tools and resources to plan meal
 - Create new activity SearchedRecipeQueryOutput - [X]
 - Obtain Recipes successfully from spoonacular api, prompting with query pasesed from intent, and adapt into recycler view - [X]
 - Implement onClickListener for recipes leading to RecipeDetailsActivity - [X]
+Optional:
+- Consolidate both activities into one activity - [X]
+- UI/UX improvements, such as button animation and transitions - []
+
+##### Menu Update to accomodate new features - Jin Rong []
+- Incorporate new buttons for new features in Main Menu and Drawable Menu - []
+- Revamp menu to utilise clickable cardViews instead of buttons for UI - []
+- Use constraintHeight and constraintWeight for mobile responsiveness - []
+- Add logo svgs for both menus - []
 
 #### Community page using SQLite with app notifications and recipe sharing to WhatsApp - Enjia - [ ]
 - Successfully implement Community Page User Interface - [ ]
