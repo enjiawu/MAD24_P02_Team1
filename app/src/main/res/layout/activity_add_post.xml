@@ -11,51 +11,55 @@
     tools:context=".CommunityActivity"
     tools:openDrawer="start">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/main"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clipToPadding="false"
-        android:background="@color/paletteorange"
-        app:layoutDescription="@xml/recipe_activity_scene">
+        android:layout_height="match_parent">
 
-        <!-- ImageView for Back Button to return to profile page -->
-        <LinearLayout
-            android:id="@+id/header"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:background="@color/paletteblue"
-            android:paddingBottom="40px"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:clipToPadding="false"
+            android:background="@color/paletteorange"
+            app:layoutDescription="@xml/recipe_activity_scene">
 
-            <ImageView
-                android:id="@+id/backIv"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="16dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/baseline_arrow_back_ios_24" />
-
-            <TextView
-                android:id="@+id/addPostTitle"
-                android:layout_width="wrap_content"
+            <!-- ImageView for Back Button to return to profile page -->
+            <LinearLayout
+                android:id="@+id/header"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
-                android:layout_marginLeft="10dp"
-                android:text="@string/add_post_title"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="@color/white"
+                android:orientation="horizontal"
+                android:background="@color/paletteblue"
+                android:paddingBottom="40px"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/addMoreIngredients" />
+                app:layout_constraintTop_toTopOf="parent">
 
-        </LinearLayout>
+                <ImageView
+                    android:id="@+id/backIv"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/baseline_arrow_back_ios_24" />
+
+                <TextView
+                    android:id="@+id/addPostTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    android:layout_marginLeft="10dp"
+                    android:text="@string/add_post_title"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/addMoreIngredients" />
+
+            </LinearLayout>
 
             <!-- Recipe Title -->
             <com.google.android.material.textfield.TextInputLayout
@@ -426,33 +430,44 @@
                 app:layout_constraintTop_toBottomOf="@+id/addEquipment"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
-        <ImageView
-            android:id="@+id/addRecipeImageIcon"
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="100dp"
-            android:layout_marginEnd="16dp"
-            app:srcCompat="@drawable/ic_picture_folder"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recipeTitleBox"/>
+            <ImageView
+                android:id="@+id/addRecipeImageIcon"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="100dp"
+                android:layout_marginEnd="16dp"
+                app:srcCompat="@drawable/ic_picture_folder"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/recipeTitleBox"/>
 
-        <TextView
-            android:id="@+id/addRecipeImageText"
-            android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/addRecipeImageText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/add_recipe_image"
+                android:textAlignment="center"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/addRecipeImageIcon" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:text="@string/add_recipe_image"
-            android:textAlignment="center"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addRecipeImageIcon" />
+            android:layout_gravity="center"
+            android:visibility="gone"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintVertical_bias="0.5" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
 </ScrollView>
 
 
