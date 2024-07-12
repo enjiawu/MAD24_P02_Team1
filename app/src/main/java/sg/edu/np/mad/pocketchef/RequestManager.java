@@ -162,7 +162,8 @@ public class RequestManager {
         CallSearchedRecipesQuery callSearchedRecipesQuery = retrofit.create(CallSearchedRecipesQuery.class);
         Call<SearchedRecipeQueryApiResponse> call = callSearchedRecipesQuery.callSearchedRecipesQuery(
                 context.getString(R.string.api_key),
-                query
+                query,
+                true
         );
         call.enqueue(new Callback<SearchedRecipeQueryApiResponse>() {
             @Override
@@ -249,7 +250,8 @@ public class RequestManager {
         @GET("recipes/complexSearch")
         Call<SearchedRecipeQueryApiResponse> callSearchedRecipesQuery(
                 @Query("apiKey") String apiKey,
-                @Query("query") String query
+                @Query("query") String query,
+                @Query("addRecipeNutrition") boolean addRecipeNutrition
         );
     }
 }

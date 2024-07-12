@@ -27,21 +27,28 @@
             app:titleTextColor="@android:color/white" />
 
         <!-- ImageView for Image -->
-        <ImageView
-            android:id="@+id/imageView"
+        <!-- ImageView inside CardView -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/imageCardView"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_centerHorizontal="true"
             android:layout_marginTop="16dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_launcher_foreground"
+            app:cardCornerRadius="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_default="percent"
             app:layout_constraintHeight_percent="0.4"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar"
             app:layout_constraintWidth_default="percent"
-            app:layout_constraintWidth_percent="1.0" />
+            app:layout_constraintWidth_percent="1.0">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_launcher_foreground" />
+        </com.google.android.material.card.MaterialCardView>
 
         <!-- Result TextView -->
         <com.google.android.material.card.MaterialCardView
@@ -52,7 +59,7 @@
             app:cardCornerRadius="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/imageView"
+            app:layout_constraintTop_toBottomOf="@id/imageCardView"
             app:layout_constraintWidth_default="percent"
             app:layout_constraintWidth_percent="0.75">
 
@@ -61,9 +68,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text=""
-                android:visibility="gone"
                 android:textAlignment="center"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:visibility="gone" />
 
         </com.google.android.material.card.MaterialCardView>
 
