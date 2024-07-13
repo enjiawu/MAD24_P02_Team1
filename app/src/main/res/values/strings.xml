@@ -154,7 +154,7 @@
     <string name="calories_info">Calories (kcal)</string>
     <string name="servings_info">No. of servings</string>
     <string name="prep_time">Prep Time (min)</string>
-    <string name="cost_per_serving">Cost per serving</string>
+    <string name="cost_per_serving">Cost per serving ($0.00)</string>
     <string name="instructions">Step-by-step instructions (in order)</string>
     <string name="ingredients">Ingredients</string>
     <string name="equipment">Equipment</string>
