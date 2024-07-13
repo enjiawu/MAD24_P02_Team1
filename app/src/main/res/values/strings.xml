@@ -122,10 +122,10 @@
     <string name="activity_recipe_details_ingredients_title">Ingredients</string>
     <string name="activity_recipe_details_similarrecipes_title">Similar Recipes</string>
     <string name="button_Nutrition_label_text">View Nutrition Info</string>
-    <string name="textView_calories_label_text">Calories:</string>
-    <string name="textView_daily_requirements_coverage_label_text">Daily Req:</string>
-    <string name="textView_fat_label_text">Fat:</string>
-    <string name="textView_protein_label_text">Protein:</string>
+    <string name="textView_calories_label_text">Calories</string>
+    <string name="textView_daily_requirements_coverage_label_text">Daily Req</string>
+    <string name="textView_fat_label_text">Fat</string>
+    <string name="textView_protein_label_text">Protein</string>
     <string name="cardView1_title_text">Recipes</string>
     <string name="cardView2_title_text">Advanced Search</string>
     <string name="btn_favourite_text">Add To Favourites</string>
@@ -186,6 +186,8 @@
     <string name="cardView4_text">Pantry</string>
     <string name="list_random_recipe_imageView_food_contentdesc">Food Image</string>
     <string name="textView_upvote_text">1 Upvote</string>
-    <string name="textView_time_text">2 hours\n</string>
+    <string name="textView_time_text">2 hours</string>
     <string name="textView_no_image_available">No Image Available</string>
+    <string name="textView_money_placeholder">x.xx</string>
+    <string name="textView_carbs_placeholder">100</string>
 </resources>

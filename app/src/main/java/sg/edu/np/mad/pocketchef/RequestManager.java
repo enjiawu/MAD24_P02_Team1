@@ -164,6 +164,7 @@ public class RequestManager {
         Call<SearchedRecipeQueryApiResponse> call = callSearchedRecipesQuery.callSearchedRecipesQuery(
                 context.getString(R.string.api_key),
                 query,
+                true,
                 true
         );
         call.enqueue(new Callback<SearchedRecipeQueryApiResponse>() {
@@ -253,7 +254,8 @@ public class RequestManager {
         Call<SearchedRecipeQueryApiResponse> callSearchedRecipesQuery(
                 @Query("apiKey") String apiKey,
                 @Query("query") String query,
-                @Query("addRecipeNutrition") boolean addRecipeNutrition
+                @Query("addRecipeNutrition") boolean addRecipeNutrition,
+                @Query("addRecipeInformation") boolean addRecipeInformation
         );
     }
 }

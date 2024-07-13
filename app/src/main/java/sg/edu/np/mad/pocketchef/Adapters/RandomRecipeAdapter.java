@@ -19,8 +19,6 @@ import java.util.List;
 import sg.edu.np.mad.pocketchef.Listener.RecipeClickListener;
 import sg.edu.np.mad.pocketchef.Models.Recipe;
 import sg.edu.np.mad.pocketchef.R;
-
-
 public class RandomRecipeAdapter extends RecyclerView.Adapter<RandomRecipeViewHolder> {
 
     private final Context context;
