@@ -30,6 +30,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 
 import sg.edu.np.mad.pocketchef.Adapters.RandomRecipeAdapter;
+import sg.edu.np.mad.pocketchef.Adapters.SearchedQueryRecipesAdapter;
 import sg.edu.np.mad.pocketchef.Adapters.SearchedRecipesAdapter;
 import sg.edu.np.mad.pocketchef.Listener.RecipeClickListener;
 import sg.edu.np.mad.pocketchef.Listener.SearchRecipeQueryListener;
@@ -129,7 +130,7 @@ public class SearchedQueryRecipesOutput extends AppCompatActivity implements Nav
 
         if (response != null && response.getRecipes() != null) {
             recyclerView_query_recipes.setLayoutManager(new GridLayoutManager(SearchedQueryRecipesOutput.this, 1));
-            SearchedRecipesAdapter searchedQueryRecipesAdapter = new SearchedRecipesAdapter(SearchedQueryRecipesOutput.this, response.getRecipes(), recipeClickListener);
+            SearchedQueryRecipesAdapter searchedQueryRecipesAdapter = new SearchedQueryRecipesAdapter(SearchedQueryRecipesOutput.this, response.getRecipes(), recipeClickListener);
             recyclerView_query_recipes.setAdapter(searchedQueryRecipesAdapter);
             // Log the JSON object
             Log.d(TAG, "Response JSON: " + new Gson().toJson(response));
