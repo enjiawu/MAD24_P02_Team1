@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sg.edu.np.mad.pocketchef.Listener.PostClickListener;
+import sg.edu.np.mad.pocketchef.Listener.PostLikeClickListener;
 import sg.edu.np.mad.pocketchef.Models.Post;
 import sg.edu.np.mad.pocketchef.Models.SearchedRecipe;
 import sg.edu.np.mad.pocketchef.R;
@@ -38,13 +39,15 @@ import sg.edu.np.mad.pocketchef.R;
 public class CommunityAdapter extends RecyclerView.Adapter<CommunityViewHolder>{
     Context context;
     List<Post> posts; // List to store posts
-    PostClickListener listener; //Listener for when they click on the post
+    PostClickListener postListener; //Listener for when they click on the post
+    PostLikeClickListener likesListener;
     private DatabaseReference postRef;
 
-    public CommunityAdapter(Context context, List<Post> posts, PostClickListener listener) {
+    public CommunityAdapter(Context context, List<Post> posts, PostClickListener postListener, PostLikeClickListener likesListener) {
         this.context = context;
         this.posts = posts;
-        this.listener = listener;
+        this.postListener = postListener;
+        this.likesListener = likesListener;
     }
 
     @NonNull
@@ -86,124 +89,28 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityViewHolder>{
         holder.post_container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onPostClicked(String.valueOf(posts.get(holder.getAdapterPosition()).getPostKey()));
+                postListener.onPostClicked(String.valueOf(posts.get(holder.getAdapterPosition()).getPostKey()));
             }
         });
-
-        // Check if user has already liked the post
-        boolean hasLiked = post.getLikesUsers() != null && post.getLikesUsers().contains(FirebaseAuth.getInstance().getCurrentUser().getUid());
-
-        // Set like button color and text
-        if (hasLiked) {
-            holder.likesImage.setImageResource(R.drawable.baseline_thumb_up_alt_24);
-        } else {
-            holder.likesImage.setImageResource(R.drawable.baseline_thumb_up_off_alt_24);
-        }
 
         holder.likesLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!hasLiked) {
-                    // Get the post's DatabaseReference
-                    DatabaseReference postsRef = FirebaseDatabase.getInstance().getReference("posts");
-                    postsRef.orderByChild("postKey").equalTo(post.getPostKey()).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            if (dataSnapshot.exists()) {
-                                DataSnapshot postSnapshot = dataSnapshot.getChildren().iterator().next();
-                                postRef = postSnapshot.getRef();
-                                postRef.runTransaction(new Transaction.Handler() {
-                                    @NonNull
-                                    @Override
-                                    public Transaction.Result doTransaction(@NonNull MutableData mutableData) {
-                                        Post post = mutableData.getValue(Post.class);
-                                        if (post == null) {
-                                            return Transaction.success(mutableData);
-                                        }
-                                        post.setLikes(post.getLikes() + 1);
-                                        if (post.getLikesUsers() == null) {
-                                            post.setLikesUsers(new ArrayList<>());
-                                        }
-                                        post.getLikesUsers().add(FirebaseAuth.getInstance().getCurrentUser().getUid());
-                                        mutableData.setValue(post);
-                                        return Transaction.success(mutableData);
-                                    }
-
-                                    @Override
-                                    public void onComplete(@Nullable DatabaseError databaseError, boolean b, @Nullable DataSnapshot dataSnapshot) {
-                                        if (databaseError!= null) {
-                                            Log.e(TAG, "Error updating likes count", databaseError.toException());
-                                        } else {
-                                            // Update like button color and text
-                                            holder.likesImage.setImageResource(R.drawable.baseline_thumb_up_alt_24);
-                                        }
-                                    }
-                                });
-                            } else {
-                                // Post not found
-                                Log.w(TAG, "Post not found");
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-                            Log.e(TAG, "Error finding post", databaseError.toException());
-                        }
-                    });
-                } else if (hasLiked){
-                    // Unlike functionality
-                    DatabaseReference postsRef = FirebaseDatabase.getInstance().getReference("posts");
-                    postsRef.orderByChild("postKey").equalTo(post.getPostKey()).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            if (dataSnapshot.exists()) {
-                                DataSnapshot postSnapshot = dataSnapshot.getChildren().iterator().next();
-                                postRef = postSnapshot.getRef();
-                                postRef.runTransaction(new Transaction.Handler() {
-                                    @NonNull
-                                    @Override
-                                    public Transaction.Result doTransaction(@NonNull MutableData mutableData) {
-                                        Post post = mutableData.getValue(Post.class);
-                                        if (post == null) {
-                                            return Transaction.success(mutableData);
-                                        }
-                                        post.setLikes(post.getLikes() - 1);
-                                        if (post.getLikesUsers() != null) {
-                                            post.getLikesUsers().remove(FirebaseAuth.getInstance().getCurrentUser().getUid());
-                                        }
-                                        mutableData.setValue(post);
-                                        return Transaction.success(mutableData);
-                                    }
-
-                                    @Override
-                                    public void onComplete(@Nullable DatabaseError databaseError, boolean b, @Nullable DataSnapshot dataSnapshot) {
-                                        if (databaseError!= null) {
-                                            Log.e(TAG, "Error updating likes count", databaseError.toException());
-                                        } else {
-                                            // Update like button color and text
-                                            holder.likesImage.setImageResource(R.drawable.baseline_thumb_up_off_alt_24);
-                                        }
-                                    }
-                                });
-                            } else {
-                                // Post not found
-                                Log.w(TAG, "Post not found");
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-                            Log.e(TAG, "Error finding post", databaseError.toException());
-                        }
-                    });
-                }
+                likesListener.onLikeClicked(String.valueOf(posts.get(position).getPostKey()), position);
             }
         });
     }
+    public void updatePost(Post post, int position) {
+        if (position != -1) {
+            posts.set(position, post);
+        }
+    }
+
     @Override
     public int getItemCount() {
         return posts.size();
     }
+
 }
 
 // Preparing view holder

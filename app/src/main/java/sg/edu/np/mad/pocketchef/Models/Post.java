@@ -31,7 +31,7 @@ public class Post {
         this.equipment = equipment;
         this.username = username;
         this.timeStamp = ServerValue.TIMESTAMP;
-        this.comments = comments;
+        this.comments = comments != null ? comments : new ArrayList<>(); // Initialize comments list
         this.likes = 0;
         this.likesUsers = new ArrayList<>();
         this.userId = userId;
@@ -39,6 +39,7 @@ public class Post {
     }
 
     public Post() {
+        this.comments = new ArrayList<>(); // Initialize comments list
     }
 
     public String getPostKey() {
