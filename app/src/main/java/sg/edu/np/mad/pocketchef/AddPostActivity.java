@@ -472,6 +472,10 @@ public class AddPostActivity extends AppCompatActivity {
                             }
                         }
 
+                        // Checking what the saved equipment, instructions and ingredients are
+                        Log.d("Add Post Activity", equipment.toString());
+                        Log.d("Add Post Activity", instructions.toString());
+                        Log.d("Add Post Activity", ingredients.toString());
                         mUserRef.child(currentUser.getUid()).addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -522,7 +526,7 @@ public class AddPostActivity extends AppCompatActivity {
                                             finish();
                                             startActivity(intent);
                                         }
-                                    }, 1000); // 2000 milliseconds = 2 seconds
+                                    }, 1000);
                                 } else {
                                     Log.w(TAG, "DataSnapshot does not exist");
                                 }
