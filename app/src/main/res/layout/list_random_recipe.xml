@@ -1,12 +1,14 @@
-<com.google.android.material.card.MaterialCardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/random_list_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
     android:background="@drawable/card_background"
     android:elevation="4dp"
-    android:radius="16dp">
+    android:radius="16dp"
+    app:cardBackgroundColor="@color/palettebeige"
+    app:cardElevation="4dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,7 +27,7 @@
             android:scrollHorizontally="true"
             android:singleLine="true"
             android:text="@string/textView_title_text"
-            android:textColor="@color/paletteorange"
+            android:textColor="@color/paletteblue"
             android:textSize="24sp"
             android:textStyle="bold" />
 
@@ -80,7 +82,10 @@
                 android:layout_margin="4dp"
                 android:layout_weight="1"
                 android:radius="16dp"
-                android:padding="8dp">
+                android:padding="8dp"
+                app:strokeWidth="0dp"
+                app:cardElevation="2dp"
+                >
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -110,7 +115,9 @@
                 android:layout_margin="4dp"
                 android:layout_weight="1"
                 android:radius="16dp"
-                android:padding="8dp">
+                android:padding="8dp"
+                app:strokeWidth="0dp"
+                app:cardElevation="2dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -140,7 +147,9 @@
                 android:layout_margin="4dp"
                 android:layout_weight="1"
                 android:radius="16dp"
-                android:padding="8dp">
+                android:padding="8dp"
+                app:strokeWidth="0dp"
+                app:cardElevation="2dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"

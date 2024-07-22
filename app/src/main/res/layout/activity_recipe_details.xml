@@ -66,7 +66,8 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"
                         android:radius="16dp"
-                        android:strokeColor="@android:color/transparent">
+                        android:strokeColor="@android:color/transparent"
+                        app:cardElevation="4dp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -148,7 +149,8 @@
                                     android:backgroundTint="@color/white"
                                     android:radius="8dp"
                                     app:cardElevation="2dp"
-                                    app:contentPadding="4dp">
+                                    app:contentPadding="4dp"
+                                    app:strokeWidth="0dp">
 
                                     <TextView
                                         android:id="@+id/textView_protein_label"
@@ -197,7 +199,8 @@
                                     android:backgroundTint="@color/white"
                                     android:radius="8dp"
                                     app:cardElevation="2dp"
-                                    app:contentPadding="4dp">
+                                    app:contentPadding="4dp"
+                                    app:strokeWidth="0dp">
 
                                     <TextView
                                         android:id="@+id/textView_fat_label"
@@ -230,7 +233,8 @@
                             android:layout_columnWeight="1"
                             android:layout_marginEnd="12dp"
                             android:layout_marginBottom="12dp"
-                            android:radius="8dp">
+                            android:radius="8dp"
+                            app:cardElevation="2dp">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -245,7 +249,8 @@
                                     android:backgroundTint="@color/white"
                                     android:radius="8dp"
                                     app:cardElevation="2dp"
-                                    app:contentPadding="4dp">
+                                    app:contentPadding="4dp"
+                                    app:strokeWidth="0dp">
 
                                     <TextView
                                         android:id="@+id/textView_calories_label"
@@ -278,7 +283,8 @@
                             android:layout_columnWeight="1"
                             android:layout_marginEnd="12dp"
                             android:layout_marginBottom="12dp"
-                            android:radius="8dp">
+                            android:radius="8dp"
+                            app:cardElevation="2dp">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -293,7 +299,8 @@
                                     android:backgroundTint="@color/white"
                                     android:radius="8dp"
                                     app:cardElevation="2dp"
-                                    app:contentPadding="4dp">
+                                    app:contentPadding="4dp"
+                                    app:strokeWidth="0dp">
 
                                     <TextView
                                         android:id="@+id/textView_daily_requirements_coverage_label"
@@ -330,7 +337,9 @@
                         android:outlineSpotShadowColor="@color/paletteorange"
                         android:padding="8dp"
                         android:text="@string/button_Nutrition_label_text"
-                        android:textColor="@color/palettetext" />
+                        android:textColor="@color/palettetext"
+                        android:elevation="4dp"
+                        />
 
                     <!-- Nutrition Dialog Layout -->
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -369,7 +378,9 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="16dp"
                         android:padding="16dp"
-                        android:radius="8dp">
+                        android:radius="8dp"
+                        app:cardBackgroundColor="@color/palettebeige"
+                        app:cardElevation="4dp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -381,7 +392,9 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="8dp"
-                                android:radius="8dp">
+                                android:radius="8dp"
+                                app:strokeWidth="0dp"
+                                app:cardElevation="2dp">
 
                                 <TextView
                                     android:id="@+id/textView_meal_servings"
@@ -403,7 +416,9 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="8dp"
-                                android:radius="8dp">
+                                android:radius="8dp"
+                                app:strokeWidth="0dp"
+                                app:cardElevation="2dp">
 
                                 <TextView
                                     android:id="@+id/textView_meal_ready"
@@ -424,7 +439,9 @@
                             <com.google.android.material.card.MaterialCardView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:radius="8dp">
+                                android:radius="8dp"
+                                app:strokeWidth="0dp"
+                                app:cardElevation="2dp">
 
                                 <TextView
                                     android:id="@+id/textView_meal_price"
@@ -449,7 +466,8 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="16dp"
                         android:backgroundTint="@color/paletteorange"
-                        android:radius="8dp">
+                        android:radius="8dp"
+                        app:cardElevation="4dp">
 
                         <TextView
                             android:layout_width="match_parent"
@@ -473,7 +491,8 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="16dp"
                         android:backgroundTint="@color/paletteorange"
-                        android:radius="8dp">
+                        android:radius="8dp"
+                        app:cardElevation="4dp">
 
                         <TextView
                             android:layout_width="match_parent"
@@ -497,7 +516,8 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="16dp"
                         android:backgroundTint="@color/paletteorange"
-                        android:radius="8dp">
+                        android:radius="8dp"
+                        app:cardElevation="4dp">
 
                         <TextView
                             android:layout_width="match_parent"
@@ -525,6 +545,7 @@
                 android:layout_margin="10dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
+                app:cardElevation="4dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Favorite Button"
                 android:padding="15dp"
