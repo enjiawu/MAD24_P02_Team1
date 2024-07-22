@@ -377,7 +377,7 @@ public class ComplexSearchActivity extends AppCompatActivity implements Navigati
             if (displayMessage == null || displayMessage.trim().isEmpty()) {
                 displayMessage = "Please try another image or voice search";
             } else {
-                isClassifiedLabelUpdated = true;
+                isRecognizedTextUpdated = true;
             }
             resultTextView.setText(displayMessage);
             resultTextView.setVisibility(View.VISIBLE);
