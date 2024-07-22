@@ -168,16 +168,17 @@
     <string name="add_instructions_hint">Instructions for this step: </string>
     <!-- Sorting for posts -->
     <string-array name="postSortArray">
-        <item>My Posts</item>
         <item>Newest</item>
         <item>Oldest</item>
         <item>Popularity (Asc)</item>
         <item>Popularity (Desc)</item>
+        <item>My Posts</item>
     </string-array>
     <string name="comment">Comments</string>
     <string name="addComment">Add comment...</string>
     <string name="noEquipment">No Equipment Needed</string>
     <string name="noComments">Be the first to leave a message!</string>
+    <string name="noPosts">No Post Found!</string>
 
 
     <string name="resultTextView_placeholder">Search for recipes...</string>

@@ -1,21 +1,26 @@
 package sg.edu.np.mad.pocketchef;
 
 import static android.content.ContentValues.TAG;
+import static android.view.View.VISIBLE;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
@@ -63,8 +68,11 @@ public class CommunityActivity extends AppCompatActivity implements NavigationVi
     // XML Variables
     private ProgressBar progressBar;
     private ImageView addPostButton;
+    private TextView noPostsFound;
 
     private CommunityAdapter adapter;
+    private SearchView searchView;
+    private Spinner spinner;
 
     // Database
     FirebaseAuth mAuth;
@@ -109,6 +117,11 @@ public class CommunityActivity extends AppCompatActivity implements NavigationVi
         //Getting all the variables from the xml file
         progressBar = findViewById(R.id.progressBar);
         addPostButton = findViewById(R.id.addPostButton);
+        spinner = findViewById(R.id.sort_by_spinner);
+        searchView = findViewById(R.id.searchView_post);
+        noPostsFound = findViewById(R.id.noPostsFound);
+
+        noPostsFound.setVisibility(View.GONE); // Make sure the no posts found is hidden
 
         //Firebase database setup
         mAuth = FirebaseAuth.getInstance();
@@ -121,6 +134,41 @@ public class CommunityActivity extends AppCompatActivity implements NavigationVi
 
     // Setting up listeners
     public void setupListeners() {
+        // Search function
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                if (query.isEmpty()){
+                    setupSearchedRecipeRecyclerView();
+                    return false;
+                }
+                searchPost(query);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (newText.isEmpty()){
+                    setupSearchedRecipeRecyclerView();
+                    return false;
+                }
+                searchPost(newText);
+                return true;
+            }
+        });
+
+        // Set up spinner for sorting of posts
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                sortPosts(parent.getSelectedItem().toString());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
         // Check if add post button has been clicked
         addPostButton.setOnClickListener(v -> {
             Log.d("Community", "Working");
@@ -133,7 +181,7 @@ public class CommunityActivity extends AppCompatActivity implements NavigationVi
 
     // Loading community posts
     public void setupSearchedRecipeRecyclerView() {
-        progressBar.setVisibility(View.VISIBLE); // Making the progress bar visible as the  posts get loaded
+        progressBar.setVisibility(VISIBLE); // Making the progress bar visible as the posts get loaded
 
         postsRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -203,6 +251,179 @@ public class CommunityActivity extends AppCompatActivity implements NavigationVi
             }
         });
     }
+
+    public void searchPost(String query) {
+        progressBar.setVisibility(VISIBLE); // Show progress bar while searching
+
+        if (query.isEmpty()){ // If user doesnt enter anything
+            setupSearchedRecipeRecyclerView();
+        }
+
+        postsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<Post> searchedPosts = new ArrayList<>();
+                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                    Post post = postSnapshot.getValue(Post.class);
+                    post.setPostKey(postSnapshot.getKey()); // Set the postKey for each Post object
+
+                    // Check if the query is present in the post's recipeName or description
+                    if (post.getTitle().toLowerCase().contains(query.toLowerCase())){
+                        searchedPosts.add(post);
+                    }
+                }
+
+                if (searchedPosts.isEmpty()){
+                    noPostsFound.setVisibility(View.VISIBLE); // Make sure the no posts found is shown
+                }
+                else{
+                    noPostsFound.setVisibility(View.GONE); // Make sure the no posts found is shown
+                }
+
+                // Update the RecyclerView with the search results
+                updateRecyclerView(searchedPosts);
+
+                // Hide progress bar after search results are loaded
+                progressBar.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle potential errors
+                progressBar.setVisibility(View.GONE);
+                noPostsFound.setVisibility(View.GONE); // Make sure the no posts found is shown
+            }
+        });
+    }
+
+    public void sortPosts(String sortOption) {
+        progressBar.setVisibility(View.VISIBLE); // Show progress bar while sorting
+
+        postsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<Post> posts = new ArrayList<>();
+                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                    Post post = postSnapshot.getValue(Post.class);
+                    post.setPostKey(postSnapshot.getKey()); // Set the postKey for each Post object
+                    posts.add(post);
+                }
+
+                // Sort the posts based on the selected sort option
+                switch (sortOption) {
+                    case "My Posts":
+                        posts = sortMyPosts(posts);
+                        break;
+                    case "Newest":
+                        posts = sortPostsByNewest(posts);
+                        break;
+                    case "Oldest":
+                        posts = sortPostsByOldest(posts);
+                        break;
+                    case "Popularity (Asc)":
+                        posts = sortPostsByPopularityAsc(posts);
+                        break;
+                    case "Popularity (Desc)":
+                        posts = sortPostsByPopularityDesc(posts);
+                        break;
+                }
+
+                // Update the RecyclerView with the sorted posts
+                updateRecyclerView(posts);
+
+                // Hide progress bar after sorting is done
+                progressBar.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle potential errors
+                progressBar.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    private List<Post> sortMyPosts(List<Post> posts) {
+        String userId = mAuth.getCurrentUser().getUid();
+        List<Post> myPosts = new ArrayList<>();
+        for (Post post : posts) {
+            if (post.getUserId().equals(userId)) {
+                myPosts.add(post);
+            }
+        }
+        return myPosts;
+    }
+
+    private List<Post> sortPostsByNewest(List<Post> posts) {
+        posts.sort((post1, post2) -> Long.compare(post2.getTimeStamp(), post1.getTimeStamp()));
+        return posts;
+    }
+
+    private List<Post> sortPostsByOldest(List<Post> posts) {
+        posts.sort((post1, post2) -> Long.compare(post1.getTimeStamp(), post2.getTimeStamp()));
+        return posts;
+    }
+
+    private List<Post> sortPostsByPopularityAsc(List<Post> posts) {
+        posts.sort((post1, post2) -> Integer.compare(post1.getLikes(), post2.getLikes()));
+        return posts;
+    }
+
+    private List<Post> sortPostsByPopularityDesc(List<Post> posts) {
+        posts.sort((post1, post2) -> Integer.compare(post2.getLikes(), post1.getLikes()));
+        return posts;
+    }
+
+    private void updateRecyclerView(List<Post> posts) {
+        RecyclerView recyclerView = findViewById(R.id.post_recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(CommunityActivity.this));
+        adapter = new CommunityAdapter(CommunityActivity.this, posts, new PostClickListener() {
+            @Override
+            public void onPostClicked(String postKey) {
+                Log.d("Community", postKey);
+                // To see recipe details
+                Intent postDetails = new Intent(CommunityActivity.this, PostDetailsActivity.class)
+                        .putExtra("id", postKey);
+                startActivity(postDetails);
+            }
+        }, new PostLikeClickListener() {
+            @Override
+            public void onLikeClicked(String postKey, int position) {
+                // Find the post with the matching postKey
+                String userId = mAuth.getCurrentUser().getUid();
+                postsRef.child(postKey).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        Post post = snapshot.getValue(Post.class);
+
+                        if (post != null && snapshot.getKey().equals(postKey)) {
+                            if (post.getLikesUsers().contains(userId)) {
+                                post.getLikesUsers().remove(userId);
+                                post.setLikes(post.getLikes() - 1);
+                            } else {
+                                post.getLikesUsers().add(userId);
+                                post.setLikes(post.getLikes() + 1);
+                            }
+
+                            postsRef.child(postKey).setValue(post).addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    adapter.notifyItemChanged(position);
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        // Handle potential errors
+                    }
+                });
+            }
+        });
+
+        recyclerView.setAdapter(adapter);
+    }
+
 
     // For the menu
     @Override
