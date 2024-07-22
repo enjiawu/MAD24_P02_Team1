@@ -138,7 +138,8 @@ public class RequestManager {
                 diet,
                 intolerances,
                 sort,
-                sortDirection
+                sortDirection,
+                true
         );
         call.enqueue(new Callback<SearchedRecipeApiResponse>() {
             @Override
@@ -162,7 +163,9 @@ public class RequestManager {
         CallSearchedRecipesQuery callSearchedRecipesQuery = retrofit.create(CallSearchedRecipesQuery.class);
         Call<SearchedRecipeQueryApiResponse> call = callSearchedRecipesQuery.callSearchedRecipesQuery(
                 context.getString(R.string.api_key),
-                query
+                query,
+                true,
+                true
         );
         call.enqueue(new Callback<SearchedRecipeQueryApiResponse>() {
             @Override
@@ -241,7 +244,8 @@ public class RequestManager {
                 @Query("diet") String diet,
                 @Query("intolerances") String intolerances,
                 @Query("sort") String sort,
-                @Query("sortDirection") String sortDirection
+                @Query("sortDirection") String sortDirection,
+                @Query("addRecipeNutrition") boolean addRecipeNutrition
         );
     }
 
@@ -249,7 +253,9 @@ public class RequestManager {
         @GET("recipes/complexSearch")
         Call<SearchedRecipeQueryApiResponse> callSearchedRecipesQuery(
                 @Query("apiKey") String apiKey,
-                @Query("query") String query
+                @Query("query") String query,
+                @Query("addRecipeNutrition") boolean addRecipeNutrition,
+                @Query("addRecipeInformation") boolean addRecipeInformation
         );
     }
 }

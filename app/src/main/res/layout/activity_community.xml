@@ -76,6 +76,16 @@
                         app:searchIcon="@drawable/ic_search"/>
                 </com.google.android.material.card.MaterialCardView>
 
+                <!-- RecyclerView for posts -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/post_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_margin="5dp"
+                    android:paddingTop="15dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cardView_search" />
+
                 <ImageView
                     android:id="@+id/addPostButton"
                     android:layout_width="56dp"
@@ -86,17 +96,9 @@
                     android:padding="12dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:srcCompat="@drawable/baseline_create_24" />
-
-                <!-- RecyclerView for posts -->
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/post_recycler_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_margin="5dp"
-                    android:paddingTop="15dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/cardView_search" />
+                    app:srcCompat="@drawable/baseline_create_24"
+                    android:focusable="true"
+                    android:clickable="true" />
 
         </androidx.constraintlayout.motion.widget.MotionLayout>
 

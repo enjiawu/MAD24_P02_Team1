@@ -1,12 +1,11 @@
-<com.google.android.material.card.MaterialCardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/random_list_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
     android:background="@drawable/card_background"
-    android:elevation="4dp"
-    android:radius="16dp">
+    android:elevation="8dp"
+    android:radius="12dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,16 +16,12 @@
             android:id="@+id/textView_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ellipsize="marquee"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:marqueeRepeatLimit="marquee_forever"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:padding="8dp"
-            android:scrollHorizontally="true"
-            android:singleLine="true"
             android:text="@string/textView_title_text"
             android:textColor="@color/paletteorange"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
         <com.google.android.material.card.MaterialCardView
@@ -51,8 +46,7 @@
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:radius="16dp">
+                    android:layout_gravity="center">
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/textView_no_image"
@@ -62,25 +56,27 @@
                         android:background="@color/paletteorange"
                         android:text="@string/textView_no_image_available"
                         android:textColor="@color/black"
-                        android:textSize="18sp"
-                        android:visibility="gone"/>
+                        android:textSize="16sp"
+                        android:visibility="gone" />
                 </com.google.android.material.card.MaterialCardView>
             </FrameLayout>
         </com.google.android.material.card.MaterialCardView>
 
+        <!-- Servings, Price, Time -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="4dp">
+            android:paddingBottom="0dp">
 
+            <!-- Servings -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
                 android:layout_weight="1"
-                android:radius="16dp"
-                android:padding="8dp">
+                android:padding="8dp"
+                android:radius="8dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -104,13 +100,14 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
+            <!-- Price -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
                 android:layout_weight="1"
-                android:radius="16dp"
-                android:padding="8dp">
+                android:padding="8dp"
+                android:radius="8dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -121,26 +118,27 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_upvote" />
+                        android:src="@drawable/ic_money" />
 
                     <TextView
-                        android:id="@+id/textView_upvote"
+                        android:id="@+id/textView_money"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="4dp"
-                        android:text="@string/textView_upvote_text"
+                        android:text="@string/textView_money_placeholder"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
+            <!-- Time -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
                 android:layout_weight="1"
-                android:radius="16dp"
-                android:padding="8dp">
+                android:padding="8dp"
+                android:radius="8dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -159,6 +157,116 @@
                         android:layout_height="wrap_content"
                         android:padding="4dp"
                         android:text="@string/textView_time_text"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+
+        <!-- Nutrition Information -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="0dp">
+
+            <!-- Calories -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:padding="8dp"
+                android:radius="8dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/calories"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textView_calories"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="4dp"
+                        android:text="@string/textView_calories_label_text"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Protein -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:padding="8dp"
+                android:radius="8dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/protein"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textView_protein"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="4dp"
+                        android:text="@string/textView_protein_label_text"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Carbs -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:padding="8dp"
+                android:radius="8dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/carbs"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textView_carbs"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="4dp"
+                        android:text="@string/textView_carbs_placeholder"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
                 </LinearLayout>

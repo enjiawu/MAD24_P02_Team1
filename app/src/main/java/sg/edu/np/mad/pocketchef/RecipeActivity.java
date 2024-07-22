@@ -195,7 +195,7 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(RecipeActivity.this, 1));
         RandomRecipeAdapter randomRecipeAdapter = new RandomRecipeAdapter(RecipeActivity.this,
-                response.recipes, recipeClickListener);
+                response.getRecipes(), recipeClickListener);
         recyclerView.setAdapter(randomRecipeAdapter);
     }
 
