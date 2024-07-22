@@ -161,69 +161,34 @@ public class CommunityActivity extends AppCompatActivity implements NavigationVi
                     @Override
                     public void onLikeClicked(String postKey, int position) {
                         // Find the post with the matching postKey
-                        for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-                            Post post = postSnapshot.getValue(Post.class);
-                            if (post != null && post.getPostKey() != null && post.getPostKey().equals(postKey)) {
-                                // Check if user has already liked the post
-                                List<String> likesUsers = post.getLikesUsers();
-                                boolean hasLiked = likesUsers != null && likesUsers.contains(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                        String userId = mAuth.getCurrentUser().getUid();
+                        postsRef.child(postKey).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                Post post = snapshot.getValue(Post.class);
 
-                                // Get the post's DatabaseReference
-                                DatabaseReference postRef = FirebaseDatabase.getInstance().getReference("posts").child(postSnapshot.getKey());
-
-                                // Run transaction to update likes
-                                postRef.runTransaction(new Transaction.Handler() {
-                                    @NonNull
-                                    @Override
-                                    public Transaction.Result doTransaction(@NonNull MutableData mutableData) {
-                                        Post mutablePost = mutableData.getValue(Post.class);
-                                        if (mutablePost == null) {
-                                            return Transaction.success(mutableData);
-                                        }
-
-                                        if (!hasLiked) {
-                                            // User is liking the post
-                                            mutablePost.setLikes(mutablePost.getLikes() + 1);
-                                            if (mutablePost.getLikesUsers() == null) {
-                                                mutablePost.setLikesUsers(new ArrayList<>());
-                                            }
-                                            mutablePost.getLikesUsers().add(FirebaseAuth.getInstance().getCurrentUser().getUid());
-                                        } else {
-                                            // User is unliking the post
-                                            mutablePost.setLikes(mutablePost.getLikes() - 1);
-                                            if (mutablePost.getLikesUsers() != null) {
-                                                mutablePost.getLikesUsers().remove(FirebaseAuth.getInstance().getCurrentUser().getUid());
-                                            }
-                                        }
-
-                                        // Set the updated value back to the database
-                                        mutableData.setValue(mutablePost);
-                                        return Transaction.success(mutableData);
+                                if (post != null && snapshot.getKey().equals(postKey)) {
+                                    if (post.getLikesUsers().contains(userId)) {
+                                        post.getLikesUsers().remove(userId);
+                                        post.setLikes(post.getLikes() - 1);
+                                    } else {
+                                        post.getLikesUsers().add(userId);
+                                        post.setLikes(post.getLikes() + 1);
                                     }
 
-                                    @Override
-                                    public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
-                                        if (error != null) {
-                                            Log.e(TAG, "Error updating likes count: " + error.getMessage());
-                                        } else {
-                                            // Update UI based on like status
-                                            if (!hasLiked) {
-                                                // User liked the post
-                                                Log.d(TAG, "Post liked: " + postKey);
-                                            } else {
-                                                // User unliked the post
-                                                Log.d(TAG, "Post unliked: " + postKey);
-                                            }
-
-                                            // Update post in the adapter
-                                            adapter.updatePost(post, position);
+                                    postsRef.child(postKey).setValue(post).addOnCompleteListener(task -> {
+                                        if (task.isSuccessful()) {
                                             adapter.notifyItemChanged(position);
                                         }
-                                    }
-                                });
-                                break; // Exit loop since post is found
+                                    });
+                                }
                             }
-                        }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                // Handle potential errors
+                            }
+                        });
                     }
                 });
 
@@ -234,7 +199,7 @@ public class CommunityActivity extends AppCompatActivity implements NavigationVi
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // Handle error here
+                // Handle potential errors
             }
         });
     }

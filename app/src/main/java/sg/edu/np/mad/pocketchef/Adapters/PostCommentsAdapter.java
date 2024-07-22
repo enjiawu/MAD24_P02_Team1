@@ -38,7 +38,7 @@ public class PostCommentsAdapter extends RecyclerView.Adapter<PostCommentsViewHo
         Comment comment = comments.get(position);
 
         // Setting all the comment information
-        holder.username.setText(comment.getUsername());
+        holder.username.setText("@" + comment.getUsername());
         holder.datePosted.setText(comment.formatDate());
         holder.comment.setText(comment.getComment());
 

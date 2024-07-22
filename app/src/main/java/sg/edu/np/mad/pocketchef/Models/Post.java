@@ -12,7 +12,8 @@ import java.util.TimeZone;
 public class Post {
     private String postKey, title, recipeImage, username, userId, profilePicture;
     private float protein, fat, calories, servings, prepTime, costPerServing;
-    private List<String> instructions, ingredients, equipment, likesUsers;
+    private List<String> instructions, ingredients, equipment;
+    private List<String> likesUsers;
     private Object timeStamp;
     private List<Comment> comments;
     private int likes;
@@ -40,8 +41,10 @@ public class Post {
 
     public Post() {
         this.comments = new ArrayList<>(); // Initialize comments list
+        this.likesUsers = new ArrayList<>(); // Initialize likesUsers list
     }
 
+    // Getters and Setters
     public String getPostKey() {
         return postKey;
     }
@@ -181,6 +184,7 @@ public class Post {
     public String getUserId() {
         return userId;
     }
+
     public void setUserId(String userId) {
         this.userId = userId;
     }

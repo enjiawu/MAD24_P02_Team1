@@ -41,7 +41,6 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityViewHolder>{
     List<Post> posts; // List to store posts
     PostClickListener postListener; //Listener for when they click on the post
     PostLikeClickListener likesListener;
-    private DatabaseReference postRef;
 
     public CommunityAdapter(Context context, List<Post> posts, PostClickListener postListener, PostLikeClickListener likesListener) {
         this.context = context;
@@ -85,6 +84,13 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityViewHolder>{
             holder.profilePicture.setImageResource(R.drawable.pocketchef_logo);
         }
 
+        // Set like icon state
+        if (post.getLikesUsers() != null && post.getLikesUsers().contains(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+            holder.likesImage.setImageResource(R.drawable.baseline_thumb_up_alt_24);
+        } else {
+            holder.likesImage.setImageResource(R.drawable.baseline_thumb_up_off_alt_24);
+        }
+
         //Check if user clicks on post, if they click then return the Id
         holder.post_container.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,17 +106,11 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityViewHolder>{
             }
         });
     }
-    public void updatePost(Post post, int position) {
-        if (position != -1) {
-            posts.set(position, post);
-        }
-    }
 
     @Override
     public int getItemCount() {
         return posts.size();
     }
-
 }
 
 // Preparing view holder

@@ -91,7 +91,7 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
     // Database
     FirebaseAuth mAuth;
     FirebaseDatabase database;
-    DatabaseReference myRef, mUserRef, commentsRef;
+    DatabaseReference postsRef, mUserRef, postRef;
     StorageReference storageReference;
     FirebaseUser currentUser;
 
@@ -114,11 +114,8 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
 
         findViews();
         setUpListeners();
-        addComment();
 
         handleDynamicLink();
-
-        postKey = getIntent().getStringExtra("id");
 
         loadPostDetails();
 
@@ -130,36 +127,6 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(PostDetailsActivity.this);
         navigationView.setCheckedItem(nav_home);
-
-        /*
-        // Set up the OnClickListener for the Favorite button
-        btnFavorite.setOnClickListener(v -> {
-            if (recipeDetailsC == null) {
-                showFavoriteDialog();
-            } else {
-                // if recipe is already favorite, confirm favorite
-                MessageDialog.show("Unfavorite recipe", "Are you sure you want to unfavorite this recipe?", "Yes"
-                        , "No").setOkButtonClickListener((dialog, v1) -> {
-                    WaitDialog.show("loading...");
-                    new Thread(() -> {
-                        // delete recipe from favorites
-                        FavoriteDatabase.getInstance(PostDetailsActivity.this)
-                                .RecipeDetailsCDao().delete(recipeDetailsC);
-                        recipeDetailsC = null; // update favorite status
-                        runOnUiThread(() -> {
-                            // update favorite button appearance
-                            Glide.with(PostDetailsActivity.this).load(R.drawable.ic_btn_star).into(btnFavorite);
-                            btnFavorite.setImageTintList(ColorStateList.valueOf(Color.WHITE));
-                            WaitDialog.dismiss();
-                        });
-                    }).start();
-
-                    return false;
-                });
-            }
-        });*/
-
-
     }
 
     // Initialize objects
@@ -194,11 +161,15 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
         //Initialize comment input
         commentInput = findViewById(R.id.addCommentInput);
 
+
+        postKey = getIntent().getStringExtra("id");
+
         //Firebase database setup
         mAuth = FirebaseAuth.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference().child("PostImages");
         database = FirebaseDatabase.getInstance("https://pocket-chef-cd59c-default-rtdb.asia-southeast1.firebasedatabase.app/");
-        myRef = database.getReference("posts").push();
+        postsRef = database.getReference("posts");
+        postRef = postsRef.child(postKey);
         // Get current user
         currentUser = mAuth.getCurrentUser();
         mUserRef = FirebaseDatabase.getInstance().getReference("users");
@@ -249,9 +220,6 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
 
     private void loadPostDetails(){
         progressBar.setVisibility(View.VISIBLE);
-
-        DatabaseReference postsRef = FirebaseDatabase.getInstance().getReference("posts");
-        DatabaseReference postRef = postsRef.child(getIntent().getStringExtra("id"));
         postRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -289,13 +257,22 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
                     else{
                         noEquipmentText.setVisibility(View.VISIBLE);
                     }
-                    if(post.getComments() != null){
+                    if(!post.getComments().isEmpty()){
                         loadComments();
                         noCommentsText.setVisibility(View.GONE);
                     }
                     else{
                         noCommentsText.setVisibility(View.VISIBLE);
                     }
+
+                    // Retrieve and update like status
+                    String userId = currentUser.getUid();
+                    if (post.getLikesUsers().contains(userId)) {
+                        likeButton.setImageResource(R.drawable.baseline_thumb_up_alt_24);
+                    } else {
+                        likeButton.setImageResource(R.drawable.baseline_thumb_up_off_alt_24);
+                    }
+
                 } else {
                     // Handle the case where the post is null
                     Log.e("Post Details", "Post is null");
@@ -331,8 +308,7 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
     }
 
     private void loadComments() {
-        commentsRef = FirebaseDatabase.getInstance().getReference("posts").child(postKey);
-        commentsRef.addValueEventListener(new ValueEventListener() {
+        postRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Post post = snapshot.getValue(Post.class);
@@ -357,6 +333,49 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
             @Override
             public void onClick(View v) {
                 createDynamicLink();
+            }
+        });
+
+        // Like button function
+        likeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleLike();
+            }
+        });
+
+        // Add comment button
+        addCommentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addComment();
+            }
+        });
+
+        // Set up the OnClickListener for the Favorite button
+        favouriteButton.setOnClickListener(v -> {
+            if (recipeDetailsC == null) {
+                showFavoriteDialog();
+            } else {
+                // if recipe is already favorite, confirm favorite
+                MessageDialog.show("Unfavorite recipe", "Are you sure you want to unfavorite this recipe?", "Yes"
+                        , "No").setOkButtonClickListener((dialog, v1) -> {
+                    WaitDialog.show("loading...");
+                    new Thread(() -> {
+                        // delete recipe from favorites
+                        FavoriteDatabase.getInstance(PostDetailsActivity.this)
+                                .RecipeDetailsCDao().delete(recipeDetailsC);
+                        recipeDetailsC = null; // update favorite status
+                        runOnUiThread(() -> {
+                            // update favorite button appearance
+                            Glide.with(PostDetailsActivity.this).load(R.drawable.ic_btn_star).into(favouriteButton);
+                            favouriteButton.setImageTintList(ColorStateList.valueOf(Color.WHITE));
+                            WaitDialog.dismiss();
+                        });
+                    }).start();
+
+                    return false;
+                });
             }
         });
     }
@@ -387,117 +406,99 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
         startActivity(Intent.createChooser(intent, "Share via..."));
     }
 
+    // Function to add comments
     private void addComment() {
         progressBar.setVisibility(View.VISIBLE);
 
-        final DatabaseReference postRef = FirebaseDatabase.getInstance().getReference("posts").child(getIntent().getStringExtra("id"));
+        String commentText = String.valueOf(commentInput.getText());
 
-        addCommentButton.setOnClickListener(new View.OnClickListener() {
+        if (TextUtils.isEmpty(commentText)) {
+            Toast.makeText(PostDetailsActivity.this, "Enter a comment!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        mUserRef.child(currentUser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
-            public void onClick(View v) {
-                String commentText = String.valueOf(commentInput.getText());
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    String username = snapshot.child("username").getValue(String.class);
+                    String profilePictureUrl = snapshot.child("profile-picture").getValue(String.class);
+                    String userId = currentUser.getUid();
 
-                if (TextUtils.isEmpty(commentText)) {
-                    Toast.makeText(PostDetailsActivity.this, "Enter a comment!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+                    Comment comment = new Comment(commentText, userId, username, profilePictureUrl);
 
-                mUserRef.child(currentUser.getUid()).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.exists()) {
-                            String username = snapshot.child("username").getValue(String.class);
-                            String profilePictureUrl = snapshot.child("profile-picture").getValue(String.class);
-                            String userId = currentUser.getUid();
-
-                            Comment comment = new Comment(commentText, userId, username, profilePictureUrl);
-
-                            postRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    Post post = dataSnapshot.getValue(Post.class);
-                                    if (post != null) {
-                                        List<Comment> comments = post.getComments();
-                                        comments.add(comment);
-                                        post.setComments(comments);
-                                        postRef.setValue(post).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void unused) {
-                                                Toast.makeText(PostDetailsActivity.this, "Comment has been published", Toast.LENGTH_SHORT).show();
-                                                loadComments(); // Refresh the comments section
-                                            }
-                                        });
+                    postRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            Post post = dataSnapshot.getValue(Post.class);
+                            if (post != null) {
+                                List<Comment> comments = post.getComments();
+                                comments.add(comment);
+                                post.setComments(comments);
+                                postRef.setValue(post).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        Toast.makeText(PostDetailsActivity.this, "Comment has been published", Toast.LENGTH_SHORT).show();
+                                        loadComments(); // Refresh the comments section
                                     }
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
-                                    Log.e(TAG, "DatabaseError: " + databaseError.getMessage());
-                                }
-                            });
-
-                            commentInput.setText("");
-                            progressBar.setVisibility(View.GONE);
-                        } else {
-                            Log.w(TAG, "DataSnapshot does not exist");
+                                });
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        Log.e(TAG, "DatabaseError: " + error.getMessage());
-                    }
-                });
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            Log.e(TAG, "DatabaseError: " + databaseError.getMessage());
+                        }
+                    });
+
+                    commentInput.setText("");
+                    progressBar.setVisibility(View.GONE);
+                } else {
+                    Log.w(TAG, "DataSnapshot does not exist");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e(TAG, "DatabaseError: " + error.getMessage());
             }
         });
     }
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        int itemId = menuItem.getItemId();
-        if (itemId == R.id.nav_home) {
-            Intent intent = new Intent(PostDetailsActivity.this, MainActivity.class);
-            finish();
-            startActivity(intent);
-        } else if (itemId == R.id.nav_recipes) {
-            Intent intent = new Intent(PostDetailsActivity.this, RecipeActivity.class);
-            finish();
-            startActivity(intent);
-        } else if (itemId == R.id.nav_search) {
-            Intent intent2 = new Intent(PostDetailsActivity.this, AdvancedSearchActivity.class);
-            finish();
-            startActivity(intent2);
-        } else if (itemId == R.id.nav_favourites) {
-            Intent intent4 = new Intent(PostDetailsActivity.this, CreateCategoryActivity.class);
-            finish();
-            startActivity(intent4);
-        } else if (itemId == R.id.nav_profile) {
-            Intent intent4 = new Intent(PostDetailsActivity.this, ProfileActivity.class);
-            finish();
-            startActivity(intent4);
-        } else if (itemId == R.id.nav_logout) {
-            FirebaseAuth.getInstance().signOut();
-            Intent intent5 = new Intent(PostDetailsActivity.this, LoginActivity.class);
-            finish();
-            startActivity(intent5);
-        } else if (itemId == R.id.nav_community) {
-            Intent intent6 = new Intent(PostDetailsActivity.this, CommunityActivity.class);
-            finish();
-            startActivity(intent6);
-        } else if (itemId == R.id.nav_pantry) {
-            Intent intent7 = new Intent(PostDetailsActivity.this, PantryActivity.class);
-            finish();
-            startActivity(intent7);
-        } else if (itemId == R.id.nav_complex_search) {
-            Intent intent8 = new Intent(PostDetailsActivity.this, ComplexSearchActivity.class);
-            finish();
-            startActivity(intent8);
-        }
-        drawerLayout.closeDrawer(GravityCompat.START);
-        return true;
+    // Function to toggle likes
+    private void toggleLike() {
+        String userId = currentUser.getUid();
+
+        postRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Post post = snapshot.getValue(Post.class);
+                if (post != null) {
+                    if (post.getLikesUsers().contains(userId)) {
+                        Log.d("Post Details",  "Post has been unliked");
+                        // User has already liked the post, so we will unlike it
+                        post.getLikesUsers().remove(userId);
+                        post.setLikes(post.getLikes() - 1);
+                        likeButton.setImageResource(R.drawable.baseline_thumb_up_off_alt_24);
+                    } else {
+                        Log.d("Post Details",  "Post has been liked");
+                        // User has not liked the post
+                        post.getLikesUsers().add(userId);
+                        post.setLikes(post.getLikes() + 1);
+                        likeButton.setImageResource(R.drawable.baseline_thumb_up_alt_24);
+                    }
+
+                    postRef.setValue(post);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle potential errors
+            }
+        });
     }
 
-    /*
     // Add to favorite list
     Spinner spinnerCategories;
     private String path;
@@ -549,12 +550,12 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
             }
             RecipeDetailsC recipeDetailsC1 = new RecipeDetailsC();
             //recipeDetailsC1.recipeDetailsResponseId = postId;
-            Log.d("run", postId + "");
+            Log.d("run", postKey + "");
             recipeDetailsC1.categoryBeanId = spinnerCategories.getSelectedItem().toString();
-            recipeDetailsC1.meal_servings = textView_meal_servings.getText().toString();
-            recipeDetailsC1.meal_ready = textView_meal_ready.getText().toString();
-            recipeDetailsC1.meal_price = textView_meal_price.getText().toString();
-            recipeDetailsC1.meal_name = textView_meal_name.getText().toString();
+            recipeDetailsC1.meal_servings = servings.getText().toString();
+            recipeDetailsC1.meal_ready = prepTime.getText().toString();
+            recipeDetailsC1.meal_price = costPerServing.getText().toString();
+            recipeDetailsC1.meal_name = recipeName.getText().toString();
             recipeDetailsC1.imagPath = path;
             recipeDetailsC = recipeDetailsC1;
 
@@ -565,8 +566,8 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
                 runOnUiThread(() -> {
                     WaitDialog.dismiss();
                     PopTip.show("Successfully Favorite!");
-                    Glide.with(PostDetailsActivity.this).load(R.drawable.ic_collect).into(btnFavorite);
-                    btnFavorite.setImageTintList(ColorStateList.valueOf(Color.YELLOW));
+                    Glide.with(PostDetailsActivity.this).load(R.drawable.ic_collect).into(favouriteButton);
+                    favouriteButton.setImageTintList(ColorStateList.valueOf(Color.YELLOW));
                 });
             }).start();
             dialog.dismiss();
@@ -595,5 +596,50 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
                 spinnerCategories.setAdapter(adapter);
             });
         }).start();
-    }*/
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        int itemId = menuItem.getItemId();
+        if (itemId == R.id.nav_home) {
+            Intent intent = new Intent(PostDetailsActivity.this, MainActivity.class);
+            finish();
+            startActivity(intent);
+        } else if (itemId == R.id.nav_recipes) {
+            Intent intent = new Intent(PostDetailsActivity.this, RecipeActivity.class);
+            finish();
+            startActivity(intent);
+        } else if (itemId == R.id.nav_search) {
+            Intent intent2 = new Intent(PostDetailsActivity.this, AdvancedSearchActivity.class);
+            finish();
+            startActivity(intent2);
+        } else if (itemId == R.id.nav_favourites) {
+            Intent intent4 = new Intent(PostDetailsActivity.this, CreateCategoryActivity.class);
+            finish();
+            startActivity(intent4);
+        } else if (itemId == R.id.nav_profile) {
+            Intent intent4 = new Intent(PostDetailsActivity.this, ProfileActivity.class);
+            finish();
+            startActivity(intent4);
+        } else if (itemId == R.id.nav_logout) {
+            FirebaseAuth.getInstance().signOut();
+            Intent intent5 = new Intent(PostDetailsActivity.this, LoginActivity.class);
+            finish();
+            startActivity(intent5);
+        } else if (itemId == R.id.nav_community) {
+            Intent intent6 = new Intent(PostDetailsActivity.this, CommunityActivity.class);
+            finish();
+            startActivity(intent6);
+        } else if (itemId == R.id.nav_pantry) {
+            Intent intent7 = new Intent(PostDetailsActivity.this, PantryActivity.class);
+            finish();
+            startActivity(intent7);
+        } else if (itemId == R.id.nav_complex_search) {
+            Intent intent8 = new Intent(PostDetailsActivity.this, ComplexSearchActivity.class);
+            finish();
+            startActivity(intent8);
+        }
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
+    }
 }
