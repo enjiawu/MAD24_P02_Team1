@@ -23,6 +23,9 @@
         android:theme="@style/Theme.pocketchef"
         tools:targetApi="33">
         <activity
+            android:name=".PantryRecipesActivity"
+            android:exported="false" />
+        <activity
             android:name=".PostDetailsActivity"
             android:exported="false" />
         <activity
@@ -39,7 +42,7 @@
             android:exported="false" />
         <activity
             android:name=".CommunityActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".CreateCategoryActivity"
             android:exported="false" />

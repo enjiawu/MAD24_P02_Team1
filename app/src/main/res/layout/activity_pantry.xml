@@ -69,9 +69,11 @@
 
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/availableRecipesButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/paletteorange"
+        android:textColor="@color/palettetext"
         android:text="Available Recipes"
         app:icon="@drawable/ic_recipes"
         app:layout_anchor="@id/bottomAppBar"/>
