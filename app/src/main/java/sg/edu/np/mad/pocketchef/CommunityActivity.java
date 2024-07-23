@@ -1,5 +1,7 @@
 package sg.edu.np.mad.pocketchef;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +13,7 @@ import android.widget.ProgressBar;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -30,6 +33,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -42,6 +47,8 @@ import java.util.List;
 import sg.edu.np.mad.pocketchef.Adapters.CommunityAdapter;
 import sg.edu.np.mad.pocketchef.Adapters.SearchedRecipesAdapter;
 import sg.edu.np.mad.pocketchef.Listener.PostClickListener;
+import sg.edu.np.mad.pocketchef.Listener.PostLikeClickListener;
+import sg.edu.np.mad.pocketchef.Listener.RecipeClickListener;
 import sg.edu.np.mad.pocketchef.Models.Comment;
 import sg.edu.np.mad.pocketchef.Models.Post;
 import sg.edu.np.mad.pocketchef.Models.SearchedRecipeApiResponse;
@@ -56,6 +63,8 @@ public class CommunityActivity extends AppCompatActivity implements NavigationVi
     // XML Variables
     private ProgressBar progressBar;
     private ImageView addPostButton;
+
+    private CommunityAdapter adapter;
 
     // Database
     FirebaseAuth mAuth;
@@ -132,18 +141,57 @@ public class CommunityActivity extends AppCompatActivity implements NavigationVi
                 List<Post> posts = new ArrayList<>();
                 for (DataSnapshot postSnapshot : snapshot.getChildren()) {
                     Post post = postSnapshot.getValue(Post.class);
+                    post.setPostKey(postSnapshot.getKey()); // Set the postKey for each Post object
                     posts.add(post);
                 }
 
                 // Set the adapter to the RecyclerView
                 RecyclerView recyclerView = findViewById(R.id.post_recycler_view);
                 recyclerView.setLayoutManager(new LinearLayoutManager(CommunityActivity.this));
-                CommunityAdapter adapter = new CommunityAdapter(CommunityActivity.this, posts, new PostClickListener() {
+                adapter = new CommunityAdapter(CommunityActivity.this, posts, new PostClickListener() {
                     @Override
                     public void onPostClicked(String postKey) {
-                        // Handle post click here
+                        Log.d("Community", postKey);
+                        //To see recipe details
+                        Intent postDetails = new Intent(CommunityActivity.this, PostDetailsActivity.class)
+                                .putExtra("id", postKey);
+                        startActivity(postDetails);
+                    }
+                }, new PostLikeClickListener() {
+                    @Override
+                    public void onLikeClicked(String postKey, int position) {
+                        // Find the post with the matching postKey
+                        String userId = mAuth.getCurrentUser().getUid();
+                        postsRef.child(postKey).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                Post post = snapshot.getValue(Post.class);
+
+                                if (post != null && snapshot.getKey().equals(postKey)) {
+                                    if (post.getLikesUsers().contains(userId)) {
+                                        post.getLikesUsers().remove(userId);
+                                        post.setLikes(post.getLikes() - 1);
+                                    } else {
+                                        post.getLikesUsers().add(userId);
+                                        post.setLikes(post.getLikes() + 1);
+                                    }
+
+                                    postsRef.child(postKey).setValue(post).addOnCompleteListener(task -> {
+                                        if (task.isSuccessful()) {
+                                            adapter.notifyItemChanged(position);
+                                        }
+                                    });
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                // Handle potential errors
+                            }
+                        });
                     }
                 });
+
                 recyclerView.setAdapter(adapter);
 
                 // Making the progress bar disappear after posts get loaded
@@ -151,7 +199,7 @@ public class CommunityActivity extends AppCompatActivity implements NavigationVi
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // Handle error here
+                // Handle potential errors
             }
         });
     }

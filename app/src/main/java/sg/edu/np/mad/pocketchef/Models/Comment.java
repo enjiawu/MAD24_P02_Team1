@@ -1,16 +1,23 @@
 package sg.edu.np.mad.pocketchef.Models;
 
-public class Comment {
-    private String commentId;
-    private String comment;
-    private String userId;
-    private String username;
+import com.google.firebase.database.ServerValue;
 
-    public Comment(String commentId, String comment, String userId, String username, String userProfilePicture) {
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
+
+public class Comment {
+    private String commentId, comment, userId, username, userProfilePicture;
+    private Object date;
+
+    public Comment(String comment, String userId, String username, String userProfilePicture) {
         this.commentId = commentId;
         this.comment = comment;
         this.userId = userId;
         this.username = username;
+        this.userProfilePicture = userProfilePicture;
+        this.date = ServerValue.TIMESTAMP;
     }
 
     public Comment() {
@@ -46,5 +53,29 @@ public class Comment {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public Object getDate() {
+        return date;
+    }
+
+    public void setDate(Object date) {
+        this.date = date;
+    }
+
+    public String formatDate() {
+        long timeStampSeconds = (Long) date / 1000; // Convert milliseconds to seconds
+        Date date = new Date(timeStampSeconds * 1000); // Create Date object
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        return dateFormat.format(date);
+    }
+
+    public String getUserProfilePicture() {
+        return userProfilePicture;
+    }
+
+    public void setUserProfilePicture(String userProfilePicture) {
+        this.userProfilePicture = userProfilePicture;
     }
 }
