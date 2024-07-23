@@ -67,7 +67,9 @@
                         android:layout_margin="4dp"
                         android:radius="16dp"
                         android:strokeColor="@android:color/transparent"
-                        app:cardElevation="4dp">
+                        app:cardElevation="4dp"
+                        app:strokeWidth="0dp"
+                        app:cardBackgroundColor="@color/palettepeach">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -75,18 +77,18 @@
                             android:orientation="vertical">
 
                             <!-- Meal Name TextView -->
-                            <TextView
+                            <com.google.android.material.textview.MaterialTextView
                                 android:id="@+id/textView_meal_name"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:padding="4dp"
                                 android:text="@string/recipe_name"
-                                android:textColor="@color/paletteorange"
+                                android:textColor="@color/palettedarkblue"
                                 android:textSize="20sp"
                                 android:textStyle="bold" />
 
                             <!-- Meal Source TextView -->
-                            <TextView
+                            <com.google.android.material.textview.MaterialTextView
                                 android:id="@+id/textView_meal_source"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -134,7 +136,9 @@
                             android:layout_marginEnd="12dp"
                             android:layout_marginBottom="12dp"
                             android:radius="8dp"
-                            app:cardElevation="2dp">
+                            app:cardElevation="2dp"
+                            app:strokeWidth="0dp"
+                            app:cardBackgroundColor="@color/palettepeach">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -146,24 +150,24 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
-                                    android:backgroundTint="@color/white"
+                                    android:backgroundTint="@color/paletteorange"
                                     android:radius="8dp"
                                     app:cardElevation="2dp"
                                     app:contentPadding="4dp"
                                     app:strokeWidth="0dp">
 
-                                    <TextView
+                                    <com.google.android.material.textview.MaterialTextView
                                         android:id="@+id/textView_protein_label"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center"
                                         android:text="@string/textView_protein_label_text"
-                                        android:textColor="@color/paletteorange"
+                                        android:textColor="@color/palettedarkblue"
                                         android:textSize="18sp"
                                         android:textStyle="normal" />
                                 </com.google.android.material.card.MaterialCardView>
 
-                                <TextView
+                                <com.google.android.material.textview.MaterialTextView
                                     android:id="@+id/textView_protein_value"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -184,7 +188,9 @@
                             android:layout_marginEnd="12dp"
                             android:layout_marginBottom="12dp"
                             android:radius="8dp"
-                            app:cardElevation="2dp">
+                            app:cardElevation="2dp"
+                            app:strokeWidth="0dp"
+                            app:cardBackgroundColor="@color/palettepeach">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -196,24 +202,24 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
-                                    android:backgroundTint="@color/white"
+                                    android:backgroundTint="@color/paletteorange"
                                     android:radius="8dp"
                                     app:cardElevation="2dp"
                                     app:contentPadding="4dp"
                                     app:strokeWidth="0dp">
 
-                                    <TextView
+                                    <com.google.android.material.textview.MaterialTextView
                                         android:id="@+id/textView_fat_label"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center"
                                         android:text="@string/textView_fat_label_text"
-                                        android:textColor="@color/paletteorange"
+                                        android:textColor="@color/palettedarkblue"
                                         android:textSize="18sp"
                                         android:textStyle="normal" />
                                 </com.google.android.material.card.MaterialCardView>
 
-                                <TextView
+                                <com.google.android.material.textview.MaterialTextView
                                     android:id="@+id/textView_fat_value"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -234,7 +240,9 @@
                             android:layout_marginEnd="12dp"
                             android:layout_marginBottom="12dp"
                             android:radius="8dp"
-                            app:cardElevation="2dp">
+                            app:cardElevation="2dp"
+                            app:strokeWidth="0dp"
+                            app:cardBackgroundColor="@color/palettepeach">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -246,24 +254,24 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
-                                    android:backgroundTint="@color/white"
+                                    android:backgroundTint="@color/paletteorange"
                                     android:radius="8dp"
                                     app:cardElevation="2dp"
                                     app:contentPadding="4dp"
                                     app:strokeWidth="0dp">
 
-                                    <TextView
+                                    <com.google.android.material.textview.MaterialTextView
                                         android:id="@+id/textView_calories_label"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center"
                                         android:text="@string/textView_calories_label_text"
-                                        android:textColor="@color/paletteorange"
+                                        android:textColor="@color/palettedarkblue"
                                         android:textSize="18sp"
                                         android:textStyle="normal" />
                                 </com.google.android.material.card.MaterialCardView>
 
-                                <TextView
+                                <com.google.android.material.textview.MaterialTextView
                                     android:id="@+id/textView_calories_value"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -284,7 +292,9 @@
                             android:layout_marginEnd="12dp"
                             android:layout_marginBottom="12dp"
                             android:radius="8dp"
-                            app:cardElevation="2dp">
+                            app:cardElevation="2dp"
+                            app:strokeWidth="0dp"
+                            app:cardBackgroundColor="@color/palettepeach">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -296,24 +306,24 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
-                                    android:backgroundTint="@color/white"
+                                    android:backgroundTint="@color/paletteorange"
                                     android:radius="8dp"
                                     app:cardElevation="2dp"
                                     app:contentPadding="4dp"
                                     app:strokeWidth="0dp">
 
-                                    <TextView
+                                    <com.google.android.material.textview.MaterialTextView
                                         android:id="@+id/textView_daily_requirements_coverage_label"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center"
                                         android:text="@string/textView_daily_requirements_coverage_label_text"
-                                        android:textColor="@color/paletteorange"
+                                        android:textColor="@color/palettedarkblue"
                                         android:textSize="18sp"
                                         android:textStyle="normal" />
                                 </com.google.android.material.card.MaterialCardView>
 
-                                <TextView
+                                <com.google.android.material.textview.MaterialTextView
                                     android:id="@+id/textView_daily_requirements_coverage_value"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -337,7 +347,7 @@
                         android:outlineSpotShadowColor="@color/paletteorange"
                         android:padding="8dp"
                         android:text="@string/button_Nutrition_label_text"
-                        android:textColor="@color/palettetext"
+                        android:textColor="@color/palettedarkblue"
                         android:elevation="4dp"
                         />
 
@@ -380,7 +390,8 @@
                         android:padding="16dp"
                         android:radius="8dp"
                         app:cardBackgroundColor="@color/palettebeige"
-                        app:cardElevation="4dp">
+                        app:cardElevation="4dp"
+                        app:strokeWidth="0dp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -394,15 +405,16 @@
                                 android:layout_marginBottom="8dp"
                                 android:radius="8dp"
                                 app:strokeWidth="0dp"
-                                app:cardElevation="2dp">
+                                app:cardElevation="2dp"
+                                app:cardBackgroundColor="@color/palettepeach">
 
-                                <TextView
+                                <com.google.android.material.textview.MaterialTextView
                                     android:id="@+id/textView_meal_servings"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:drawableStart="@drawable/ic_servings"
                                     android:drawablePadding="8dp"
-                                    android:drawableTint="@color/paletteorange"
+                                    android:drawableTint="@color/palettedarkblue"
                                     android:padding="8dp"
                                     android:text="@string/servings_text"
                                     android:textColor="@color/paletteblue"
@@ -418,15 +430,15 @@
                                 android:layout_marginBottom="8dp"
                                 android:radius="8dp"
                                 app:strokeWidth="0dp"
-                                app:cardElevation="2dp">
+                                app:cardBackgroundColor="@color/palettepeach">
 
-                                <TextView
+                                <com.google.android.material.textview.MaterialTextView
                                     android:id="@+id/textView_meal_ready"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:drawableStart="@drawable/ic_time"
                                     android:drawablePadding="8dp"
-                                    android:drawableTint="@color/paletteorange"
+                                    android:drawableTint="@color/palettedarkblue"
                                     android:padding="8dp"
                                     android:text="@string/time_text"
                                     android:textColor="@color/paletteblue"
@@ -441,15 +453,16 @@
                                 android:layout_height="wrap_content"
                                 android:radius="8dp"
                                 app:strokeWidth="0dp"
-                                app:cardElevation="2dp">
+                                app:cardElevation="2dp"
+                                app:cardBackgroundColor="@color/palettepeach">
 
-                                <TextView
+                                <com.google.android.material.textview.MaterialTextView
                                     android:id="@+id/textView_meal_price"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:drawableStart="@drawable/ic_cost"
                                     android:drawablePadding="8dp"
-                                    android:drawableTint="@color/paletteorange"
+                                    android:drawableTint="@color/palettedarkblue"
                                     android:padding="8dp"
                                     android:text="@string/cost_text"
                                     android:textColor="@color/paletteblue"
@@ -469,7 +482,7 @@
                         android:radius="8dp"
                         app:cardElevation="4dp">
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
@@ -484,7 +497,8 @@
                         android:id="@+id/recycler_meal_instructions"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="8dp" />
+                        android:layout_margin="8dp"
+                        android:background="@color/palettebeige"/>
 
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
@@ -509,7 +523,8 @@
                         android:id="@+id/recycler_meal_ingredients"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="8dp" />
+                        android:layout_margin="8dp"
+                        android:background="@color/palettebeige"/>
 
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
@@ -534,7 +549,8 @@
                         android:id="@+id/recycler_meal_similar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="8dp" />
+                        android:layout_margin="8dp"
+                        android:background="@color/palettebeige"/>
                 </LinearLayout>
             </androidx.core.widget.NestedScrollView>
             <!-- add to favorite list button -->

@@ -35,6 +35,7 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.kongzue.dialogx.dialogs.InputDialog;
 import com.kongzue.dialogx.dialogs.MessageDialog;
@@ -68,7 +69,7 @@ public class RecipeDetailsActivity extends AppCompatActivity
     // Global variables for activity
     private static final long API_REQUEST_DELAY = 1000;
     int recipeId;
-    TextView textView_meal_name, textView_meal_source, textView_meal_servings, textView_meal_ready, textView_meal_price,
+    MaterialTextView textView_meal_name, textView_meal_source, textView_meal_servings, textView_meal_ready, textView_meal_price,
             textView_protein_value, textView_fat_value, textView_calories_value, textView_daily_requirements_coverage_value;
     ImageView imageView_meal_image, imageView_nutrition;
     RecyclerView recycler_meal_ingredients, recycler_meal_similar, recycler_meal_instructions;
