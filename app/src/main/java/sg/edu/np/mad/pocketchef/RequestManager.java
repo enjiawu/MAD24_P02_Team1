@@ -1,9 +1,12 @@
 package sg.edu.np.mad.pocketchef;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import retrofit2.Call;
@@ -14,12 +17,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import sg.edu.np.mad.pocketchef.Listener.IngredientsRecipesListener;
 import sg.edu.np.mad.pocketchef.Listener.InstructionsListener;
 import sg.edu.np.mad.pocketchef.Listener.RdmRecipeRespListener;
 import sg.edu.np.mad.pocketchef.Listener.RecipeDetailsListener;
 import sg.edu.np.mad.pocketchef.Listener.SearchRecipeListener;
 import sg.edu.np.mad.pocketchef.Listener.SearchRecipeQueryListener;
 import sg.edu.np.mad.pocketchef.Listener.SimilarRecipesListener;
+import sg.edu.np.mad.pocketchef.Models.IngredientsRecipesResponse;
 import sg.edu.np.mad.pocketchef.Models.InstructionsResponse;
 import sg.edu.np.mad.pocketchef.Models.RandomRecipeApiResponse;
 import sg.edu.np.mad.pocketchef.Models.RecipeDetailsResponse;
@@ -117,6 +122,28 @@ public class RequestManager {
 
             @Override
             public void onFailure(@NonNull Call<List<InstructionsResponse>> call, @NonNull Throwable throwable) {
+                listener.didError(throwable.getMessage());
+            }
+        });
+    }
+
+    public void getRecipesByIngredients(IngredientsRecipesListener listener, String ingredients) {
+        CallRecipesByIngredients callIngredientsRecipes = retrofit.create(CallRecipesByIngredients.class);
+        Call<List<IngredientsRecipesResponse>> call = callIngredientsRecipes.callIngredientsRecipes(ingredients, "10","1","6895c25fb3bd4372a73ff035ac46b7ab");
+
+
+        call.enqueue(new Callback<List<IngredientsRecipesResponse>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<IngredientsRecipesResponse>> call, @NonNull Response<List<IngredientsRecipesResponse>> response) {
+                if (!response.isSuccessful()) {
+                    listener.didError(response.message());
+                    return;
+                }
+                listener.didFetch(response.body(), response.message());
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<IngredientsRecipesResponse>> call, @NonNull Throwable throwable) {
                 listener.didError(throwable.getMessage());
             }
         });
@@ -224,6 +251,17 @@ public class RequestManager {
         @GET("recipes/{id}/analyzedInstructions")
         Call<List<InstructionsResponse>> callInstructions(
                 @Path("id") int id,
+                @Query("apiKey") String apiKey
+        );
+    }
+
+    // Method to GET Instructions from API
+    private interface CallRecipesByIngredients {
+        @GET("recipes/findByIngredients")
+        Call<List<IngredientsRecipesResponse>> callIngredientsRecipes(
+                @Query("ingredients") String ingredients,
+                @Query("number") String number,
+                @Query("ranking") String ranking,
                 @Query("apiKey") String apiKey
         );
     }

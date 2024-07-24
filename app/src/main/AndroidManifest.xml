@@ -34,6 +34,9 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".PantryRecipesActivity"
+            android:exported="false" />
+        <activity
             android:name=".ProfileActivity"
             android:exported="false" />
         <activity
