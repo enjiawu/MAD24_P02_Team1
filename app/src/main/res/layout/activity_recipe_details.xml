@@ -67,7 +67,7 @@
                         android:layout_margin="4dp"
                         android:radius="16dp"
                         android:strokeColor="@android:color/transparent"
-                        app:cardBackgroundColor="@color/palettepeach"
+                        app:cardBackgroundColor="@color/paletteorange"
                         app:cardElevation="4dp"
                         app:strokeWidth="0dp">
 
