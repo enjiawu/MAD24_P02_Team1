@@ -26,7 +26,7 @@
             android:scrollHorizontally="true"
             android:singleLine="true"
             android:text="@string/textView_title_text"
-            android:textColor="@color/paletteorange"
+            android:textColor="@color/palettedarkblue"
             android:textSize="24sp"
             android:textStyle="bold" />
 
