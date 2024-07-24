@@ -129,12 +129,12 @@ public class RequestManager {
 
     public void getRecipesByIngredients(IngredientsRecipesListener listener, String ingredients) {
         CallRecipesByIngredients callIngredientsRecipes = retrofit.create(CallRecipesByIngredients.class);
-        Call<List<IngredientsRecipesResponse>> call = callIngredientsRecipes.callIngredientsRecipes(ingredients, "10","1","6895c25fb3bd4372a73ff035ac46b7ab");
+        Call<ArrayList<IngredientsRecipesResponse>> call = callIngredientsRecipes.callIngredientsRecipes(ingredients, "10","1","6895c25fb3bd4372a73ff035ac46b7ab");
 
 
-        call.enqueue(new Callback<List<IngredientsRecipesResponse>>() {
+        call.enqueue(new Callback<ArrayList<IngredientsRecipesResponse>>() {
             @Override
-            public void onResponse(@NonNull Call<List<IngredientsRecipesResponse>> call, @NonNull Response<List<IngredientsRecipesResponse>> response) {
+            public void onResponse(@NonNull Call<ArrayList<IngredientsRecipesResponse>> call, @NonNull Response<ArrayList<IngredientsRecipesResponse>> response) {
                 if (!response.isSuccessful()) {
                     listener.didError(response.message());
                     return;
@@ -143,7 +143,7 @@ public class RequestManager {
             }
 
             @Override
-            public void onFailure(@NonNull Call<List<IngredientsRecipesResponse>> call, @NonNull Throwable throwable) {
+            public void onFailure(@NonNull Call<ArrayList<IngredientsRecipesResponse>> call, @NonNull Throwable throwable) {
                 listener.didError(throwable.getMessage());
             }
         });
@@ -258,7 +258,7 @@ public class RequestManager {
     // Method to GET Instructions from API
     private interface CallRecipesByIngredients {
         @GET("recipes/findByIngredients")
-        Call<List<IngredientsRecipesResponse>> callIngredientsRecipes(
+        Call<ArrayList<IngredientsRecipesResponse>> callIngredientsRecipes(
                 @Query("ingredients") String ingredients,
                 @Query("number") String number,
                 @Query("ranking") String ranking,
