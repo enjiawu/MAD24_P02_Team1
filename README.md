@@ -113,7 +113,8 @@ Optional:
 #### Generated Shopping List - Wenya - [ ]
 ### Limitations of API:
 #### Advanced Searching - [recipes/complexSearch](https://spoonacular.com/food-api/docs#Search-Recipes-Complex)
-- Some inputs do not generate the correct recipe details when the query and excludeIngredients parameters are both entered. For example, when the user inputs "apple" for the query and excludeIngredients parameters, the API still returns recipes with apples. However, all other food options work, like entering cheese or chicken for both parameters. 
+- Some inputs do not generate the correct recipe details when the query and excludeIngredients parameters are both entered. For example, when the user inputs "apple" for the query and excludeIngredients parameters, the API still returns recipes with apples. However, all other food options work, like entering cheese or chicken for both parameters.
+- API calls for equipment and ingredient might be changed due to API Provider changing their output. For example, ingredients utilise "ingredient.image" which is the parameter itself such as "/banana.jpg", however for equipment, it is the full url "https://img.spoonacular.com/equipments_100x100/pan.png". Undocumented changes for this API have happened, so if images do not show up in the recyclerview for "RecipeDetailsActivity", please check through postman.
 ---------------------------------------------
 ### Screenshots of Application:
 #### 1) Login: 
