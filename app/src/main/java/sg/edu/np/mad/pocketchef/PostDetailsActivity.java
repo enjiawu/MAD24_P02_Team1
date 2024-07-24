@@ -1,7 +1,6 @@
 package sg.edu.np.mad.pocketchef;
 
 import static android.content.ContentValues.TAG;
-import static android.content.Intent.ACTION_SEND;
 
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -9,6 +8,7 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
@@ -25,7 +25,6 @@ import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.graphics.Insets;
 import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
@@ -48,6 +47,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.kongzue.dialogx.dialogs.BottomMenu;
 import com.kongzue.dialogx.dialogs.InputDialog;
 import com.kongzue.dialogx.dialogs.MessageDialog;
 import com.kongzue.dialogx.dialogs.PopTip;
@@ -57,17 +57,18 @@ import com.google.firebase.dynamiclinks.DynamicLink;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import android.net.Uri;
+
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import sg.edu.np.mad.pocketchef.Adapters.PostCommentsAdapter;
 import sg.edu.np.mad.pocketchef.Adapters.PostInfoAdapter;
+import sg.edu.np.mad.pocketchef.Listener.CommentOnHoldListener;
 import sg.edu.np.mad.pocketchef.Models.CategoryBean;
 import sg.edu.np.mad.pocketchef.Models.Comment;
 import sg.edu.np.mad.pocketchef.Models.Post;
@@ -87,6 +88,7 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
     ImageView recipeImage, profilePicture;
     RecyclerView instructionsRecyclerView, ingredientsRecyclerView, equipmentRecyclerView, commentsRecyclerView;
     TextInputEditText commentInput;
+    PostCommentsAdapter adapter;
 
     // Database
     FirebaseAuth mAuth;
@@ -160,7 +162,6 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
         commentsRecyclerView = findViewById(R.id.recycler_comments);
         //Initialize comment input
         commentInput = findViewById(R.id.addCommentInput);
-
 
         postKey = getIntent().getStringExtra("id");
 
@@ -246,11 +247,10 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
                         profilePicture.setImageResource(R.drawable.pocketchef_logo);
                     }
 
-
                     // Load the ingredients, instructions, and comments
                     loadInstructions(post.getInstructions());
                     loadIngredients(post.getIngredients());
-                    if(post.getEquipment() != null){
+                    if(post.getEquipment() != null && !post.getEquipment().isEmpty()){
                         loadEquipment(post.getEquipment());
                         noEquipmentText.setVisibility(View.GONE);
                     }
@@ -314,7 +314,7 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
                 Post post = snapshot.getValue(Post.class);
                 if (post != null) {
                     List<Comment> comments = post.getComments();
-                    PostCommentsAdapter adapter = new PostCommentsAdapter(PostDetailsActivity.this, comments);
+                    adapter = new PostCommentsAdapter(PostDetailsActivity.this, comments, commentOnHoldListener);
                     commentsRecyclerView.setAdapter(adapter);
                     commentsRecyclerView.setLayoutManager(new LinearLayoutManager(PostDetailsActivity.this));
                 }
@@ -375,6 +375,123 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
                     }).start();
 
                     return false;
+                });
+            }
+        });
+    }
+
+    // Comment on hold listener
+    private final CommentOnHoldListener commentOnHoldListener = (position) -> {
+        Log.d(TAG, String.valueOf(position));
+        postsRef.child(postKey).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Post post = snapshot.getValue(Post.class);
+
+                String currentUserId = mAuth.getCurrentUser().getUid();
+
+                List<Comment> comments = post.getComments();
+
+                Log.d(TAG, String.valueOf(comments.get(position).getUserId()));
+                Log.d(TAG, String.valueOf(currentUserId));
+
+                // Check if the current user is the owner of the comment
+                if (!comments.get(position).getUserId().equals(currentUserId) && !post.getUserId().equals(currentUserId)) {
+                    // If the user does not own the comment or is not the owner of the post, do nothing
+                    return;
+                }
+
+                Log.d(TAG, "Working");
+                String[] options = {"Delete Comment"};
+
+                BottomMenu.show(options)
+                        .setMessage(Html.fromHtml("<b>Post Options</b>"))
+                        .setOnMenuItemClickListener((dialog, text, index) -> {
+                            // Handle Edit Post
+                            if (index == 0) {
+                                // Handle Edit Post
+                                handleDeleteComment(position);
+                            }
+                            dialog.dismiss();
+                            return true;
+                        });
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle potential errors
+            }
+        });
+
+
+    };
+
+    // Function to delete post if it belongs to the user
+    private void handleDeleteComment(int position) {
+        // Confirm deletion with a dialog
+        BottomMenu.show(Collections.singletonList("Are you sure you want to delete this comment?"))
+                .setOnMenuItemClickListener((dialog, text, index) -> {
+                    if (index == 0) { // User confirmed deletion
+                        WaitDialog.show("Deleting...");
+
+                        // Perform the deletion in a separate thread to avoid blocking the UI
+                        postsRef.child(postKey).child("comments").child(String.valueOf(position)).removeValue()
+                                .addOnCompleteListener(task -> {
+                                    if (task.isSuccessful()) {
+                                        updateCommentsListAndDatabase();
+                                    } else {
+                                        runOnUiThread(() -> {
+                                            // Handle the failure, e.g., show a Toast message
+                                            WaitDialog.dismiss();
+                                            Toast.makeText(PostDetailsActivity.this, "Failed to delete comment", Toast.LENGTH_SHORT).show();
+                                        });
+                                    }
+                                });
+                    }
+
+                    dialog.dismiss();
+                    return true;
+                });
+    }
+
+    private void updateCommentsListAndDatabase() {
+        postsRef.child(postKey).child("comments").get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DataSnapshot dataSnapshot = task.getResult();
+                List<Comment> updatedComments = new ArrayList<>();
+
+                // Iterate through the comments and remove any null values
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Comment comment = snapshot.getValue(Comment.class);
+                    if (comment != null) {
+                        updatedComments.add(comment);
+                    }
+                }
+
+                // Update the adapter with the new list of comments
+                runOnUiThread(() -> {
+                    adapter.updateComments(updatedComments);
+                    adapter.notifyDataSetChanged();
+
+                    if (updatedComments.isEmpty()) {
+                        noCommentsText.setVisibility(View.VISIBLE);
+                    } else {
+                        noCommentsText.setVisibility(View.GONE);
+                    }
+
+                    WaitDialog.dismiss();
+                });
+
+                // Update the database with the new list of comments
+                postsRef.child(postKey).child("comments").setValue(updatedComments)
+                        .addOnCompleteListener(dbTask -> {
+                            if (!dbTask.isSuccessful()) {
+                                runOnUiThread(() -> Toast.makeText(PostDetailsActivity.this, "Failed to update comments list", Toast.LENGTH_SHORT).show());
+                            }
+                        });
+            } else {
+                runOnUiThread(() -> {
+                    WaitDialog.dismiss();
+                    Toast.makeText(PostDetailsActivity.this, "Failed to fetch comments", Toast.LENGTH_SHORT).show();
                 });
             }
         });

@@ -20,8 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clipToPadding="false"
-            android:background="@color/paletteorange"
-            app:layoutDescription="@xml/recipe_activity_scene">
+            android:background="@color/paletteorange">
 
             <!-- ImageView for Back Button to return to profile page -->
             <LinearLayout

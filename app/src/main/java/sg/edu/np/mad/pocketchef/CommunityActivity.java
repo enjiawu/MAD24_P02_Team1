@@ -1,64 +1,58 @@
 package sg.edu.np.mad.pocketchef;
 
-import static android.content.ContentValues.TAG;
 import static android.view.View.VISIBLE;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
-import androidx.core.graphics.Insets;
 import androidx.core.view.GravityCompat;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.MutableData;
-import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-
-import org.checkerframework.checker.units.qual.C;
+import com.kongzue.dialogx.dialogs.BottomMenu;
+import com.kongzue.dialogx.dialogs.WaitDialog;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import sg.edu.np.mad.pocketchef.Adapters.CommunityAdapter;
-import sg.edu.np.mad.pocketchef.Adapters.SearchedRecipesAdapter;
 import sg.edu.np.mad.pocketchef.Listener.PostClickListener;
 import sg.edu.np.mad.pocketchef.Listener.PostLikeClickListener;
-import sg.edu.np.mad.pocketchef.Listener.RecipeClickListener;
+import sg.edu.np.mad.pocketchef.Listener.PostOnHoldListener;
 import sg.edu.np.mad.pocketchef.Models.Comment;
 import sg.edu.np.mad.pocketchef.Models.Post;
-import sg.edu.np.mad.pocketchef.Models.SearchedRecipeApiResponse;
 
 public class CommunityActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+    private static final String TAG = "CommunityActivity";
+
     //Menu
     DrawerLayout drawerLayout;
     NavigationView navigationView;
@@ -73,6 +67,7 @@ public class CommunityActivity extends AppCompatActivity implements NavigationVi
     private CommunityAdapter adapter;
     private SearchView searchView;
     private Spinner spinner;
+    private RecyclerView recyclerView;
 
     // Database
     FirebaseAuth mAuth;
@@ -120,6 +115,7 @@ public class CommunityActivity extends AppCompatActivity implements NavigationVi
         spinner = findViewById(R.id.sort_by_spinner);
         searchView = findViewById(R.id.searchView_post);
         noPostsFound = findViewById(R.id.noPostsFound);
+        recyclerView = findViewById(R.id.post_recycler_view);
 
         noPostsFound.setVisibility(View.GONE); // Make sure the no posts found is hidden
 
@@ -150,6 +146,7 @@ public class CommunityActivity extends AppCompatActivity implements NavigationVi
             public boolean onQueryTextChange(String newText) {
                 if (newText.isEmpty()){
                     setupSearchedRecipeRecyclerView();
+                    noPostsFound.setVisibility(View.GONE); // Make sure the no posts found is shown
                     return false;
                 }
                 searchPost(newText);
@@ -171,7 +168,7 @@ public class CommunityActivity extends AppCompatActivity implements NavigationVi
 
         // Check if add post button has been clicked
         addPostButton.setOnClickListener(v -> {
-            Log.d("Community", "Working");
+            Log.d(TAG, "Add Post");
             // Go to add post activity
             Intent intent = new Intent(CommunityActivity.this, AddPostActivity.class);
             finish();
@@ -183,6 +180,12 @@ public class CommunityActivity extends AppCompatActivity implements NavigationVi
     public void setupSearchedRecipeRecyclerView() {
         progressBar.setVisibility(VISIBLE); // Making the progress bar visible as the posts get loaded
 
+        // Initialize the RecyclerView and Adapter
+        recyclerView.setLayoutManager(new LinearLayoutManager(CommunityActivity.this));
+        adapter = new CommunityAdapter(CommunityActivity.this, new ArrayList<>(), postClickListener, postLikeClickListener, postOnHoldListener);
+        recyclerView.setAdapter(adapter);
+
+        // Add a listener for data changes
         postsRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -190,61 +193,18 @@ public class CommunityActivity extends AppCompatActivity implements NavigationVi
                 for (DataSnapshot postSnapshot : snapshot.getChildren()) {
                     Post post = postSnapshot.getValue(Post.class);
                     post.setPostKey(postSnapshot.getKey()); // Set the postKey for each Post object
+
                     posts.add(post);
                 }
 
-                // Set the adapter to the RecyclerView
-                RecyclerView recyclerView = findViewById(R.id.post_recycler_view);
-                recyclerView.setLayoutManager(new LinearLayoutManager(CommunityActivity.this));
-                adapter = new CommunityAdapter(CommunityActivity.this, posts, new PostClickListener() {
-                    @Override
-                    public void onPostClicked(String postKey) {
-                        Log.d("Community", postKey);
-                        //To see recipe details
-                        Intent postDetails = new Intent(CommunityActivity.this, PostDetailsActivity.class)
-                                .putExtra("id", postKey);
-                        startActivity(postDetails);
-                    }
-                }, new PostLikeClickListener() {
-                    @Override
-                    public void onLikeClicked(String postKey, int position) {
-                        // Find the post with the matching postKey
-                        String userId = mAuth.getCurrentUser().getUid();
-                        postsRef.child(postKey).addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                Post post = snapshot.getValue(Post.class);
-
-                                if (post != null && snapshot.getKey().equals(postKey)) {
-                                    if (post.getLikesUsers().contains(userId)) {
-                                        post.getLikesUsers().remove(userId);
-                                        post.setLikes(post.getLikes() - 1);
-                                    } else {
-                                        post.getLikesUsers().add(userId);
-                                        post.setLikes(post.getLikes() + 1);
-                                    }
-
-                                    postsRef.child(postKey).setValue(post).addOnCompleteListener(task -> {
-                                        if (task.isSuccessful()) {
-                                            adapter.notifyItemChanged(position);
-                                        }
-                                    });
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-                                // Handle potential errors
-                            }
-                        });
-                    }
-                });
-
-                recyclerView.setAdapter(adapter);
+                // Update the existing adapter's data
+                adapter.setPosts(sortPostsByNewest(posts));
+                adapter.notifyDataSetChanged();
 
                 // Making the progress bar disappear after posts get loaded
                 progressBar.setVisibility(View.GONE);
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 // Handle potential errors
@@ -252,6 +212,133 @@ public class CommunityActivity extends AppCompatActivity implements NavigationVi
         });
     }
 
+    private final PostClickListener postClickListener = postKey -> {
+        Log.d(TAG, postKey);
+        // To see recipe details
+        Intent postDetails = new Intent(CommunityActivity.this, PostDetailsActivity.class)
+                .putExtra("id", postKey);
+        startActivity(postDetails);
+    };
+
+    private final PostLikeClickListener postLikeClickListener = (postKey, position) -> {
+        // Find the post with the matching postKey
+        String userId = mAuth.getCurrentUser().getUid();
+        postsRef.child(postKey).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Post post = snapshot.getValue(Post.class);
+
+                if (post != null && snapshot.getKey().equals(postKey)) {
+                    if (post.getLikesUsers().contains(userId)) {
+                        post.getLikesUsers().remove(userId);
+                        post.setLikes(post.getLikes() - 1);
+                    } else {
+                        post.getLikesUsers().add(userId);
+                        post.setLikes(post.getLikes() + 1);
+                    }
+
+                    postsRef.child(postKey).setValue(post).addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            adapter.notifyItemChanged(position);
+                        }
+                    });
+                }
+
+                sortPosts(spinner.getSelectedItem().toString());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle potential errors
+            }
+        });
+    };
+
+    private final PostOnHoldListener postOnHoldListener = (postKey, position) -> {
+
+        postsRef.child(postKey).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Post post = snapshot.getValue(Post.class);
+
+                String currentUserId = mAuth.getCurrentUser().getUid();
+
+                // Check if the current user is the owner of the post
+                if (!post.getUserId().equals(currentUserId)) {
+                    // If the user does not own the post, do nothing
+                    return;
+                }
+
+                String[] options = {"Edit Post", "Delete Post"};
+
+                BottomMenu.show(options)
+                    .setMessage(Html.fromHtml("<b>Post Options</b>"))
+                    .setOnMenuItemClickListener((dialog, text, index) -> {
+                        if (index == 0) {
+                            // Handle Edit Post
+                            handleEditPost(postKey);
+                        } else if (index == 1) {
+                            // Handle Delete Post
+                            handleDeletePost(postKey, position);
+                        }
+                        dialog.dismiss();
+                        return true;
+                    });
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle potential errors
+            }
+        });
+
+
+    };
+
+    // Function to edit post if it belongs to the user
+    private void handleEditPost(String postKey) {
+        Log.d(TAG, postKey);
+        // Create an intent to start the AddPostActivity
+        Intent intent = new Intent(CommunityActivity.this, EditPostActivity.class);
+        // Pass the post ID to the intent
+        intent.putExtra("postKey", postKey);
+        // Finish the current activity and start the EditPostActivity
+        finish();
+        startActivity(intent);
+    }
+
+    // Function to delete post if it belongs to the user
+    private void handleDeletePost(String postKey, int position) {
+        // Confirm deletion with a dialog
+        BottomMenu.show(Collections.singletonList("Are you sure you want to delete this post?"))
+            .setOnMenuItemClickListener((dialog, text, index) -> {
+                if (index == 0) { // User confirmed deletion
+                    WaitDialog.show("Deleting...");
+
+                    // Perform the deletion in a separate thread to avoid blocking the UI
+                    postsRef.child(postKey).removeValue()
+                            .addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    runOnUiThread(() -> {
+                                        adapter.removePost(position); // Custom method to remove the item from the adapter
+                                        adapter.notifyItemRemoved(position);
+                                        WaitDialog.dismiss();
+                                    });
+                                } else {
+                                    runOnUiThread(() -> {
+                                        // Handle the failure, e.g., show a Toast message
+                                        WaitDialog.dismiss();
+                                        Toast.makeText(CommunityActivity.this, "Failed to delete post", Toast.LENGTH_SHORT).show();
+                                    });
+                                }
+                            });
+                }
+                dialog.dismiss();
+                return true;
+            });
+    }
+
+
+    // Funciton to search for post
     public void searchPost(String query) {
         progressBar.setVisibility(VISIBLE); // Show progress bar while searching
 
@@ -293,9 +380,11 @@ public class CommunityActivity extends AppCompatActivity implements NavigationVi
                 progressBar.setVisibility(View.GONE);
                 noPostsFound.setVisibility(View.GONE); // Make sure the no posts found is shown
             }
+
         });
     }
 
+    // Function to sort posts based on chosen option
     public void sortPosts(String sortOption) {
         progressBar.setVisibility(View.VISIBLE); // Show progress bar while sorting
 
@@ -343,6 +432,7 @@ public class CommunityActivity extends AppCompatActivity implements NavigationVi
         });
     }
 
+    // Sort the posts by chosen option (my posts, newest, oldest, popularity)
     private List<Post> sortMyPosts(List<Post> posts) {
         String userId = mAuth.getCurrentUser().getUid();
         List<Post> myPosts = new ArrayList<>();
@@ -355,12 +445,12 @@ public class CommunityActivity extends AppCompatActivity implements NavigationVi
     }
 
     private List<Post> sortPostsByNewest(List<Post> posts) {
-        posts.sort((post1, post2) -> Long.compare(post2.getTimeStamp(), post1.getTimeStamp()));
+        posts.sort((post1, post2) -> Long.compare((long) post2.getTimeStamp(), (long) post1.getTimeStamp()));
         return posts;
     }
 
     private List<Post> sortPostsByOldest(List<Post> posts) {
-        posts.sort((post1, post2) -> Long.compare(post1.getTimeStamp(), post2.getTimeStamp()));
+        posts.sort((post1, post2) -> Long.compare((long) post1.getTimeStamp(), (long) post2.getTimeStamp()));
         return posts;
     }
 
@@ -374,56 +464,11 @@ public class CommunityActivity extends AppCompatActivity implements NavigationVi
         return posts;
     }
 
+    // For searching posts and sorting
     private void updateRecyclerView(List<Post> posts) {
-        RecyclerView recyclerView = findViewById(R.id.post_recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(CommunityActivity.this));
-        adapter = new CommunityAdapter(CommunityActivity.this, posts, new PostClickListener() {
-            @Override
-            public void onPostClicked(String postKey) {
-                Log.d("Community", postKey);
-                // To see recipe details
-                Intent postDetails = new Intent(CommunityActivity.this, PostDetailsActivity.class)
-                        .putExtra("id", postKey);
-                startActivity(postDetails);
-            }
-        }, new PostLikeClickListener() {
-            @Override
-            public void onLikeClicked(String postKey, int position) {
-                // Find the post with the matching postKey
-                String userId = mAuth.getCurrentUser().getUid();
-                postsRef.child(postKey).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        Post post = snapshot.getValue(Post.class);
-
-                        if (post != null && snapshot.getKey().equals(postKey)) {
-                            if (post.getLikesUsers().contains(userId)) {
-                                post.getLikesUsers().remove(userId);
-                                post.setLikes(post.getLikes() - 1);
-                            } else {
-                                post.getLikesUsers().add(userId);
-                                post.setLikes(post.getLikes() + 1);
-                            }
-
-                            postsRef.child(postKey).setValue(post).addOnCompleteListener(task -> {
-                                if (task.isSuccessful()) {
-                                    adapter.notifyItemChanged(position);
-                                }
-                            });
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        // Handle potential errors
-                    }
-                });
-            }
-        });
-
-        recyclerView.setAdapter(adapter);
+        adapter.setPosts(posts); // Make sure to have a method to set new data in the adapter
+        adapter.notifyDataSetChanged();
     }
-
 
     // For the menu
     @Override

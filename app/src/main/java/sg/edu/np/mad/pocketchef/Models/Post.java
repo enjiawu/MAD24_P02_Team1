@@ -149,8 +149,8 @@ public class Post {
         this.username = username;
     }
 
-    public long getTimeStamp() {
-        return (long) timeStamp;
+    public Object getTimeStamp() {
+        return timeStamp;
     }
 
     public void setTimeStamp(Object timeStamp) {

@@ -45,6 +45,7 @@ dependencies {
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-database")
     implementation("com.google.firebase:firebase-dynamic-links")
+    implementation("com.google.firebase:firebase-messaging")
     implementation("de.hdodenhof:circleimageview:3.1.0")
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
     implementation("com.github.bumptech.glide:glide:4.16.0")
