@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">pocketchef</string>
-    <string name="api_key">a337243f8ab941abb3c0498cd50e7867</string>
+    <string name="api_key">ecf1f9a5a71942279609e19286c0a00b</string>
     <string name="source">Source</string>
     <string name="textView_title_text">Pocket Chef</string>
     <string name="textView_title_subtitle">Recipes at your fingertips</string>
@@ -195,4 +195,5 @@
     <string name="textView_no_image_available">No Image Available</string>
     <string name="textView_money_placeholder">x.xx</string>
     <string name="textView_carbs_placeholder">100</string>
+    <string name="similar_recipes_text">Similar Recipes</string>
 </resources>
