@@ -67,9 +67,9 @@
                         android:layout_margin="4dp"
                         android:radius="16dp"
                         android:strokeColor="@android:color/transparent"
+                        app:cardBackgroundColor="@color/palettepeach"
                         app:cardElevation="4dp"
-                        app:strokeWidth="0dp"
-                        app:cardBackgroundColor="@color/palettepeach">
+                        app:strokeWidth="0dp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -135,10 +135,10 @@
                             android:layout_columnWeight="1"
                             android:layout_marginEnd="12dp"
                             android:layout_marginBottom="12dp"
-                            android:radius="8dp"
+                            app:cardCornerRadius="8dp"
+                            app:cardBackgroundColor="@color/palettepeach"
                             app:cardElevation="2dp"
-                            app:strokeWidth="0dp"
-                            app:cardBackgroundColor="@color/palettepeach">
+                            app:strokeWidth="0dp">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -151,7 +151,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:backgroundTint="@color/paletteorange"
-                                    android:radius="8dp"
+                                    app:cardCornerRadius="0dp"
                                     app:cardElevation="2dp"
                                     app:contentPadding="4dp"
                                     app:strokeWidth="0dp">
@@ -187,10 +187,10 @@
                             android:layout_columnWeight="1"
                             android:layout_marginEnd="12dp"
                             android:layout_marginBottom="12dp"
-                            android:radius="8dp"
+                            app:cardCornerRadius="8dp"
+                            app:cardBackgroundColor="@color/palettepeach"
                             app:cardElevation="2dp"
-                            app:strokeWidth="0dp"
-                            app:cardBackgroundColor="@color/palettepeach">
+                            app:strokeWidth="0dp">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -204,6 +204,7 @@
                                     android:layout_gravity="center"
                                     android:backgroundTint="@color/paletteorange"
                                     android:radius="8dp"
+                                    app:cardCornerRadius="0dp"
                                     app:cardElevation="2dp"
                                     app:contentPadding="4dp"
                                     app:strokeWidth="0dp">
@@ -239,10 +240,10 @@
                             android:layout_columnWeight="1"
                             android:layout_marginEnd="12dp"
                             android:layout_marginBottom="12dp"
-                            android:radius="8dp"
+                            app:cardCornerRadius="8dp"
+                            app:cardBackgroundColor="@color/palettepeach"
                             app:cardElevation="2dp"
-                            app:strokeWidth="0dp"
-                            app:cardBackgroundColor="@color/palettepeach">
+                            app:strokeWidth="0dp">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -255,7 +256,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:backgroundTint="@color/paletteorange"
-                                    android:radius="8dp"
+                                    app:cardCornerRadius="0dp"
                                     app:cardElevation="2dp"
                                     app:contentPadding="4dp"
                                     app:strokeWidth="0dp">
@@ -291,10 +292,10 @@
                             android:layout_columnWeight="1"
                             android:layout_marginEnd="12dp"
                             android:layout_marginBottom="12dp"
-                            android:radius="8dp"
+                            app:cardCornerRadius="8dp"
+                            app:cardBackgroundColor="@color/palettepeach"
                             app:cardElevation="2dp"
-                            app:strokeWidth="0dp"
-                            app:cardBackgroundColor="@color/palettepeach">
+                            app:strokeWidth="0dp">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -307,8 +308,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:backgroundTint="@color/paletteorange"
-                                    android:radius="8dp"
-                                    app:cardElevation="2dp"
+                                    app:cardCornerRadius="0dp"
                                     app:contentPadding="4dp"
                                     app:strokeWidth="0dp">
 
@@ -342,14 +342,13 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:backgroundTint="@color/paletteorange"
+                        android:elevation="4dp"
                         android:fontFamily="@font/montserrat"
                         android:outlineAmbientShadowColor="@color/paletteorange"
                         android:outlineSpotShadowColor="@color/paletteorange"
                         android:padding="8dp"
                         android:text="@string/button_Nutrition_label_text"
-                        android:textColor="@color/palettedarkblue"
-                        android:elevation="4dp"
-                        />
+                        android:textColor="@color/palettedarkblue" />
 
                     <!-- Nutrition Dialog Layout -->
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -404,9 +403,9 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="8dp"
                                 android:radius="8dp"
-                                app:strokeWidth="0dp"
+                                app:cardBackgroundColor="@color/palettepeach"
                                 app:cardElevation="2dp"
-                                app:cardBackgroundColor="@color/palettepeach">
+                                app:strokeWidth="0dp">
 
                                 <com.google.android.material.textview.MaterialTextView
                                     android:id="@+id/textView_meal_servings"
@@ -429,8 +428,8 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="8dp"
                                 android:radius="8dp"
-                                app:strokeWidth="0dp"
-                                app:cardBackgroundColor="@color/palettepeach">
+                                app:cardBackgroundColor="@color/palettepeach"
+                                app:strokeWidth="0dp">
 
                                 <com.google.android.material.textview.MaterialTextView
                                     android:id="@+id/textView_meal_ready"
@@ -452,9 +451,9 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:radius="8dp"
-                                app:strokeWidth="0dp"
+                                app:cardBackgroundColor="@color/palettepeach"
                                 app:cardElevation="2dp"
-                                app:cardBackgroundColor="@color/palettepeach">
+                                app:strokeWidth="0dp">
 
                                 <com.google.android.material.textview.MaterialTextView
                                     android:id="@+id/textView_meal_price"
@@ -498,7 +497,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="8dp"
-                        android:background="@color/palettebeige"/>
+                        android:background="@color/palettebeige" />
 
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
@@ -524,7 +523,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="8dp"
-                        android:background="@color/palettebeige"/>
+                        android:background="@color/palettebeige" />
 
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
@@ -550,7 +549,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="8dp"
-                        android:background="@color/palettebeige"/>
+                        android:background="@color/palettebeige" />
                 </LinearLayout>
             </androidx.core.widget.NestedScrollView>
             <!-- add to favorite list button -->
@@ -561,11 +560,11 @@
                 android:layout_margin="10dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
-                app:cardElevation="4dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Favorite Button"
                 android:padding="15dp"
                 android:src="@drawable/ic_btn_star"
+                app:cardElevation="4dp"
                 app:layout_constraintBottom_toTopOf="@+id/nestedScrollView_RecipeInfo"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

@@ -24,7 +24,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="@drawable/ic_launcher_foreground"
             app:title="Complex Search"
-            app:titleTextColor="@android:color/white" />
+            app:titleTextColor="@color/palettedarkblue" />
 
         <!-- ImageView for Image -->
         <!-- ImageView inside CardView -->

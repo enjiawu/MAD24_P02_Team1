@@ -35,7 +35,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:radius="16dp"
-            app:cardBackgroundColor="@color/palettepeach">
+            app:cardBackgroundColor="@color/palettelavender">
 
             <FrameLayout
                 android:layout_width="match_parent"
@@ -82,10 +82,8 @@
                 android:layout_margin="4dp"
                 android:layout_weight="1"
                 android:padding="8dp"
-                android:radius="8dp"
-                app:cardElevation="2dp"
                 app:strokeWidth="0dp"
-                app:cardBackgroundColor="@color/palettepeach">
+                app:cardBackgroundColor="@color/palettelavender">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -104,7 +102,7 @@
                         android:layout_height="wrap_content"
                         android:padding="4dp"
                         android:text="@string/textView_servings_text"
-                        android:textColor="@color/black"
+                        android:textColor="@color/palettedarkblue"
                         android:textSize="14sp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -116,10 +114,8 @@
                 android:layout_margin="4dp"
                 android:layout_weight="1"
                 android:padding="8dp"
-                android:radius="8dp"
-                app:cardElevation="2dp"
                 app:strokeWidth="0dp"
-                app:cardBackgroundColor="@color/palettepeach">
+                app:cardBackgroundColor="@color/palettelavender">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -138,7 +134,7 @@
                         android:layout_height="wrap_content"
                         android:padding="4dp"
                         android:text="@string/textView_money_placeholder"
-                        android:textColor="@color/black"
+                        android:textColor="@color/palettedarkblue"
                         android:textSize="14sp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -150,10 +146,9 @@
                 android:layout_margin="4dp"
                 android:layout_weight="1"
                 android:padding="8dp"
-                android:radius="8dp"
                 app:cardElevation="2dp"
                 app:strokeWidth="0dp"
-                app:cardBackgroundColor="@color/palettepeach">
+                app:cardBackgroundColor="@color/palettelavender">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -172,7 +167,7 @@
                         android:layout_height="wrap_content"
                         android:padding="4dp"
                         android:text="@string/textView_time_text"
-                        android:textColor="@color/black"
+                        android:textColor="@color/palettedarkblue"
                         android:textSize="14sp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -192,10 +187,8 @@
                 android:layout_margin="4dp"
                 android:layout_weight="1"
                 android:padding="8dp"
-                android:radius="8dp"
-                app:cardElevation="2dp"
                 app:strokeWidth="0dp"
-                app:cardBackgroundColor="@color/palettepeach">
+                app:cardBackgroundColor="@color/palettelavender">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -207,7 +200,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/calories"
-                        android:textColor="@color/black"
+                        android:textColor="@color/palettedarkblue"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
@@ -217,7 +210,7 @@
                         android:layout_height="wrap_content"
                         android:padding="4dp"
                         android:text="@string/textView_calories_label_text"
-                        android:textColor="@color/black"
+                        android:textColor="@color/palettedarkblue"
                         android:textSize="14sp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -229,10 +222,8 @@
                 android:layout_margin="4dp"
                 android:layout_weight="1"
                 android:padding="8dp"
-                android:radius="8dp"
-                app:cardElevation="2dp"
                 app:strokeWidth="0dp"
-                app:cardBackgroundColor="@color/palettepeach">
+                app:cardBackgroundColor="@color/palettelavender">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -244,7 +235,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/protein"
-                        android:textColor="@color/black"
+                        android:textColor="@color/palettedarkblue"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
@@ -254,7 +245,7 @@
                         android:layout_height="wrap_content"
                         android:padding="4dp"
                         android:text="@string/textView_protein_label_text"
-                        android:textColor="@color/black"
+                        android:textColor="@color/palettedarkblue"
                         android:textSize="14sp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -266,10 +257,8 @@
                 android:layout_margin="4dp"
                 android:layout_weight="1"
                 android:padding="8dp"
-                android:radius="8dp"
-                app:cardElevation="2dp"
                 app:strokeWidth="0dp"
-                app:cardBackgroundColor="@color/palettepeach">
+                app:cardBackgroundColor="@color/palettelavender">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -281,7 +270,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/carbs"
-                        android:textColor="@color/black"
+                        android:textColor="@color/palettedarkblue"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
@@ -291,7 +280,7 @@
                         android:layout_height="wrap_content"
                         android:padding="4dp"
                         android:text="@string/textView_carbs_placeholder"
-                        android:textColor="@color/black"
+                        android:textColor="@color/palettedarkblue"
                         android:textSize="14sp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
