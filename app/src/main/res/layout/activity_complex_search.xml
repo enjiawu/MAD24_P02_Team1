@@ -24,7 +24,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="@drawable/ic_launcher_foreground"
             app:title="Complex Search"
-            app:titleTextColor="@android:color/white" />
+            app:titleTextColor="@color/palettedarkblue" />
 
         <!-- ImageView for Image -->
         <!-- ImageView inside CardView -->
@@ -40,7 +40,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar"
             app:layout_constraintWidth_default="percent"
-            app:layout_constraintWidth_percent="1.0">
+            app:layout_constraintWidth_percent="1.0"
+            app:cardElevation="2dp"
+            app:cardBackgroundColor="@color/palettelavender">
 
             <ImageView
                 android:id="@+id/imageView"
@@ -82,11 +84,14 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="50dp"
             android:layout_marginEnd="5dp"
+            app:cardBackgroundColor="@color/palettelavender"
+            app:cardElevation="2dp"
             app:layout_constraintEnd_toStartOf="@+id/cardView_open_gallery"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/resultCardView"
             app:layout_constraintWidth_default="percent"
-            app:layout_constraintWidth_percent="0.4">
+            app:layout_constraintWidth_percent="0.4"
+            app:strokeWidth="0dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -135,6 +140,8 @@
             android:layout_marginStart="5dp"
             android:layout_marginTop="50dp"
             android:layout_marginEnd="10dp"
+            app:cardBackgroundColor="@color/palettelavender"
+            app:cardElevation="2dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/cardView_open_camera"
             app:layout_constraintTop_toBottomOf="@id/resultCardView"
@@ -191,6 +198,8 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="5dp"
+            app:cardBackgroundColor="@color/palettelavender"
+            app:cardElevation="2dp"
             app:layout_constraintEnd_toStartOf="@id/cardView_search_recipes"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cardView_open_camera"
@@ -247,6 +256,8 @@
             android:layout_marginStart="5dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
+            app:cardBackgroundColor="@color/palettelavender"
+            app:cardElevation="2dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/cardView_start_recognition"
             app:layout_constraintTop_toBottomOf="@id/cardView_open_gallery"
