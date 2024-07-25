@@ -19,7 +19,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/textView_header_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -28,9 +28,9 @@
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/imageView_header_logo"
-        app:layout_constraintStart_toStartOf="@+id/imageView_header_logo"/>
+        app:layout_constraintStart_toStartOf="@+id/imageView_header_logo" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/textView_header_subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

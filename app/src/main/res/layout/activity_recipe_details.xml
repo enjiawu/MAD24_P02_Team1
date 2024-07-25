@@ -99,20 +99,26 @@
                                 android:textSize="14sp"
                                 android:textStyle="italic" />
 
-                            <!-- FrameLayout for ImageView -->
-                            <FrameLayout
+                            <com.google.android.material.card.MaterialCardView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_margin="8dp">
+                                android:layout_margin="4dp"
+                                app:cardCornerRadius="16dp"
+                                android:strokeColor="@android:color/transparent"
+                                app:cardBackgroundColor="@color/paletteorange"
+                                app:cardElevation="4dp"
+                                app:strokeWidth="0dp">
 
-                                <!-- ImageView inside FrameLayout -->
-                                <ImageView
+                                <!-- ShapeableImageView inside MaterialCardView -->
+                                <com.google.android.material.imageview.ShapeableImageView
                                     android:id="@+id/imageView_meal_image"
                                     android:layout_width="match_parent"
-                                    android:layout_height="250dp"
+                                    android:layout_height="wrap_content"
+                                    android:adjustViewBounds="true"
                                     android:scaleType="centerCrop"
-                                    tools:ignore="ContentDescription" />
-                            </FrameLayout>
+                                    app:shapeAppearanceOverlay="@style/RoundedCorners" />
+
+                            </com.google.android.material.card.MaterialCardView>
 
                         </LinearLayout>
 
@@ -135,8 +141,8 @@
                             android:layout_columnWeight="1"
                             android:layout_marginEnd="12dp"
                             android:layout_marginBottom="12dp"
-                            app:cardCornerRadius="8dp"
                             app:cardBackgroundColor="@color/palettepeach"
+                            app:cardCornerRadius="8dp"
                             app:cardElevation="2dp"
                             app:strokeWidth="0dp">
 
@@ -187,8 +193,8 @@
                             android:layout_columnWeight="1"
                             android:layout_marginEnd="12dp"
                             android:layout_marginBottom="12dp"
-                            app:cardCornerRadius="8dp"
                             app:cardBackgroundColor="@color/palettepeach"
+                            app:cardCornerRadius="8dp"
                             app:cardElevation="2dp"
                             app:strokeWidth="0dp">
 
@@ -240,8 +246,8 @@
                             android:layout_columnWeight="1"
                             android:layout_marginEnd="12dp"
                             android:layout_marginBottom="12dp"
-                            app:cardCornerRadius="8dp"
                             app:cardBackgroundColor="@color/palettepeach"
+                            app:cardCornerRadius="8dp"
                             app:cardElevation="2dp"
                             app:strokeWidth="0dp">
 
@@ -292,8 +298,8 @@
                             android:layout_columnWeight="1"
                             android:layout_marginEnd="12dp"
                             android:layout_marginBottom="12dp"
-                            app:cardCornerRadius="8dp"
                             app:cardBackgroundColor="@color/palettepeach"
+                            app:cardCornerRadius="8dp"
                             app:cardElevation="2dp"
                             app:strokeWidth="0dp">
 

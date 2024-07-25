@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/post_container"
+    android:id="@+id/comment_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
     android:background="@color/white"
-    android:elevation="8dp">
+    android:clickable="true"
+    android:elevation="8dp"
+    android:focusable="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,15 +24,14 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginVertical="8dp"
-                android:scaleType="centerCrop"
-                />
+                android:scaleType="centerCrop" />
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/username"
                 android:layout_width="174dp"
                 android:layout_height="match_parent"
-                android:gravity="center_vertical"
                 android:layout_weight="1"
+                android:gravity="center_vertical"
                 android:padding="5dp"
                 android:singleLine="true"
                 android:text="@string/usernameSignUp_text"
@@ -38,7 +39,7 @@
                 android:textSize="13sp"
                 android:textStyle="bold" />
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/datePosted"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -51,13 +52,13 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/comments_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="8dp"
             android:layout_marginHorizontal="15dp"
             android:layout_marginBottom="10dp"
+            android:padding="8dp"
             android:scrollHorizontally="true"
             android:singleLine="true"
             android:text="@string/comment"

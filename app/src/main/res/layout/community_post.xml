@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/textView_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -36,15 +36,14 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginVertical="8dp"
-                android:scaleType="centerCrop"
-               />
+                android:scaleType="centerCrop" />
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/username"
                 android:layout_width="174dp"
                 android:layout_height="match_parent"
-                android:gravity="center_vertical"
                 android:layout_weight="1"
+                android:gravity="center_vertical"
                 android:padding="5dp"
                 android:singleLine="true"
                 android:text="@string/usernameSignUp_text"
@@ -52,7 +51,7 @@
                 android:textSize="13sp"
                 android:textStyle="bold" />
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/dateUpdated"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -91,16 +90,16 @@
                     android:id="@+id/likes_image"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/baseline_thumb_up_off_alt_24"/>
+                    android:src="@drawable/baseline_thumb_up_off_alt_24" />
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/likes_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:padding="4dp"
                     android:text="@string/textView_servings_text"
                     android:textColor="@color/black"
-                    android:textSize="14sp"
-                    android:padding="4dp"/>
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
@@ -117,7 +116,7 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/baseline_comment_24" />
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/comments_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

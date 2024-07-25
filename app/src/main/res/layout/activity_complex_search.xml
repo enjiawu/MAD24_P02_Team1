@@ -33,16 +33,16 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="16dp"
+            app:cardBackgroundColor="@color/palettelavender"
             app:cardCornerRadius="8dp"
+            app:cardElevation="2dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_default="percent"
             app:layout_constraintHeight_percent="0.4"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar"
             app:layout_constraintWidth_default="percent"
-            app:layout_constraintWidth_percent="1.0"
-            app:cardElevation="2dp"
-            app:cardBackgroundColor="@color/palettelavender">
+            app:layout_constraintWidth_percent="1.0">
 
             <ImageView
                 android:id="@+id/imageView"
@@ -97,7 +97,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/textView_open_camera"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -152,7 +152,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/textView_open_gallery"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -210,7 +210,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/textView_start_recognition"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -268,7 +268,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/textView_search_recipes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

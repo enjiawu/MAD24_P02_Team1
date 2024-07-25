@@ -1,9 +1,6 @@
 package sg.edu.np.mad.pocketchef.Adapters;
 
-import static android.content.ContentValues.TAG;
-
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,41 +9,34 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.MutableData;
-import com.google.firebase.database.Transaction;
-import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import sg.edu.np.mad.pocketchef.Listener.PostClickListener;
 import sg.edu.np.mad.pocketchef.Listener.PostLikeClickListener;
+import sg.edu.np.mad.pocketchef.Listener.PostOnHoldListener;
 import sg.edu.np.mad.pocketchef.Models.Post;
-import sg.edu.np.mad.pocketchef.Models.SearchedRecipe;
 import sg.edu.np.mad.pocketchef.R;
 
+// Enjia - Stage 2
 public class CommunityAdapter extends RecyclerView.Adapter<CommunityViewHolder>{
     Context context;
     List<Post> posts; // List to store posts
     PostClickListener postListener; //Listener for when they click on the post
     PostLikeClickListener likesListener;
+    PostOnHoldListener postOnHoldListener;
 
-    public CommunityAdapter(Context context, List<Post> posts, PostClickListener postListener, PostLikeClickListener likesListener) {
+    public CommunityAdapter(Context context, List<Post> posts, PostClickListener postListener, PostLikeClickListener likesListener, PostOnHoldListener postOnHoldListener) {
         this.context = context;
         this.posts = posts;
         this.postListener = postListener;
         this.likesListener = likesListener;
+        this.postOnHoldListener = postOnHoldListener;
     }
 
     @NonNull
@@ -105,6 +95,26 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityViewHolder>{
                 likesListener.onLikeClicked(String.valueOf(posts.get(position).getPostKey()), position);
             }
         });
+
+        holder.post_container.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                postOnHoldListener.onPostHold(String.valueOf(posts.get(position).getPostKey()), position);
+                return true;
+            }
+        });
+    }
+
+    // Function to set posts to the modified ones
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
+    }
+
+    // Function to delete post
+    public void removePost(int position) {
+        if (position >= 0 && position < posts.size()) {
+            posts.remove(position);
+        }
     }
 
     @Override
@@ -119,7 +129,6 @@ class CommunityViewHolder extends RecyclerView.ViewHolder {
     TextView textView_title, username, dateUpdated, likes_text, comments_text;
     ImageView imageView_food, likesImage, profilePicture;
     LinearLayout likesLayout;
-
 
     // Assigning xml elements to variables in adapter
     public CommunityViewHolder(@NonNull View itemView) {

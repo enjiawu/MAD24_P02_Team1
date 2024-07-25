@@ -16,9 +16,9 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/paletteorange"
             app:cardElevation="4dp"
-            app:strokeWidth="0dp"
-            app:cardBackgroundColor="@color/paletteorange">
+            app:strokeWidth="0dp">
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/textView_ingredients_quantity"
@@ -53,14 +53,15 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/paletteorange"
             app:cardElevation="4dp"
-            app:strokeWidth="0dp"
-            app:cardBackgroundColor="@color/paletteorange">
+            app:strokeWidth="0dp">
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/textView_ingredients_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:ellipsize="marquee"
                 android:gravity="center"
                 android:marqueeRepeatLimit="marquee_forever"
@@ -69,9 +70,8 @@
                 android:text="@string/textView_ingredients_name_text"
                 android:textAlignment="center"
                 android:textColor="@color/black"
-                android:textStyle="bold"
                 android:textSize="16sp"
-                android:layout_gravity="center"/>
+                android:textStyle="bold" />
 
         </com.google.android.material.card.MaterialCardView>
 
