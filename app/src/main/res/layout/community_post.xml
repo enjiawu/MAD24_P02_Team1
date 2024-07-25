@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/textView_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -39,7 +39,7 @@
                 android:scaleType="centerCrop"
                />
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/username"
                 android:layout_width="174dp"
                 android:layout_height="match_parent"
@@ -52,7 +52,7 @@
                 android:textSize="13sp"
                 android:textStyle="bold" />
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/dateUpdated"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -93,7 +93,7 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/baseline_thumb_up_off_alt_24"/>
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/likes_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -117,7 +117,7 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/baseline_comment_24" />
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/comments_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

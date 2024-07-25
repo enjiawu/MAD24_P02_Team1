@@ -134,7 +134,7 @@
                     android:scaleType="centerCrop"
                     android:src="@drawable/pocketchef_logo" />
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/username"
                     android:layout_width="174dp"
                     android:layout_height="match_parent"
@@ -147,7 +147,7 @@
                     android:textSize="13sp"
                     android:textStyle="bold" />
 
-              <TextView
+              <com.google.android.material.textview.MaterialTextView
                   android:id="@+id/date"
                   android:layout_width="wrap_content"
                   android:layout_height="match_parent"
@@ -226,7 +226,7 @@
                       android:textStyle="normal" />
                 </com.google.android.material.card.MaterialCardView>
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/textView_protein_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -264,7 +264,7 @@
                     app:cardElevation="2dp"
                     app:contentPadding="4dp">
 
-                  <TextView
+                  <com.google.android.material.textview.MaterialTextView
                       android:id="@+id/textView_fat_label"
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
@@ -275,7 +275,7 @@
                       android:textStyle="normal" />
                 </com.google.android.material.card.MaterialCardView>
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/textView_fat_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -313,7 +313,7 @@
                     app:cardElevation="2dp"
                     app:contentPadding="4dp">
 
-                  <TextView
+                  <com.google.android.material.textview.MaterialTextView
                       android:id="@+id/textView_calories_label"
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
@@ -324,7 +324,7 @@
                       android:textStyle="normal" />
                 </com.google.android.material.card.MaterialCardView>
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/textView_calories_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -357,7 +357,7 @@
                   android:layout_marginBottom="8dp"
                   android:radius="8dp">
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/textView_meal_servings"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -379,7 +379,7 @@
                   android:layout_marginBottom="8dp"
                   android:radius="8dp">
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/textView_meal_ready"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -400,7 +400,7 @@
                   android:layout_height="wrap_content"
                   android:radius="8dp">
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/textView_meal_price"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -425,7 +425,7 @@
               android:backgroundTint="@color/paletteorange"
               android:radius="8dp">
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -463,7 +463,7 @@
               android:backgroundTint="@color/paletteorange"
               android:radius="8dp">
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -501,7 +501,7 @@
               android:backgroundTint="@color/paletteorange"
               android:radius="8dp">
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -525,7 +525,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-          <TextView
+          <com.google.android.material.textview.MaterialTextView
               android:id="@+id/noEquipmentText"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
@@ -553,7 +553,7 @@
               android:backgroundTint="@color/paletteorange"
               android:radius="8dp">
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
@@ -576,7 +576,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-              <TextView
+              <com.google.android.material.textview.MaterialTextView
                   android:id="@+id/noCommentsText"
                   android:layout_width="match_parent"
                   android:layout_height="match_parent"
