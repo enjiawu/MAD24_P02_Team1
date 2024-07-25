@@ -198,4 +198,5 @@
     <string name="textView_money_placeholder">x.xx</string>
     <string name="textView_carbs_placeholder">100</string>
     <string name="similar_recipes_text">Similar Recipes</string>
+    <string name="changePasswordTv_text">Change Password?</string>
 </resources>
