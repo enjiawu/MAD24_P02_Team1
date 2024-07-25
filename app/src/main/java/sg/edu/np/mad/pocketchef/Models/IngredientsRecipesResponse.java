@@ -8,7 +8,7 @@ public class IngredientsRecipesResponse {
     public int id;
     public String image;
     public int likes;
-    public List<Ingredient> missedIngredients;
-    public List<Ingredient> usedIngredients;
+    public ArrayList<Ingredient> missedIngredients;
+    public ArrayList<Ingredient> usedIngredients;
     public String title;
 }
