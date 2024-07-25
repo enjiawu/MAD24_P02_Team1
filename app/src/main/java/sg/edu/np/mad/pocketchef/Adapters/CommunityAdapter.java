@@ -23,6 +23,7 @@ import sg.edu.np.mad.pocketchef.Listener.PostOnHoldListener;
 import sg.edu.np.mad.pocketchef.Models.Post;
 import sg.edu.np.mad.pocketchef.R;
 
+// Enjia - Stage 2
 public class CommunityAdapter extends RecyclerView.Adapter<CommunityViewHolder>{
     Context context;
     List<Post> posts; // List to store posts

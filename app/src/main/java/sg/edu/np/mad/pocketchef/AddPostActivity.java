@@ -49,6 +49,7 @@ import java.util.List;
 import sg.edu.np.mad.pocketchef.Models.Comment;
 import sg.edu.np.mad.pocketchef.Models.Post;
 
+// Enjia - Stage 2
 public class AddPostActivity extends AppCompatActivity {
     private static final String TAG = "AddPostActivity";
     private ActivityResultLauncher<Intent> resultLauncher;

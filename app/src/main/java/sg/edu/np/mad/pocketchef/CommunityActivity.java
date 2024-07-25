@@ -50,6 +50,7 @@ import sg.edu.np.mad.pocketchef.Listener.PostOnHoldListener;
 import sg.edu.np.mad.pocketchef.Models.Comment;
 import sg.edu.np.mad.pocketchef.Models.Post;
 
+// Enjia - Stage 2
 public class CommunityActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     private static final String TAG = "CommunityActivity";
 

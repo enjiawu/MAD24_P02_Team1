@@ -44,7 +44,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/baseline_arrow_back_ios_24" />
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/addPostTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -294,7 +294,7 @@
             </LinearLayout>
 
             <!-- Instructions -->
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/instructions"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -333,7 +333,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/instruction_input_layout" />
 
             <!-- Ingredients -->
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/ingredients"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -372,7 +372,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/ingredients_input_layout" />
 
             <!-- Equipment -->
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/equipment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -441,7 +441,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/recipeTitleBox"/>
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/addRecipeImageText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -3,6 +3,7 @@ package sg.edu.np.mad.pocketchef;
 import static android.content.ContentValues.TAG;
 
 import android.app.AlertDialog;
+import android.app.Notification;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -34,6 +35,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputEditText;
@@ -45,6 +48,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.RemoteMessage;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.kongzue.dialogx.dialogs.BottomMenu;
@@ -63,6 +68,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -74,6 +80,7 @@ import sg.edu.np.mad.pocketchef.Models.Comment;
 import sg.edu.np.mad.pocketchef.Models.Post;
 import sg.edu.np.mad.pocketchef.Models.RecipeDetailsC;
 
+// Enjia - Stage 2
 public class PostDetailsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     String postKey;
@@ -96,6 +103,7 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
     DatabaseReference postsRef, mUserRef, postRef;
     StorageReference storageReference;
     FirebaseUser currentUser;
+    FirebaseMessaging firebaseMessaging;
 
     //For navigation menu
     DrawerLayout drawerLayout;
@@ -120,6 +128,20 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
         handleDynamicLink();
 
         loadPostDetails();
+
+        // Notifications
+        firebaseMessaging = FirebaseMessaging.getInstance();
+        firebaseMessaging.getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                if (!task.isSuccessful()) {
+                    Log.w(TAG, "Fetching FCM registration token failed", task.getException());
+                    return;
+                }
+                String token = task.getResult();
+                Log.d(TAG, "FCM registration token: " + token);
+            }
+        });
 
         // Set up nav menu
         navigationView.bringToFront();
@@ -603,9 +625,44 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
                         post.getLikesUsers().add(userId);
                         post.setLikes(post.getLikes() + 1);
                         likeButton.setImageResource(R.drawable.baseline_thumb_up_alt_24);
+
+                        // Send notification to the post owner
+                        sendNotificationToPostOwner(post);
                     }
 
                     postRef.setValue(post);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle potential errors
+            }
+        });
+    }
+
+    private void sendNotificationToPostOwner(Post post) {
+        String postOwnerId = post.getUserId();
+        String notificationTitle = "Someone liked your post!";
+        String notificationMessage = "Your post on '" + post.getTitle() + "' was liked by " + currentUser.getDisplayName();
+
+        // Get the FCM token for the post owner's device
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(postOwnerId);
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String fcmToken = snapshot.child("fcmToken").getValue(String.class);
+                Log.d(TAG, "FCM Token:" + fcmToken);
+
+                if (fcmToken != null) {
+                    // Use the FCM API to send the notification
+                    FirebaseMessaging.getInstance().send(new RemoteMessage.Builder(fcmToken)
+                            .setMessageId(UUID.randomUUID().toString())
+                            .addData("title", notificationTitle)
+                            .addData("message", notificationMessage)
+                            .build());
+                } else {
+                    Log.e(TAG, "Failed to get FCM token for post owner");
                 }
             }
 
