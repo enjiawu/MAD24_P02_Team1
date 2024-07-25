@@ -6,7 +6,7 @@
 
 
     <item
-        android:id="@+id/accelerator"
+        android:id="@+id/addIngredient"
         android:icon="@drawable/baseline_add_24_orange"
         android:contentDescription="Description"
         android:title="Add Ingredient"
