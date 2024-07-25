@@ -7,9 +7,13 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -17,6 +21,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import sg.edu.np.mad.pocketchef.Adapters.PantryIngredientAdapter;
+import sg.edu.np.mad.pocketchef.Adapters.PantryRecipeAdapter;
 import sg.edu.np.mad.pocketchef.Listener.IngredientsRecipesListener;
 import sg.edu.np.mad.pocketchef.Listener.RdmRecipeRespListener;
 import sg.edu.np.mad.pocketchef.Models.IngredientsRecipesResponse;
@@ -25,6 +31,7 @@ import sg.edu.np.mad.pocketchef.Models.RandomRecipeApiResponse;
 public class PantryRecipesActivity extends AppCompatActivity {
 
     private RequestManager requestManager;
+    RecyclerView pantryRecipesRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +44,19 @@ public class PantryRecipesActivity extends AppCompatActivity {
             return insets;
         });
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // back button pressed
+                finish();
+            }
+        });
+
         requestManager = new RequestManager(this);
+
+        FindViews();
 
         fetchIngredientsRecipes();
     }
@@ -55,7 +74,7 @@ public class PantryRecipesActivity extends AppCompatActivity {
 //        progressBar.setVisibility(View.VISIBLE);
         requestManager.getRecipesByIngredients(new IngredientsRecipesListener() {
             @Override
-            public void didFetch(List<IngredientsRecipesResponse> response, String message) {
+            public void didFetch(ArrayList<IngredientsRecipesResponse> response, String message) {
 //                progressBar.setVisibility(View.GONE);
 //                setupRandomRecipeRecyclerView(response);
                 Log.d("RESPONSE:", response.toString());
@@ -65,6 +84,13 @@ public class PantryRecipesActivity extends AppCompatActivity {
 
                     Log.d("RECIPE", recipe.title);
                 }
+                PantryRecipeAdapter pantryRecipeAdapter = new PantryRecipeAdapter(response, PantryRecipesActivity.this);
+
+                LinearLayoutManager pantryRecipeLayoutManager = new LinearLayoutManager(PantryRecipesActivity.this);
+
+                pantryRecipesRecyclerView.setLayoutManager(pantryRecipeLayoutManager);
+                pantryRecipesRecyclerView.setItemAnimator(new DefaultItemAnimator());
+                pantryRecipesRecyclerView.setAdapter(pantryRecipeAdapter);
             }
 
             @Override
@@ -76,4 +102,9 @@ public class PantryRecipesActivity extends AppCompatActivity {
             }
         }, Arrays.toString(ingredients.toArray()));
     }
+
+    private void FindViews() {
+        pantryRecipesRecyclerView = findViewById(R.id.pantryRecipesRecyclerView);
+    }
+
 }

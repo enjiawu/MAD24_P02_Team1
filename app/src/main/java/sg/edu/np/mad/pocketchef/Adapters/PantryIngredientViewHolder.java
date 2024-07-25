@@ -1,6 +1,5 @@
 package sg.edu.np.mad.pocketchef.Adapters;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 
