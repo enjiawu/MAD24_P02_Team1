@@ -318,7 +318,7 @@
                 app:layout_constraintEnd_toEndOf="parent"/>
 
             <!-- Add More Steps Button -->
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/addMoreSteps"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -357,7 +357,7 @@
                 app:layout_constraintEnd_toEndOf="parent"/>
 
             <!-- Add More Ingredients Button -->
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/addMoreIngredients"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -396,7 +396,7 @@
                 app:layout_constraintEnd_toEndOf="parent"/>
 
             <!-- Add Equipment Button -->
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/addEquipment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -411,7 +411,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/equipment_input_layout" />
 
             <!-- Post Recipe Button -->
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/postRecipeButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

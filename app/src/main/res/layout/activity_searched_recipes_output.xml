@@ -43,7 +43,7 @@
                 app:title="Searched Recipes" />
 
             <!-- Button to expand search and go to the search inputs-->
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/expand_search_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -96,7 +96,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <!--TextView that will be displayed if got no recipes found-->
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/no_recipe_found"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
