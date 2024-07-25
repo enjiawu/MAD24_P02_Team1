@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -28,7 +29,9 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,32 +40,36 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import sg.edu.np.mad.pocketchef.Models.Comment;
 import sg.edu.np.mad.pocketchef.Models.Post;
 
 // Enjia - Stage 2
-public class AddPostActivity extends AppCompatActivity {
-    private static final String TAG = "AddPostActivity";
+public class EditPostActivity extends AppCompatActivity {
+    private static final String TAG = "EditPostActivity";
     private ActivityResultLauncher<Intent> resultLauncher;
     private ImageView backButton, recipeImage, addImageIcon;
-    private TextView addRecipeImageText;
+    private TextView addRecipeImageText, addPostTitle;
     private LinearLayout inputLayout, instructionInputLayout, ingredientsInputLayout, equipmentInputLayout;
     private TextInputEditText recipeTitleInput, proteinInput, fatInput, caloriesInput, servingsInput, prepTimeInput, costPerServingInput;
     private TextInputLayout recipeTitleBox, fatInfoBox, proteinInfoBox, caloriesInfoBox, prepTimeInfoBox, costPerServingInfoBox, servingsInputBox;
     private Button addMoreStepsButton, addMoreIngredients, addMoreEquipment, postButton;
-    private List<TextInputLayout> inputBoxes, instructionsInputBoxes  = new ArrayList<>(), ingredientsInputBoxes  = new ArrayList<>(), equipmentInputBoxes = new ArrayList<>();
+    private List<TextInputLayout> inputBoxes, instructionsInputBoxes = new ArrayList<>(), ingredientsInputBoxes = new ArrayList<>(), equipmentInputBoxes = new ArrayList<>();
+    private List<Comment> comments;
     private Uri imageUri;
     private ProgressBar progressBar;
-    private String currentUsername, currentUserId, currentProfilePictureUrl;
+    private String currentUsername, currentUserId, currentProfilePictureUrl, postId, recipeImageUrl;
+    private Post post;
 
     // Database
     FirebaseAuth mAuth;
@@ -71,21 +78,31 @@ public class AddPostActivity extends AppCompatActivity {
     StorageReference storageReference;
     FirebaseUser currentUser;
 
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_add_post);
 
-        //Register user to get gallery access
+        // Get post ID from intent
+        postId = getIntent().getStringExtra("postKey");
+        Log.d(TAG, postId);
+
+        // Register user to get gallery access
         registerUser();
 
-        //Setting up views and listeners
+        // Setting up views and listeners
         setupViews();
         setupListeners();
+
+        // Load existing post data if postId is not null
+        if (postId != null) {
+            loadPostData(postId);
+        }
     }
 
     private void setupViews() {
-        //Getting all the variables from the xml file
+        // Initializing views as before...
         backButton = findViewById(R.id.backIv);
 
         instructionInputLayout = findViewById(R.id.instruction_input_layout);
@@ -117,7 +134,25 @@ public class AddPostActivity extends AppCompatActivity {
 
         progressBar = findViewById(R.id.progressBar);
 
+        addPostTitle = findViewById(R.id.addPostTitle);
+        postButton = findViewById(R.id.postRecipeButton);
+
+        addPostTitle.setText("Update Post"); // Change the text
+        postButton.setText("Update Post");
+
         // Add the initial input boxes and set up listeners for them
+        setupInitialInputBoxes();
+
+        // Firebase database setup
+        mAuth = FirebaseAuth.getInstance();
+        storageReference = FirebaseStorage.getInstance().getReference().child("PostImages");
+        database = FirebaseDatabase.getInstance("https://pocket-chef-cd59c-default-rtdb.asia-southeast1.firebasedatabase.app/");
+        myRef = database.getReference("posts").child(postId);
+        currentUser = mAuth.getCurrentUser();
+        mUserRef = FirebaseDatabase.getInstance().getReference("users");
+    }
+
+    private void setupInitialInputBoxes() {
         TextInputLayout InstructionsInputBox = (TextInputLayout) getLayoutInflater().inflate(R.layout.input_box, null);
         instructionInputLayout.addView(InstructionsInputBox);
         instructionsInputBoxes.add(InstructionsInputBox);
@@ -140,29 +175,77 @@ public class AddPostActivity extends AppCompatActivity {
         TextInputEditText equipmentEditText = EquipmentInputBox.findViewById(R.id.input);
         textChangeListener(equipmentEditText);
         textDelete(equipmentEditText, equipmentInputLayout, equipmentInputBoxes);
-
-        //Firebase database setup
-        mAuth = FirebaseAuth.getInstance();
-        storageReference = FirebaseStorage.getInstance().getReference().child("PostImages");
-        database = FirebaseDatabase.getInstance("https://pocket-chef-cd59c-default-rtdb.asia-southeast1.firebasedatabase.app/");
-        myRef = database.getReference("posts").push();
-        // Get current user
-        currentUser = mAuth.getCurrentUser();
-        mUserRef = FirebaseDatabase.getInstance().getReference("users");
     }
 
-    /*
-    * Potential features to add:
-    * Drag and drop step by step instructions for easier reorganisation
-    * Allow users to save their post draft
-    */
+    private void loadPostData(String postId) {
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    post = snapshot.getValue(Post.class);
+                    if (post != null) {
+                        populateFields(post);
+                        comments = post.getComments();
+                    }
+                } else {
+                    Log.w(TAG, "Post does not exist");
+                }
+            }
 
-    // Setting up listeners
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e(TAG, "DatabaseError: " + error.getMessage()); // Handle database error
+            }
+        });
+    }
+
+    private void populateFields(Post post) {
+        recipeTitleInput.setText(post.getTitle());
+        proteinInput.setText(String.valueOf(post.getProtein()));
+        fatInput.setText(String.valueOf(post.getFat()));
+        caloriesInput.setText(String.valueOf(post.getCalories()));
+        servingsInput.setText(String.valueOf(post.getServings()));
+        prepTimeInput.setText(String.valueOf(post.getPrepTime()));
+        costPerServingInput.setText(String.valueOf(post.getCostPerServing()));
+
+        // Load image
+        Picasso.get().load(post.getRecipeImage()).into(recipeImage);
+        imageUri = Uri.parse(post.getRecipeImage());
+        addImageIcon.setVisibility(View.GONE);
+        addRecipeImageText.setVisibility(View.GONE);
+
+        recipeImageUrl = post.getRecipeImage();
+
+        currentUsername = post.getUsername();
+        currentProfilePictureUrl = post.getProfilePicture();
+        currentUserId = post.getUserId();
+
+        // Populate instructions, ingredients, and equipment
+        populateList(instructionsInputBoxes, post.getInstructions(), instructionInputLayout);
+        populateList(ingredientsInputBoxes, post.getIngredients(), ingredientsInputLayout);
+        if (post.getEquipment() != null){
+            populateList(equipmentInputBoxes, post.getEquipment(), equipmentInputLayout);
+        }
+    }
+
+    private void populateList(List<TextInputLayout> inputBoxes, List<String> dataList, LinearLayout inputLayout) {
+        inputLayout.removeAllViews();
+        inputBoxes.clear();
+
+        for (String data : dataList) {
+            TextInputLayout inputBox = (TextInputLayout) getLayoutInflater().inflate(R.layout.input_box, null);
+            TextInputEditText editText = inputBox.findViewById(R.id.input);
+            editText.setText(data);
+            inputLayout.addView(inputBox);
+            inputBoxes.add(inputBox);
+        }
+    }
+
     public void setupListeners() {
         // Check if back button has been clicked
         backButton.setOnClickListener(v -> {
             // Go to community activity
-            Intent intent = new Intent(AddPostActivity.this, CommunityActivity.class);
+            Intent intent = new Intent(EditPostActivity.this, CommunityActivity.class);
             finish();
             startActivity(intent);
         });
@@ -195,16 +278,16 @@ public class AddPostActivity extends AppCompatActivity {
         postButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                 if (validateData()){
-                     addPost();
-                 }
+                if (validateData()){
+                    updatePost(post);
+                }
             }
         });
 
         recipeImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               selectImageFromGallery();
+                selectImageFromGallery();
             }
         });;
 
@@ -283,28 +366,28 @@ public class AddPostActivity extends AppCompatActivity {
     }
 
     private void textChangeListener(TextInputEditText editText){ {
-      // Function to check if the input in the input box has been changed
-            editText.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                }
+        // Function to check if the input in the input box has been changed
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
 
-                @Override
-                public void afterTextChanged(Editable s) {
-                    TextInputLayout parentLayout = (TextInputLayout) editText.getParent().getParent();
-                    if (s.toString().trim().isEmpty()) {
-                        parentLayout.setError("Please fill this field");
-                    } else {
-                        parentLayout.setError(null);
-                        parentLayout.setErrorEnabled(false);
-                    }
+            @Override
+            public void afterTextChanged(Editable s) {
+                TextInputLayout parentLayout = (TextInputLayout) editText.getParent().getParent();
+                if (s.toString().trim().isEmpty()) {
+                    parentLayout.setError("Please fill this field");
+                } else {
+                    parentLayout.setError(null);
+                    parentLayout.setErrorEnabled(false);
                 }
-            });
-        }
+            }
+        });
+    }
     }
 
     // Function to allow user to select image from gallery
@@ -329,7 +412,7 @@ public class AddPostActivity extends AppCompatActivity {
                             addRecipeImageText.setVisibility(View.GONE);
                         }
                         catch (Exception e){ //Throw error if the user didnt select any image
-                            Toast.makeText(AddPostActivity.this, "No Image Selected", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(EditPostActivity.this, "No Image Selected", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
@@ -430,122 +513,116 @@ public class AddPostActivity extends AppCompatActivity {
     }
 
     // Function to add post
-    private void addPost() {
+    private void updatePost(Post post) {
         // Show progress bar
         progressBar.setVisibility(View.VISIBLE);
 
-        // Access firebase storage
-        final StorageReference imageFilePath = storageReference.child(imageUri.getLastPathSegment());
-        imageFilePath.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                imageFilePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        String imageDownloadLink = uri.toString();
+        // Get the updated post data
+        String title = recipeTitleInput.getText().toString().trim();
+        float protein = 0;
+        float fat = 0;
+        float calories = 0;
+        float servings = 0;
+        float prepTime = 0;
+        float costPerServing = 0;
+        List<String> instructions = getInputBoxData(instructionsInputBoxes);
+        List<String> ingredients = getInputBoxData(ingredientsInputBoxes);
+        List<String> equipment = getInputBoxData(equipmentInputBoxes);
 
-                        // Collate instructions, ingredients, and equipment into lists
-                        List<String> instructions = new ArrayList<>();
-                        for (TextInputLayout inputBox : instructionsInputBoxes) {
-                            TextInputEditText editText = inputBox.findViewById(R.id.input);
-                            String instruction = editText.getText().toString().trim();
-                            if (!instruction.isEmpty()) {
-                                instructions.add(instruction);
-                            }
-                        }
+        if (!TextUtils.isEmpty(proteinInput.getText())) {
+            protein = Float.parseFloat(proteinInput.getText().toString().trim());
+        }
+        if (!TextUtils.isEmpty(fatInput.getText())) {
+            fat = Float.parseFloat(fatInput.getText().toString().trim());
+        }
+        if (!TextUtils.isEmpty(caloriesInput.getText())) {
+            calories = Float.parseFloat(caloriesInput.getText().toString().trim());
+        }
+        if (!TextUtils.isEmpty(servingsInput.getText())) {
+            servings = Float.parseFloat(servingsInput.getText().toString().trim());
+        }
+        if (!TextUtils.isEmpty(prepTimeInput.getText())) {
+            prepTime = Float.parseFloat(prepTimeInput.getText().toString().trim());
+        }
+        if (!TextUtils.isEmpty(costPerServingInput.getText())) {
+            costPerServing = Float.parseFloat(costPerServingInput.getText().toString().trim());
+        }
 
-                        List<String> ingredients = new ArrayList<>();
-                        for (TextInputLayout inputBox : ingredientsInputBoxes) {
-                            TextInputEditText editText = inputBox.findViewById(R.id.input);
-                            String ingredient = editText.getText().toString().trim();
-                            if (!ingredient.isEmpty()) {
-                                ingredients.add(ingredient);
-                            }
-                        }
+        // Create a map to hold only the updated values
+        Map<String, Object> updates = new HashMap<>();
 
-                        List<String> equipment = new ArrayList<>();
-                        for (TextInputLayout inputBox : equipmentInputBoxes) {
-                            TextInputEditText editText = inputBox.findViewById(R.id.input);
-                            String equipmentItem = editText.getText().toString().trim();
-                            if (!equipmentItem.isEmpty()) {
-                                equipment.add(equipmentItem);
-                            }
-                        }
+        // Compare each field and add to the map if it has changed
+        if (!title.equals(post.getTitle())) {
+            updates.put("title", title);
+        }
+        if (!recipeImageUrl.equals(post.getRecipeImage())) {
+            updates.put("recipeImage", recipeImageUrl);
+        }
+        if (protein != post.getProtein()) {
+            updates.put("protein", protein);
+        }
+        if (fat != post.getFat()) {
+            updates.put("fat", fat);
+        }
+        if (calories != post.getCalories()) {
+            updates.put("calories", calories);
+        }
+        if (servings != post.getServings()) {
+            updates.put("servings", servings);
+        }
+        if (prepTime != post.getPrepTime()) {
+            updates.put("prepTime", prepTime);
+        }
+        if (costPerServing != post.getCostPerServing()) {
+            updates.put("costPerServing", costPerServing);
+        }
+        if (!instructions.equals(post.getInstructions())) {
+            updates.put("instructions", instructions);
+        }
+        if (!ingredients.equals(post.getIngredients())) {
+            updates.put("ingredients", ingredients);
+        }
+        // Remove the 'equipment' field if the list is empty
+        if (equipment.isEmpty() || (equipment.size() == 1 && equipment.get(0).isEmpty())){
+            myRef.child("equipment").removeValue().addOnCompleteListener(task -> {
+                if (!task.isSuccessful()) {
+                    Toast.makeText(EditPostActivity.this, "Failed to remove " + "equipment", Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else if (!equipment.equals(post.getEquipment())) {
+            updates.put("equipment", equipment);
+        }
 
-                        // Checking what the saved equipment, instructions and ingredients are
-                        Log.d(TAG, equipment.toString());
-                        Log.d(TAG, instructions.toString());
-                        Log.d(TAG, ingredients.toString());
-                        mUserRef.child(currentUser.getUid()).addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                if (snapshot.exists()) {
-                                    // Retrieve data safely
-                                    String username = snapshot.child("username").getValue(String.class);
-                                    String profilePictureUrl = snapshot.child("profile-picture").getValue(String.class);
+        // Update the post in the Firebase Realtime Database
+        myRef.updateChildren(updates)
+            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        // Hide progress bar and show success message
+                        progressBar.setVisibility(View.GONE);
+                        Toast.makeText(EditPostActivity.this, "Post updated successfully", Toast.LENGTH_SHORT).show();
 
-                                    // Get username and user id of the user who made the post
-                                    currentUsername = username;
-                                    currentUserId = currentUser.getUid();
-                                    currentProfilePictureUrl = profilePictureUrl;
-
-                                    // Create post object
-                                    Post post = new Post(
-                                            recipeTitleInput.getText().toString().trim(),
-                                            imageDownloadLink,
-                                            Float.parseFloat(proteinInput.getText().toString().trim()),
-                                            Float.parseFloat(fatInput.getText().toString().trim()),
-                                            Float.parseFloat(caloriesInput.getText().toString().trim()),
-                                            Float.parseFloat(servingsInput.getText().toString().trim()),
-                                            Float.parseFloat(prepTimeInput.getText().toString().trim()),
-                                            Float.parseFloat(costPerServingInput.getText().toString().trim()),
-                                            instructions,
-                                            ingredients,
-                                            equipment,
-                                            currentUsername,
-                                            new ArrayList<Comment>(),
-                                            currentUserId,
-                                            currentProfilePictureUrl
-                                    );
-
-                                    // Add post data to firebase database
-                                    myRef.setValue(post).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void unused) {
-                                            Toast.makeText(AddPostActivity.this, "Post has been published", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-
-                                    progressBar.setVisibility(View.GONE);
-
-                                    new Handler().postDelayed(new Runnable() { // Delay by 2 seconds so they can see the message
-                                        @Override
-                                        public void run() {
-                                            // Go to community activity and see new post
-                                            Intent intent = new Intent(AddPostActivity.this, CommunityActivity.class);
-                                            finish();
-                                            startActivity(intent);
-                                        }
-                                    }, 1000);
-                                } else {
-                                    Log.w(TAG, "DataSnapshot does not exist");
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-                                Log.e(TAG, "DatabaseError: " + error.getMessage()); // Handle database error
-                            }
-                        });
-
-
+                        // Go back to the CommunityActivity
+                        Intent intent = new Intent(EditPostActivity.this, CommunityActivity.class);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        // Hide progress bar and show error message
+                        progressBar.setVisibility(View.GONE);
+                        Toast.makeText(EditPostActivity.this, "Failed to update post: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     }
-                });
-            }
-        });
+                }
+            });
+    }
 
+    // Helper method to extract data from a list of TextInputLayouts
+    private List<String> getInputBoxData(List<TextInputLayout> inputBoxes) {
+        List<String> dataList = new ArrayList<>();
+        for (TextInputLayout inputBox : inputBoxes) {
+            TextInputEditText editText = inputBox.findViewById(R.id.input);
+            dataList.add(editText.getText().toString().trim());
+        }
+        return dataList;
     }
 }
-
-
-

@@ -30,6 +30,9 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.appcheck.FirebaseAppCheck;
+import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -37,6 +40,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -114,6 +118,12 @@ public class LoginActivity extends AppCompatActivity {
                 .setTitleText("Select Date of Birth")
                 .setSelection(milliseconds)
                 .build();
+
+        // Initialize App Check for token generation (Stage 2 - Enjia)
+        FirebaseApp.initializeApp(this);
+        FirebaseAppCheck appCheck = FirebaseAppCheck.getInstance();
+        appCheck.installAppCheckProviderFactory(
+                SafetyNetAppCheckProviderFactory.getInstance());
 
         mStorageRef = FirebaseStorage.getInstance().getReference().child("Images");
 
@@ -536,6 +546,28 @@ public class LoginActivity extends AppCompatActivity {
                         myRef.child("users").child(uid).child("email").setValue(email);
                         myRef.child("usernames").child(uid).setValue(username);
                         myRef.child("emails").child(uid).setValue(email);
+
+                        // Enjia - Stage 2
+                        // Generate a new FCM token for the user to send notifications
+                        FirebaseMessaging.getInstance().getToken()
+                                .addOnCompleteListener(fcmTask -> {
+                                    if (fcmTask.isSuccessful()) {
+                                        String fcmToken = fcmTask.getResult();
+                                        Log.d("FCM_TOKEN", fcmToken);
+                                        // Store the FCM token in your database
+                                        myRef.child("users").child(uid).child("fcmToken").setValue(fcmToken)
+                                                .addOnCompleteListener(databaseTask -> {
+                                                    if (databaseTask.isSuccessful()) {
+                                                        Log.d("FCM_TOKEN", "FCM token added to database");
+                                                    } else {
+                                                        Log.w("FCM_TOKEN", "Failed to add FCM token to database", databaseTask.getException());
+                                                    }
+                                                });
+                                    } else {
+                                        Log.w("FCM_TOKEN", "Failed to get FCM token", fcmTask.getException());
+                                    }
+                                });
+
                         viewAnimator.showNext();
                         ClearInputs();
                     }
