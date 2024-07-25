@@ -1,7 +1,11 @@
 package sg.edu.np.mad.pocketchef;
 
 import android.annotation.SuppressLint;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -11,6 +15,7 @@ import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -19,6 +24,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.motion.widget.MotionLayout;
+import androidx.core.app.ActivityCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
@@ -47,6 +53,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     FirebaseUser mUser;
     DatabaseReference mUserRef;
     private static final String TAG = "MainMenu";
+    private static final int PERMISSION_REQUEST_CODE = 100;
+    private static final String CHANNEL_ID = "pocket_chef";
 
     DrawerLayout drawerLayout;
     NavigationView navigationView;
@@ -54,6 +62,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     MenuItem nav_home, nav_recipes, nav_search, nav_logout, nav_profile, nav_favourites, nav_community, nav_pantry, nav_complex_search;
     CardView cardView1, cardView2, cardView3, cardView4, cardView5, cardView6, cardView7, cardView8;
     //cardView5, cardView6;
+
+    // In-app notifications (Stage 2 - Enjia)
+    ImageView notificationButton;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -89,6 +100,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Set toolbar as action bar
         setSupportActionBar(toolbar);
+
+        // Notifications
+        notificationButton = findViewById(R.id.notification_button);
 
         //Not sure if this is needed
         //menu.findItem(R.id.nav_logout).setVisible(false);
@@ -146,7 +160,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 return true;
             }
         });
+
+        // Notifications Permission
+        createNotificationChannel();
+
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            // Request permission
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, PERMISSION_REQUEST_CODE);
+        }
     }
+
 
     private void CreateDefaultFavorites(){
         new Thread(new Runnable() {
@@ -223,6 +246,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent intent = new Intent(MainActivity.this, CommunityActivity.class);
             startActivity(intent);
         });
+
+    }
+
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "Pocket Chef";
+            String description = "Community Page Notifications";
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    // In-app notifications
+    public void checkForNotifications(){
 
     }
 

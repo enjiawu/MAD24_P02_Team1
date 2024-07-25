@@ -179,6 +179,9 @@
     <string name="noEquipment">No Equipment Needed</string>
     <string name="noComments">Be the first to leave a message!</string>
     <string name="noPosts">No Post Found!</string>
+    <string name="notifications_title">Notifications</string>
+    <string name="noNotifications">No new notifications</string>
+
 
     <string name="resultTextView_placeholder">Search for recipes...</string>
     <string name="cardView_open_camera_textview_text">Open Camera</string>
