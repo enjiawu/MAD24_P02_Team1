@@ -49,10 +49,12 @@
             android:layout_marginTop="80dp"
             app:layout_constraintBottom_toTopOf="@id/bt" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/bt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/palettebeige"
+            android:textColor="@color/palettedarkblue"
             android:text="Add New Category"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

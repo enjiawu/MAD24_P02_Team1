@@ -61,7 +61,7 @@
                 app:layout_constraintVertical_bias="0.329"/>
 
             <!-- TextView to display User's Username -->
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/usernameTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -84,7 +84,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <!-- TextView: Label for User's Full Name -->
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -95,7 +95,7 @@
             app:layout_constraintTop_toBottomOf="@+id/view"/>
 
         <!-- TextView to display User's Full Name -->
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/nameTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -107,7 +107,7 @@
             app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toBottomOf="@+id/view"/>
 
         <!-- TextView: Label for User's Email -->
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -117,7 +117,7 @@
             app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toBottomOf="@+id/view"/>
 
         <!-- TextView to display User's Email -->
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/EmailTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -130,7 +130,7 @@
             app:layout_constraintTop_toBottomOf="@+id/view"/>
 
         <!-- TextView: Label for User's Date of Birth -->
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/dob"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -141,7 +141,7 @@
             app:layout_constraintTop_toBottomOf="@+id/view"/>
 
         <!-- TextView to display User's Date of Birth -->
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/dobTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

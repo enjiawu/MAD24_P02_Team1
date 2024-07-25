@@ -26,425 +26,422 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        <androidx.constraintlayout.motion.widget.MotionLayout
-            android:id="@+id/main"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#FCFAFB"
-            android:clipToPadding="false"
-            app:layoutDescription="@xml/recipe_activity_scene">
+            <androidx.constraintlayout.motion.widget.MotionLayout
+                android:id="@+id/main"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#FCFAFB"
+                android:clipToPadding="false"
+                app:layoutDescription="@xml/recipe_activity_scene">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="@color/paletteblue"
-            android:minHeight="?attr/actionBarSize"
-            app:contentInsetStart="0dp"
-            app:contentInsetStartWithNavigation="0dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:navigationIcon="@drawable/ic_launcher_foreground"
-            app:title="Advanced Searching"/>
-
-            <!-- Search By Name -->
-            <TextView
-                android:id="@+id/searchByNameText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginStart="20dp"
-                android:text="@string/search_by_name"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/toolbar" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:id="@+id/searchByNameBox"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:hint="@string/search_by_name_hint"
-                app:boxCornerRadiusBottomEnd="5dp"
-                app:boxCornerRadiusBottomStart="5dp"
-                app:boxCornerRadiusTopEnd="5dp"
-                app:boxCornerRadiusTopStart="5dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/searchByNameText"
-                app:layout_constraintStart_toStartOf="parent">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/searchByName"
-                    android:layout_width="match_parent"
+                <com.google.android.material.appbar.MaterialToolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textSize="15sp"
-                    android:padding="10dp"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    tools:ignore="KeyboardInaccessibleWidget" />
+                    android:background="@color/paletteblue"
+                    android:minHeight="?attr/actionBarSize"
+                    app:contentInsetStart="0dp"
+                    app:contentInsetStartWithNavigation="0dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:navigationIcon="@drawable/ic_launcher_foreground"
+                    app:title="Advanced Searching" />
 
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!-- Exclude Ingredients -->
-            <TextView
-                android:id="@+id/excludeIngredientsText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="@string/exclude_ingredients"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:layout_marginStart="20dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/searchByNameBox" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:id="@+id/excludeIngredientsBox"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:hint="@string/exclude_ingredients_hint"
-                app:boxCornerRadiusBottomEnd="5dp"
-                app:boxCornerRadiusBottomStart="5dp"
-                app:boxCornerRadiusTopEnd="5dp"
-                app:boxCornerRadiusTopStart="5dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/excludeIngredientsText">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/excludeIngredients"
-                    android:layout_width="match_parent"
+                <!-- Search By Name -->
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/searchByNameText"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:padding="10dp"
-                    android:textSize="15sp"
-                    tools:ignore="KeyboardInaccessibleWidget" />
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/search_by_name"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!-- Carbs -->
-            <TextView
-                android:id="@+id/minCarb"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="@string/min_carbs"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:layout_marginStart="20dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/excludeIngredientsBox" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:id="@+id/editMinCarbsBox"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:hint="@string/min_hint"
-                app:boxCornerRadiusBottomEnd="5dp"
-                app:boxCornerRadiusBottomStart="5dp"
-                app:boxCornerRadiusTopEnd="5dp"
-                app:boxCornerRadiusTopStart="5dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/minCarb">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editMinCarbs"
-                    android:layout_width="100dp"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/searchByNameBox"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:inputType="number"
-                    android:padding="10dp"
-                    android:textSize="15sp"
-                    tools:ignore="KeyboardInaccessibleWidget" />
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:hint="@string/search_by_name_hint"
+                    app:boxCornerRadiusBottomEnd="5dp"
+                    app:boxCornerRadiusBottomStart="5dp"
+                    app:boxCornerRadiusTopEnd="5dp"
+                    app:boxCornerRadiusTopStart="5dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/searchByNameText">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/searchByName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:padding="10dp"
+                        android:textSize="15sp"
+                        tools:ignore="KeyboardInaccessibleWidget" />
 
-            <TextView
-                android:id="@+id/maxCarb"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginStart="85dp"
-                android:text="@string/max_carbs"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@+id/minCarb"
-                app:layout_constraintTop_toBottomOf="@+id/excludeIngredientsBox" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/editMaxCarbsBox"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="60dp"
-                android:layout_marginEnd="16dp"
-                android:hint="@string/max_hint"
-                app:boxCornerRadiusBottomEnd="5dp"
-                app:boxCornerRadiusBottomStart="5dp"
-                app:boxCornerRadiusTopEnd="5dp"
-                app:boxCornerRadiusTopStart="5dp"
-                app:layout_constraintStart_toEndOf="@+id/editMinCarbsBox"
-                app:layout_constraintTop_toBottomOf="@+id/minCarb">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editMaxCarbs"
-                    android:layout_width="100dp"
+                <!-- Exclude Ingredients -->
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/excludeIngredientsText"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:inputType="number"
-                    android:maxLines="1"
-                    android:padding="10dp"
-                    android:textSize="15sp"
-                    tools:ignore="KeyboardInaccessibleWidget" />
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/exclude_ingredients"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/searchByNameBox" />
 
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!-- Protein -->
-            <TextView
-                android:id="@+id/minProtein"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="@string/min_protein"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:layout_marginStart="20dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editMaxCarbsBox" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:id="@+id/editMinProteinBox"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:hint="@string/min_hint"
-                app:boxCornerRadiusBottomEnd="5dp"
-                app:boxCornerRadiusBottomStart="5dp"
-                app:boxCornerRadiusTopEnd="5dp"
-                app:boxCornerRadiusTopStart="5dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/minProtein">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editMinProtein"
-                    android:layout_width="100dp"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/excludeIngredientsBox"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:inputType="number"
-                    android:padding="10dp"
-                    android:textSize="15sp"
-                    tools:ignore="KeyboardInaccessibleWidget" />
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:hint="@string/exclude_ingredients_hint"
+                    app:boxCornerRadiusBottomEnd="5dp"
+                    app:boxCornerRadiusBottomStart="5dp"
+                    app:boxCornerRadiusTopEnd="5dp"
+                    app:boxCornerRadiusTopStart="5dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/excludeIngredientsText">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/excludeIngredients"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:padding="10dp"
+                        android:textSize="15sp"
+                        tools:ignore="KeyboardInaccessibleWidget" />
 
-            <TextView
-                android:id="@+id/maxProtein"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginStart="85dp"
-                android:text="@string/max_protein"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@+id/minCarb"
-                app:layout_constraintTop_toBottomOf="@+id/editMaxCarbsBox" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/editMaxProteinBox"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="60dp"
-                android:layout_marginEnd="16dp"
-                android:hint="@string/max_hint"
-                app:boxCornerRadiusBottomEnd="5dp"
-                app:boxCornerRadiusBottomStart="5dp"
-                app:boxCornerRadiusTopEnd="5dp"
-                app:boxCornerRadiusTopStart="5dp"
-                app:layout_constraintStart_toEndOf="@+id/editMinProteinBox"
-                app:layout_constraintTop_toBottomOf="@+id/maxProtein">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editMaxProtein"
-                    android:layout_width="100dp"
+                <!-- Carbs -->
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/minCarb"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:inputType="number"
-                    android:maxLines="1"
-                    android:padding="10dp"
-                    android:textSize="15sp"
-                    tools:ignore="KeyboardInaccessibleWidget" />
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/min_carbs"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/excludeIngredientsBox" />
 
-            </com.google.android.material.textfield.TextInputLayout>
-
-
-            <!-- Calories -->
-            <TextView
-                android:id="@+id/minCalories"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="@string/min_calories"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:layout_marginStart="20dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editMaxProteinBox" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:id="@+id/editMinCaloriesBox"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:hint="@string/min_hint"
-                app:boxCornerRadiusBottomEnd="5dp"
-                app:boxCornerRadiusBottomStart="5dp"
-                app:boxCornerRadiusTopEnd="5dp"
-                app:boxCornerRadiusTopStart="5dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/minCalories">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editMinCalories"
-                    android:layout_width="100dp"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/editMinCarbsBox"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:inputType="number"
-                    android:padding="10dp"
-                    android:textSize="15sp"
-                    tools:ignore="KeyboardInaccessibleWidget" />
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:hint="@string/min_hint"
+                    app:boxCornerRadiusBottomEnd="5dp"
+                    app:boxCornerRadiusBottomStart="5dp"
+                    app:boxCornerRadiusTopEnd="5dp"
+                    app:boxCornerRadiusTopStart="5dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/minCarb">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editMinCarbs"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:inputType="number"
+                        android:maxLines="1"
+                        android:padding="10dp"
+                        android:textSize="15sp"
+                        tools:ignore="KeyboardInaccessibleWidget" />
 
-            <TextView
-                android:id="@+id/maxCalories"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginStart="85dp"
-                android:text="@string/max_calories"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@+id/minCarb"
-                app:layout_constraintTop_toBottomOf="@+id/editMaxProteinBox" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/editMaxCaloriesBox"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="60dp"
-                android:layout_marginEnd="16dp"
-                android:hint="@string/max_hint"
-                app:boxCornerRadiusBottomEnd="5dp"
-                app:boxCornerRadiusBottomStart="5dp"
-                app:boxCornerRadiusTopEnd="5dp"
-                app:boxCornerRadiusTopStart="5dp"
-                app:layout_constraintStart_toEndOf="@+id/editMinProteinBox"
-                app:layout_constraintTop_toBottomOf="@+id/maxCalories">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editMaxCalories"
-                    android:layout_width="100dp"
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/maxCarb"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:inputType="number"
-                    android:maxLines="1"
-                    android:padding="10dp"
-                    android:textSize="15sp"
-                    tools:ignore="KeyboardInaccessibleWidget" />
+                    android:layout_marginStart="85dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/max_carbs"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toEndOf="@+id/minCarb"
+                    app:layout_constraintTop_toBottomOf="@+id/excludeIngredientsBox" />
 
-            </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/editMaxCarbsBox"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="60dp"
+                    android:layout_marginEnd="16dp"
+                    android:hint="@string/max_hint"
+                    app:boxCornerRadiusBottomEnd="5dp"
+                    app:boxCornerRadiusBottomStart="5dp"
+                    app:boxCornerRadiusTopEnd="5dp"
+                    app:boxCornerRadiusTopStart="5dp"
+                    app:layout_constraintStart_toEndOf="@+id/editMinCarbsBox"
+                    app:layout_constraintTop_toBottomOf="@+id/minCarb">
 
-            <!-- Diet -->
-            <TextView
-                android:id="@+id/dietText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
-                android:text="@string/diet"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editMinCaloriesBox" />
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editMaxCarbs"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:inputType="number"
+                        android:maxLines="1"
+                        android:padding="10dp"
+                        android:textSize="15sp"
+                        tools:ignore="KeyboardInaccessibleWidget" />
 
-            <Spinner
-                android:id="@+id/diet_spinner"
-                android:layout_width="150sp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:padding="8dp"
-                android:entries="@array/dietArray"
-                android:background="@drawable/custom_spinner_background"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/dietText" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Intolerances -->
-            <TextView
-                android:id="@+id/intolerancesText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="175dp"
-                android:layout_marginTop="10dp"
-                android:text="@string/intolerances"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@+id/dietText"
-                app:layout_constraintTop_toBottomOf="@+id/editMinCaloriesBox" />
+                <!-- Protein -->
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/minProtein"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/min_protein"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/editMaxCarbsBox" />
 
-            <Spinner
-                android:id="@+id/intolerances_spinner"
-                android:layout_width="150sp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="50dp"
-                android:background="@drawable/custom_spinner_background"
-                android:padding="8dp"
-                android:textColor="@color/black"
-                android:entries="@array/intolerancesArray"
-                app:layout_constraintStart_toEndOf="@+id/diet_spinner"
-                app:layout_constraintTop_toBottomOf="@+id/intolerancesText" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/editMinProteinBox"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:hint="@string/min_hint"
+                    app:boxCornerRadiusBottomEnd="5dp"
+                    app:boxCornerRadiusBottomStart="5dp"
+                    app:boxCornerRadiusTopEnd="5dp"
+                    app:boxCornerRadiusTopStart="5dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/minProtein">
 
-            <!--Search Button-->
-            <Button
-                android:id="@+id/searchButton"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/intolerances_spinner"
-                android:layout_marginRight="20dp"
-                android:layout_marginLeft="20dp"
-                android:textStyle="bold"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:backgroundTint="#FEAC5D"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="@string/search" />
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editMinProtein"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:inputType="number"
+                        android:maxLines="1"
+                        android:padding="10dp"
+                        android:textSize="15sp"
+                        tools:ignore="KeyboardInaccessibleWidget" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/maxProtein"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="85dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/max_protein"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toEndOf="@+id/minCarb"
+                    app:layout_constraintTop_toBottomOf="@+id/editMaxCarbsBox" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/editMaxProteinBox"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="60dp"
+                    android:layout_marginEnd="16dp"
+                    android:hint="@string/max_hint"
+                    app:boxCornerRadiusBottomEnd="5dp"
+                    app:boxCornerRadiusBottomStart="5dp"
+                    app:boxCornerRadiusTopEnd="5dp"
+                    app:boxCornerRadiusTopStart="5dp"
+                    app:layout_constraintStart_toEndOf="@+id/editMinProteinBox"
+                    app:layout_constraintTop_toBottomOf="@+id/maxProtein">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editMaxProtein"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:inputType="number"
+                        android:maxLines="1"
+                        android:padding="10dp"
+                        android:textSize="15sp"
+                        tools:ignore="KeyboardInaccessibleWidget" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <!-- Calories -->
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/minCalories"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/min_calories"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/editMaxProteinBox" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/editMinCaloriesBox"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:hint="@string/min_hint"
+                    app:boxCornerRadiusBottomEnd="5dp"
+                    app:boxCornerRadiusBottomStart="5dp"
+                    app:boxCornerRadiusTopEnd="5dp"
+                    app:boxCornerRadiusTopStart="5dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/minCalories">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editMinCalories"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:inputType="number"
+                        android:maxLines="1"
+                        android:padding="10dp"
+                        android:textSize="15sp"
+                        tools:ignore="KeyboardInaccessibleWidget" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/maxCalories"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="85dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/max_calories"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toEndOf="@+id/minCarb"
+                    app:layout_constraintTop_toBottomOf="@+id/editMaxProteinBox" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/editMaxCaloriesBox"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="60dp"
+                    android:layout_marginEnd="16dp"
+                    android:hint="@string/max_hint"
+                    app:boxCornerRadiusBottomEnd="5dp"
+                    app:boxCornerRadiusBottomStart="5dp"
+                    app:boxCornerRadiusTopEnd="5dp"
+                    app:boxCornerRadiusTopStart="5dp"
+                    app:layout_constraintStart_toEndOf="@+id/editMinProteinBox"
+                    app:layout_constraintTop_toBottomOf="@+id/maxCalories">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editMaxCalories"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:inputType="number"
+                        android:maxLines="1"
+                        android:padding="10dp"
+                        android:textSize="15sp"
+                        tools:ignore="KeyboardInaccessibleWidget" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Diet -->
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/dietText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/diet"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/editMinCaloriesBox" />
+
+                <Spinner
+                    android:id="@+id/diet_spinner"
+                    android:layout_width="150sp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:background="@drawable/custom_spinner_background"
+                    android:entries="@array/dietArray"
+                    android:padding="8dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/dietText" />
+
+                <!-- Intolerances -->
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/intolerancesText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="175dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/intolerances"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toEndOf="@+id/dietText"
+                    app:layout_constraintTop_toBottomOf="@+id/editMinCaloriesBox" />
+
+                <Spinner
+                    android:id="@+id/intolerances_spinner"
+                    android:layout_width="150sp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="50dp"
+                    android:background="@drawable/custom_spinner_background"
+                    android:entries="@array/intolerancesArray"
+                    android:padding="8dp"
+                    android:textColor="@color/black"
+                    app:layout_constraintStart_toEndOf="@+id/diet_spinner"
+                    app:layout_constraintTop_toBottomOf="@+id/intolerancesText" />
+
+                <!--Search Button-->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/searchButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="20dp"
+                    android:backgroundTint="#FEAC5D"
+                    android:text="@string/search"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/intolerances_spinner" />
 
 
             </androidx.constraintlayout.motion.widget.MotionLayout>
         </androidx.core.widget.NestedScrollView>
     </FrameLayout>
-
-
-
 </androidx.drawerlayout.widget.DrawerLayout>

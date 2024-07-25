@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    app:strokeWidth="0dp"
-    app:cardBackgroundColor="@color/palettebeige">
+    app:cardBackgroundColor="@color/palettebeige"
+    app:strokeWidth="0dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,9 +16,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            app:cardElevation="4dp"
+            app:cardBackgroundColor="@color/paletteorange"
             app:cardCornerRadius="8dp"
-            app:cardBackgroundColor="@color/paletteorange"> <!-- Adjust the color as needed -->
+            app:cardElevation="4dp">
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/textView_instruction_no"
@@ -40,7 +40,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
-            android:background="@color/palettebeige"/>
+            android:background="@color/palettebeige" />
     </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>
