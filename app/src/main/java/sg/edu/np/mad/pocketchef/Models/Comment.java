@@ -8,15 +8,13 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 public class Comment {
-    private String commentId, comment, userId, username, userProfilePicture;
+    private String commentId, comment, userId;
     private Object date;
 
-    public Comment(String comment, String userId, String username, String userProfilePicture) {
+    public Comment(String comment, String userId) {
         this.commentId = commentId;
         this.comment = comment;
         this.userId = userId;
-        this.username = username;
-        this.userProfilePicture = userProfilePicture;
         this.date = ServerValue.TIMESTAMP;
     }
 
@@ -47,14 +45,6 @@ public class Comment {
         this.userId = userId;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     public Object getDate() {
         return date;
     }
@@ -69,13 +59,5 @@ public class Comment {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         return dateFormat.format(date);
-    }
-
-    public String getUserProfilePicture() {
-        return userProfilePicture;
-    }
-
-    public void setUserProfilePicture(String userProfilePicture) {
-        this.userProfilePicture = userProfilePicture;
     }
 }

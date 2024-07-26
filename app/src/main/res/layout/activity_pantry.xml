@@ -5,6 +5,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawerLayout"
+
+    android:focusableInTouchMode="true"
+    android:clickable="true"
+    android:focusable="true"
+    android:fitsSystemWindows="true"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
@@ -42,8 +48,24 @@
             android:id="@+id/pantryRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:helperTextEnabled="true"
+            app:helperText="Tap anywhere to add"
+            app:layout_constraintTop_toBottomOf="@+id/pantryRecyclerView">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/addIngredientEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="New pantry item"
+                android:inputType="text"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"

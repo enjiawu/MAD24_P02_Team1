@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,10 +8,10 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:background="@color/paletteblue"
-    tools:context=".CommunityActivity"
+    tools:context=".AddPostActivity"
     tools:openDrawer="start">
 
-    <FrameLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -22,7 +22,6 @@
             android:clipToPadding="false"
             android:background="@color/paletteorange">
 
-            <!-- ImageView for Back Button to return to profile page -->
             <LinearLayout
                 android:id="@+id/header"
                 android:layout_width="match_parent"
@@ -456,17 +455,16 @@
                 app:layout_constraintTop_toBottomOf="@+id/addRecipeImageIcon" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="gone"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintVertical_bias="0.5" />
-
-    </FrameLayout>
-</ScrollView>
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintVertical_bias="0.5" />
+</FrameLayout>
 
 

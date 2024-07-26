@@ -62,11 +62,13 @@ public class PantryRecipesActivity extends AppCompatActivity {
     }
 
     private void fetchIngredientsRecipes() {
-        ArrayList<String> ingredients = new ArrayList<>();
-        ingredients.add("Salt");
-        ingredients.add("Sugar");
-        ingredients.add("Butter");
-        ingredients.add("Honey");
+//        ArrayList<String> ingredients = new ArrayList<>();
+//        ingredients.add("Salt");
+//        ingredients.add("Sugar");
+//        ingredients.add("Butter");
+//        ingredients.add("Honey");
+
+        ArrayList<String> ingredients = getIntent().getStringArrayListExtra("ingredients");
 
 
         // Show a Snackbar message indicating that search is in progress

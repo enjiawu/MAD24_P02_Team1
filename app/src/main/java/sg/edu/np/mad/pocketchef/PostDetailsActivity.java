@@ -1,9 +1,6 @@
 package sg.edu.np.mad.pocketchef;
 
-import static android.content.ContentValues.TAG;
-
 import android.app.AlertDialog;
-import android.app.Notification;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -49,7 +46,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.messaging.RemoteMessage;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.kongzue.dialogx.dialogs.BottomMenu;
@@ -65,10 +61,10 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import android.widget.Toast;
 
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -77,12 +73,13 @@ import sg.edu.np.mad.pocketchef.Adapters.PostInfoAdapter;
 import sg.edu.np.mad.pocketchef.Listener.CommentOnHoldListener;
 import sg.edu.np.mad.pocketchef.Models.CategoryBean;
 import sg.edu.np.mad.pocketchef.Models.Comment;
+import sg.edu.np.mad.pocketchef.Models.Notification;
 import sg.edu.np.mad.pocketchef.Models.Post;
 import sg.edu.np.mad.pocketchef.Models.RecipeDetailsC;
 
 // Enjia - Stage 2
-public class PostDetailsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
-
+public class PostDetailsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    private final String TAG = "PostDetailsActivtity";
     String postKey;
 
     //Favourites
@@ -122,12 +119,13 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
             return insets;
         });
 
+        // Setting up views and listeners
         findViews();
         setUpListeners();
 
-        handleDynamicLink();
+        handleDynamicLink(); // Dynamic link for sharing
 
-        loadPostDetails();
+        loadPostDetails(); // Loading the post details
 
         // Notifications
         firebaseMessaging = FirebaseMessaging.getInstance();
@@ -211,7 +209,9 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
         nav_community = navigationView.getMenu().findItem(R.id.nav_community);
         nav_pantry = navigationView.getMenu().findItem(R.id.nav_pantry);
         nav_complex_search = navigationView.getMenu().findItem(R.id.nav_complex_search);
-    };
+    }
+
+    ;
 
     // Handle dynamic link in firebase to load post when link is clicked
     private void handleDynamicLink() {
@@ -241,71 +241,85 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
                 });
     }
 
-    private void loadPostDetails(){
+    private void loadPostDetails() {
         progressBar.setVisibility(View.VISIBLE);
+
         postRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Post post = snapshot.getValue(Post.class);
                 if (post != null) {
-                    // Update your UI with the post information
-                    recipeName.setText(post.getTitle());
-                    servings.setText(post.getServings() + " Servings");
-                    prepTime.setText(post.getPrepTime() + " mins");
-                    costPerServing.setText(String.format("%.2f", post.getCostPerServing()) + " per Serving(s)");
-                    protein.setText(post.getProtein() + " g");
-                    fat.setText(post.getFat() + " g");
-                    calories.setText(post.getCalories() + " kcal");
-                    username.setText("@" + post.getUsername());
-                    date.setText(post.formatDate());
+                    mUserRef.child(post.getUserId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot userSnapshot) {
+                            if (userSnapshot.exists()) {
+                                String postUsername = userSnapshot.child("username").getValue(String.class);
+                                String Image = userSnapshot.child("Image").getValue(String.class);
 
-                    // Load post image
-                    Picasso.get().load(post.getRecipeImage()).into(recipeImage);
+                                // Update your UI with the post information
+                                recipeName.setText(post.getTitle());
+                                servings.setText(post.getServings() + " Servings");
+                                prepTime.setText(post.getPrepTime() + " mins");
+                                costPerServing.setText(String.format("%.2f", post.getCostPerServing()) + " per Serving(s)");
+                                protein.setText(post.getProtein() + " g");
+                                fat.setText(post.getFat() + " g");
+                                calories.setText(post.getCalories() + " kcal");
+                                username.setText("@" + postUsername);
+                                date.setText(post.formatDate());
 
-                    // Load profile picture
-                    if (post.getProfilePicture() != null) {
-                        Picasso.get().load(post.getProfilePicture()).into(profilePicture);
-                    } else {
-                        profilePicture.setImageResource(R.drawable.pocketchef_logo);
-                    }
+                                // Load post image
+                                Picasso.get().load(post.getRecipeImage()).into(recipeImage);
 
-                    // Load the ingredients, instructions, and comments
-                    loadInstructions(post.getInstructions());
-                    loadIngredients(post.getIngredients());
-                    if(post.getEquipment() != null && !post.getEquipment().isEmpty()){
-                        loadEquipment(post.getEquipment());
-                        noEquipmentText.setVisibility(View.GONE);
-                    }
-                    else{
-                        noEquipmentText.setVisibility(View.VISIBLE);
-                    }
-                    if(!post.getComments().isEmpty()){
-                        loadComments();
-                        noCommentsText.setVisibility(View.GONE);
-                    }
-                    else{
-                        noCommentsText.setVisibility(View.VISIBLE);
-                    }
+                                // Load profile picture
+                                if (Image != null && !Image.isEmpty()) {
+                                    Picasso.get().load(Image).into(profilePicture);
+                                } else {
+                                    profilePicture.setImageResource(R.drawable.pocketchef_logo);
+                                }
 
-                    // Retrieve and update like status
-                    String userId = currentUser.getUid();
-                    if (post.getLikesUsers().contains(userId)) {
-                        likeButton.setImageResource(R.drawable.baseline_thumb_up_alt_24);
-                    } else {
-                        likeButton.setImageResource(R.drawable.baseline_thumb_up_off_alt_24);
-                    }
+                                // Load the ingredients, instructions, and comments
+                                loadInstructions(post.getInstructions());
+                                loadIngredients(post.getIngredients());
+                                if (post.getEquipment() != null && !post.getEquipment().isEmpty()) {
+                                    loadEquipment(post.getEquipment());
+                                    noEquipmentText.setVisibility(View.GONE);
+                                } else {
+                                    noEquipmentText.setVisibility(View.VISIBLE);
+                                }
+                                if (!post.getComments().isEmpty()) {
+                                    loadComments();
+                                    noCommentsText.setVisibility(View.GONE);
+                                } else {
+                                    noCommentsText.setVisibility(View.VISIBLE);
+                                }
 
-                } else {
-                    // Handle the case where the post is null
-                    Log.e("Post Details", "Post is null");
+                                // Retrieve and update like status
+                                String userId = currentUser.getUid();
+                                if (post.getLikesUsers().contains(userId)) {
+                                    likeButton.setImageResource(R.drawable.baseline_thumb_up_alt_24);
+                                } else {
+                                    likeButton.setImageResource(R.drawable.baseline_thumb_up_off_alt_24);
+                                }
+
+                            } else {
+                                // Handle the case where the post is null
+                                Log.e(TAG, "Post is null");
+                            }
+                            progressBar.setVisibility(View.GONE);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            // Handle database error
+                            Log.e(TAG, "Error loading post details", error.toException());
+                            progressBar.setVisibility(View.GONE);
+                        }
+                    });
                 }
-                progressBar.setVisibility(View.GONE);
             }
-
-            @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 // Handle database error
-                Log.e("Post Details", "Error loading post details", error.toException());
+                Log.e(TAG, "Error loading post details", error.toException());
                 progressBar.setVisibility(View.GONE);
             }
         });
@@ -344,12 +358,12 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Log.w("Post Details", "loadComments:onCancelled", error.toException());
+                Log.w(TAG, "loadComments:onCancelled", error.toException());
             }
         });
     }
 
-    private void setUpListeners(){
+    private void setUpListeners() {
         // Share post function
         shareButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -432,12 +446,13 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
                             // Handle Edit Post
                             if (index == 0) {
                                 // Handle Edit Post
-                                handleDeleteComment(position);
+                                handleDeleteComment(position, post);
                             }
                             dialog.dismiss();
                             return true;
                         });
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 // Handle potential errors
@@ -448,7 +463,7 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
     };
 
     // Function to delete post if it belongs to the user
-    private void handleDeleteComment(int position) {
+    private void handleDeleteComment(int position, Post post) {
         // Confirm deletion with a dialog
         BottomMenu.show(Collections.singletonList("Are you sure you want to delete this comment?"))
                 .setOnMenuItemClickListener((dialog, text, index) -> {
@@ -459,7 +474,11 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
                         postsRef.child(postKey).child("comments").child(String.valueOf(position)).removeValue()
                                 .addOnCompleteListener(task -> {
                                     if (task.isSuccessful()) {
-                                        updateCommentsListAndDatabase();
+                                        // Delete the notification
+                                        deleteNotification(post.getUserId(), post.getComments().size() + "_" + currentUser.getUid());
+
+                                        updateCommentsListAndDatabase(); // Update database and comment list for the adapter
+
                                     } else {
                                         runOnUiThread(() -> {
                                             // Handle the failure, e.g., show a Toast message
@@ -535,6 +554,7 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
 
         sharePost(dynamicLinkUri.toString());
     }
+
     private void sharePost(String dynamicLink) {
         Intent intent = new Intent();
         intent.setType("text/plain");
@@ -556,15 +576,14 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
             return;
         }
 
-        mUserRef.child(currentUser.getUid()).addValueEventListener(new ValueEventListener() {
+        mUserRef.child(currentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     String username = snapshot.child("username").getValue(String.class);
-                    String profilePictureUrl = snapshot.child("profile-picture").getValue(String.class);
                     String userId = currentUser.getUid();
 
-                    Comment comment = new Comment(commentText, userId, username, profilePictureUrl);
+                    Comment comment = new Comment(commentText, userId);
 
                     postRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -572,6 +591,9 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
                             Post post = dataSnapshot.getValue(Post.class);
                             if (post != null) {
                                 List<Comment> comments = post.getComments();
+                                if (comments == null) {
+                                    comments = new ArrayList<>();
+                                }
                                 comments.add(comment);
                                 post.setComments(comments);
                                 postRef.setValue(post).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -579,6 +601,11 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
                                     public void onSuccess(Void unused) {
                                         Toast.makeText(PostDetailsActivity.this, "Comment has been published", Toast.LENGTH_SHORT).show();
                                         loadComments(); // Refresh the comments section
+
+                                        // Send notification to the post owner
+                                        String title = "@" + username + " left a comment on your post!";
+                                        String message = comment.getComment();
+                                        sendNotificationToPostOwner(post.getUserId(), String.valueOf(post.getComments().size()), title, message);
                                     }
                                 });
                             }
@@ -606,72 +633,107 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
 
     // Function to toggle likes
     private void toggleLike() {
-        String userId = currentUser.getUid();
-
-        postRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        mUserRef.child(currentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Post post = snapshot.getValue(Post.class);
-                if (post != null) {
-                    if (post.getLikesUsers().contains(userId)) {
-                        Log.d("Post Details",  "Post has been unliked");
-                        // User has already liked the post, so we will unlike it
-                        post.getLikesUsers().remove(userId);
-                        post.setLikes(post.getLikes() - 1);
-                        likeButton.setImageResource(R.drawable.baseline_thumb_up_off_alt_24);
-                    } else {
-                        Log.d("Post Details",  "Post has been liked");
-                        // User has not liked the post
-                        post.getLikesUsers().add(userId);
-                        post.setLikes(post.getLikes() + 1);
-                        likeButton.setImageResource(R.drawable.baseline_thumb_up_alt_24);
+                if (snapshot.exists()) {
+                    String username = snapshot.child("username").getValue(String.class);
+                    String userId = currentUser.getUid();
+                    postRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            Post post = snapshot.getValue(Post.class);
+                            post.setPostKey(snapshot.getKey());
+                            if (post != null) {
+                                if (post.getLikesUsers().contains(userId)) {
+                                    Log.d(TAG, "Post has been unliked");
+                                    // User has already liked the post, so we will unlike it
+                                    post.getLikesUsers().remove(userId);
+                                    post.setLikes(post.getLikes() - 1);
+                                    likeButton.setImageResource(R.drawable.baseline_thumb_up_off_alt_24);
 
-                        // Send notification to the post owner
-                        sendNotificationToPostOwner(post);
-                    }
+                                    // Delete the notification
+                                    deleteNotification(post.getUserId(), post.getPostKey() + "_" + userId);
 
-                    postRef.setValue(post);
+                                } else {
+                                    Log.d(TAG, "Post has been liked");
+                                    // User has not liked the post
+                                    post.getLikesUsers().add(userId);
+                                    post.setLikes(post.getLikes() + 1);
+                                    likeButton.setImageResource(R.drawable.baseline_thumb_up_alt_24);
+
+                                    // Send notification to the post owner
+                                    String title = "Someone liked your post!";
+                                    String message = "Your post on '" + post.getTitle() + "' was liked by @" + username;
+                                    sendNotificationToPostOwner(post.getUserId(), post.getPostKey(), title, message);
+                                }
+
+                                postRef.setValue(post);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            // Handle potential errors
+                        }
+                    });
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // Handle potential errors
+                Log.e(TAG, "DatabaseError: " + error.getMessage());
             }
         });
     }
 
-    private void sendNotificationToPostOwner(Post post) {
-        String postOwnerId = post.getUserId();
-        String notificationTitle = "Someone liked your post!";
-        String notificationMessage = "Your post on '" + post.getTitle() + "' was liked by " + currentUser.getDisplayName();
 
-        // Get the FCM token for the post owner's device
+    private void sendNotificationToPostOwner(String postOwnerId, String id, String notificationTitle, String notificationMessage) {
+
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(postOwnerId);
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                String fcmToken = snapshot.child("fcmToken").getValue(String.class);
-                Log.d(TAG, "FCM Token:" + fcmToken);
+                Log.d(TAG,  currentUser.getUid() + "_" + postOwnerId);
+                if (!currentUser.getUid().equals(postOwnerId)){ // If the post belongs to the user, ignore notifications
+                    long timestamp = System.currentTimeMillis(); // Get current time as timestamp
 
-                if (fcmToken != null) {
-                    // Use the FCM API to send the notification
-                    FirebaseMessaging.getInstance().send(new RemoteMessage.Builder(fcmToken)
-                            .setMessageId(UUID.randomUUID().toString())
-                            .addData("title", notificationTitle)
-                            .addData("message", notificationMessage)
-                            .build());
-                } else {
-                    Log.e(TAG, "Failed to get FCM token for post owner");
+                    // Get a reference to the notifications node for this user
+                    DatabaseReference notificationsRef = userRef.child("notifications");
+
+                    // Push the new notification to the notifications list with a unique ID
+                    String notificationId = id + "_" + currentUser.getUid()
+                            ; // Unique ID based on post and user
+
+                    // Create a new notification object
+                    Notification notification = new Notification(notificationId, notificationTitle, notificationMessage, timestamp);
+
+
+                    notificationsRef.child(notificationId).setValue(notification)
+                            .addOnSuccessListener(aVoid -> Log.d(TAG, "Notification successfully added"))
+                            .addOnFailureListener(e -> Log.e(TAG, "Error adding notification: " + e.getMessage()));
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // Handle potential errors
+                Log.e(TAG, "DatabaseError: " + error.getMessage());
             }
         });
     }
+
+    // Deleting a notification
+    private void deleteNotification(String postOwnerId, String notificationId) {
+        // Get a reference to the user's notifications node
+        DatabaseReference notificationsRef = FirebaseDatabase.getInstance()
+                .getReference("users")
+                .child(postOwnerId)
+                .child("notifications");
+
+        // Remove the specific notification by its ID
+        notificationsRef.child(notificationId).removeValue()
+                .addOnSuccessListener(aVoid -> Log.d(TAG, "Notification successfully deleted"))
+                .addOnFailureListener(e -> Log.e(TAG, "Error deleting notification: " + e.getMessage()));
+    }
+
 
     // Add to favorite list
     Spinner spinnerCategories;

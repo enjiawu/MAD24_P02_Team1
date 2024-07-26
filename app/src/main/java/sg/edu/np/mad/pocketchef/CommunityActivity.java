@@ -29,6 +29,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -48,6 +49,7 @@ import sg.edu.np.mad.pocketchef.Listener.PostClickListener;
 import sg.edu.np.mad.pocketchef.Listener.PostLikeClickListener;
 import sg.edu.np.mad.pocketchef.Listener.PostOnHoldListener;
 import sg.edu.np.mad.pocketchef.Models.Comment;
+import sg.edu.np.mad.pocketchef.Models.Notification;
 import sg.edu.np.mad.pocketchef.Models.Post;
 
 // Enjia - Stage 2
@@ -73,8 +75,9 @@ public class CommunityActivity extends AppCompatActivity implements NavigationVi
     // Database
     FirebaseAuth mAuth;
     FirebaseDatabase database;
-    DatabaseReference postsRef;
+    DatabaseReference postsRef, mUserRef;
     StorageReference storageReference;
+    FirebaseUser currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,6 +128,8 @@ public class CommunityActivity extends AppCompatActivity implements NavigationVi
         storageReference = FirebaseStorage.getInstance().getReference().child("PostImages");
         database = FirebaseDatabase.getInstance("https://pocket-chef-cd59c-default-rtdb.asia-southeast1.firebasedatabase.app/");
         postsRef = database.getReference("posts");
+        currentUser = mAuth.getCurrentUser(); // Get current user
+        mUserRef = FirebaseDatabase.getInstance().getReference("users");
 
         setupSearchedRecipeRecyclerView();
     }
@@ -222,35 +227,57 @@ public class CommunityActivity extends AppCompatActivity implements NavigationVi
     };
 
     private final PostLikeClickListener postLikeClickListener = (postKey, position) -> {
-        // Find the post with the matching postKey
-        String userId = mAuth.getCurrentUser().getUid();
-        postsRef.child(postKey).addListenerForSingleValueEvent(new ValueEventListener() {
+        mUserRef.child(currentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Post post = snapshot.getValue(Post.class);
+                if (snapshot.exists()) {
+                    String username = snapshot.child("username").getValue(String.class);
+                    String userId = currentUser.getUid();
 
-                if (post != null && snapshot.getKey().equals(postKey)) {
-                    if (post.getLikesUsers().contains(userId)) {
-                        post.getLikesUsers().remove(userId);
-                        post.setLikes(post.getLikes() - 1);
-                    } else {
-                        post.getLikesUsers().add(userId);
-                        post.setLikes(post.getLikes() + 1);
-                    }
+                    // Find the post with the matching postKey
+                    postsRef.child(postKey).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            Post post = snapshot.getValue(Post.class);
+                            post.setPostKey(snapshot.getKey());
 
-                    postsRef.child(postKey).setValue(post).addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            adapter.notifyItemChanged(position);
+                            if (post != null && snapshot.getKey().equals(postKey)) {
+                                if (post.getLikesUsers().contains(userId)) {
+                                    post.getLikesUsers().remove(userId);
+                                    post.setLikes(post.getLikes() - 1);
+
+                                    // Delete the notification
+                                    deleteNotification(post.getUserId(), post.getPostKey() + "_" + userId);
+                                } else {
+                                    post.getLikesUsers().add(userId);
+                                    post.setLikes(post.getLikes() + 1);
+
+                                    // Send notification to the post owner
+                                    String title = "Someone liked your post!";
+                                    String message = "Your post on '" + post.getTitle() + "' was liked by @" + username;
+                                    sendNotificationToPostOwner(post.getUserId(), post.getPostKey(), title, message);
+                                }
+
+                                postsRef.child(postKey).setValue(post).addOnCompleteListener(task -> {
+                                    if (task.isSuccessful()) {
+                                        adapter.notifyItemChanged(position);
+                                    }
+                                });
+                            }
+
+                            sortPosts(spinner.getSelectedItem().toString());
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            // Handle potential errors
                         }
                     });
                 }
-
-                sortPosts(spinner.getSelectedItem().toString());
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // Handle potential errors
+                Log.e(TAG, "DatabaseError: " + error.getMessage());
             }
         });
     };
@@ -294,6 +321,55 @@ public class CommunityActivity extends AppCompatActivity implements NavigationVi
 
 
     };
+
+    // Handle notifications
+    private void sendNotificationToPostOwner(String postOwnerId, String id, String notificationTitle, String notificationMessage) {
+
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(postOwnerId);
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Log.d(TAG,  currentUser.getUid() + "_" + postOwnerId);
+                if (!currentUser.getUid().equals(postOwnerId)){ // If the post belongs to the user, ignore notifications
+                    long timestamp = System.currentTimeMillis(); // Get current time as timestamp
+
+                    // Get a reference to the notifications node for this user
+                    DatabaseReference notificationsRef = userRef.child("notifications");
+
+                    // Push the new notification to the notifications list with a unique ID
+                    String notificationId = id + "_" + currentUser.getUid()
+                            ; // Unique ID based on post and user
+
+                    // Create a new notification object
+                    Notification notification = new Notification(notificationId, notificationTitle, notificationMessage, timestamp);
+
+
+                    notificationsRef.child(notificationId).setValue(notification)
+                            .addOnSuccessListener(aVoid -> Log.d(TAG, "Notification successfully added"))
+                            .addOnFailureListener(e -> Log.e(TAG, "Error adding notification: " + e.getMessage()));
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e(TAG, "DatabaseError: " + error.getMessage());
+            }
+        });
+    }
+
+    // Deleting a notification
+    private void deleteNotification(String postOwnerId, String notificationId) {
+        // Get a reference to the user's notifications node
+        DatabaseReference notificationsRef = FirebaseDatabase.getInstance()
+                .getReference("users")
+                .child(postOwnerId)
+                .child("notifications");
+
+        // Remove the specific notification by its ID
+        notificationsRef.child(notificationId).removeValue()
+                .addOnSuccessListener(aVoid -> Log.d(TAG, "Notification successfully deleted"))
+                .addOnFailureListener(e -> Log.e(TAG, "Error deleting notification: " + e.getMessage()));
+    }
+
 
     // Function to edit post if it belongs to the user
     private void handleEditPost(String postKey) {
