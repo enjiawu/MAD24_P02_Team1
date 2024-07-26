@@ -127,7 +127,9 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
 
         loadPostDetails(); // Loading the post details
 
-        // Notifications
+
+        // Notifications - Not working due to limitations (had to pay)
+        /*
         firebaseMessaging = FirebaseMessaging.getInstance();
         firebaseMessaging.getToken().addOnCompleteListener(new OnCompleteListener<String>() {
             @Override
@@ -139,7 +141,7 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
                 String token = task.getResult();
                 Log.d(TAG, "FCM registration token: " + token);
             }
-        });
+        });*/
 
         // Set up nav menu
         navigationView.bringToFront();
@@ -241,6 +243,7 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
                 });
     }
 
+    // Function to laod post details
     private void loadPostDetails() {
         progressBar.setVisibility(View.VISIBLE);
 
@@ -325,6 +328,7 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
         });
     }
 
+    // Load instructions, ingridietns and equipment using adapter based on the type
     private void loadInstructions(List<String> instructions) {
         PostInfoAdapter adapter = new PostInfoAdapter(this, instructions, "instructions");
         instructionsRecyclerView.setAdapter(adapter);
@@ -343,6 +347,7 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
         equipmentRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
+    // Load comments for post
     private void loadComments() {
         postRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -363,6 +368,7 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
         });
     }
 
+    // set up listeners from share, like, favourite and addcomment buttons
     private void setUpListeners() {
         // Share post function
         shareButton.setOnClickListener(new View.OnClickListener() {
@@ -494,6 +500,7 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
                 });
     }
 
+    // Update comments and database function when a new post gets added
     private void updateCommentsListAndDatabase() {
         postsRef.child(postKey).child("comments").get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -555,6 +562,7 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
         sharePost(dynamicLinkUri.toString());
     }
 
+    // Function to share post using the dyanmic link
     private void sharePost(String dynamicLink) {
         Intent intent = new Intent();
         intent.setType("text/plain");
@@ -591,7 +599,7 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
                             Post post = dataSnapshot.getValue(Post.class);
                             if (post != null) {
                                 List<Comment> comments = post.getComments();
-                                if (comments == null) {
+                                if (comments == null) { // Check that if the comment is null a new list wil be made
                                     comments = new ArrayList<>();
                                 }
                                 comments.add(comment);
@@ -686,7 +694,7 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
         });
     }
 
-
+    // Function to send notification to post owner - in app
     private void sendNotificationToPostOwner(String postOwnerId, String id, String notificationTitle, String notificationMessage) {
 
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(postOwnerId);

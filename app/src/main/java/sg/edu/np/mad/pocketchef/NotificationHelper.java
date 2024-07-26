@@ -7,6 +7,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+// Enjia - Stage 2
 public class NotificationHelper {
     private static final String CHANNEL_ID = "pocket_chef";
 
