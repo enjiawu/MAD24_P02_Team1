@@ -547,8 +547,9 @@ public class LoginActivity extends AppCompatActivity {
                         myRef.child("usernames").child(uid).setValue(username);
                         myRef.child("emails").child(uid).setValue(email);
 
-                        // Enjia - Stage 2
+                        // Enjia - Stage 2 (Not working due to limitations - must pay)
                         // Generate a new FCM token for the user to send notifications
+                        /*
                         FirebaseMessaging.getInstance().getToken()
                                 .addOnCompleteListener(fcmTask -> {
                                     if (fcmTask.isSuccessful()) {
@@ -566,7 +567,7 @@ public class LoginActivity extends AppCompatActivity {
                                     } else {
                                         Log.w("FCM_TOKEN", "Failed to get FCM token", fcmTask.getException());
                                     }
-                                });
+                                });*/
 
                         viewAnimator.showNext();
                         ClearInputs();

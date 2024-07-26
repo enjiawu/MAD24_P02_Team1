@@ -152,6 +152,7 @@ public class EditPostActivity extends AppCompatActivity {
         mUserRef = FirebaseDatabase.getInstance().getReference("users");
     }
 
+    // Set up the input boxes
     private void setupInitialInputBoxes() {
         TextInputLayout InstructionsInputBox = (TextInputLayout) getLayoutInflater().inflate(R.layout.input_box, null);
         instructionInputLayout.addView(InstructionsInputBox);
@@ -177,6 +178,7 @@ public class EditPostActivity extends AppCompatActivity {
         textDelete(equipmentEditText, equipmentInputLayout, equipmentInputBoxes);
     }
 
+    // Load the post data
     private void loadPostData(String postId) {
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -199,6 +201,7 @@ public class EditPostActivity extends AppCompatActivity {
         });
     }
 
+    // Populate fields using the post data
     private void populateFields(Post post) {
         recipeTitleInput.setText(post.getTitle());
         proteinInput.setText(String.valueOf(post.getProtein()));
@@ -226,6 +229,7 @@ public class EditPostActivity extends AppCompatActivity {
         }
     }
 
+    // Populate the list for each item in equipment, ingredients or instructions
     private void populateList(List<TextInputLayout> inputBoxes, List<String> dataList, LinearLayout inputLayout) {
         inputLayout.removeAllViews();
         inputBoxes.clear();
@@ -239,6 +243,7 @@ public class EditPostActivity extends AppCompatActivity {
         }
     }
 
+    // Setting up listeners
     public void setupListeners() {
         // Check if back button has been clicked
         backButton.setOnClickListener(v -> {
