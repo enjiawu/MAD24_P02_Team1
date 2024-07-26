@@ -1,7 +1,11 @@
 package sg.edu.np.mad.pocketchef;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -9,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -30,11 +35,16 @@ import sg.edu.np.mad.pocketchef.Models.Notification;
 
 public class NotificationsActivity extends AppCompatActivity {
     private final String TAG = "NotificationsActivity";
+
+    //XML Values
     RecyclerView notifRecyclerView;
+    ImageView backButton;
+    TextView noNotifications;
+
     // Database
     FirebaseAuth mAuth;
     FirebaseDatabase database;
-    DatabaseReference postsRef, mUserRef, postRef;
+    DatabaseReference mUserRef;
     StorageReference storageReference;
     FirebaseUser currentUser;
 
@@ -50,12 +60,20 @@ public class NotificationsActivity extends AppCompatActivity {
         });
 
         findViews();
-        //setUpListeners();
+        setUpListeners();
+
+        setUpSwipeToDelete(); // Set up swipe to delete
     }
 
     private void findViews(){
         // Get the recycler view for the notifications
         notifRecyclerView = findViewById(R.id.notification_recycler_view);
+
+        // Get the back button
+        backButton = findViewById(R.id.backIv);
+
+        // No notifications text view
+        noNotifications = findViewById(R.id.noNotifications);
 
         //Firebase database setup
         mAuth = FirebaseAuth.getInstance();
@@ -101,15 +119,55 @@ public class NotificationsActivity extends AppCompatActivity {
         });
     }
 
+    private void setUpListeners(){
+        backButton.setOnClickListener(v -> {
+            // Go to main activity
+            Intent intent = new Intent(NotificationsActivity.this, MainActivity.class);
+            finish();
+            startActivity(intent);
+        });
+    }
+
     // Method to display notifications (implement as needed)
     private void displayNotifications(List<Notification> notifications) {
-        if (notifications.isEmpty()){
-
+        if (notifications.isEmpty()){ // If there no notifications, show the no notifications text
+            noNotifications.setVisibility(View.VISIBLE);
         }
+        noNotifications.setVisibility(View.GONE); // Hide the no notifications text
+
+        // Set up recycler view to display notifications
         NotificationAdapter notificationAdapter = new NotificationAdapter(NotificationsActivity.this, notifications);
 
         notifRecyclerView.setAdapter(notificationAdapter);
         notifRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
+    // Function to delete notification by swiping
+    private void setUpSwipeToDelete() {
+        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false; // Not used, only interested in swipe
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                int position = viewHolder.getAdapterPosition();
+                NotificationAdapter adapter = (NotificationAdapter) notifRecyclerView.getAdapter();
+                if (adapter != null) {
+                    if (position >= 0 && position < adapter.getItemCount()) {
+                        adapter.removeItem(position);
+                    } else {
+                        Log.e(TAG, "Invalid position on swipe: " + position);
+                    }
+                } else {
+                    Log.e(TAG, "Adapter is null");
+                }
+            }
+
+        };
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(notifRecyclerView);
+    }
 }

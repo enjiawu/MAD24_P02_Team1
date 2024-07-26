@@ -1,5 +1,6 @@
 package sg.edu.np.mad.pocketchef;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -30,6 +31,7 @@ import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
@@ -40,10 +42,15 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import sg.edu.np.mad.pocketchef.Adapters.PostCommentsAdapter;
 import sg.edu.np.mad.pocketchef.Models.CategoryBean;
+import sg.edu.np.mad.pocketchef.Models.Comment;
+import sg.edu.np.mad.pocketchef.Models.Notification;
+import sg.edu.np.mad.pocketchef.Models.Post;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     boolean isReady = false;
@@ -51,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     TextView usernameTv;
     FirebaseAuth mAuth;
     FirebaseUser mUser;
-    DatabaseReference mUserRef;
+    DatabaseReference postsRef, mUserRef;
     private static final String TAG = "MainMenu";
     private static final int PERMISSION_REQUEST_CODE = 100;
     private static final String CHANNEL_ID = "pocket_chef";
@@ -65,6 +72,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     // In-app notifications (Stage 2 - Enjia)
     ImageView notificationButton;
+
+    // Dashboard statistics and posts (Stage 2 - Enjia)
+    TextView newNotifications, myPosts, popularPostTitle, newestPostTitle, popularUsername, newestUsername;
+    ImageView popularProfilePicture, newestProfilePicture;
+    CardView popularPostCV, newestPostCV;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -94,18 +106,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Initialize Firebase Database
         mUserRef = FirebaseDatabase.getInstance().getReference("users");
         usernameTv = findViewById(R.id.textView_username);
+        postsRef = FirebaseDatabase.getInstance().getReference("posts");
 
         FindViews(); // Initialize views after setContentView()
         loadProfile(); //Load username
+        setUpDashboard(); // Set up dashboard
 
         // Set toolbar as action bar
         setSupportActionBar(toolbar);
 
-        // Notifications
+        // Set up Notifications
         notificationButton = findViewById(R.id.notification_button);
+        notificationActivity();
 
         //Not sure if this is needed
         //menu.findItem(R.id.nav_logout).setVisible(false);
+
 
         // Set up navigation view
         navigationView.bringToFront();
@@ -164,9 +180,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Notifications Permission
         createNotificationChannel();
 
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
             // Request permission
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, PERMISSION_REQUEST_CODE);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, PERMISSION_REQUEST_CODE);
         }
     }
 
@@ -249,6 +265,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+    // Stage 2 - Enjia
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "Pocket Chef";
@@ -262,9 +279,184 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    // In-app notifications
-    public void checkForNotifications(){
+    // In-app notifications - check if got any notifications
+    public void notificationActivity(){
+        // Check if the user has any notifications and count the total of notifications the user has
+        mUserRef.child(mUser.getUid()).child("notifications").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    int totalNotifications = (int) snapshot.getChildrenCount(); // Count number of notifications and update the dashbaord
+                    Log.d(TAG, "Notifications: " + totalNotifications);
+                    newNotifications.setText(totalNotifications == 0 ? "0" : String.valueOf(totalNotifications));
 
+                    boolean hasNotifications = false;
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        Notification notification = dataSnapshot.getValue(Notification.class);
+                        if (notification != null) {
+                            // User has notifications so the button will change
+                            hasNotifications = true;
+                            notificationButton.setImageResource(R.drawable.baseline_notifications_active_24);
+                        }
+                    }
+                    if (hasNotifications) {
+                        Log.d(TAG, "User has notifications.");
+                    } else {
+                        Log.d(TAG, "No notifications for user.");
+                    }
+                } else {
+                    newNotifications.setText("0"); // User has no notifications
+                    Log.d(TAG, "No notifications found.");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e(TAG, "DatabaseError: " + error.getMessage());
+            }
+        });
+        notificationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, NotificationsActivity.class);
+                finish();
+                startActivity(intent);
+            }
+        });
+    }
+
+    // Setting up dashboard and posts (Stage 2 - Enjia)
+    public void setUpDashboard(){
+        // Get the total number of posts
+        postsRef.orderByChild("userId").equalTo(mUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                int totalPosts = (int) snapshot.getChildrenCount();
+                Log.d(TAG, "Total posts: " + totalPosts);
+                myPosts.setText(totalPosts == 0 ? "0" : String.valueOf(totalPosts));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w(TAG, "loadPosts", error.toException());
+            }
+        });
+
+        postsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                // Get the post with the most number of likes
+                Post mostLikedPost = null;
+                int maxLikes = Integer.MIN_VALUE;
+                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                    Post post = postSnapshot.getValue(Post.class);
+                    post.setPostKey(postSnapshot.getKey());
+
+                    if (post != null) {
+                        int likes = post.getLikes();
+                        if (likes > maxLikes) {
+                            mostLikedPost = post;
+                            maxLikes = likes;
+                        }
+                    }
+                }
+                if (mostLikedPost != null) {
+                    Log.d(TAG, "Most liked post: " + mostLikedPost.getTitle());
+                    popularPostTitle.setText(mostLikedPost.getTitle());
+
+                    // Get the user name and profile picture of the user who posted the most liked post
+                    String userId = mostLikedPost.getUserId();
+                    getUserInfo(userId, popularUsername, popularProfilePicture);
+
+                    // Set up on click listener for the post
+                    Post finalMostLikedPost = mostLikedPost;
+                    Log.d(TAG, finalMostLikedPost.getPostKey());
+                    popularPostCV.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            // To see recipe details
+                            Intent postDetails = new Intent(MainActivity.this, PostDetailsActivity.class)
+                                    .putExtra("id", finalMostLikedPost.getPostKey());
+                            startActivity(postDetails);
+                        }
+                    });
+                } else {
+                    Log.d(TAG, "No posts found.");
+                }
+
+                // Get the newest post
+                Post newestPost = null;
+                long newestTimestamp = Long.MIN_VALUE;
+                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                    Post post = postSnapshot.getValue(Post.class);
+                    post.setPostKey(postSnapshot.getKey());
+
+                    if (post != null) {
+                        long timestamp = (long) post.getTimeStamp();
+                        if (timestamp > newestTimestamp) {
+                            newestPost = post;
+                            newestTimestamp = timestamp;
+                        }
+                    }
+                }
+                if (newestPost != null) {
+                    Log.d(TAG, "Newest post: " + newestPost.getTitle());
+                    newestPostTitle.setText(newestPost.getTitle());
+
+                    // Get the user name and profile picture of the user who posted the newest post
+                    String userId = newestPost.getUserId();
+                    getUserInfo(userId, newestUsername, newestProfilePicture);
+
+                    // Set up on click listener for the post
+                    Post finalNewestPost = newestPost;
+                    newestPostCV.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Log.d(TAG, finalNewestPost.getPostKey());
+                            // To see recipe details
+                            Intent postDetails = new Intent(MainActivity.this, PostDetailsActivity.class)
+                                    .putExtra("id", finalNewestPost.getPostKey());
+                            startActivity(postDetails);
+                        }
+                    });
+                } else {
+                    Log.d(TAG, "No posts found.");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w(TAG, "loadPosts", error.toException());
+            }
+        });
+    }
+
+    private void getUserInfo(String userId, TextView usernameTextView, ImageView profilePictureImageView) {
+        mUserRef.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    String postUsername = snapshot.child("username").getValue(String.class);
+                    String Image = snapshot.child("Image").getValue(String.class);
+
+                    // Load profile picture
+                    if (Image != null && !Image.isEmpty()) {
+                        Picasso.get().load(Image).into(profilePictureImageView);
+                    } else {
+                        profilePictureImageView.setImageResource(R.drawable.pocketchef_logo);
+                    }
+
+                    // Update the username
+                    usernameTextView.setText(postUsername);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w(TAG, "getUserInfo:onCancelled", error.toException());
+            }
+        });
     }
 
     @Override
@@ -298,6 +490,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         cardView6 = findViewById(R.id.cardView6);
         cardView7 = findViewById(R.id.cardView7);
         cardView8 = findViewById(R.id.cardView8);
+
+        // Dashboard statistics and posts (Stage 2 - Enjia)
+        newNotifications = findViewById(R.id.textView_new_notifications);
+        myPosts = findViewById(R.id.textView_myPosts);
+        popularPostCV = findViewById(R.id.cardView_popularPost);
+        newestPostCV = findViewById(R.id.cardView_newestPost);
+        popularPostTitle = findViewById(R.id.textView_popularPostTitle);
+        newestPostTitle  = findViewById(R.id.textView_newestPostTitle);
+        newestUsername = findViewById(R.id.newest_username);
+        popularUsername = findViewById(R.id.popular_username);
+        newestProfilePicture = findViewById(R.id.newest_profile_picture);
+        popularProfilePicture = findViewById(R.id.popular_profile_picture);
     }
 
     private void dismissSplashScreen() {

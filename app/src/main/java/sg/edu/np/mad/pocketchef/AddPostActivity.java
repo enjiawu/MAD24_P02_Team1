@@ -480,14 +480,8 @@ public class AddPostActivity extends AppCompatActivity {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 if (snapshot.exists()) {
-                                    // Retrieve data safely
-                                    String username = snapshot.child("username").getValue(String.class);
-                                    String profilePictureUrl = snapshot.child("profile-picture").getValue(String.class);
-
                                     // Get username and user id of the user who made the post
-                                    currentUsername = username;
                                     currentUserId = currentUser.getUid();
-                                    currentProfilePictureUrl = profilePictureUrl;
 
                                     // Create post object
                                     Post post = new Post(
@@ -502,10 +496,8 @@ public class AddPostActivity extends AppCompatActivity {
                                             instructions,
                                             ingredients,
                                             equipment,
-                                            currentUsername,
                                             new ArrayList<Comment>(),
-                                            currentUserId,
-                                            currentProfilePictureUrl
+                                            currentUserId
                                     );
 
                                     // Add post data to firebase database

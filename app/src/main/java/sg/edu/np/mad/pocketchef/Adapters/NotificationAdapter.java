@@ -1,6 +1,7 @@
 package sg.edu.np.mad.pocketchef.Adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.List;
 
 import sg.edu.np.mad.pocketchef.Models.InstructionsResponse;
@@ -17,6 +22,7 @@ import sg.edu.np.mad.pocketchef.Models.Notification;
 import sg.edu.np.mad.pocketchef.R;
 
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationsViewHolder> {
+    final String TAG  = "NoficationsAdapter";
     final Context context;
     final List<Notification> notifications;
 
@@ -38,12 +44,36 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationsViewH
         holder.title.setText(notification.getTitle());
         holder.date.setText(notification.formatDate());
         holder.description.setText(notification.getMessage());
-
-        // Implementing notifications
-        holder.notifRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
-        NotificationAdapter adapter = new NotificationAdapter(context, notifications);
-        holder.notifRecyclerView.setAdapter(adapter);
     }
+
+    // Function to delete the notification
+    public void removeItem(int position) {
+        if (position >= 0 && position < notifications.size()) {
+            // Remove item from the list
+            Notification notification = notifications.get(position);
+            notifications.remove(position);
+            notifyItemRemoved(position);
+
+            // Update the database
+            DatabaseReference notificationRef = FirebaseDatabase.getInstance()
+                    .getReference("users")
+                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    .child("notifications")
+                    .child(notification.getId());
+
+            notificationRef.removeValue().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+
+                    Log.d("NotificationAdapter", "Notification removed from database");
+                } else {
+                    Log.e("NotificationAdapter", "Failed to remove notification from database");
+                }
+            });
+        } else {
+            Log.e("NotificationAdapter", "Invalid position: " + position);
+        }
+    }
+
 
     @Override
     public int getItemCount() {
@@ -53,13 +83,11 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationsViewH
 
 class NotificationsViewHolder extends RecyclerView.ViewHolder {
     TextView title, date, description;
-    RecyclerView notifRecyclerView;
 
     public NotificationsViewHolder(@NonNull View itemView) {
         super(itemView);
         title = itemView.findViewById(R.id.notification_title);
         date = itemView.findViewById(R.id.notification_date);
         description = itemView.findViewById(R.id.notification_description);
-        notifRecyclerView = itemView.findViewById(R.id.notification_recycler_view);
     }
 }

@@ -243,64 +243,80 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
 
     private void loadPostDetails() {
         progressBar.setVisibility(View.VISIBLE);
+
         postRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Post post = snapshot.getValue(Post.class);
                 if (post != null) {
-                    // Update your UI with the post information
-                    recipeName.setText(post.getTitle());
-                    servings.setText(post.getServings() + " Servings");
-                    prepTime.setText(post.getPrepTime() + " mins");
-                    costPerServing.setText(String.format("%.2f", post.getCostPerServing()) + " per Serving(s)");
-                    protein.setText(post.getProtein() + " g");
-                    fat.setText(post.getFat() + " g");
-                    calories.setText(post.getCalories() + " kcal");
-                    username.setText("@" + post.getUsername());
-                    date.setText(post.formatDate());
+                    mUserRef.child(post.getUserId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot userSnapshot) {
+                            if (userSnapshot.exists()) {
+                                String postUsername = userSnapshot.child("username").getValue(String.class);
+                                String Image = userSnapshot.child("Image").getValue(String.class);
 
-                    // Load post image
-                    Picasso.get().load(post.getRecipeImage()).into(recipeImage);
+                                // Update your UI with the post information
+                                recipeName.setText(post.getTitle());
+                                servings.setText(post.getServings() + " Servings");
+                                prepTime.setText(post.getPrepTime() + " mins");
+                                costPerServing.setText(String.format("%.2f", post.getCostPerServing()) + " per Serving(s)");
+                                protein.setText(post.getProtein() + " g");
+                                fat.setText(post.getFat() + " g");
+                                calories.setText(post.getCalories() + " kcal");
+                                username.setText("@" + postUsername);
+                                date.setText(post.formatDate());
 
-                    // Load profile picture
-                    if (post.getProfilePicture() != null) {
-                        Picasso.get().load(post.getProfilePicture()).into(profilePicture);
-                    } else {
-                        profilePicture.setImageResource(R.drawable.pocketchef_logo);
-                    }
+                                // Load post image
+                                Picasso.get().load(post.getRecipeImage()).into(recipeImage);
 
-                    // Load the ingredients, instructions, and comments
-                    loadInstructions(post.getInstructions());
-                    loadIngredients(post.getIngredients());
-                    if (post.getEquipment() != null && !post.getEquipment().isEmpty()) {
-                        loadEquipment(post.getEquipment());
-                        noEquipmentText.setVisibility(View.GONE);
-                    } else {
-                        noEquipmentText.setVisibility(View.VISIBLE);
-                    }
-                    if (!post.getComments().isEmpty()) {
-                        loadComments();
-                        noCommentsText.setVisibility(View.GONE);
-                    } else {
-                        noCommentsText.setVisibility(View.VISIBLE);
-                    }
+                                // Load profile picture
+                                if (Image != null && !Image.isEmpty()) {
+                                    Picasso.get().load(Image).into(profilePicture);
+                                } else {
+                                    profilePicture.setImageResource(R.drawable.pocketchef_logo);
+                                }
 
-                    // Retrieve and update like status
-                    String userId = currentUser.getUid();
-                    if (post.getLikesUsers().contains(userId)) {
-                        likeButton.setImageResource(R.drawable.baseline_thumb_up_alt_24);
-                    } else {
-                        likeButton.setImageResource(R.drawable.baseline_thumb_up_off_alt_24);
-                    }
+                                // Load the ingredients, instructions, and comments
+                                loadInstructions(post.getInstructions());
+                                loadIngredients(post.getIngredients());
+                                if (post.getEquipment() != null && !post.getEquipment().isEmpty()) {
+                                    loadEquipment(post.getEquipment());
+                                    noEquipmentText.setVisibility(View.GONE);
+                                } else {
+                                    noEquipmentText.setVisibility(View.VISIBLE);
+                                }
+                                if (!post.getComments().isEmpty()) {
+                                    loadComments();
+                                    noCommentsText.setVisibility(View.GONE);
+                                } else {
+                                    noCommentsText.setVisibility(View.VISIBLE);
+                                }
 
-                } else {
-                    // Handle the case where the post is null
-                    Log.e(TAG, "Post is null");
+                                // Retrieve and update like status
+                                String userId = currentUser.getUid();
+                                if (post.getLikesUsers().contains(userId)) {
+                                    likeButton.setImageResource(R.drawable.baseline_thumb_up_alt_24);
+                                } else {
+                                    likeButton.setImageResource(R.drawable.baseline_thumb_up_off_alt_24);
+                                }
+
+                            } else {
+                                // Handle the case where the post is null
+                                Log.e(TAG, "Post is null");
+                            }
+                            progressBar.setVisibility(View.GONE);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            // Handle database error
+                            Log.e(TAG, "Error loading post details", error.toException());
+                            progressBar.setVisibility(View.GONE);
+                        }
+                    });
                 }
-                progressBar.setVisibility(View.GONE);
             }
-
-            @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 // Handle database error
                 Log.e(TAG, "Error loading post details", error.toException());
@@ -565,10 +581,9 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     String username = snapshot.child("username").getValue(String.class);
-                    String profilePictureUrl = snapshot.child("profile-picture").getValue(String.class);
                     String userId = currentUser.getUid();
 
-                    Comment comment = new Comment(commentText, userId, username, profilePictureUrl);
+                    Comment comment = new Comment(commentText, userId);
 
                     postRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -588,7 +603,7 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
                                         loadComments(); // Refresh the comments section
 
                                         // Send notification to the post owner
-                                        String title = username + " left a comment on your post!";
+                                        String title = "@" + username + " left a comment on your post!";
                                         String message = comment.getComment();
                                         sendNotificationToPostOwner(post.getUserId(), String.valueOf(post.getComments().size()), title, message);
                                     }
@@ -618,44 +633,55 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
 
     // Function to toggle likes
     private void toggleLike() {
-        String userId = currentUser.getUid();
-
-        postRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        mUserRef.child(currentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Post post = snapshot.getValue(Post.class);
-                post.setPostKey(snapshot.getKey());
-                if (post != null) {
-                    if (post.getLikesUsers().contains(userId)) {
-                        Log.d(TAG, "Post has been unliked");
-                        // User has already liked the post, so we will unlike it
-                        post.getLikesUsers().remove(userId);
-                        post.setLikes(post.getLikes() - 1);
-                        likeButton.setImageResource(R.drawable.baseline_thumb_up_off_alt_24);
+                if (snapshot.exists()) {
+                    String username = snapshot.child("username").getValue(String.class);
+                    String userId = currentUser.getUid();
+                    postRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            Post post = snapshot.getValue(Post.class);
+                            post.setPostKey(snapshot.getKey());
+                            if (post != null) {
+                                if (post.getLikesUsers().contains(userId)) {
+                                    Log.d(TAG, "Post has been unliked");
+                                    // User has already liked the post, so we will unlike it
+                                    post.getLikesUsers().remove(userId);
+                                    post.setLikes(post.getLikes() - 1);
+                                    likeButton.setImageResource(R.drawable.baseline_thumb_up_off_alt_24);
 
-                        // Delete the notification
-                        deleteNotification(post.getUserId(), post.getPostKey() + "_" + userId);
+                                    // Delete the notification
+                                    deleteNotification(post.getUserId(), post.getPostKey() + "_" + userId);
 
-                    } else {
-                        Log.d(TAG, "Post has been liked");
-                        // User has not liked the post
-                        post.getLikesUsers().add(userId);
-                        post.setLikes(post.getLikes() + 1);
-                        likeButton.setImageResource(R.drawable.baseline_thumb_up_alt_24);
+                                } else {
+                                    Log.d(TAG, "Post has been liked");
+                                    // User has not liked the post
+                                    post.getLikesUsers().add(userId);
+                                    post.setLikes(post.getLikes() + 1);
+                                    likeButton.setImageResource(R.drawable.baseline_thumb_up_alt_24);
 
-                        // Send notification to the post owner
-                        String title = "Someone liked your post!";
-                        String message = "Your post on '" + post.getTitle() + "' was liked by " + currentUser.getDisplayName();
-                        sendNotificationToPostOwner(post.getUserId(), post.getPostKey(), title, message);
-                    }
+                                    // Send notification to the post owner
+                                    String title = "Someone liked your post!";
+                                    String message = "Your post on '" + post.getTitle() + "' was liked by @" + username;
+                                    sendNotificationToPostOwner(post.getUserId(), post.getPostKey(), title, message);
+                                }
 
-                    postRef.setValue(post);
+                                postRef.setValue(post);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            // Handle potential errors
+                        }
+                    });
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // Handle potential errors
+                Log.e(TAG, "DatabaseError: " + error.getMessage());
             }
         });
     }
@@ -667,21 +693,26 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                long timestamp = System.currentTimeMillis(); // Get current time as timestamp
+                Log.d(TAG,  currentUser.getUid() + "_" + postOwnerId);
+                if (!currentUser.getUid().equals(postOwnerId)){ // If the post belongs to the user, ignore notifications
+                    long timestamp = System.currentTimeMillis(); // Get current time as timestamp
 
-                // Create a new notification object
-                Notification notification = new Notification(notificationTitle, notificationMessage, timestamp);
+                    // Get a reference to the notifications node for this user
+                    DatabaseReference notificationsRef = userRef.child("notifications");
 
-                // Get a reference to the notifications node for this user
-                DatabaseReference notificationsRef = userRef.child("notifications");
+                    // Push the new notification to the notifications list with a unique ID
+                    String notificationId = id + "_" + currentUser.getUid()
+                            ; // Unique ID based on post and user
 
-                // Push the new notification to the notifications list with a unique ID
-                String notificationId = id + "_" + currentUser.getUid(); // Unique ID based on post and user
-                notificationsRef.child(notificationId).setValue(notification)
-                        .addOnSuccessListener(aVoid -> Log.d(TAG, "Notification successfully added"))
-                        .addOnFailureListener(e -> Log.e(TAG, "Error adding notification: " + e.getMessage()));
+                    // Create a new notification object
+                    Notification notification = new Notification(notificationId, notificationTitle, notificationMessage, timestamp);
+
+
+                    notificationsRef.child(notificationId).setValue(notification)
+                            .addOnSuccessListener(aVoid -> Log.d(TAG, "Notification successfully added"))
+                            .addOnFailureListener(e -> Log.e(TAG, "Error adding notification: " + e.getMessage()));
+                }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.e(TAG, "DatabaseError: " + error.getMessage());

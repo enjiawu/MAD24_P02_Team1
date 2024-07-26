@@ -6,6 +6,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 public class Notification {
+    private String id;
     private String title;
     private String message;
     private long timestamp;
@@ -13,7 +14,8 @@ public class Notification {
     public Notification() {
     }
 
-    public Notification(String title, String message, long timestamp) {
+    public Notification(String id, String title, String message, long timestamp) {
+        this.id = id;
         this.title = title;
         this.message = message;
         this.timestamp = timestamp;
@@ -48,6 +50,14 @@ public class Notification {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         return dateFormat.format(date);
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
 
