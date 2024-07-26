@@ -62,19 +62,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final String TAG = "MainMenu";
     private static final int PERMISSION_REQUEST_CODE = 100;
     private static final String CHANNEL_ID = "pocket_chef";
+    private static final float SWIPE_THRESHOLD = 10; // pixels, reduce for higher sensitivity
+    private static final float SWIPE_VELOCITY_THRESHOLD = 50; // pixels/second, reduce for higher sensitivity
 
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     MaterialToolbar toolbar;
     MenuItem nav_home, nav_recipes, nav_search, nav_logout, nav_profile, nav_favourites, nav_community, nav_pantry, nav_complex_search;
-    CardView cardView1, cardView2, cardView3, cardView4, cardView5, cardView6, cardView7, cardView8;
-    //cardView5, cardView6;
+    CardView cardView1, cardView2, cardView3, cardView4, cardView5, cardView6, cardView7, cardView8, cardView_popularPost, cardView_newestPost, cardView_newNotifications, cardView_myPosts;
 
     // In-app notifications (Stage 2 - Enjia)
     ImageView notificationButton;
 
     // Dashboard statistics and posts (Stage 2 - Enjia)
-    TextView newNotifications, myPosts, popularPostTitle, newestPostTitle, popularUsername, newestUsername;
+    TextView newNotifications, myPosts, popularPostTitle, newestPostTitle, popularUsername, newestUsername, textView_popularPost, textView_newestPost;
     ImageView popularProfilePicture, newestProfilePicture;
     CardView popularPostCV, newestPostCV;
 
@@ -135,6 +136,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Custom setOnTouchListener for swipe gestures (in-built Gesture Detector is not working)
         motionLayout.setOnTouchListener(new View.OnTouchListener() {
             private float startX;
+            private float startY;
             private VelocityTracker velocityTracker;
 
             @Override
@@ -142,6 +144,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 switch (event.getActionMasked()) {
                     case MotionEvent.ACTION_DOWN:
                         startX = event.getX();
+                        startY = event.getY();
                         if (velocityTracker == null) {
                             velocityTracker = VelocityTracker.obtain();
                         } else {
@@ -149,28 +152,39 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         }
                         velocityTracker.addMovement(event);
                         break;
+
                     case MotionEvent.ACTION_MOVE:
                         velocityTracker.addMovement(event);
-                        velocityTracker.computeCurrentVelocity(1000);
                         break;
+
                     case MotionEvent.ACTION_UP:
                         float endX = event.getX();
+                        float endY = event.getY();
                         float diffX = endX - startX;
-                        if (Math.abs(diffX) > 10 && velocityTracker != null) {
-                            velocityTracker.computeCurrentVelocity(1000);
-                            float velocityX = velocityTracker.getXVelocity();
-                            if (Math.abs(velocityX) > 100) {
-                                if (diffX > 0) {
-                                    // Right swipe (forward)
-                                    motionLayout.transitionToEnd();
-                                } else {
-                                    // Left swipe (backward)
-                                    motionLayout.transitionToStart();
-                                }
+                        float diffY = endY - startY;
+                        velocityTracker.addMovement(event);
+                        velocityTracker.computeCurrentVelocity(1000);
+                        float velocityX = velocityTracker.getXVelocity();
+                        float velocityY = velocityTracker.getYVelocity();
+
+                        if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
+                            if (diffX > 0) {
+                                // Right swipe
+                                motionLayout.transitionToEnd();
+                            } else {
+                                // Left swipe
+                                motionLayout.transitionToStart();
                             }
                         }
+                        velocityTracker.recycle();
+                        velocityTracker = null;
                         break;
+
                     case MotionEvent.ACTION_CANCEL:
+                        if (velocityTracker != null) {
+                            velocityTracker.recycle();
+                            velocityTracker = null;
+                        }
                         break;
                 }
                 return true;
@@ -490,6 +504,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         cardView6 = findViewById(R.id.cardView6);
         cardView7 = findViewById(R.id.cardView7);
         cardView8 = findViewById(R.id.cardView8);
+        cardView_newestPost = findViewById(R.id.cardView_newestPost);
+        cardView_popularPost = findViewById(R.id.cardView_popularPost);
+        cardView_newNotifications = findViewById(R.id.cardView_newNotifications);
+        cardView_myPosts = findViewById(R.id.cardView_myPosts);
+        textView_newestPost = findViewById(R.id.textView_newestPost);
+        textView_popularPost = findViewById(R.id.textView_popularPost);
 
         // Dashboard statistics and posts (Stage 2 - Enjia)
         newNotifications = findViewById(R.id.textView_new_notifications);
