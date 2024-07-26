@@ -1,15 +1,21 @@
 package sg.edu.np.mad.pocketchef;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.menu.ActionMenuItemView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.GravityCompat;
@@ -20,6 +26,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,6 +43,11 @@ public class PantryActivity extends AppCompatActivity implements NavigationView.
     NavigationView navigationView;
     Toolbar toolbar;
     MenuItem navHome;
+    BottomAppBar bottomAppBar;
+    ArrayList<String> ingredientList = new ArrayList<>();
+    ArrayList<String> selectedIngredients = new ArrayList<>();
+    EditText addIngredientEditText;
+    PantryIngredientAdapter pantryAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,13 +59,9 @@ public class PantryActivity extends AppCompatActivity implements NavigationView.
         FindViews();
         SetUpListeners();
 
-        ArrayList<String> ingredientList = new ArrayList<>();
-        ingredientList.add("Salt");
-        ingredientList.add("Sugar");
-        ingredientList.add("Butter");
-        ingredientList.add("Honey");
 
-        PantryIngredientAdapter pantryAdapter = new PantryIngredientAdapter(ingredientList);
+
+        pantryAdapter = new PantryIngredientAdapter(ingredientList, PantryActivity.this);
 
         LinearLayoutManager pantryLayoutManager = new LinearLayoutManager(this);
 
@@ -62,14 +70,25 @@ public class PantryActivity extends AppCompatActivity implements NavigationView.
         pantryRecyclerView.setAdapter(pantryAdapter);
     }
 
+    public void SelectIngredient(String s) {
+        selectedIngredients.add(s);
+    }
+
+    public void RemoveIngredient(String s) {
+        selectedIngredients.remove(s);
+    }
+
     private void FindViews() {
         pantryRecyclerView = findViewById(R.id.pantryRecyclerView);
         availableRecipesButton = findViewById(R.id.availableRecipesButton);
+        addIngredientEditText = findViewById(R.id.addIngredientEditText);
 
         drawerLayout = findViewById(R.id.drawerLayout);
         navigationView = findViewById(R.id.navigationView);
         toolbar = findViewById(R.id.toolbar);
         navHome = navigationView.getMenu().findItem(R.id.nav_home);
+        bottomAppBar = findViewById(R.id.bottomAppBar);
+
         // Set up nav menu
         navigationView.bringToFront();
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(PantryActivity.this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -80,13 +99,63 @@ public class PantryActivity extends AppCompatActivity implements NavigationView.
     }
 
     private void SetUpListeners() {
+        addIngredientEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus && !addIngredientEditText.getText().toString().trim().isEmpty()) {
+                    ingredientList.add(addIngredientEditText.getText().toString());
+                    Log.d("ADDED", addIngredientEditText.getText().toString());
+
+                    pantryAdapter.notifyItemInserted(ingredientList.size() - 1);
+                    addIngredientEditText.setText(null);
+                }
+            }
+        });
+
         availableRecipesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent availableRecipes = new Intent(PantryActivity.this, PantryRecipesActivity.class);
+                availableRecipes.putStringArrayListExtra("ingredients", selectedIngredients);
                 startActivity(availableRecipes);
             }
         });
+
+
+        bottomAppBar.setOnMenuItemClickListener (new Toolbar.OnMenuItemClickListener() {
+
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                int itemId = item.getItemId();
+                if (itemId == R.id.addIngredient) {
+                    Log.d("CLICK","click");
+                }
+
+
+                return true;
+            }
+        });
+//            return true;
+
+
+
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+            if ( v instanceof EditText) {
+                Rect outRect = new Rect();
+                v.getGlobalVisibleRect(outRect);
+                if (!outRect.contains((int)event.getRawX(), (int)event.getRawY())) {
+                    v.clearFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
+        }
+        return super.dispatchTouchEvent( event );
     }
 
     @Override
