@@ -1,34 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="wrap_content">
+
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/card"
-        android:layout_height="wrap_content"
+        style="?attr/materialCardViewElevatedStyle"
         android:layout_width="match_parent"
-        android:clickable="true"
-        android:focusable="true"
-        android:checkable="false"
+        android:layout_height="wrap_content"
         android:layout_margin="15dp"
         android:backgroundTint="@color/palettebeige"
-        style="?attr/materialCardViewElevatedStyle">
+        android:checkable="false"
+        android:clickable="true"
+        android:focusable="true">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:padding="20dp">
+
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="10dp"
-                android:layout_marginBottom="10dp">
+                android:layout_marginBottom="10dp"
+                app:cardCornerRadius="10dp">
+
                 <ImageView
                     android:id="@+id/recipeImage"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
-                    android:scaleType="centerCrop"
-                    />
+                    android:scaleType="centerCrop" />
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.textview.MaterialTextView
@@ -40,23 +43,25 @@
                 android:text="@string/textView_no_image_available"
                 android:textColor="@color/black"
                 android:textSize="18sp"
-                android:visibility="gone"/>
-            <TextView
+
+                android:visibility="gone" />
+
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/recipeName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Recipe Name"
                 android:textSize="25dp"
-                android:textStyle="bold"
-            />
-            <TextView
+
+                android:textStyle="bold" />
+
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/missingIngredients"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Missing:"/>
+                android:text="Missing:" />
 
         </LinearLayout>
-
 
 
     </com.google.android.material.card.MaterialCardView>

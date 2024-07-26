@@ -17,7 +17,7 @@
         android:orientation="vertical">
 
         <!-- Recipe Title -->
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/textView_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -38,12 +38,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            app:strokeWidth="0dp"
-            app:cardElevation="2dp"
-            app:cardBackgroundColor="@color/palettebeige"
             android:layout_marginBottom="8dp"
             android:radius="16dp"
-            app:cardCornerRadius="16dp">
+            app:cardBackgroundColor="@color/palettebeige"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp"
+            app:strokeWidth="0dp">
 
             <FrameLayout
                 android:layout_width="match_parent"
@@ -72,7 +72,7 @@
                         android:text="@string/textView_no_image_available"
                         android:textColor="@color/black"
                         android:textSize="18sp"
-                        android:visibility="gone"/>
+                        android:visibility="gone" />
                 </com.google.android.material.card.MaterialCardView>
             </FrameLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -91,16 +91,16 @@
                 android:layout_margin="4dp"
                 android:layout_weight="1"
                 android:padding="8dp"
-                app:strokeWidth="0dp"
-                app:cardBackgroundColor="@color/palettelavender">
+                app:cardBackgroundColor="@color/palettelavender"
+                app:strokeWidth="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="vertical">
 
-                    <TextView
+                    <com.google.android.material.textview.MaterialTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/calories"
@@ -108,7 +108,7 @@
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
-                    <TextView
+                    <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/textView_calories"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -126,16 +126,16 @@
                 android:layout_margin="4dp"
                 android:layout_weight="1"
                 android:padding="8dp"
-                app:strokeWidth="0dp"
-                app:cardBackgroundColor="@color/palettelavender">
+                app:cardBackgroundColor="@color/palettelavender"
+                app:strokeWidth="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="vertical">
 
-                    <TextView
+                    <com.google.android.material.textview.MaterialTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/protein"
@@ -143,7 +143,7 @@
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
-                    <TextView
+                    <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/textView_protein"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -161,16 +161,16 @@
                 android:layout_margin="4dp"
                 android:layout_weight="1"
                 android:padding="8dp"
-                app:strokeWidth="0dp"
-                app:cardBackgroundColor="@color/palettelavender">
+                app:cardBackgroundColor="@color/palettelavender"
+                app:strokeWidth="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="vertical">
 
-                    <TextView
+                    <com.google.android.material.textview.MaterialTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/carbs"
@@ -178,7 +178,7 @@
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
-                    <TextView
+                    <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/textView_carbs"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

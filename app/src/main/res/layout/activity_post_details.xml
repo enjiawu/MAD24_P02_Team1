@@ -161,7 +161,7 @@
                   android:textStyle="bold" />
           </LinearLayout>
 
-          <TextView
+          <com.google.android.material.textview.MaterialTextView
               android:id="@+id/textView_meal_name"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
@@ -216,7 +216,7 @@
                     app:cardElevation="2dp"
                     app:contentPadding="4dp">
 
-                  <TextView
+                  <com.google.android.material.textview.MaterialTextView
                       android:id="@+id/textView_protein_label"
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
