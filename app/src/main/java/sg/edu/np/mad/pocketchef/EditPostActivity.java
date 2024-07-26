@@ -68,7 +68,7 @@ public class EditPostActivity extends AppCompatActivity {
     private List<Comment> comments;
     private Uri imageUri;
     private ProgressBar progressBar;
-    private String currentUsername, currentUserId, currentProfilePictureUrl, postId, recipeImageUrl;
+    private String  currentUserId, postId, recipeImageUrl;
     private Post post;
 
     // Database
@@ -216,8 +216,6 @@ public class EditPostActivity extends AppCompatActivity {
 
         recipeImageUrl = post.getRecipeImage();
 
-        currentUsername = post.getUsername();
-        currentProfilePictureUrl = post.getProfilePicture();
         currentUserId = post.getUserId();
 
         // Populate instructions, ingredients, and equipment

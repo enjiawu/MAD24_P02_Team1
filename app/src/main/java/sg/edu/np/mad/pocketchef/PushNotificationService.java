@@ -41,4 +41,16 @@ public class PushNotificationService extends FirebaseMessagingService {
         // Store the new token in your database
         myRef.child("users").child(uid).child("fcmToken").setValue(token);
     }
+
+    @Override
+    public void onMessageReceived(@NonNull RemoteMessage message) {
+        super.onMessageReceived(message);
+
+        if(message.getNotification() != null){
+            String title = message.getNotification().getTitle();
+            String body = message.getNotification().getBody();
+
+            NotificationHelper.showNotification(getApplicationContext(), title, body);
+        }
+    }
 }
