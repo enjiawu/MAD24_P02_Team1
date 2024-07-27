@@ -161,7 +161,7 @@ public class PantryActivity extends AppCompatActivity implements NavigationView.
 
         // Navigation Menu setup
         DrawerLayout drawerLayout = bind.drawerLayout;
-        NavigationView navigationView = bind.navView;
+        NavigationView navigationView = bind.navigationView;
         MaterialToolbar toolbar = bind.toolbar;
 
 
