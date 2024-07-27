@@ -1,6 +1,7 @@
 package sg.edu.np.mad.pocketchef;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.widget.EditText;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.ActionMenuItemView;
 import androidx.appcompat.widget.Toolbar;
@@ -23,18 +25,22 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomappbar.BottomAppBar;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import sg.edu.np.mad.pocketchef.Adapters.PantryIngredientAdapter;
 
+// Timothy - Stage 2
 public class PantryActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     RecyclerView pantryRecyclerView;
@@ -68,6 +74,9 @@ public class PantryActivity extends AppCompatActivity implements NavigationView.
         pantryRecyclerView.setLayoutManager(pantryLayoutManager);
         pantryRecyclerView.setItemAnimator(new DefaultItemAnimator());
         pantryRecyclerView.setAdapter(pantryAdapter);
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(pantryRecyclerView);
     }
 
     public void SelectIngredient(String s) {
@@ -137,9 +146,57 @@ public class PantryActivity extends AppCompatActivity implements NavigationView.
         });
 //            return true;
 
-
-
     }
+
+    ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN,  ItemTouchHelper.START | ItemTouchHelper.END) {
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            int fromPosition = viewHolder.getAdapterPosition();
+            Log.d("FROM", String.valueOf(fromPosition));
+            int toPosition = target.getAdapterPosition();
+            Log.d("TO", String.valueOf(toPosition));
+            Collections.swap(ingredientList,fromPosition, toPosition);
+            recyclerView.getAdapter().notifyItemMoved(fromPosition,toPosition);
+            return true;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+            if (direction == ItemTouchHelper.START) {
+
+                if (selectedIngredients.contains(ingredientList.get(viewHolder.getAdapterPosition()))) {
+//                    selectedIngredients.remove(viewHolder.getAdapterPosition());
+                }
+                ingredientList.remove(viewHolder.getAdapterPosition());
+                pantryAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+            } else if (direction == ItemTouchHelper.END) {
+                EditText updatedIngredient = new EditText(PantryActivity.this);
+
+                MaterialAlertDialogBuilder alert = new MaterialAlertDialogBuilder(PantryActivity.this);
+                alert.setTitle("Editing ingredient");
+                alert.setView(updatedIngredient);
+                alert.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ingredientList.set(viewHolder.getAdapterPosition(), updatedIngredient.getText().toString());
+                        pantryAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
+                    }
+                });
+                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        pantryAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
+                        return;
+                    }
+                });
+                alert.show();
+//                ingredientList.set(viewHolder.getAdapterPosition(), "EDIT SUCCESS");
+//                pantryAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
+            }
+
+        }
+    };
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
