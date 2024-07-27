@@ -179,6 +179,13 @@
     <string name="noEquipment">No Equipment Needed</string>
     <string name="noComments">Be the first to leave a message!</string>
     <string name="noPosts">No Post Found!</string>
+    <string name="notifications_title">Notifications</string>
+    <string name="noNotifications">No new notifications</string>
+    <string name="newNotifications">New notifications</string>
+    <string name="myPosts">My Posts</string>
+    <string name="seeMore">See More</string>
+    <string name="popularPost">Popular Post</string>
+    <string name="newestPost">Newest Post</string>
 
     <string name="resultTextView_placeholder">Search for recipes...</string>
     <string name="cardView_open_camera_textview_text">Open Camera</string>
@@ -196,4 +203,9 @@
     <string name="textView_carbs_placeholder">100</string>
     <string name="similar_recipes_text">Similar Recipes</string>
     <string name="changePasswordTv_text">Change Password?</string>
+    <string name="cardView6_text">Community</string>
+    <string name="cardView7_text">Pantry</string>
+
+
+    <string name="s_map_api">AIzaSyBLIQc5G7x6lh945rbXAzr0OGlzK_tjOng</string>
 </resources>

@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
 
     id("com.google.gms.google-services")
+    alias(libs.plugins.jetbrains.kotlin.android)
 }
 
 android {
@@ -10,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "sg.edu.np.mad.pocketchef"
-        minSdk = 33
+        minSdk = 24
         targetSdk = 34
         versionCode = 8
         versionName = "1.42"
@@ -36,6 +37,9 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = "17"
     }
 }
 
@@ -75,6 +79,7 @@ dependencies {
     implementation(libs.firebase.storage)
     implementation(libs.tensorflow.lite.support)
     implementation(libs.tensorflow.lite.metadata)
+    implementation(libs.core.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -84,4 +89,17 @@ dependencies {
     implementation("androidx.room:room-runtime:2.6.1")
     annotationProcessor("androidx.room:room-compiler:2.6.1")
     implementation ("com.guolindev.permissionx:permissionx:1.7.1")
+    implementation("com.google.android.gms:play-services-location:21.0.1")
+    implementation("com.google.android.gms:play-services-maps:18.0.0")
+    implementation("com.google.android.libraries.places:places:3.5.0")
+    implementation("com.google.android.gms:play-services-maps:18.0.0")
+    implementation("com.google.maps.android:android-maps-utils:2.2.0")
+    implementation ("com.google.code.gson:gson:2.8.9")
+    implementation ("com.orhanobut:logger:2.2.0")
+    implementation ("com.google.zxing:core:3.4.1")
+    implementation ("com.journeyapps:zxing-android-embedded:4.2.0")
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation ("com.squareup.okhttp3:okhttp:4.9.1")
+    implementation ("com.squareup.okhttp3:logging-interceptor:4.7.2")
 }

@@ -68,7 +68,7 @@ public class EditPostActivity extends AppCompatActivity {
     private List<Comment> comments;
     private Uri imageUri;
     private ProgressBar progressBar;
-    private String currentUsername, currentUserId, currentProfilePictureUrl, postId, recipeImageUrl;
+    private String  currentUserId, postId, recipeImageUrl;
     private Post post;
 
     // Database
@@ -152,6 +152,7 @@ public class EditPostActivity extends AppCompatActivity {
         mUserRef = FirebaseDatabase.getInstance().getReference("users");
     }
 
+    // Set up the input boxes
     private void setupInitialInputBoxes() {
         TextInputLayout InstructionsInputBox = (TextInputLayout) getLayoutInflater().inflate(R.layout.input_box, null);
         instructionInputLayout.addView(InstructionsInputBox);
@@ -177,6 +178,7 @@ public class EditPostActivity extends AppCompatActivity {
         textDelete(equipmentEditText, equipmentInputLayout, equipmentInputBoxes);
     }
 
+    // Load the post data
     private void loadPostData(String postId) {
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -199,6 +201,7 @@ public class EditPostActivity extends AppCompatActivity {
         });
     }
 
+    // Populate fields using the post data
     private void populateFields(Post post) {
         recipeTitleInput.setText(post.getTitle());
         proteinInput.setText(String.valueOf(post.getProtein()));
@@ -216,8 +219,6 @@ public class EditPostActivity extends AppCompatActivity {
 
         recipeImageUrl = post.getRecipeImage();
 
-        currentUsername = post.getUsername();
-        currentProfilePictureUrl = post.getProfilePicture();
         currentUserId = post.getUserId();
 
         // Populate instructions, ingredients, and equipment
@@ -228,6 +229,7 @@ public class EditPostActivity extends AppCompatActivity {
         }
     }
 
+    // Populate the list for each item in equipment, ingredients or instructions
     private void populateList(List<TextInputLayout> inputBoxes, List<String> dataList, LinearLayout inputLayout) {
         inputLayout.removeAllViews();
         inputBoxes.clear();
@@ -238,9 +240,15 @@ public class EditPostActivity extends AppCompatActivity {
             editText.setText(data);
             inputLayout.addView(inputBox);
             inputBoxes.add(inputBox);
+            if(inputLayout == ingredientsInputLayout){ // Change the hints
+                inputBox.setHint("Enter Ingredient");
+            } else if (inputLayout == equipmentInputLayout){
+                inputBox.setHint("Enter Equipment");
+            }
         }
     }
 
+    // Setting up listeners
     public void setupListeners() {
         // Check if back button has been clicked
         backButton.setOnClickListener(v -> {
@@ -303,18 +311,22 @@ public class EditPostActivity extends AppCompatActivity {
 
     // Function to add new input box
     private void addInputBox(String type) {
+        String hint = null;
         switch(type){
             case "instructions":
                 inputBoxes = instructionsInputBoxes;
                 inputLayout = instructionInputLayout;
+                hint = "Instructions for this step: ";
                 break;
             case "ingredients":
                 inputBoxes = ingredientsInputBoxes;
                 inputLayout = ingredientsInputLayout;
+                hint = "Enter Ingredient: ";
                 break;
             case "equipment":
                 inputBoxes = equipmentInputBoxes;
                 inputLayout = equipmentInputLayout;
+                hint = "Enter Equipment:  ";
                 break;
             default:
                 // Nothing Happens
@@ -338,6 +350,7 @@ public class EditPostActivity extends AppCompatActivity {
             TextInputLayout inputBox = (TextInputLayout) getLayoutInflater().inflate(R.layout.input_box, null);
             inputLayout.addView(inputBox);
             inputBoxes.add(inputBox);
+            inputBox.setHint(hint);
 
             TextInputEditText editText = inputBox.findViewById(R.id.input);
             textChangeListener(editText);
