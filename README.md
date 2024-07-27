@@ -267,11 +267,12 @@ Optional:
 - Users can select any recipe to view recipe details and instructions.
 
 #### 19) Google Maps:
-![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/Location.png)
 ![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/LocationSearch.png)
-- Users can input a query for an area to search a location
-- API from Google will be called to be utilised to calculate an optimal route
 ![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/Location.png)
+- Users can input a query for an area to search a location.
+- API from Google will be called to be utilised to calculate an optimal route.
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/Distance.png)
+- Users can view their route for requested location.
 
 #### 20) Shopping List:
 ![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/ShoppingList.png)
