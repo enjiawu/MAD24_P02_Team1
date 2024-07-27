@@ -20,8 +20,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-// Enjia - Stage 2
+// Enjia - Stage 2 (NOT WORKING! - LIMITATIONS: HAD TO PAY)
 // Setting up push notification service for community posts
+/*
 public class PushNotificationService extends FirebaseMessagingService {
     private DatabaseReference myRef;
     private String uid;
@@ -53,4 +54,4 @@ public class PushNotificationService extends FirebaseMessagingService {
             NotificationHelper.showNotification(getApplicationContext(), title, body);
         }
     }
-}
+}*/

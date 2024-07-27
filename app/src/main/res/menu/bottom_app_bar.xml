@@ -6,8 +6,8 @@
 
 
     <item
-        android:id="@+id/addIngredient"
-        android:icon="@drawable/baseline_add_24_orange"
+        android:id="@+id/deleteIngredient"
+        android:icon="@drawable/baseline_delete_24"
         android:contentDescription="Description"
         android:title="Add Ingredient"
         app:showAsAction="ifRoom"/>

@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,18 +18,22 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
+import sg.edu.np.mad.pocketchef.Listener.NotificationListener;
 import sg.edu.np.mad.pocketchef.Models.InstructionsResponse;
 import sg.edu.np.mad.pocketchef.Models.Notification;
 import sg.edu.np.mad.pocketchef.R;
 
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationsViewHolder> {
-    final String TAG  = "NoficationsAdapter";
-    final Context context;
-    final List<Notification> notifications;
+    String TAG  = "NoficationsAdapter";
+    Context context;
+    List<Notification> notifications;
+    NotificationListener notificationListener;
 
-    public NotificationAdapter(Context context, List<Notification> notifications) {
+
+    public NotificationAdapter(Context context, List<Notification> notifications, NotificationListener notificationListener) {
         this.context = context;
         this.notifications = notifications;
+        this.notificationListener = notificationListener;
     }
     @NonNull
     @Override
@@ -44,6 +49,15 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationsViewH
         holder.title.setText(notification.getTitle());
         holder.date.setText(notification.formatDate());
         holder.description.setText(notification.getMessage());
+
+        //Check if user clicks on post, if they click then return the Id
+        holder.notificationCardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, String.valueOf(notifications.get(holder.getAdapterPosition()).getId()));
+                notificationListener.onNotificationClicked(String.valueOf(notifications.get(holder.getAdapterPosition()).getId()));
+            }
+        });
     }
 
     // Function to delete the notification
@@ -83,11 +97,13 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationsViewH
 
 class NotificationsViewHolder extends RecyclerView.ViewHolder {
     TextView title, date, description;
+    CardView notificationCardView;
 
     public NotificationsViewHolder(@NonNull View itemView) {
         super(itemView);
         title = itemView.findViewById(R.id.notification_title);
         date = itemView.findViewById(R.id.notification_date);
         description = itemView.findViewById(R.id.notification_description);
+        notificationCardView = itemView.findViewById(R.id.notifications_container);
     }
 }

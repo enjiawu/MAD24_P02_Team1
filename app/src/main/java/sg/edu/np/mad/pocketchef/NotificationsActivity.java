@@ -31,8 +31,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sg.edu.np.mad.pocketchef.Adapters.NotificationAdapter;
+import sg.edu.np.mad.pocketchef.Listener.NotificationListener;
+import sg.edu.np.mad.pocketchef.Listener.PostClickListener;
 import sg.edu.np.mad.pocketchef.Models.Notification;
 
+// Enjia - Stage 2
 public class NotificationsActivity extends AppCompatActivity {
     private final String TAG = "NotificationsActivity";
 
@@ -88,6 +91,7 @@ public class NotificationsActivity extends AppCompatActivity {
         loadNotifications(currentUser.getUid());
     }
 
+    // Function to load notifications for the user
     private void loadNotifications(String userId) {
         DatabaseReference notificationsRef = FirebaseDatabase.getInstance()
                 .getReference("users")
@@ -119,6 +123,7 @@ public class NotificationsActivity extends AppCompatActivity {
         });
     }
 
+    // Set up listeners for the back button to the main activity
     private void setUpListeners(){
         backButton.setOnClickListener(v -> {
             // Go to main activity
@@ -136,11 +141,30 @@ public class NotificationsActivity extends AppCompatActivity {
         noNotifications.setVisibility(View.GONE); // Hide the no notifications text
 
         // Set up recycler view to display notifications
-        NotificationAdapter notificationAdapter = new NotificationAdapter(NotificationsActivity.this, notifications);
+        NotificationAdapter notificationAdapter = new NotificationAdapter(NotificationsActivity.this, notifications, notificationClickListener);
 
         notifRecyclerView.setAdapter(notificationAdapter);
         notifRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
+
+    private final NotificationListener notificationClickListener = notifId -> {
+        Log.d(TAG, notifId);
+
+        // Split the notifId to get the postId
+        String[] parts = notifId.split("_"); // Split it because the post key is formmatted at the back
+        if (parts.length == 2) {
+            String postId = parts[0]; // Get the post key which is the first element from the split
+            Log.d(TAG, postId);
+
+            // To see recipe details
+            Intent postDetails = new Intent(NotificationsActivity.this, PostDetailsActivity.class)
+                    .putExtra("id", postId);
+            startActivity(postDetails);
+        } else {
+            Log.e(TAG, "Invalid notification ID format");
+        }
+    };
+
 
     // Function to delete notification by swiping
     private void setUpSwipeToDelete() {
@@ -157,6 +181,9 @@ public class NotificationsActivity extends AppCompatActivity {
                 if (adapter != null) {
                     if (position >= 0 && position < adapter.getItemCount()) {
                         adapter.removeItem(position);
+                        if(adapter.getItemCount() == 0){
+                            noNotifications.setVisibility(View.VISIBLE);
+                        }
                     } else {
                         Log.e(TAG, "Invalid position on swipe: " + position);
                     }
