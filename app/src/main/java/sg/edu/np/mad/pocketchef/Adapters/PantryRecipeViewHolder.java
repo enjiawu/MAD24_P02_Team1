@@ -10,6 +10,7 @@ import com.google.android.material.card.MaterialCardView;
 
 import sg.edu.np.mad.pocketchef.R;
 
+// Timothy - Stage 2
 public class PantryRecipeViewHolder extends RecyclerView.ViewHolder{
     int id;
     ImageView recipeImage;

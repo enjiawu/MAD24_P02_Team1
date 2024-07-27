@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import sg.edu.np.mad.pocketchef.R;
 
+// Timothy - Stage 2
 public class PantryIngredientViewHolder extends RecyclerView.ViewHolder{
     CheckBox ingredientCheckbox;
     public PantryIngredientViewHolder(View ingredientView) {
