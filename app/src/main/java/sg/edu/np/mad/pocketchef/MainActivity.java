@@ -285,10 +285,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
         // Card View On Click Listener for Shopping List Activity
-//        cardView8.setOnClickListener(v -> {
-//            Intent intent = new Intent(MainActivity.this, LocationActivity.class);
-//            startActivity(intent);
-//        });
+        cardView8.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, LocationActivity.class);
+            startActivity(intent);
+        });
 
     }
 
