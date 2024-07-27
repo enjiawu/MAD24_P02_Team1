@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     MaterialToolbar toolbar;
+
     MenuItem nav_home, nav_recipes, nav_search, nav_logout, nav_profile, nav_favourites, nav_community, nav_pantry, nav_complex_search, nav_shopping_list, nav_locationfinder;
     CardView cardView1, cardView2, cardView3, cardView4, cardView5, cardView6, cardView7, cardView8, cardView_popularPost, cardView_newestPost, cardView_newNotifications, cardView_myPosts;
 
@@ -208,7 +209,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void run() {
                 List<CategoryBean> list = FavoriteDatabase.getInstance(MainActivity.this).categoryDao().getAllCategories();
                 if(list==null||list.isEmpty()){
-                    CategoryBean categoryBean =new CategoryBean("Favorite","Favorite");
+                    CategoryBean categoryBean =new CategoryBean(App.user,"Favorite","Favorite");
                     FavoriteDatabase.getInstance(MainActivity.this).categoryDao().insertCategory(categoryBean);
                 }
             }
@@ -484,6 +485,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Log.w(TAG, "getUserInfo:onCancelled", error.toException());
             }
         });
+
     }
 
     @Override

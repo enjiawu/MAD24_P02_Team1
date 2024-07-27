@@ -41,6 +41,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import sg.edu.np.mad.pocketchef.Models.App;
 import sg.edu.np.mad.pocketchef.Models.CategoryBean;
 
 import sg.edu.np.mad.pocketchef.Adapters.FavoriteAdapter;
@@ -108,7 +109,7 @@ public class CreateCategoryActivity extends AppCompatActivity implements Navigat
             if (path.isEmpty()) {
                 path = "default";
             }
-            CategoryBean categoryBean = new CategoryBean(path, et);
+            CategoryBean categoryBean = new CategoryBean(App.user,path, et);
             new Thread(() -> {
                 try {
                     FavoriteDatabase.getInstance(CreateCategoryActivity.this)
@@ -121,7 +122,7 @@ public class CreateCategoryActivity extends AppCompatActivity implements Navigat
                     PopTip.show("Success");
                     datalist.remove(datalist.size() - 1);
                     datalist.add(categoryBean);
-                    datalist.add(new CategoryBean("a", "a"));
+                    datalist.add(new CategoryBean(App.user,"a", "a"));
                     favoriteAdapter.setData(datalist);
                     editText.setText("");
                     path = "";
@@ -142,7 +143,7 @@ public class CreateCategoryActivity extends AppCompatActivity implements Navigat
                         .categoryDao()
                         .getAllCategories();
                 if(list==null||list.isEmpty()){
-                    CategoryBean categoryBean =new CategoryBean("Favorite","Favorite");
+                    CategoryBean categoryBean =new CategoryBean(App.user,"Favorite","Favorite");
                     FavoriteDatabase.getInstance(CreateCategoryActivity.this).categoryDao()
                             .insertCategory(categoryBean);
                 }
@@ -289,7 +290,7 @@ public class CreateCategoryActivity extends AppCompatActivity implements Navigat
             if (datalist == null || datalist.isEmpty()) {
                 datalist = new ArrayList<>();
             }
-            CategoryBean categoryBean = new CategoryBean("a", "a");
+            CategoryBean categoryBean = new CategoryBean(App.user,"a", "a");
             datalist.add(categoryBean);
             runOnUiThread(() -> favoriteAdapter.setData(datalist));
         }).start();

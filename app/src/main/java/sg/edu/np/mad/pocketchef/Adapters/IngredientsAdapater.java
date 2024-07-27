@@ -22,6 +22,10 @@ public class IngredientsAdapater extends RecyclerView.Adapter<IngredientsViewHol
     final Context context;
     final List<ExtendedIngredient> list;
 
+    public List<ExtendedIngredient> getData(){
+        return list;
+    }
+
     public IngredientsAdapater(Context context, List<ExtendedIngredient> list) {
         this.context = context;
         this.list = list;
