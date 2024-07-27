@@ -108,7 +108,15 @@ Optional:
 - Successfully implement dashboard statistics with the most popular post and the newest post - [x]
 - Successfully implement a notifications page for users to view notifications and delete them - [x]
 - Successfully implement push notifications whenever a user adds a new post - [x]
-#### Calorie Counter - Ggwendolynn - [ ]
+#### Market Locator - Ggwendolynn - [X]
+- Successfully implement Market Locator User Interface - [X]
+- Successfully implement Market Distance User Interface - [X]
+- Successfully integrate Google Maps API - [X]
+- Successfully display market location details on the map - [X]
+- Successfully implement search functionality to locate markets - [X]
+- Successfully implement functionality to show distance of select market location - [X]
+- Successfully handle user interactions (e.g., clicks on map direction) - [X]
+- Successfully implement permissions for user's location - [X]
 #### Virtual Pantry - Timothy - [ ]
 - Successfully implement Nested Recycler view - [ ]
 - Successfully parse ingredients through API to fetch images - [ ]
@@ -218,6 +226,16 @@ Optional:
   
 #### 16) Notifications:
 ![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/Notifications.png)
+- Users can view notifications received and delete them by swiping to the left.
+- Users can click on the notifications to view the post related to the notificaiton.
+
+#### 16) Complex Search:
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/ComplexSearch.png)
+- Users can view notifications received and delete them by swiping to the left.
+- Users can click on the notifications to view the post related to the notification.
+
+#### 16) Queried Recipes:
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/QueriedRecipes.png)
 - Users can view notifications received and delete them by swiping to the left.
 - Users can click on the notifications to view the post related to the notificaiton.
 
