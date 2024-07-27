@@ -250,16 +250,7 @@ Optional:
 ![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/QueriedRecipes.png)
 - Recipes searched based on query from Complex Search will be viewed in a recycler view format.
 
-#### 18) Shopping List
-![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/CreateNewShoppingList.png)
-
-![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/ShoppingList.png)
-
-![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/ShoppingListDetails.png)
-- Users can view notifications received and delete them by swiping to the left.
-- Users can click on the notifications to view the post related to the notificaiton.
-
-#### 19) Pantry:
+#### 18) Pantry:
 ![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/Pantry.png)
 - Users can add, edit and delete their pantry ingredients here
 - Users can select pantry ingredients to search for available recipes
@@ -269,12 +260,11 @@ Optional:
 - Users can view the ingredients they are missing for each recipe.
 - Users can select any recipe to view recipe details and instructions.
 
-#### 20) Google Maps:
+#### 19) Google Maps:
 ![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/QueriedRecipes.png)
-- Users can view notifications received and delete them by swiping to the left.
-- Users can click on the notifications to view the post related to the notificaiton.
+- Place Holder
 
-#### 17) Shopping List:
+#### 20) Shopping List:
 ![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/ShoppingList.png)
 ![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/ShoppingList-Share.png)
 ![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/ShoppingList-Scan.png)
@@ -284,14 +274,14 @@ Optional:
 - Users can Scan the QR code to get the shopping list detail
 - Users can click on a category to view the ingredients added to a specific category
 
-#### 18) Shopping List Items:
+#### 21) Shopping List Items:
 ![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/ShoppingList-Item.png)
 - Users can view and delete the ingredients that add in the shopping list
 - Users can tick the ingredients that they have and check how many items left in the shooping list
 - Users can scan barcode or use the "+" button to add ingredient that they might want to buy
 - Users can click on the "house" icon to view the item that they already have in Virtual Pantry
 
-#### 19) Virtual Pantry
+#### 22) Virtual Pantry for Shopping List
 ![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/VirtualPantry.png)
 ![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/VirtualPantry-Scanner.jpg)
 - Users can scan barcode to add the products that they already have into the virtual pantry, when the product match with the shopping list item it will auto-ticking the item
