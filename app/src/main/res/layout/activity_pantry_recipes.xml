@@ -43,7 +43,9 @@
         android:id="@+id/noAvailableRecipes"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="No available recipes"
+        android:text="Looks like there is nothing here."
+        android:textSize="20dp"
+        android:textStyle="bold"
         android:gravity="center"
         android:visibility="gone"
         />
