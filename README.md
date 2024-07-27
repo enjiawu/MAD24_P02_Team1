@@ -261,8 +261,11 @@ Optional:
 - Users can select any recipe to view recipe details and instructions.
 
 #### 19) Google Maps:
-![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/QueriedRecipes.png)
-- Place Holder
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/Location.png)
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/LocationSearch.png)
+- Users can input a query for an area to search a location
+- API from Google will be called to be utilised to calculate an optimal route
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/Location.png)
 
 #### 20) Shopping List:
 ![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/ShoppingList.png)
