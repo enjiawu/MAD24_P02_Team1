@@ -241,19 +241,16 @@ Optional:
 
 #### 17) Complex Search:
 ![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/ComplexSearch.png)
-- Users can view notifications received and delete them by swiping to the left.
-- Users can click on the notifications to view the post related to the notification.
+- Users can search via Voice Recognition and Image Classification
+- Upon pressing Open Camera, user will be prompted for camera permission and an image will be taken
+- Upon pressing Open Gallery, user will be prompted for gallery permissions and an image will be selected
+- Classifying an image, a food label with associated prediction value will be provided.
+- Upon pressing Voice Search, voice recognition will start, and food-related keywords will be filtered out
+- Upon pressing Search Recipes, a query will be parsed into intent and recipes will be shown.
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/QueriedRecipes.png)
+- Recipes searched based on query from Complex Search will be viewed in a recycler view format.
 
-#### 18) Shopping List
-![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/CreateNewShoppingList.png)
-
-![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/ShoppingList.png)
-
-![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/ShoppingListDetails.png)
-- Users can view notifications received and delete them by swiping to the left.
-- Users can click on the notifications to view the post related to the notificaiton.
-
-#### 19) Pantry:
+#### 18) Pantry:
 ![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/Pantry.png)
 - Users can add, edit and delete their pantry ingredients here
 - Users can select pantry ingredients to search for available recipes
@@ -263,12 +260,14 @@ Optional:
 - Users can view the ingredients they are missing for each recipe.
 - Users can select any recipe to view recipe details and instructions.
 
-#### 20) Google Maps:
-![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/QueriedRecipes.png)
-- Users can view notifications received and delete them by swiping to the left.
-- Users can click on the notifications to view the post related to the notificaiton.
+#### 19) Google Maps:
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/Location.png)
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/LocationSearch.png)
+- Users can input a query for an area to search a location
+- API from Google will be called to be utilised to calculate an optimal route
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/Location.png)
 
-#### 17) Shopping List:
+#### 20) Shopping List:
 ![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/ShoppingList.png)
 ![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/ShoppingList-Share.png)
 ![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/ShoppingList-Scan.png)
@@ -278,14 +277,14 @@ Optional:
 - Users can Scan the QR code to get the shopping list detail
 - Users can click on a category to view the ingredients added to a specific category
 
-#### 18) Shopping List Items:
+#### 21) Shopping List Items:
 ![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/ShoppingList-Item.png)
 - Users can view and delete the ingredients that add in the shopping list
 - Users can tick the ingredients that they have and check how many items left in the shooping list
 - Users can scan barcode or use the "+" button to add ingredient that they might want to buy
 - Users can click on the "house" icon to view the item that they already have in Virtual Pantry
 
-#### 19) Virtual Pantry
+#### 22) Virtual Pantry for Shopping List
 ![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/VirtualPantry.png)
 ![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/VirtualPantry-Scanner.jpg)
 - Users can scan barcode to add the products that they already have into the virtual pantry, when the product match with the shopping list item it will auto-ticking the item
@@ -309,31 +308,55 @@ https://github.com/EdricYeo117/MAD_Assignment_Stage2_MLPythonCode
   https://www.youtube.com/watch?v=jtT60yFPelI
 ------------------------------------------------
 ### Dependencies Utilised:
-- Picasso dependency for image loading from API:
-https://github.com/square/picasso
-- Retrofit dependency for API calling:
-https://github.com/square/retrofit
-- Retrofit gson converter dependency:
-https://github.com/square/retrofit/tree/trunk/retrofit-converters/gson
-- Material 3 open-source Google design system:
-https://m3.material.io/
-- Glide an image loading and cache library
-https://github.com/bumptech/glide
-- Jsoup a java to html parser 
-  https://jsoup.org/download
-- Firebase for database
+- Android AppCompat:
+https://developer.android.com/jetpack/androidx/releases/appcompat
+- Android Maps Utils:
+https://github.com/googlemaps/android-maps-utils
+- Android Room:
+https://developer.android.com/jetpack/androidx/releases/room
+- CircleImageView:
+https://github.com/hdodenhof/CircleImageView
+- Firebase App Check:
+https://firebase.google.com/docs/app-check
+- Firebase App Check SafetyNet:
+https://firebase.google.com/docs/app-check/android/safetynet-provider
+- Firebase for Database:
 https://firebase.google.com/
-- CircleImageView
-  https://github.com/hdodenhof/CircleImageView
-- Android Splashscreen
-https://developer.android.com/jetpack/androidx/releases/core
-- Android AppCompat
-  https://developer.android.com/jetpack/androidx/releases/appcompat
-- Android Room
-  https://developer.android.com/jetpack/androidx/releases/room
-- Kongzue DialogX
-  https://github.com/kongzue/DialogX
-- Kongzue DialogX Album Dialog and File Dialog
-  https://github.com/kongzue/DialogXSample
-- ZXing Barcode Scanner
-  https://github.com/zxing/zxing
+- Glide:
+https://github.com/bumptech/glide
+- Gson:
+https://github.com/google/gson
+- Guava:
+https://github.com/google/guava
+- Jsoup:
+https://jsoup.org/download
+- Kongzue DialogX:
+https://github.com/kongzue/DialogX
+- Kongzue DialogX Album Dialog and File Dialog:
+https://github.com/kongzue/DialogXSample
+- Logger:
+https://github.com/orhanobut/logger
+- OkHttp:
+https://github.com/square/okhttp
+- OkHttp Logging Interceptor:
+https://github.com/square/okhttp/tree/master/okhttp-logging-interceptor
+- PermissionX:
+https://github.com/guolindev/PermissionX
+- Picasso:
+https://github.com/square/picasso
+- Play Services Location & Maps:
+https://developers.google.com/android/guides/setup
+- Retrofit:
+https://github.com/square/retrofit
+- Retrofit Gson Converter:
+https://github.com/square/retrofit/tree/trunk/retrofit-converters/gson
+- TensorFlow Lite:
+https://github.com/tensorflow/tensorflow/tree/master/tensorflow/lite
+- ZXing Barcode Scanner:
+https://github.com/zxing/zxing
+- ZXing Android Embedded:
+https://github.com/journeyapps/zxing-android-embedded
+- Material 3:
+https://m3.material.io/
+- Google Places:
+https://developers.google.com/maps/documentation/places/android-sdk/overview
