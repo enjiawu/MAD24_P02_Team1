@@ -132,8 +132,10 @@ Optional:
 
 #### 3) Menu (Start): 
 ![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/Menu1.png)
-- Starting menu for application. Blank space left for Stage 2 implementation/usage
-- To proceed to buttons, User has to swipe downwards to trigger animation to load buttons
+- Starting menu for application.
+- Users can view their dashboard statistics including new notifications and the number of posts they have made.
+- Users can view the current most popular post and newest post. Clicking on any will redirect them to that post.
+- To proceed to buttons, the User has to swipe downwards to trigger animation to load buttons
 
 #### 4) Menu (End): 
 ![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/Menu2.png)
@@ -166,13 +168,13 @@ Optional:
 
 #### 8) Advanced Search Output:
 ![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/AdvancedSearchOutput.png)
-- Recipes are listed similar to "Random Recipes"
+- Recipes are listed similarly to "Random Recipes"
 - Users can click on recipes to view recipe details
 
 #### 9) Favourite:
 ![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/Favourites.png)
 - Users can view their categories for favourited recipes
-- User can click on category to view recipes added to a specific category
+- User can click on a category to view recipes added to a specific category
 
 #### 10) Favourite Recipes:
 ![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/FavouriteRecipes.png)
@@ -188,6 +190,36 @@ Optional:
 ![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/EditProfile.png)
 - Users can edit their profile
 - Users can click the "Save" profile icon to save their new profile information
+
+#### 13) Community Page:
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/Community.png)
+- Users can view recipes made by other users
+- Users can sort posts based on popularity, date made or filter to get their own posts.
+- Users can search for posts based on the post title
+- Users can click the recipes to view post details
+
+#### 14) Post Details:
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/PostDetails1.png)
+
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/PostDetails2.png)
+
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/PostDetails3.png)
+- Users can view the post details, including nutrition, ingredients, equipment and instructions.
+- Users can leave comments and likes on the post
+- Users can share the post with others in external apps like mail or messages.
+
+#### 15) Add Post/Edit Post:
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/AddPost.png)
+
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/UpdatePost.png)
+
+- Users can create a new post by filling in all the necessary input boxes, creating a new post will send a push notification to everyone.
+- Users can edit their posts by holding the selected and clicking on the edit button.
+  
+#### 16) Notifications:
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/Notifications.png)
+- Users can view notifications received and delete them by swiping to the left.
+- Users can click on the notifications to view the post related to the notificaiton.
 
 ---------------------------------------------
 ### Acknowledgements:
