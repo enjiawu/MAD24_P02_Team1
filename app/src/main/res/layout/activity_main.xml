@@ -616,7 +616,7 @@
                         android:layout_height="100dp"
                         android:layout_marginBottom="20dp"
                         android:scaleType="centerInside"
-                        app:srcCompat="@drawable/ic_profile" />
+                        app:srcCompat="@drawable/ic_shoppinglist" />
                 </FrameLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -686,7 +686,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="Feature 6"
+                    android:text="@string/cardView6_text"
                     android:textSize="24sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -710,7 +710,7 @@
                         android:layout_height="100dp"
                         android:layout_marginBottom="20dp"
                         android:scaleType="fitCenter"
-                        app:srcCompat="@drawable/ic_launcher_foreground" />
+                        app:srcCompat="@drawable/ic_community" />
                 </FrameLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -733,7 +733,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="Feature 7"
+                    android:text="@string/cardView7_text"
                     android:textSize="24sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -757,7 +757,7 @@
                         android:layout_height="100dp"
                         android:layout_marginBottom="20dp"
                         android:scaleType="centerInside"
-                        app:srcCompat="@drawable/ic_launcher_foreground" />
+                        app:srcCompat="@drawable/ic_pantry" />
                 </FrameLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -804,7 +804,7 @@
                         android:layout_height="100dp"
                         android:layout_marginBottom="20dp"
                         android:scaleType="centerInside"
-                        app:srcCompat="@drawable/ic_launcher_foreground" />
+                        app:srcCompat="@drawable/ic_location" />
                 </FrameLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>

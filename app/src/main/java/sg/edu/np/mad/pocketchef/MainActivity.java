@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     MaterialToolbar toolbar;
-    MenuItem nav_home, nav_recipes, nav_search, nav_logout, nav_profile, nav_favourites, nav_community, nav_pantry, nav_complex_search;
+    MenuItem nav_home, nav_recipes, nav_search, nav_logout, nav_profile, nav_favourites, nav_community, nav_pantry, nav_complex_search, nav_shopping_list, nav_locationfinder;
     CardView cardView1, cardView2, cardView3, cardView4, cardView5, cardView6, cardView7, cardView8, cardView_popularPost, cardView_newestPost, cardView_newNotifications, cardView_myPosts;
 
     // In-app notifications (Stage 2 - Enjia)
@@ -259,23 +259,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivity(intent);
         });
 
-        // Card View On Click Listener for ProfileActivity
+        // Card View On Click Listener for ProfileActivity (changing this to shoppinglist)
         cardView4.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
             startActivity(intent);
         });
 
-        // Card View On Click Listener for ImageSearchActivity
+        // Card View On Click Listener for ComplexSearch Activity
         cardView5.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, ComplexSearchActivity.class);
             startActivity(intent);
         });
 
-        // Card View On Click Listener for ProfileActivity
+        // Card View On Click Listener for Community Activity
         cardView6.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, CommunityActivity.class);
             startActivity(intent);
         });
+
+        // Card View On Click Listener for Pantry Activity
+        cardView7.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, PantryActivity.class);
+            startActivity(intent);
+        });
+
+        // Card View On Click Listener for Shopping List Activity
+//        cardView8.setOnClickListener(v -> {
+//            Intent intent = new Intent(MainActivity.this, LocationActivity.class);
+//            startActivity(intent);
+//        });
 
     }
 
@@ -571,6 +583,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             finish();
             startActivity(intent7);
         }
+//        } else if (itemId = R.id.nav_shoppinglist) {
+//            Intent intent8 = new Intent(MainActivity.this, ShoppingListActivity.class);
+//            finish();
+//            startActivity(intent8);
+//        } else if (itemId = R.id.nav_locationfinder) {
+//            Intent intent9 = new Intent(MainActivity.this, LocationActivity.class);
+//            finish();
+//            startActivity(intent9);
+//        }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
