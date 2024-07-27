@@ -238,12 +238,28 @@ Optional:
 - Users can view notifications received and delete them by swiping to the left.
 - Users can click on the notifications to view the post related to the notificaiton.
 
-#### 16) Complex Search:
+#### 17) Complex Search:
 ![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/ComplexSearch.png)
 - Users can view notifications received and delete them by swiping to the left.
 - Users can click on the notifications to view the post related to the notification.
 
-#### 16) Queried Recipes:
+#### 18) Shopping List
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/CreateNewShoppingList.png)
+
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/ShoppingList.png)
+
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/ShoppingListDetails.png)
+- Users can view notifications received and delete them by swiping to the left.
+- Users can click on the notifications to view the post related to the notificaiton.
+
+#### 19) Pantry:
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/Pantry.png)
+
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/Pantry2.png)
+- Users can view notifications received and delete them by swiping to the left.
+- Users can click on the notifications to view the post related to the notificaiton.
+
+#### 20) Google Maps:
 ![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/QueriedRecipes.png)
 - Users can view notifications received and delete them by swiping to the left.
 - Users can click on the notifications to view the post related to the notificaiton.
