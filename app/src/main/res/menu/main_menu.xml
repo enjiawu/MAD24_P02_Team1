@@ -47,7 +47,7 @@
         <menu>
             <item
                 android:id="@+id/nav_community"
-                android:icon="@drawable/pocketchef_logo"
+                android:icon="@drawable/ic_community"
                 android:title="Community" />
             <item
                 android:id="@+id/nav_complex_search"
@@ -55,16 +55,12 @@
                 android:title="Complex Search" />
             <item
                 android:id="@+id/nav_shoppinglist"
-                android:icon="@drawable/pocketchef_logo"
+                android:icon="@drawable/ic_shoppinglist"
                 android:title="Shopping List" />
             <item
                 android:id="@+id/nav_locationfinder"
-                android:icon="@drawable/pocketchef_logo"
+                android:icon="@drawable/ic_location"
                 android:title="Location Finder" />
-            <item
-                android:id="@+id/nav_shoppinglist"
-                android:icon="@drawable/pocketchef_logo"
-                android:title="Shop Cart" />
         </menu>
     </item>
 </menu>

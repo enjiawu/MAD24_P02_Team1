@@ -58,6 +58,9 @@ import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import sg.edu.np.mad.pocketchef.databinding.ActivityCommunityBinding;
+import sg.edu.np.mad.pocketchef.databinding.ActivityComplexSearchBinding;
+
 public class ComplexSearchActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = "ComplexSearchActivity";
@@ -67,7 +70,6 @@ public class ComplexSearchActivity extends AppCompatActivity implements Navigati
     private static final int PERMISSION_GALLERY = 2;
     private static final int PERMISSION_MICROPHONE = 3;
     private int permissionRequested = PERMISSION_NONE;
-    private DrawerLayout drawerLayout;
     private ImageView imageView_classify;
     private MaterialTextView resultTextView;
     private Interpreter tflite;
@@ -80,10 +82,7 @@ public class ComplexSearchActivity extends AppCompatActivity implements Navigati
 
     CardView cardView_open_camera, cardView_open_gallery, cardView_start_recognition, cardView_search_recipes;
     FrameLayout frameLayout_image_camera, frameLayout_image_gallery, frameLayout_image_voice, frameLayout_image_recipes;
-    NavigationView navigationView;
-    MaterialToolbar toolbar;
-    MenuItem nav_home, nav_recipes, nav_search, nav_logout, nav_profile, nav_favourites, nav_community, nav_pantry, nav_complex_search, nav_shoppinglist, nav_locationfinder;
-
+    private ActivityComplexSearchBinding bind;
     // Launcher for camera activity to capture images, for user to take a photo
     private final ActivityResultLauncher<Intent> cameraLauncher = registerForActivityResult(
             // Specify contract for strating activity, expects a result
@@ -155,39 +154,10 @@ public class ComplexSearchActivity extends AppCompatActivity implements Navigati
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_complex_search);
-
-        // Initialize views
-        imageView_classify = findViewById(R.id.imageView);
-        resultTextView = findViewById(R.id.resultTextView);
-
-        // Intialise drawable menu
-        drawerLayout = findViewById(R.id.drawer_layout);
-        navigationView = findViewById(R.id.nav_view);
-        toolbar = findViewById(R.id.toolbar);
-        nav_home = navigationView.getMenu().findItem(R.id.nav_home);
-        nav_recipes = navigationView.getMenu().findItem(R.id.nav_recipes);
-        nav_search = navigationView.getMenu().findItem(R.id.nav_search);
-        nav_logout = navigationView.getMenu().findItem(R.id.nav_logout);
-        nav_profile = navigationView.getMenu().findItem(R.id.nav_profile);
-        nav_favourites = navigationView.getMenu().findItem(R.id.nav_favourites);
-        nav_pantry = navigationView.getMenu().findItem(R.id.nav_pantry);
-        nav_community = navigationView.getMenu().findItem(R.id.nav_community);
-        nav_complex_search = navigationView.getMenu().findItem(R.id.nav_complex_search);
-        nav_shoppinglist = navigationView.getMenu().findItem(R.id.nav_shoppinglist);
-        nav_locationfinder = navigationView.getMenu().findItem(R.id.nav_locationfinder);
-
-        // Intialise cardViews
-        cardView_open_camera = findViewById(R.id.cardView_open_camera);
-        cardView_open_gallery = findViewById(R.id.cardView_open_gallery);
-        cardView_start_recognition = findViewById(R.id.cardView_start_recognition);
-        cardView_search_recipes = findViewById(R.id.cardView_search_recipes);
-
-        // Intialise frameLayout
-        frameLayout_image_camera = findViewById(R.id.frameLayout_image_camera);
-        frameLayout_image_gallery = findViewById(R.id.frameLayout_image_gallery);
-        frameLayout_image_voice = findViewById(R.id.frameLayout_image_voice);
-        frameLayout_image_recipes = findViewById(R.id.frameLayout_image_recipes);
-
+        // Initialize view binding
+        bind = ActivityComplexSearchBinding.inflate(getLayoutInflater());
+        setContentView(bind.getRoot());
+        setUpViews();
         // Create executor service for background tasks
         executorService = Executors.newFixedThreadPool(2);
 
@@ -229,13 +199,37 @@ public class ComplexSearchActivity extends AppCompatActivity implements Navigati
         // onClickListener for search recipes function
         cardView_search_recipes.setOnClickListener(v -> navigateToSearchedQueryRecipes());
 
-        // Set up navigation view
+    }
+
+    private void setUpViews() {
+        // Initialize views
+        imageView_classify = findViewById(R.id.imageView);
+        resultTextView = findViewById(R.id.resultTextView);
+
+        // Navigation Menu setup
+        DrawerLayout drawerLayout = bind.drawerLayout;
+        NavigationView navigationView = bind.navView;
+        MaterialToolbar toolbar = bind.toolbar;
+
+        // Set up nav menu
         navigationView.bringToFront();
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(ComplexSearchActivity.this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(ComplexSearchActivity.this);
-        navigationView.setCheckedItem(nav_home);
+        navigationView.setCheckedItem(R.id.nav_complex_search);
+
+        // Intialise cardViews
+        cardView_open_camera = findViewById(R.id.cardView_open_camera);
+        cardView_open_gallery = findViewById(R.id.cardView_open_gallery);
+        cardView_start_recognition = findViewById(R.id.cardView_start_recognition);
+        cardView_search_recipes = findViewById(R.id.cardView_search_recipes);
+
+        // Intialise frameLayout
+        frameLayout_image_camera = findViewById(R.id.frameLayout_image_camera);
+        frameLayout_image_gallery = findViewById(R.id.frameLayout_image_gallery);
+        frameLayout_image_voice = findViewById(R.id.frameLayout_image_voice);
+        frameLayout_image_recipes = findViewById(R.id.frameLayout_image_recipes);
     }
 
     // Function to check for camera permissions, prompts if required
@@ -611,20 +605,17 @@ public class ComplexSearchActivity extends AppCompatActivity implements Navigati
             finish();
             startActivity(intent6);
         } else if (itemId == R.id.nav_complex_search) {
-            Intent intent7 = new Intent(ComplexSearchActivity.this, ComplexSearchActivity.class);
+            // Nothing happens
+        } else if (itemId == R.id.nav_shoppinglist) {
+            Intent intent8 = new Intent(ComplexSearchActivity.this, ShopCartActivity.class);
             finish();
-            startActivity(intent7);
+            startActivity(intent8);
+        } else if (itemId == R.id.nav_locationfinder) {
+            Intent intent9 = new Intent(ComplexSearchActivity.this, LocationActivity.class);
+            finish();
+            startActivity(intent9);
         }
-        //        } else if (itemId = R.id.nav_shoppinglist) {
-//            Intent intent8 = new Intent(MainActivity.this, ShoppingListActivity.class);
-//            finish();
-//            startActivity(intent8);
-//        } else if (itemId = R.id.nav_locationfinder) {
-//            Intent intent9 = new Intent(MainActivity.this, LocationActivity.class);
-//            finish();
-//            startActivity(intent9);
-//        }
-        drawerLayout.closeDrawer(GravityCompat.START);
+        bind.drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 

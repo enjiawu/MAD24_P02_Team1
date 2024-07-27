@@ -52,6 +52,8 @@ import sg.edu.np.mad.pocketchef.Models.CategoryBean;
 import sg.edu.np.mad.pocketchef.Models.Comment;
 import sg.edu.np.mad.pocketchef.Models.Notification;
 import sg.edu.np.mad.pocketchef.Models.Post;
+import sg.edu.np.mad.pocketchef.databinding.ActivityAdvancedSearchBinding;
+import sg.edu.np.mad.pocketchef.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     boolean isReady = false;
@@ -65,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final String CHANNEL_ID = "pocket_chef";
     private static final float SWIPE_THRESHOLD = 10; // pixels, reduce for higher sensitivity
     private static final float SWIPE_VELOCITY_THRESHOLD = 50; // pixels/second, reduce for higher sensitivity
+    private ActivityMainBinding bind;
 
     DrawerLayout drawerLayout;
     NavigationView navigationView;
@@ -106,7 +109,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //For username
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
-
+        // Initialize view binding
+        bind = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(bind.getRoot());
         // Initialize Firebase Database
         mUserRef = FirebaseDatabase.getInstance().getReference("users");
         usernameTv = findViewById(R.id.textView_username);
@@ -123,19 +128,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         notificationButton = findViewById(R.id.notification_button);
         notificationActivity();
 
-        //Not sure if this is needed
-        //menu.findItem(R.id.nav_logout).setVisible(false);
-
-        //这是添加默认收藏夹的，不要注释
+        //Create default favourites to test functionalities
         CreateDefaultFavorites();
-        // Set up navigation view
-        navigationView.bringToFront();
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
-        navigationView.setNavigationItemSelectedListener(this);
-        navigationView.setCheckedItem(nav_home);
-
 
         // Custom setOnTouchListener for swipe gestures (in-built Gesture Detector is not working)
         motionLayout.setOnTouchListener(new View.OnTouchListener() {
@@ -263,9 +257,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivity(intent);
         });
 
-        // Card View On Click Listener for ProfileActivity (changing this to shoppinglist)
+        // Card View On Click Listener for ShopCartActivity
         cardView4.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+            Intent intent = new Intent(MainActivity.this, ShopCartActivity.class);
             startActivity(intent);
         });
 
@@ -501,18 +495,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void FindViews() {
         motionLayout = findViewById(R.id.main_activity);
-        drawerLayout = findViewById(R.id.drawer_layout);
-        navigationView = findViewById(R.id.nav_view);
-        toolbar = findViewById(R.id.toolbar);
-        nav_home = navigationView.getMenu().findItem(R.id.nav_home);
-        nav_recipes = navigationView.getMenu().findItem(R.id.nav_recipes);
-        nav_search = navigationView.getMenu().findItem(R.id.nav_search);
-        nav_logout = navigationView.getMenu().findItem(R.id.nav_logout);
-        nav_profile = navigationView.getMenu().findItem(R.id.nav_profile);
-        nav_favourites = navigationView.getMenu().findItem(R.id.nav_favourites);
-        nav_community = navigationView.getMenu().findItem(R.id.nav_community);
-        nav_pantry = navigationView.getMenu().findItem(R.id.nav_pantry);
-        nav_complex_search = navigationView.getMenu().findItem(R.id.nav_complex_search);
+        // Navigation Menu setup
+        DrawerLayout drawerLayout = bind.drawerLayout;
+        NavigationView navigationView = bind.navView;
+        MaterialToolbar toolbar = bind.toolbar;
+
+
+        // Set up nav menu
+        navigationView.bringToFront();
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(MainActivity.this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+        navigationView.setNavigationItemSelectedListener(MainActivity.this);
+        navigationView.setCheckedItem(R.id.nav_search);
+
+        // Set Up Card Views
         cardView1 = findViewById(R.id.cardView1);
         cardView2 = findViewById(R.id.cardView2);
         cardView3 = findViewById(R.id.cardView3);
@@ -587,16 +584,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent intent7 = new Intent(MainActivity.this, ComplexSearchActivity.class);
             finish();
             startActivity(intent7);
+        } else if (itemId == R.id.nav_shoppinglist) {
+            Intent intent8 = new Intent(MainActivity.this, ShopCartActivity.class);
+            finish();
+            startActivity(intent8);
+        } else if (itemId == R.id.nav_locationfinder) {
+            Intent intent9 = new Intent(MainActivity.this, LocationActivity.class);
+            finish();
+            startActivity(intent9);
         }
-//        } else if (itemId = R.id.nav_shoppinglist) {
-//            Intent intent8 = new Intent(MainActivity.this, ShoppingListActivity.class);
-//            finish();
-//            startActivity(intent8);
-//        } else if (itemId = R.id.nav_locationfinder) {
-//            Intent intent9 = new Intent(MainActivity.this, LocationActivity.class);
-//            finish();
-//            startActivity(intent9);
-//        }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }

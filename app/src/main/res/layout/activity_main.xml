@@ -615,7 +615,8 @@
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:layout_marginBottom="20dp"
-                        android:scaleType="centerInside" app:srcCompat="@drawable/ic_shoppinglist"/>
+                        android:scaleType="centerInside"
+                        app:srcCompat="@drawable/ic_shoppinglist" />
                 </FrameLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -779,7 +780,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="Feature 8"
+                    android:text="@string/cardView8_text"
                     android:textSize="24sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
