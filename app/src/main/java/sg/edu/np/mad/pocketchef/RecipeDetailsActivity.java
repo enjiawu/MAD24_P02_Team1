@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -72,6 +74,8 @@ import sg.edu.np.mad.pocketchef.Models.RecipeDetailsResponse;
 import sg.edu.np.mad.pocketchef.Models.ShoppingCart;
 import sg.edu.np.mad.pocketchef.Models.SimilarRecipeResponse;
 import sg.edu.np.mad.pocketchef.Models.SummaryParser;
+import sg.edu.np.mad.pocketchef.databinding.ActivityRecipeBinding;
+import sg.edu.np.mad.pocketchef.databinding.ActivityRecipeDetailsBinding;
 
 public class RecipeDetailsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -91,12 +95,12 @@ public class RecipeDetailsActivity extends AppCompatActivity
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     MaterialToolbar toolbar;
-    MenuItem nav_home, nav_recipes, nav_search, nav_logout, nav_profile, nav_favourites, nav_community, nav_pantry, nav_complex_search;
     ConstraintLayout recipeDetailsLayout, nutritionLabelLayout;
     MaterialButton buttonNutritionLabel;
     RecipeDetailsC recipeDetailsC;
     ImageView btnFavorite;
     ImageButton btn_shop;
+    private ActivityRecipeDetailsBinding bind;
     ExecutorService executorService;
 
     @Override
@@ -109,6 +113,9 @@ public class RecipeDetailsActivity extends AppCompatActivity
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        // Initialize view binding
+        bind = ActivityRecipeDetailsBinding.inflate(getLayoutInflater());
+        setContentView(bind.getRoot());
         executorService = Executors.newCachedThreadPool();
         findViews();
         recipeId = Integer.parseInt(getIntent().getStringExtra("id"));
@@ -116,12 +123,11 @@ public class RecipeDetailsActivity extends AppCompatActivity
         loadRecipeDetailsWithStaggeredApiCalls();
         // Set up nav menu
         navigationView.bringToFront();
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(RecipeDetailsActivity.this,
-                drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-        navigationView.setNavigationItemSelectedListener(RecipeDetailsActivity.this);
-        navigationView.setCheckedItem(nav_home);
+        navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setCheckedItem(R.id.nav_recipes);
         loadNutritionLabelImage(); // Load the image when the layout becomes visible
         // Set up the OnClickListener for the button
         buttonNutritionLabel.setOnClickListener(v -> {
@@ -133,6 +139,7 @@ public class RecipeDetailsActivity extends AppCompatActivity
         });
 
         btn_shop.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
                 showShopDialog();
@@ -194,16 +201,10 @@ public class RecipeDetailsActivity extends AppCompatActivity
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         toolbar = findViewById(R.id.toolbar);
-        // Initialise Menu
-        nav_home = navigationView.getMenu().findItem(R.id.nav_home);
-        nav_recipes = navigationView.getMenu().findItem(R.id.nav_recipes);
-        nav_search = navigationView.getMenu().findItem(R.id.nav_search);
-        nav_logout = navigationView.getMenu().findItem(R.id.nav_logout);
-        nav_profile = navigationView.getMenu().findItem(R.id.nav_profile);
-        nav_favourites = navigationView.getMenu().findItem(R.id.nav_favourites);
-        nav_community = navigationView.getMenu().findItem(R.id.nav_community);
-        nav_pantry = navigationView.getMenu().findItem(R.id.nav_pantry);
-        nav_complex_search = navigationView.getMenu().findItem(R.id.nav_complex_search);
+        // Navigation Menu setup
+        DrawerLayout drawerLayout = bind.drawerLayout;
+        NavigationView navigationView = bind.navView;
+        MaterialToolbar toolbar = bind.toolbar;
         // Initialise Layout
         recipeDetailsLayout = findViewById(R.id.recipe_details);
         nutritionLabelLayout = findViewById(R.id.nutrition_dialog_layout);
@@ -376,6 +377,7 @@ public class RecipeDetailsActivity extends AppCompatActivity
                 .into(imageView_nutrition);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void showShopDialog() {
 
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_add_to_shop, null);

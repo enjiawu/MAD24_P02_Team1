@@ -5,13 +5,13 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingBottom="8dp"
         android:text="Add to shopping cart"
         android:textSize="18sp"
-        android:textStyle="bold"
-        android:paddingBottom="8dp" />
+        android:textStyle="bold" />
 
     <Spinner
         android:id="@+id/spinner_categories"
@@ -20,31 +20,36 @@
         android:layout_marginBottom="16dp"
         android:padding="10dp" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/bt_new_category"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/paletteorange"
         android:text="Create New cart"
-        />
+        android:textColor="@color/palettedarkblue" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_marginTop="16dp"
-        android:gravity="end">
+        android:gravity="end"
+        android:orientation="horizontal">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/button_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cancel" />
+            android:backgroundTint="@color/paletteorange"
+            android:text="Cancel"
+            android:textColor="@color/palettedarkblue" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/button_save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:backgroundTint="@color/paletteorange"
             android:text="Add"
-            android:layout_marginStart="8dp" />
+            android:textColor="@color/palettedarkblue" />
     </LinearLayout>
 </LinearLayout>

@@ -1,0 +1,115 @@
+Index: app/src/main/java/sg/edu/np/mad/pocketchef/ImageSearchActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package sg.edu.np.mad.pocketchef;\r\n\r\nimport android.content.Intent;\r\nimport android.graphics.Bitmap;\r\nimport android.graphics.BitmapFactory;\r\nimport android.net.Uri;\r\nimport android.os.Bundle;\r\nimport android.provider.MediaStore;\r\nimport android.util.Log;\r\nimport android.widget.ImageView;\r\n\r\nimport androidx.activity.result.ActivityResultLauncher;\r\nimport androidx.activity.result.contract.ActivityResultContracts;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\nimport com.google.android.material.button.MaterialButton;\r\nimport com.google.android.material.textview.MaterialTextView;\r\n\r\nimport org.tensorflow.lite.Interpreter;\r\nimport org.tensorflow.lite.support.common.FileUtil;\r\nimport org.tensorflow.lite.support.image.TensorImage;\r\nimport org.tensorflow.lite.support.image.ops.ResizeOp;\r\nimport org.tensorflow.lite.support.tensorbuffer.TensorBuffer;\r\n\r\nimport java.io.IOException;\r\nimport java.io.InputStream;\r\nimport java.nio.MappedByteBuffer;\r\nimport java.util.List;\r\nimport java.util.concurrent.ExecutorService;\r\nimport java.util.concurrent.Executors;\r\n\r\npublic class ImageSearchActivity extends AppCompatActivity {\r\n\r\n    private static final String TAG = \"ImageSearchActivity\";\r\n    private ImageView imageView;\r\n    private MaterialTextView resultTextView;\r\n    private Interpreter tflite;\r\n    private List<String> labels;\r\n    private ExecutorService executorService;\r\n    private String classifiedLabel;\r\n    private MaterialButton searchButton, galleryButton, cameraButton;\r\n\r\n    private final ActivityResultLauncher<Intent> cameraLauncher = registerForActivityResult(\r\n            new ActivityResultContracts.StartActivityForResult(),\r\n            result -> {\r\n                if (result.getResultCode() == RESULT_OK && result.getData() != null) {\r\n                    Bundle extras = result.getData().getExtras();\r\n                    Bitmap imageBitmap = (Bitmap) extras.get(\"data\");\r\n                    if (imageBitmap != null) {\r\n                        Bitmap resizedBitmap = resizeBitmap(imageBitmap);\r\n                        imageView.setImageBitmap(resizedBitmap);\r\n                        classifyImage(resizedBitmap);\r\n                    }\r\n                }\r\n            }\r\n    );\r\n\r\n    private final ActivityResultLauncher<Intent> galleryLauncher = registerForActivityResult(\r\n            new ActivityResultContracts.StartActivityForResult(),\r\n            result -> {\r\n                if (result.getResultCode() == RESULT_OK && result.getData() != null) {\r\n                    Uri selectedImageUri = result.getData().getData();\r\n                    if (selectedImageUri != null) {\r\n                        try (InputStream inputStream = getContentResolver().openInputStream(selectedImageUri)) {\r\n                            Bitmap imageBitmap = BitmapFactory.decodeStream(inputStream);\r\n                            Bitmap resizedBitmap = resizeBitmap(imageBitmap);\r\n                            imageView.setImageBitmap(resizedBitmap);\r\n                            classifyImage(resizedBitmap);\r\n                        } catch (IOException e) {\r\n                            Log.e(TAG, \"Error loading image from gallery\", e);\r\n                        }\r\n                    }\r\n                }\r\n            }\r\n    );\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_image_search);\r\n\r\n        // Initialize views\r\n        imageView = findViewById(R.id.imageView);\r\n        resultTextView = findViewById(R.id.resultTextView);\r\n        searchButton = findViewById(R.id.searchButton);\r\n        galleryButton = findViewById(R.id.galleryButton);\r\n        cameraButton = findViewById(R.id.cameraButton);\r\n\r\n        // Create executor service for background tasks\r\n        executorService = Executors.newFixedThreadPool(2);\r\n\r\n        // Load the TFLite model and labels in background\r\n        loadModelAndLabels();\r\n\r\n        // Set click listeners for search, camera and gallery buttons\r\n        cameraButton.setOnClickListener(view -> {\r\n            if (isEmulator()) {\r\n                // Use a predefined image for testing on emulator\r\n                Bitmap imageBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.test);\r\n                Bitmap resizedBitmap = resizeBitmap(imageBitmap);\r\n                imageView.setImageBitmap(resizedBitmap);\r\n                classifyImage(resizedBitmap);\r\n            } else {\r\n                openCamera();\r\n            }\r\n        });\r\n        galleryButton.setOnClickListener(view -> openGallery());\r\n        searchButton.setOnClickListener(view -> navigateToAnotherActivity());\r\n    }\r\n\r\n    // Open camera to capture image\r\n    private void openCamera() {\r\n        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);\r\n        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {\r\n            cameraLauncher.launch(takePictureIntent);\r\n        }\r\n    }\r\n\r\n    // Open gallery to select image\r\n    private void openGallery() {\r\n        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);\r\n        intent.setType(\"image/*\");\r\n        galleryLauncher.launch(intent);\r\n    }\r\n\r\n    @Override\r\n    protected void onDestroy() {\r\n        super.onDestroy();\r\n        // Shutdown executor service\r\n        executorService.shutdown();\r\n        // Close TFLite interpreter\r\n        if (tflite != null) {\r\n            tflite.close();\r\n        }\r\n    }\r\n\r\n    // Load TFLite model and labels in background\r\n    private void loadModelAndLabels() {\r\n        executorService.execute(() -> {\r\n            try {\r\n                MappedByteBuffer tfliteModel = FileUtil.loadMappedFile(ImageSearchActivity.this, \"food101_mobilenet_quant.tflite\");\r\n                tflite = new Interpreter(tfliteModel);\r\n                labels = FileUtil.loadLabels(ImageSearchActivity.this, \"labels.txt\");\r\n            } catch (IOException e) {\r\n                Log.e(TAG, \"Error loading TFLite model or labels\", e);\r\n            }\r\n        });\r\n    }\r\n\r\n    // Classify the given image\r\n    private void classifyImage(Bitmap bitmap) {\r\n        executorService.execute(() -> {\r\n            try {\r\n                // Load bitmap into TensorImage and resize to required input size\r\n                TensorImage tensorImage = new TensorImage();\r\n                tensorImage.load(bitmap);\r\n                tensorImage = new ResizeOp(224, 224, ResizeOp.ResizeMethod.BILINEAR).apply(tensorImage);\r\n\r\n                // Prepare output buffer for classification\r\n                TensorBuffer outputBuffer = TensorBuffer.createFixedSize(new int[]{1, 101}, tensorImage.getDataType());\r\n                // Run inference on TFLite interpreter\r\n                tflite.run(tensorImage.getBuffer().rewind(), outputBuffer.getBuffer().rewind());\r\n\r\n                // Retrieve output probabilities and find the index of maximum probability\r\n                float[] outputArray = outputBuffer.getFloatArray();\r\n                int maxIndex = getMaxIndex(outputArray);\r\n                classifiedLabel = labels.get(maxIndex);\r\n                float confidenceValue = outputArray[maxIndex];\r\n                float confidenceLevel = (confidenceValue / 255) * 100;\r\n                String result = String.format(\"This is probably a %s : %.2f%% confidence level\", classifiedLabel, confidenceLevel);\r\n\r\n                // Update result on the UI thread\r\n                runOnUiThread(() -> resultTextView.setText(result));\r\n            } catch (Exception e) {\r\n                Log.e(TAG, \"Error during image classification\", e);\r\n                runOnUiThread(() -> resultTextView.setText(\"Error classifying image\"));\r\n            }\r\n        });\r\n    }\r\n\r\n    // Utility method to find index of maximum value in an array\r\n    private int getMaxIndex(float[] array) {\r\n        int maxIndex = -1;\r\n        float maxValue = Float.MIN_VALUE;\r\n        for (int i = 0; i < array.length; i++) {\r\n            if (array[i] > maxValue) {\r\n                maxValue = array[i];\r\n                maxIndex = i;\r\n            }\r\n        }\r\n        return maxIndex;\r\n    }\r\n\r\n    // Utility method to check if the app is running on an emulator\r\n    private boolean isEmulator() {\r\n        return android.os.Build.MODEL.contains(\"sdk\") || android.os.Build.MODEL.contains(\"Emulator\");\r\n    }\r\n\r\n    // Utility method to resize bitmap to required input size\r\n    private Bitmap resizeBitmap(Bitmap bitmap) {\r\n        int newWidth = 224;\r\n        int newHeight = 224;\r\n        return Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true);\r\n    }\r\n\r\n    // Method to navigate to another activity\r\n    private void navigateToAnotherActivity() {\r\n        Intent intent = new Intent(this, SearchedQueryRecipesOutput.class);\r\n        intent.putExtra(\"SEARCH_QUERY\", classifiedLabel);\r\n        startActivity(intent);\r\n    }\r\n}\r\n
+===================================================================
+diff --git a/app/src/main/java/sg/edu/np/mad/pocketchef/ImageSearchActivity.java b/app/src/main/java/sg/edu/np/mad/pocketchef/ImageSearchActivity.java
+--- a/app/src/main/java/sg/edu/np/mad/pocketchef/ImageSearchActivity.java	
++++ b/app/src/main/java/sg/edu/np/mad/pocketchef/ImageSearchActivity.java	
+@@ -40,33 +40,45 @@
+     private String classifiedLabel;
+     private MaterialButton searchButton, galleryButton, cameraButton;
+ 
++    // Launcher handles results from camera intent
+     private final ActivityResultLauncher<Intent> cameraLauncher = registerForActivityResult(
+             new ActivityResultContracts.StartActivityForResult(),
+             result -> {
++                // Checks result is OK and not null (prompts ok or retry)
+                 if (result.getResultCode() == RESULT_OK && result.getData() != null) {
++                    // Retrieves the image bitmap from the result
+                     Bundle extras = result.getData().getExtras();
+                     Bitmap imageBitmap = (Bitmap) extras.get("data");
+                     if (imageBitmap != null) {
++                        // Resize bitmap to set into image view, has to be resized for image classification
+                         Bitmap resizedBitmap = resizeBitmap(imageBitmap);
+                         imageView.setImageBitmap(resizedBitmap);
++                        // Classify image, calls classifyImage method
+                         classifyImage(resizedBitmap);
+                     }
+                 }
+             }
+     );
+ 
++    // Launcher handles results from gallery intent
+     private final ActivityResultLauncher<Intent> galleryLauncher = registerForActivityResult(
+             new ActivityResultContracts.StartActivityForResult(),
+             result -> {
++                // Check if result is OK and not null (prompts ok or retry)
+                 if (result.getResultCode() == RESULT_OK && result.getData() != null) {
++                    // Retrives image URI from result (from gallery is different logic)
+                     Uri selectedImageUri = result.getData().getData();
+                     if (selectedImageUri != null) {
+                         try (InputStream inputStream = getContentResolver().openInputStream(selectedImageUri)) {
++                            // Decode image URI into bitmap
+                             Bitmap imageBitmap = BitmapFactory.decodeStream(inputStream);
++                            // Resize bitmap and set to image view
+                             Bitmap resizedBitmap = resizeBitmap(imageBitmap);
+                             imageView.setImageBitmap(resizedBitmap);
++                            // Classify image, calls classifyImage method
+                             classifyImage(resizedBitmap);
+                         } catch (IOException e) {
++                            // Logging errors if any encountered
+                             Log.e(TAG, "Error loading image from gallery", e);
+                         }
+                     }
+@@ -77,16 +89,17 @@
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
++        // Setting content view
+         setContentView(R.layout.activity_image_search);
+ 
+-        // Initialize views
++        // Initialize views for layout
+         imageView = findViewById(R.id.imageView);
+         resultTextView = findViewById(R.id.resultTextView);
+         searchButton = findViewById(R.id.searchButton);
+         galleryButton = findViewById(R.id.galleryButton);
+         cameraButton = findViewById(R.id.cameraButton);
+ 
+-        // Create executor service for background tasks
++        // Create executor service for background tasks (without this I think it will slow app)
+         executorService = Executors.newFixedThreadPool(2);
+ 
+         // Load the TFLite model and labels in background
+@@ -95,12 +108,13 @@
+         // Set click listeners for search, camera and gallery buttons
+         cameraButton.setOnClickListener(view -> {
+             if (isEmulator()) {
+-                // Use a predefined image for testing on emulator
++                // Use a predefined image for testing on emulator [I do not have a webcam to test]
+                 Bitmap imageBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.test);
+                 Bitmap resizedBitmap = resizeBitmap(imageBitmap);
+                 imageView.setImageBitmap(resizedBitmap);
+                 classifyImage(resizedBitmap);
+             } else {
++                // Otherwise open camera to capture image
+                 openCamera();
+             }
+         });
+@@ -111,7 +125,9 @@
+     // Open camera to capture image
+     private void openCamera() {
+         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
++        // Check if app can handle camera intent
+         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
++            // Launch camera activity using camera launcher
+             cameraLauncher.launch(takePictureIntent);
+         }
+     }
+@@ -128,13 +144,13 @@
+         super.onDestroy();
+         // Shutdown executor service
+         executorService.shutdown();
+-        // Close TFLite interpreter
++        // Close TFLite interpreter (have to do this to prevent memory leak?)
+         if (tflite != null) {
+             tflite.close();
+         }
+     }
+ 
+-    // Load TFLite model and labels in background
++    // Load TFLite model and labels in background, NOTE: CPU Intensive, GPU delegation crashes app.
+     private void loadModelAndLabels() {
+         executorService.execute(() -> {
+             try {

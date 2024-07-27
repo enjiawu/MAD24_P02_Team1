@@ -34,56 +34,47 @@ import sg.edu.np.mad.pocketchef.Adapters.RandomRecipeAdapter;
 import sg.edu.np.mad.pocketchef.Listener.RdmRecipeRespListener;
 import sg.edu.np.mad.pocketchef.Listener.RecipeClickListener;
 import sg.edu.np.mad.pocketchef.Models.RandomRecipeApiResponse;
+import sg.edu.np.mad.pocketchef.databinding.ActivityRecipeBinding;
 
 public class RecipeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final String EXTRA_RECIPE_ID = "id";
     private static final int SCROLL_THRESHOLD = 2;
     private RequestManager requestManager;
-    private RecyclerView recyclerView;
-    private Spinner spinner;
     private final List<String> tags = new ArrayList<>();
     private SearchView searchView;
     private ProgressBar progressBar;
     private int previousScrollPosition = 0;
-    DrawerLayout drawerLayout;
-    NavigationView navigationView;
-    MaterialToolbar toolbar;
-    MenuItem nav_home, nav_recipes, nav_search, nav_logout, nav_profile, nav_favourites, nav_community, nav_pantry, nav_complex_search, nav_shoppinglist, nav_locationfinder;
-    View view;
+
+    // Binding object
+    private ActivityRecipeBinding bind;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_recipe);
-        // Initialise views and listener
+
+        // Initialize view binding
+        bind = ActivityRecipeBinding.inflate(getLayoutInflater());
+        setContentView(bind.getRoot());
+
+        // Initialize views
         setupViews();
         setupListeners();
         requestManager = new RequestManager(this);
     }
 
     private void setupViews() {
-        view = findViewById(R.id.recipe_details);
-        searchView = findViewById(R.id.searchView_home);
-        spinner = findViewById(R.id.spinner_tags);
-        recyclerView = findViewById(R.id.recycler_random_recipes);
-        progressBar = findViewById(R.id.progressBar);
-        // Navigation Menu set up
-        drawerLayout = findViewById(R.id.drawer_layout);
-        navigationView = findViewById(R.id.nav_view);
-        toolbar = findViewById(R.id.toolbar);
-        nav_home = navigationView.getMenu().findItem(R.id.nav_home);
-        nav_recipes = navigationView.getMenu().findItem(R.id.nav_recipes);
-        nav_search = navigationView.getMenu().findItem(R.id.nav_search);
-        nav_logout = navigationView.getMenu().findItem(R.id.nav_logout);
-        nav_profile = navigationView.getMenu().findItem(R.id.nav_profile);
-        nav_favourites = navigationView.getMenu().findItem(R.id.nav_favourites);
-        nav_community = navigationView.getMenu().findItem(R.id.nav_community);
-        nav_pantry = navigationView.getMenu().findItem(R.id.nav_pantry);
-        nav_complex_search = navigationView.getMenu().findItem(R.id.nav_complex_search);
-        nav_shoppinglist = navigationView.getMenu().findItem(R.id.nav_shoppinglist);
-        nav_locationfinder = navigationView.getMenu().findItem(R.id.nav_locationfinder);
-        // Spinner set up
+        searchView = bind.searchViewHome;
+        Spinner spinner = bind.spinnerTags;
+        RecyclerView recyclerView = bind.recyclerRandomRecipes;
+        progressBar = bind.progressBar;
+
+        // Navigation Menu setup
+        DrawerLayout drawerLayout = bind.drawerLayout;
+        NavigationView navigationView = bind.navView;
+        MaterialToolbar toolbar = bind.toolbar;
+
+        // Spinner setup
         ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(
                 this,
                 R.array.tags,
@@ -91,13 +82,14 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
         );
         arrayAdapter.setDropDownViewResource(R.layout.spinner_inner_text);
         spinner.setAdapter(arrayAdapter);
+
         // Set up nav menu
         navigationView.bringToFront();
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(RecipeActivity.this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(RecipeActivity.this);
-        navigationView.setCheckedItem(nav_home);
+        navigationView.setCheckedItem(R.id.nav_home);
     }
 
     private void setupListeners() {
@@ -116,7 +108,7 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
             }
         });
 
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        bind.spinnerTags.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 tags.clear();
@@ -129,7 +121,7 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
             }
         });
 
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        bind.recyclerRandomRecipes.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
@@ -144,8 +136,8 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
 
     // Methods for scrolling function, transition motion layout
     private boolean hasScrolledEnough() {
-        LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-        if (layoutManager != null && recyclerView.getAdapter() != null) {
+        LinearLayoutManager layoutManager = (LinearLayoutManager) bind.recyclerRandomRecipes.getLayoutManager();
+        if (layoutManager != null && bind.recyclerRandomRecipes.getAdapter() != null) {
             int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
             return lastVisibleItemPosition >= SCROLL_THRESHOLD;
         }
@@ -153,7 +145,7 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
     }
 
     private boolean shouldTransitionToStart() {
-        LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+        LinearLayoutManager layoutManager = (LinearLayoutManager) bind.recyclerRandomRecipes.getLayoutManager();
         if (layoutManager != null) {
             int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
             return firstVisibleItemPosition <= SCROLL_THRESHOLD;
@@ -162,17 +154,16 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
     }
 
     private void transitionMotionLayoutToEnd() {
-        MotionLayout motionLayout = findViewById(R.id.main);
+        MotionLayout motionLayout = bind.main;
         motionLayout.transitionToEnd();
     }
 
     private void transitionMotionLayoutToStart() {
-        MotionLayout motionLayout = findViewById(R.id.main);
+        MotionLayout motionLayout = bind.main;
         motionLayout.transitionToStart();
     }
 
     // Methods to call API
-    // Methods to fetch RandomRecipes
     private void fetchRandomRecipes() {
         // Show a Snackbar message indicating that search is in progress
         Snackbar.make(findViewById(android.R.id.content), "Searching Random Recipes", Snackbar.LENGTH_SHORT).show();
@@ -194,16 +185,15 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
     }
 
     private void setupRandomRecipeRecyclerView(RandomRecipeApiResponse response) {
+        RecyclerView recyclerView = bind.recyclerRandomRecipes;
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(RecipeActivity.this, 1));
-        RandomRecipeAdapter randomRecipeAdapter = new RandomRecipeAdapter(RecipeActivity.this,
-                response.getRecipes(), recipeClickListener);
+        RandomRecipeAdapter randomRecipeAdapter = new RandomRecipeAdapter(RecipeActivity.this, response.getRecipes(), recipeClickListener);
         recyclerView.setAdapter(randomRecipeAdapter);
     }
 
     private final RecipeClickListener recipeClickListener = id ->
-            startActivity(new Intent(RecipeActivity.this, RecipeDetailsActivity.class)
-                    .putExtra(EXTRA_RECIPE_ID, id));
+            startActivity(new Intent(RecipeActivity.this, RecipeDetailsActivity.class).putExtra(EXTRA_RECIPE_ID, id));
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -213,17 +203,15 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
             finish();
             startActivity(intent);
         } else if (itemId == R.id.nav_recipes) {
-            // Nothing Happens
-        } else if (itemId == R.id.nav_profile) {
-            Intent intent2 = new Intent(RecipeActivity.this, ProfileActivity.class);
-            finish();
-            startActivity(intent2);
+            // Nothing happens
         } else if (itemId == R.id.nav_favourites) {
             Intent intent3 = new Intent(RecipeActivity.this, CreateCategoryActivity.class);
             finish();
             startActivity(intent3);
         } else if (itemId == R.id.nav_search) {
             Intent intent4 = new Intent(RecipeActivity.this, AdvancedSearchActivity.class);
+        } else if (itemId == R.id.nav_profile) {
+            Intent intent4 = new Intent(RecipeActivity.this, ProfileActivity.class);
             finish();
             startActivity(intent4);
         } else if (itemId == R.id.nav_logout) {
@@ -235,30 +223,20 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
             Intent intent6 = new Intent(RecipeActivity.this, CommunityActivity.class);
             finish();
             startActivity(intent6);
-        } else if (itemId == R.id.nav_pantry) {
-            Intent intent7 = new Intent(RecipeActivity.this, PantryActivity.class);
+        } else if (itemId == R.id.nav_complex_search) {
+            Intent intent7 = new Intent(RecipeActivity.this, ComplexSearchActivity.class);
             finish();
             startActivity(intent7);
-        } else if (itemId == R.id.nav_complex_search) {
-            Intent intent8 = new Intent(RecipeActivity.this, ComplexSearchActivity.class);
+        } else if (itemId == R.id.nav_shoppinglist) {
+            Intent intent8 = new Intent(RecipeActivity.this, ShopCartActivity.class);
             finish();
             startActivity(intent8);
+        } else if (itemId == R.id.nav_locationfinder) {
+            Intent intent9 = new Intent(RecipeActivity.this, LocationActivity.class);
+            finish();
+            startActivity(intent9);
         }
-        //        } else if (itemId = R.id.nav_shoppinglist) {
-//            Intent intent8 = new Intent(MainActivity.this, ShoppingListActivity.class);
-//            finish();
-//            startActivity(intent8);
-//        } else if (itemId = R.id.nav_locationfinder) {
-//            Intent intent9 = new Intent(MainActivity.this, LocationActivity.class);
-//            finish();
-//            startActivity(intent9);
-//        }
-        drawerLayout.closeDrawer(GravityCompat.START);
+        bind.drawerLayout.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
-        super.onPointerCaptureChanged(hasCapture);
     }
 }
