@@ -51,6 +51,8 @@ import sg.edu.np.mad.pocketchef.Listener.PostOnHoldListener;
 import sg.edu.np.mad.pocketchef.Models.Comment;
 import sg.edu.np.mad.pocketchef.Models.Notification;
 import sg.edu.np.mad.pocketchef.Models.Post;
+import sg.edu.np.mad.pocketchef.databinding.ActivityAdvancedSearchBinding;
+import sg.edu.np.mad.pocketchef.databinding.ActivityCommunityBinding;
 
 // Enjia - Stage 2
 public class CommunityActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
@@ -60,7 +62,6 @@ public class CommunityActivity extends AppCompatActivity implements NavigationVi
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     MaterialToolbar toolbar;
-    MenuItem nav_home, nav_recipes, nav_search, nav_logout, nav_profile, nav_favourites, nav_community, nav_pantry, nav_complex_search, nav_shoppinglist, nav_locationfinder;
 
     // XML Variables
     private ProgressBar progressBar;
@@ -79,33 +80,26 @@ public class CommunityActivity extends AppCompatActivity implements NavigationVi
     StorageReference storageReference;
     FirebaseUser currentUser;
 
+    private ActivityCommunityBinding bind;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_community);
-
+        // Initialize view binding
+        bind = ActivityCommunityBinding.inflate(getLayoutInflater());
+        setContentView(bind.getRoot());
         //Setting up views and listeners
         setupViews();
         setupListeners();
     }
 
     private void setupViews() {
-        // Navigation Menu set up
-        drawerLayout = findViewById(R.id.drawer_layout);
-        navigationView = findViewById(R.id.nav_view);
-        toolbar = findViewById(R.id.toolbar);
-        nav_home = navigationView.getMenu().findItem(R.id.nav_home);
-        nav_recipes = navigationView.getMenu().findItem(R.id.nav_recipes);
-        nav_search = navigationView.getMenu().findItem(R.id.nav_search);
-        nav_pantry = navigationView.getMenu().findItem(R.id.nav_pantry);
-        nav_complex_search = navigationView.getMenu().findItem(R.id.nav_complex_search);
-        nav_logout = navigationView.getMenu().findItem(R.id.nav_logout);
-        nav_profile = navigationView.getMenu().findItem(R.id.nav_profile);
-        nav_favourites = navigationView.getMenu().findItem(R.id.nav_favourites);
-        nav_community = navigationView.getMenu().findItem(R.id.nav_community);
-        nav_shoppinglist = navigationView.getMenu().findItem(R.id.nav_shoppinglist);
-        nav_locationfinder = navigationView.getMenu().findItem(R.id.nav_locationfinder);
+        // Navigation Menu setup
+        DrawerLayout drawerLayout = bind.drawerLayout;
+        NavigationView navigationView = bind.navView;
+        MaterialToolbar toolbar = bind.toolbar;
 
         // Set up nav menu
         navigationView.bringToFront();
@@ -113,7 +107,7 @@ public class CommunityActivity extends AppCompatActivity implements NavigationVi
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(CommunityActivity.this);
-        navigationView.setCheckedItem(nav_home);
+        navigationView.setCheckedItem(R.id.nav_community);
 
         //Getting all the variables from the xml file
         progressBar = findViewById(R.id.progressBar);
@@ -596,16 +590,15 @@ public class CommunityActivity extends AppCompatActivity implements NavigationVi
             Intent intent7 = new Intent(CommunityActivity.this, ComplexSearchActivity.class);
             finish();
             startActivity(intent7);
+                } else if (itemId == R.id.nav_shoppinglist) {
+            Intent intent8 = new Intent(CommunityActivity.this, ShopCartActivity.class);
+            finish();
+            startActivity(intent8);
+        } else if (itemId == R.id.nav_locationfinder) {
+            Intent intent9 = new Intent(CommunityActivity.this, LocationActivity.class);
+            finish();
+            startActivity(intent9);
         }
-        //        } else if (itemId = R.id.nav_shoppinglist) {
-//            Intent intent8 = new Intent(MainActivity.this, ShoppingListActivity.class);
-//            finish();
-//            startActivity(intent8);
-//        } else if (itemId = R.id.nav_locationfinder) {
-//            Intent intent9 = new Intent(MainActivity.this, LocationActivity.class);
-//            finish();
-//            startActivity(intent9);
-//        }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }

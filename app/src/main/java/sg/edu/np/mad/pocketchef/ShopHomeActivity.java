@@ -15,8 +15,6 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.common.reflect.TypeToken;
-import com.google.gson.Gson;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.orhanobut.logger.Logger;
@@ -30,13 +28,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import sg.edu.np.mad.pocketchef.Adapters.HomeShopAdapter;
-import sg.edu.np.mad.pocketchef.Models.ExtendedIngredient;
 import sg.edu.np.mad.pocketchef.Models.HomeShopItem;
 import sg.edu.np.mad.pocketchef.Models.ProductResponse;
-import sg.edu.np.mad.pocketchef.Models.ShoppingCart;
 import sg.edu.np.mad.pocketchef.databinding.ActivityShopHomeBinding;
-import sg.edu.np.mad.pocketchef.net.ApiClient;
-import sg.edu.np.mad.pocketchef.net.ApiService;
+import sg.edu.np.mad.pocketchef.Net.ApiClient;
+import sg.edu.np.mad.pocketchef.Net.ApiService;
 
 public class ShopHomeActivity extends AppCompatActivity {
 

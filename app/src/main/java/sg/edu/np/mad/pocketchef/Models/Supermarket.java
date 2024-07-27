@@ -1,4 +1,4 @@
-package sg.edu.np.mad.pocketchef.model;
+package sg.edu.np.mad.pocketchef.Models;
 
 public class Supermarket {
     private String name;

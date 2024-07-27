@@ -3,6 +3,7 @@ package sg.edu.np.mad.pocketchef;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -24,6 +25,7 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.FetchPlaceRequest;
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,6 +37,7 @@ public class LocationActivity extends AppCompatActivity {
 
     private PlacesClient placesClient;
     private PredictionsAdapter adapter;
+    NavigationView navigationView;
     EditText searchEt;
     RecyclerView searchLocationRv;
     private AutocompleteSessionToken sessionToken;
@@ -44,7 +47,6 @@ public class LocationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location);
-
         backIv = findViewById(R.id.backIv);
         searchEt = findViewById(R.id.searchEt);
         searchLocationRv = findViewById(R.id.searchLocationRv);
