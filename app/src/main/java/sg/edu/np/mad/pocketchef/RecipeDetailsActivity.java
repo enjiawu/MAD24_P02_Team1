@@ -38,6 +38,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
 import com.google.android.material.textview.MaterialTextView;
+import com.google.common.reflect.TypeToken;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 import com.kongzue.dialogx.dialogs.InputDialog;
@@ -440,9 +441,8 @@ public class RecipeDetailsActivity extends AppCompatActivity
                         return;
                     }
                     ShoppingCart shoppingCart =data.get(position);
-                    // 反序列化 shoppingCart.items 为 List<ExtendedIngredient>
                     List<ExtendedIngredient> list1 = new Gson().fromJson(shoppingCart.items, new TypeToken<List<ExtendedIngredient>>() {}.getType());
-// 获取 adapter 中的数据
+                    // get adapter data
                     List<ExtendedIngredient> list2 = ingredientsAdapater.getData();
                     list1.addAll(list2);
                     shoppingCart.items = new Gson().toJson(list1);

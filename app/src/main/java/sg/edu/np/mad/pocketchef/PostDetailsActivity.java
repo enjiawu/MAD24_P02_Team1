@@ -71,6 +71,7 @@ import java.util.concurrent.Executors;
 import sg.edu.np.mad.pocketchef.Adapters.PostCommentsAdapter;
 import sg.edu.np.mad.pocketchef.Adapters.PostInfoAdapter;
 import sg.edu.np.mad.pocketchef.Listener.CommentOnHoldListener;
+import sg.edu.np.mad.pocketchef.Models.App;
 import sg.edu.np.mad.pocketchef.Models.CategoryBean;
 import sg.edu.np.mad.pocketchef.Models.Comment;
 import sg.edu.np.mad.pocketchef.Models.Notification;
@@ -775,7 +776,7 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
                         WaitDialog.show("loading.....");
                         ExecutorService executorService = Executors.newSingleThreadExecutor();
                         executorService.execute(() -> {
-                            CategoryBean categoryBean = new CategoryBean("default", s);
+                            CategoryBean categoryBean = new CategoryBean(App.user,"default", s);
                             FavoriteDatabase.getInstance(PostDetailsActivity.this)
                                     .categoryDao().insertCategory(categoryBean);
                             runOnUiThread(() -> {

@@ -47,6 +47,7 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import sg.edu.np.mad.pocketchef.Adapters.PostCommentsAdapter;
+import sg.edu.np.mad.pocketchef.Models.App;
 import sg.edu.np.mad.pocketchef.Models.CategoryBean;
 import sg.edu.np.mad.pocketchef.Models.Comment;
 import sg.edu.np.mad.pocketchef.Models.Notification;
@@ -125,7 +126,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //Not sure if this is needed
         //menu.findItem(R.id.nav_logout).setVisible(false);
 
-
+        //这是添加默认收藏夹的，不要注释
+        CreateDefaultFavorites();
         // Set up navigation view
         navigationView.bringToFront();
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -214,7 +216,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             }
         }).start();
-}
+    }
 
     //To get username
     private void loadProfile() {
