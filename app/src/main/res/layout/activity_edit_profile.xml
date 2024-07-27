@@ -76,7 +76,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- TextView: Label for Full Name -->
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -107,7 +107,7 @@
         app:layout_constraintTop_toBottomOf="@+id/view" />
 
     <!-- TextView: Label for Email -->
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -138,7 +138,7 @@
         app:layout_constraintTop_toBottomOf="@+id/view" />
 
     <!-- TextView: Label for Date of Birth -->
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/dob"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -149,7 +149,7 @@
         app:layout_constraintTop_toBottomOf="@+id/view" />
 
     <!-- TextView for user to select their date of birth -->
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/dobTv"
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -168,14 +168,14 @@
         app:layout_constraintTop_toBottomOf="@+id/view" />
 
     <!-- TextView for when user decides to change their password -->
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/changePasswordTv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:gravity="center"
-        android:text="Change Password?"
+        android:text="@string/changePasswordTv_text"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view" />

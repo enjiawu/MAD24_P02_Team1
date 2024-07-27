@@ -211,10 +211,6 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
             Intent intent8 = new Intent(ProfileActivity.this, ComplexSearchActivity.class);
             finish();
             startActivity(intent8);
-        }else if (itemId == R.id.nav_addfeature3) {
-            Intent intent7 = new Intent(this, ShopCartActivity.class);
-            finish();
-            startActivity(intent7);
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;

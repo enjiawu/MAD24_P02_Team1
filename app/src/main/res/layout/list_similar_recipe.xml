@@ -6,8 +6,9 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    app:cardBackgroundColor="@color/white"
-    app:cardElevation="8dp">
+    app:cardBackgroundColor="@color/palettebeige"
+    app:cardElevation="8dp"
+    app:strokeWidth="0dp">
 
     <LinearLayout
         android:layout_width="150dp"
@@ -17,7 +18,7 @@
         android:orientation="vertical"
         android:padding="4dp">
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/textView_similar_recipe_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -26,29 +27,49 @@
             android:padding="8dp"
             android:scrollHorizontally="true"
             android:singleLine="true"
+            android:text="@string/textView_similar_recipe_title_text"
             android:textAlignment="center"
-            android:textColor="@color/paletteorange"
-            android:textStyle="bold"
-            android:text="@string/textView_similar_recipe_title_text"/>
+            android:textColor="@color/palettedarkblue"
+            android:textStyle="bold" />
 
-        <ImageView
-            android:id="@+id/imageView_similar_recipe"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:scaleType="centerCrop" />
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp">
 
-        <TextView
-            android:id="@+id/textView_similar_recipe_servings"
+            <ImageView
+                android:id="@+id/imageView_similar_recipe"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/similar_recipes_text"
+                android:scaleType="centerCrop" />
+
+        </FrameLayout>
+
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ellipsize="marquee"
-            android:marqueeRepeatLimit="marquee_forever"
-            android:padding="4dp"
-            android:scrollHorizontally="true"
-            android:singleLine="true"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textStyle="italic"
-            android:text="@string/textView_similar_recipe_servings_text"/>
+            app:cardBackgroundColor="@color/palettepeach"
+            app:cardCornerRadius="0dp"
+            app:cardElevation="4dp"
+            app:strokeWidth="0dp">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/textView_similar_recipe_servings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="marquee"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:padding="4dp"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:text="@string/textView_similar_recipe_servings_text"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textStyle="italic" />
+
+        </com.google.android.material.card.MaterialCardView>
+
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

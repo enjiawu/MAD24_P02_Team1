@@ -36,6 +36,8 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
+
+import com.google.android.material.textview.MaterialTextView;
 import com.google.common.reflect.TypeToken;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
@@ -77,7 +79,7 @@ public class RecipeDetailsActivity extends AppCompatActivity
     // Global variables for activity
     private static final long API_REQUEST_DELAY = 1000;
     int recipeId;
-    TextView textView_meal_name, textView_meal_source, textView_meal_servings, textView_meal_ready, textView_meal_price,
+    MaterialTextView textView_meal_name, textView_meal_source, textView_meal_servings, textView_meal_ready, textView_meal_price,
             textView_protein_value, textView_fat_value, textView_calories_value, textView_daily_requirements_coverage_value;
     ImageView imageView_meal_image, imageView_nutrition;
     RecyclerView recycler_meal_ingredients, recycler_meal_similar, recycler_meal_instructions;
@@ -359,10 +361,6 @@ public class RecipeDetailsActivity extends AppCompatActivity
             Intent intent8 = new Intent(RecipeDetailsActivity.this, ComplexSearchActivity.class);
             finish();
             startActivity(intent8);
-        }else if(itemId == R.id.nav_addfeature3){
-            Intent intent9 = new Intent(this, ShopCartActivity.class);
-            finish();
-            startActivity(intent9);
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
@@ -443,9 +441,8 @@ public class RecipeDetailsActivity extends AppCompatActivity
                         return;
                     }
                     ShoppingCart shoppingCart =data.get(position);
-                    // 反序列化 shoppingCart.items 为 List<ExtendedIngredient>
                     List<ExtendedIngredient> list1 = new Gson().fromJson(shoppingCart.items, new TypeToken<List<ExtendedIngredient>>() {}.getType());
-// 获取 adapter 中的数据
+                    // get adapter data
                     List<ExtendedIngredient> list2 = ingredientsAdapater.getData();
                     list1.addAll(list2);
                     shoppingCart.items = new Gson().toJson(list1);

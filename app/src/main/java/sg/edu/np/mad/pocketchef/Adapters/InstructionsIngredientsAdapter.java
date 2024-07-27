@@ -45,9 +45,10 @@ public class InstructionsIngredientsAdapter extends RecyclerView.Adapter<Instruc
 
             // Check if the image URL is not null
             if (ingredient.image != null && !ingredient.image.isEmpty()) {
+                String completeImageUrl = "https://img.spoonacular.com/ingredients_100x100/" + ingredient.image;
                 holder.imageView_instructions_step_items.setVisibility(View.VISIBLE); // Ensure ImageView is visible
+                Picasso.get().load(completeImageUrl)
 
-                Picasso.get().load(ingredient.image)
                         .fit()
                         .centerCrop()
                         .into(holder.imageView_instructions_step_items);

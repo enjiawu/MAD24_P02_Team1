@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 import sg.edu.np.mad.pocketchef.Models.Step;
@@ -32,19 +33,25 @@ public class InstructionStepAdapter extends RecyclerView.Adapter<InstructionStep
 
     @Override
     public void onBindViewHolder(@NonNull InstructionStepViewHolder holder, int position) {
-        holder.textView_instructions_step_number.setText(String.valueOf(list.get(position).number));
-        holder.textView_instructions_step_title.setText(list.get(position).step);
-        // Ingredients recycler view
+        Step step = list.get(position);
+
+        holder.textView_instructions_step_number.setText(MessageFormat.format("Step {0}", step.number));
+        // Format the step text with new lines and bullet points
+        holder.textView_instructions_step_title.setText(step.formatStepText());
+
+        // Ingredients RecyclerView
         holder.recycler_instruction_ingredients.setHasFixedSize(true);
         holder.recycler_instruction_ingredients.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
-        InstructionsIngredientsAdapter instructionsIngredientsAdapter = new InstructionsIngredientsAdapter(context, list.get(position).ingredients);
+        InstructionsIngredientsAdapter instructionsIngredientsAdapter = new InstructionsIngredientsAdapter(context, step.ingredients);
         holder.recycler_instruction_ingredients.setAdapter(instructionsIngredientsAdapter);
-        // Equipmments recycler view
+
+        // Equipment RecyclerView
         holder.recycler_instruction_equipments.setHasFixedSize(true);
         holder.recycler_instruction_equipments.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
-        InstructionsEquipmentsAdapter instructionsEquipmentsAdapter = new InstructionsEquipmentsAdapter(context, list.get(position).equipment);
+        InstructionsEquipmentsAdapter instructionsEquipmentsAdapter = new InstructionsEquipmentsAdapter(context, step.equipment);
         holder.recycler_instruction_equipments.setAdapter(instructionsEquipmentsAdapter);
     }
+
 
     @Override
     public int getItemCount() {

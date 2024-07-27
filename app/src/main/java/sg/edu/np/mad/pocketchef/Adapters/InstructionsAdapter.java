@@ -32,7 +32,7 @@ public class InstructionsAdapter extends RecyclerView.Adapter<InstructionsViewHo
 
     @Override
     public void onBindViewHolder(@NonNull InstructionsViewHolder holder, int position) {
-        holder.textView_instruction_name.setText(list.get(position).name);
+        holder.textView_instruction_no.setText("No. Of Instruction Steps: " + getTotalSteps());
         holder.recycler_instruction_steps.setHasFixedSize(true);
         // Implementing steps
         holder.recycler_instruction_steps.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
@@ -44,15 +44,23 @@ public class InstructionsAdapter extends RecyclerView.Adapter<InstructionsViewHo
     public int getItemCount() {
         return list.size();
     }
+    private int getTotalSteps() {
+        int totalSteps = 0;
+        for (InstructionsResponse instruction : list) {
+            totalSteps += instruction.steps.size();
+        }
+        return totalSteps;
+    }
+
 }
 
 class InstructionsViewHolder extends RecyclerView.ViewHolder {
-    final TextView textView_instruction_name;
+    final TextView textView_instruction_no;
     final RecyclerView recycler_instruction_steps;
 
     public InstructionsViewHolder(@NonNull View itemView) {
         super(itemView);
-        textView_instruction_name = itemView.findViewById(R.id.textView_instruction_name);
+        textView_instruction_no = itemView.findViewById(R.id.textView_instruction_no);
         recycler_instruction_steps = itemView.findViewById(R.id.recycler_instruction_steps);
     }
 }

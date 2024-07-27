@@ -1,9 +1,12 @@
 package sg.edu.np.mad.pocketchef;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import retrofit2.Call;
@@ -14,15 +17,19 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import sg.edu.np.mad.pocketchef.Listener.IngredientsRecipesListener;
 import sg.edu.np.mad.pocketchef.Listener.InstructionsListener;
 import sg.edu.np.mad.pocketchef.Listener.RdmRecipeRespListener;
 import sg.edu.np.mad.pocketchef.Listener.RecipeDetailsListener;
 import sg.edu.np.mad.pocketchef.Listener.SearchRecipeListener;
+import sg.edu.np.mad.pocketchef.Listener.SearchRecipeQueryListener;
 import sg.edu.np.mad.pocketchef.Listener.SimilarRecipesListener;
+import sg.edu.np.mad.pocketchef.Models.IngredientsRecipesResponse;
 import sg.edu.np.mad.pocketchef.Models.InstructionsResponse;
 import sg.edu.np.mad.pocketchef.Models.RandomRecipeApiResponse;
 import sg.edu.np.mad.pocketchef.Models.RecipeDetailsResponse;
 import sg.edu.np.mad.pocketchef.Models.SearchedRecipeApiResponse;
+import sg.edu.np.mad.pocketchef.Models.SearchedRecipeQueryApiResponse;
 import sg.edu.np.mad.pocketchef.Models.SimilarRecipeResponse;
 
 public class RequestManager {
@@ -120,6 +127,30 @@ public class RequestManager {
         });
     }
 
+    // Timothy - Stage 2
+    // get recipes based on ingredients
+    public void getRecipesByIngredients(IngredientsRecipesListener listener, String ingredients) {
+        CallRecipesByIngredients callIngredientsRecipes = retrofit.create(CallRecipesByIngredients.class);
+        Call<ArrayList<IngredientsRecipesResponse>> call = callIngredientsRecipes.callIngredientsRecipes(ingredients, "10","1","6895c25fb3bd4372a73ff035ac46b7ab");
+
+
+        call.enqueue(new Callback<ArrayList<IngredientsRecipesResponse>>() {
+            @Override
+            public void onResponse(@NonNull Call<ArrayList<IngredientsRecipesResponse>> call, @NonNull Response<ArrayList<IngredientsRecipesResponse>> response) {
+                if (!response.isSuccessful()) {
+                    listener.didError(response.message());
+                    return;
+                }
+                listener.didFetch(response.body(), response.message());
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ArrayList<IngredientsRecipesResponse>> call, @NonNull Throwable throwable) {
+                listener.didError(throwable.getMessage());
+            }
+        });
+    }
+
     //Method to call API for searched recipes
     public void getSearchedRecipes(SearchRecipeListener listener, String query, String excludeIngredients, int minCarbs, int maxCarbs, int minProtein, int maxProtein, int minCalories, int maxCalories, String diet, String intolerances, String sort, String sortDirection) {
 
@@ -136,7 +167,8 @@ public class RequestManager {
                 diet,
                 intolerances,
                 sort,
-                sortDirection
+                sortDirection,
+                true
         );
         call.enqueue(new Callback<SearchedRecipeApiResponse>() {
             @Override
@@ -151,6 +183,37 @@ public class RequestManager {
             @Override
             public void onFailure(@NonNull Call<SearchedRecipeApiResponse> call, @NonNull Throwable throwable) {
                 listener.didError(throwable.getMessage());
+            }
+        });
+    }
+
+    //Method to call API for searched recipes
+    public void getSearchedRecipesQuery(SearchRecipeQueryListener listener, String query) {
+        CallSearchedRecipesQuery callSearchedRecipesQuery = retrofit.create(CallSearchedRecipesQuery.class);
+        Call<SearchedRecipeQueryApiResponse> call = callSearchedRecipesQuery.callSearchedRecipesQuery(
+                context.getString(R.string.api_key),
+                query,
+                true,
+                true
+        );
+        call.enqueue(new Callback<SearchedRecipeQueryApiResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<SearchedRecipeQueryApiResponse> call, @NonNull Response<SearchedRecipeQueryApiResponse> response) {
+                if (response.isSuccessful()) {
+                    SearchedRecipeQueryApiResponse responseBody = response.body();
+                    if (responseBody != null) {
+                        listener.didFetch(responseBody, response.message());
+                    } else {
+                        listener.didError("Response body is null");
+                    }
+                } else {
+                    listener.didError("Request failed: " + response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<SearchedRecipeQueryApiResponse> call, @NonNull Throwable throwable) {
+                listener.didError("Network error: " + throwable.getMessage());
             }
         });
     }
@@ -194,6 +257,18 @@ public class RequestManager {
         );
     }
 
+    // Timothy - Stage 2
+    // Method to GET recipes by ingredients from API
+    private interface CallRecipesByIngredients {
+        @GET("recipes/findByIngredients")
+        Call<ArrayList<IngredientsRecipesResponse>> callIngredientsRecipes(
+                @Query("ingredients") String ingredients,
+                @Query("number") String number,
+                @Query("ranking") String ranking,
+                @Query("apiKey") String apiKey
+        );
+    }
+
     // Method to GET searched recipes from API, based on queries passed entered by user
     private interface CallSearchedRecipes {
         @GET("recipes/complexSearch")
@@ -210,8 +285,18 @@ public class RequestManager {
                 @Query("diet") String diet,
                 @Query("intolerances") String intolerances,
                 @Query("sort") String sort,
-                @Query("sortDirection") String sortDirection
+                @Query("sortDirection") String sortDirection,
+                @Query("addRecipeNutrition") boolean addRecipeNutrition
         );
     }
 
+    private interface CallSearchedRecipesQuery {
+        @GET("recipes/complexSearch")
+        Call<SearchedRecipeQueryApiResponse> callSearchedRecipesQuery(
+                @Query("apiKey") String apiKey,
+                @Query("query") String query,
+                @Query("addRecipeNutrition") boolean addRecipeNutrition,
+                @Query("addRecipeInformation") boolean addRecipeInformation
+        );
+    }
 }

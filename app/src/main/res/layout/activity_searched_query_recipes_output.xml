@@ -1,0 +1,96 @@
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".MainActivity">
+    <!-- NavigationView -->
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:headerLayout="@layout/header"
+        app:menu="@menu/main_menu" />
+    <!-- Frame Layout for Progress Bar -->
+    <FrameLayout
+        android:id="@+id/frameLayout_recipe_activity"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <!-- Motion Layout for animation for searchBar to disappear -->
+        <androidx.constraintlayout.motion.widget.MotionLayout
+            android:id="@+id/main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/paletteorange"
+            android:clipToPadding="false"
+            app:layoutDescription="@xml/recipe_activity_scene"
+            tools:context=".RecipeActivity">
+
+            <!-- Material Toolbar for Navigation Menu -->
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@color/paletteblue"
+                android:minHeight="?attr/actionBarSize"
+                app:contentInsetStart="0dp"
+                app:contentInsetStartWithNavigation="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:navigationIcon="@drawable/ic_launcher_foreground"
+                app:title="Queried Recipes" />
+
+            <!-- RecyclerView for recipes -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_query_recipes"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_margin="5dp"
+                android:paddingTop="15dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+            <!--Card View that will be displayed if got no recipes found-->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardView_no_recipe_found"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:padding="16dp"
+                app:cardBackgroundColor="@color/palettebeige"
+                app:cardCornerRadius="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <!-- TextView that will be displayed if no recipes found -->
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/no_recipe_found"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/no_recipes_found"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:visibility="gone"/>
+            </com.google.android.material.card.MaterialCardView>
+
+        </androidx.constraintlayout.motion.widget.MotionLayout>
+
+        <!-- ProgressBar -->
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="visible"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintVertical_bias="0.5" />
+    </FrameLayout>
+</androidx.drawerlayout.widget.DrawerLayout>
