@@ -203,4 +203,6 @@
     <string name="textView_carbs_placeholder">100</string>
     <string name="similar_recipes_text">Similar Recipes</string>
     <string name="changePasswordTv_text">Change Password?</string>
+    <string name="cardView6_text">Community</string>
+    <string name="cardView7_text">Pantry</string>
 </resources>

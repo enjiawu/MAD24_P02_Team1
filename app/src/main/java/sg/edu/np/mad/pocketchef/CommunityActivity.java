@@ -60,7 +60,7 @@ public class CommunityActivity extends AppCompatActivity implements NavigationVi
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     MaterialToolbar toolbar;
-    MenuItem nav_home, nav_recipes, nav_search, nav_logout, nav_profile, nav_favourites, nav_community, nav_pantry, nav_complex_search;
+    MenuItem nav_home, nav_recipes, nav_search, nav_logout, nav_profile, nav_favourites, nav_community, nav_pantry, nav_complex_search, nav_shoppinglist, nav_locationfinder;
 
     // XML Variables
     private ProgressBar progressBar;
@@ -104,6 +104,8 @@ public class CommunityActivity extends AppCompatActivity implements NavigationVi
         nav_profile = navigationView.getMenu().findItem(R.id.nav_profile);
         nav_favourites = navigationView.getMenu().findItem(R.id.nav_favourites);
         nav_community = navigationView.getMenu().findItem(R.id.nav_community);
+        nav_shoppinglist = navigationView.getMenu().findItem(R.id.nav_shoppinglist);
+        nav_locationfinder = navigationView.getMenu().findItem(R.id.nav_locationfinder);
 
         // Set up nav menu
         navigationView.bringToFront();
@@ -593,6 +595,15 @@ public class CommunityActivity extends AppCompatActivity implements NavigationVi
             finish();
             startActivity(intent7);
         }
+        //        } else if (itemId = R.id.nav_shoppinglist) {
+//            Intent intent8 = new Intent(MainActivity.this, ShoppingListActivity.class);
+//            finish();
+//            startActivity(intent8);
+//        } else if (itemId = R.id.nav_locationfinder) {
+//            Intent intent9 = new Intent(MainActivity.this, LocationActivity.class);
+//            finish();
+//            startActivity(intent9);
+//        }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
