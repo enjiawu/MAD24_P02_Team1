@@ -44,7 +44,7 @@ public class SearchedRecipesOutput extends AppCompatActivity implements Navigati
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     MaterialToolbar toolbar;
-    MenuItem nav_home, nav_recipes, nav_search, nav_logout, nav_profile, nav_favourites, nav_community, nav_pantry, nav_complex_search;
+    MenuItem nav_home, nav_recipes, nav_search, nav_logout, nav_profile, nav_favourites, nav_community, nav_pantry, nav_complex_search, nav_shoppinglist, nav_locationfinder;
 
     //For search inputs
     private String query;
@@ -115,6 +115,8 @@ public class SearchedRecipesOutput extends AppCompatActivity implements Navigati
         nav_community = navigationView.getMenu().findItem(R.id.nav_community);
         nav_pantry = navigationView.getMenu().findItem(R.id.nav_pantry);
         nav_complex_search = navigationView.getMenu().findItem(R.id.nav_complex_search);
+        nav_shoppinglist = navigationView.getMenu().findItem(R.id.nav_shoppinglist);
+        nav_locationfinder = navigationView.getMenu().findItem(R.id.nav_locationfinder);
 
         // Set up nav menu
         navigationView.bringToFront();
@@ -298,6 +300,15 @@ public class SearchedRecipesOutput extends AppCompatActivity implements Navigati
             finish();
             startActivity(intent8);
         }
+        //        } else if (itemId = R.id.nav_shoppinglist) {
+//            Intent intent8 = new Intent(MainActivity.this, ShoppingListActivity.class);
+//            finish();
+//            startActivity(intent8);
+//        } else if (itemId = R.id.nav_locationfinder) {
+//            Intent intent9 = new Intent(MainActivity.this, LocationActivity.class);
+//            finish();
+//            startActivity(intent9);
+//        }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
