@@ -1,0 +1,89 @@
+Index: app/src/main/java/sg/edu/np/mad/pocketchef/CommunityActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package sg.edu.np.mad.pocketchef;\r\n\r\nimport android.content.Intent;\r\nimport android.os.Bundle;\r\nimport android.view.MenuItem;\r\nimport android.view.View;\r\nimport android.widget.Button;\r\nimport android.widget.ImageView;\r\n\r\nimport androidx.activity.EdgeToEdge;\r\nimport androidx.annotation.NonNull;\r\nimport androidx.appcompat.app.ActionBarDrawerToggle;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.core.graphics.Insets;\r\nimport androidx.core.view.GravityCompat;\r\nimport androidx.core.view.ViewCompat;\r\nimport androidx.core.view.WindowInsetsCompat;\r\nimport androidx.drawerlayout.widget.DrawerLayout;\r\n\r\nimport com.google.android.material.appbar.MaterialToolbar;\r\nimport com.google.android.material.navigation.NavigationView;\r\nimport com.google.firebase.auth.FirebaseAuth;\r\n\r\nimport org.checkerframework.checker.units.qual.C;\r\n\r\npublic class CommunityActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{\r\n    //Menu\r\n    DrawerLayout drawerLayout;\r\n    NavigationView navigationView;\r\n    MaterialToolbar toolbar;\r\n    MenuItem nav_home, nav_recipes, nav_search;\r\n\r\n    // XML Variables\r\n    private ImageView addPostButton;\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        EdgeToEdge.enable(this);\r\n        setContentView(R.layout.activity_community);\r\n\r\n        //Setting up views and listeners\r\n        setupViews();\r\n        setupListeners();\r\n    }\r\n\r\n    private void setupViews() {\r\n        // Navigation Menu set up\r\n        drawerLayout = findViewById(R.id.drawer_layout);\r\n        navigationView = findViewById(R.id.nav_view);\r\n        toolbar = findViewById(R.id.toolbar);\r\n        nav_home = navigationView.getMenu().findItem(R.id.nav_home);\r\n        nav_recipes = navigationView.getMenu().findItem(R.id.nav_recipes);\r\n        nav_search = navigationView.getMenu().findItem(R.id.nav_search);\r\n\r\n        // Set up nav menu\r\n        navigationView.bringToFront();\r\n        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(CommunityActivity.this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);\r\n        drawerLayout.addDrawerListener(toggle);\r\n        toggle.syncState();\r\n        navigationView.setNavigationItemSelectedListener(CommunityActivity.this);\r\n        navigationView.setCheckedItem(nav_home);\r\n\r\n        //Getting all the variables from the xml file\r\n        addPostButton = findViewById(R.id.addPostButton);\r\n    }\r\n\r\n    // Setting up listeners\r\n    public void setupListeners() {\r\n        // Check if add post button has been clicked\r\n        addPostButton.setOnClickListener(v -> {\r\n            // Go to add post activity\r\n            Intent intent = new Intent(CommunityActivity.this, AddPostActivity.class);\r\n            finish();\r\n            startActivity(intent);\r\n        });\r\n    }\r\n\r\n    // For the menu\r\n    @Override\r\n    public void onBackPressed() {\r\n        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {\r\n            drawerLayout.closeDrawer(GravityCompat.START);\r\n        } else {\r\n            super.onBackPressed();\r\n        }\r\n    }\r\n\r\n    //For menu\r\n    @Override\r\n    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {\r\n        int itemId = menuItem.getItemId();\r\n        if (itemId == R.id.nav_home) {\r\n            Intent intent = new Intent(CommunityActivity.this, MainActivity.class);\r\n            finish();\r\n            startActivity(intent);\r\n        } else if (itemId == R.id.nav_recipes) {\r\n            Intent intent2 = new Intent(CommunityActivity.this, RecipeActivity.class);\r\n            finish();\r\n            startActivity(intent2);\r\n        } else if (itemId == R.id.nav_favourites) {\r\n            Intent intent3 = new Intent(CommunityActivity.this, CreateCategoryActivity.class);\r\n            finish();\r\n            startActivity(intent3);\r\n        } else if (itemId == R.id.nav_search) {\r\n            Intent intent4 = new Intent(CommunityActivity.this, AdvancedSearchActivity.class);\r\n            finish();\r\n            startActivity(intent4);\r\n        } else if (itemId == R.id.nav_profile) {\r\n            Intent intent5 = new Intent(CommunityActivity.this, ProfileActivity.class);\r\n            finish();\r\n            startActivity(intent5);\r\n        } else if (itemId == R.id.nav_logout) {\r\n            FirebaseAuth.getInstance().signOut();\r\n            Intent intent6 = new Intent(CommunityActivity.this, LoginActivity.class);\r\n            finish();\r\n            startActivity(intent6);\r\n        } else if (itemId == R.id.nav_community) {\r\n            // Nothing Happens\r\n        }\r\n        drawerLayout.closeDrawer(GravityCompat.START);\r\n        return true;\r\n    }\r\n\r\n}
+===================================================================
+diff --git a/app/src/main/java/sg/edu/np/mad/pocketchef/CommunityActivity.java b/app/src/main/java/sg/edu/np/mad/pocketchef/CommunityActivity.java
+--- a/app/src/main/java/sg/edu/np/mad/pocketchef/CommunityActivity.java	
++++ b/app/src/main/java/sg/edu/np/mad/pocketchef/CommunityActivity.java	
+@@ -28,7 +28,7 @@
+     DrawerLayout drawerLayout;
+     NavigationView navigationView;
+     MaterialToolbar toolbar;
+-    MenuItem nav_home, nav_recipes, nav_search;
++    MenuItem nav_home, nav_recipes, nav_search, nav_logout, nav_profile, nav_favourites, nav_pantry, nav_community, nav_combined_search;
+ 
+     // XML Variables
+     private ImageView addPostButton;
+@@ -52,6 +52,12 @@
+         nav_home = navigationView.getMenu().findItem(R.id.nav_home);
+         nav_recipes = navigationView.getMenu().findItem(R.id.nav_recipes);
+         nav_search = navigationView.getMenu().findItem(R.id.nav_search);
++        nav_logout = navigationView.getMenu().findItem(R.id.nav_logout);
++        nav_profile = navigationView.getMenu().findItem(R.id.nav_profile);
++        nav_favourites = navigationView.getMenu().findItem(R.id.nav_favourites);
++        nav_pantry = navigationView.getMenu().findItem(R.id.nav_pantry);
++        nav_community = navigationView.getMenu().findItem(R.id.nav_community);
++        nav_combined_search = navigationView.getMenu().findItem(R.id.nav_combined_search);
+ 
+         // Set up nav menu
+         navigationView.bringToFront();
+@@ -86,28 +92,29 @@
+         }
+     }
+ 
+-    //For menu
+     @Override
+     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+         int itemId = menuItem.getItemId();
+         if (itemId == R.id.nav_home) {
+-            Intent intent = new Intent(CommunityActivity.this, MainActivity.class);
++            // Nothing Happens
++        } else if (itemId == R.id.nav_recipes) {
++            Intent intent = new Intent(CommunityActivity.this, RecipeActivity.class);
+             finish();
+             startActivity(intent);
+-        } else if (itemId == R.id.nav_recipes) {
+-            Intent intent2 = new Intent(CommunityActivity.this, RecipeActivity.class);
++        } else if (itemId == R.id.nav_profile) {
++            Intent intent2 = new Intent(CommunityActivity.this, ProfileActivity.class);
+             finish();
+             startActivity(intent2);
+         } else if (itemId == R.id.nav_favourites) {
+             Intent intent3 = new Intent(CommunityActivity.this, CreateCategoryActivity.class);
+             finish();
+             startActivity(intent3);
+-        } else if (itemId == R.id.nav_search) {
+-            Intent intent4 = new Intent(CommunityActivity.this, AdvancedSearchActivity.class);
++        } else if (itemId == R.id.nav_pantry) {
++            Intent intent4 = new Intent(CommunityActivity.this, PantryActivity.class);
+             finish();
+             startActivity(intent4);
+-        } else if (itemId == R.id.nav_profile) {
+-            Intent intent5 = new Intent(CommunityActivity.this, ProfileActivity.class);
++        } else if (itemId == R.id.nav_search) {
++            Intent intent5 = new Intent(CommunityActivity.this, AdvancedSearchActivity.class);
+             finish();
+             startActivity(intent5);
+         } else if (itemId == R.id.nav_logout) {
+@@ -116,10 +123,17 @@
+             finish();
+             startActivity(intent6);
+         } else if (itemId == R.id.nav_community) {
+-            // Nothing Happens
++            // Skip
++        } else if (itemId == R.id.nav_combined_search) {
++            Intent intent7 = new Intent(CommunityActivity.this, CombinedSearchActivity.class);
++            finish();
++            startActivity(intent7);
++        } else if (itemId == R.id.nav_pantry) {
++            Intent intent8 = new Intent(CommunityActivity.this, PantryActivity.class);
++            finish();
++            startActivity(intent8);
+         }
+         drawerLayout.closeDrawer(GravityCompat.START);
+         return true;
+     }
+-
+ }
+\ No newline at end of file

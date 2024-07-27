@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
@@ -43,11 +44,14 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import sg.edu.np.mad.pocketchef.Adapters.PantryIngredientAdapter;
+import sg.edu.np.mad.pocketchef.databinding.ActivityAdvancedSearchBinding;
+import sg.edu.np.mad.pocketchef.databinding.ActivityPantryBinding;
 
 // Timothy - Stage 2
 public class PantryActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private FirebaseAuth mAuth;
+    private ActivityPantryBinding bind;
     FirebaseDatabase database;
     DatabaseReference mPantryRef;
     FirebaseUser mUser;
@@ -70,8 +74,9 @@ public class PantryActivity extends AppCompatActivity implements NavigationView.
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_pantry);
-
-
+        // Initialize view binding
+        bind = ActivityPantryBinding.inflate(getLayoutInflater());
+        setContentView(bind.getRoot());
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
@@ -131,9 +136,6 @@ public class PantryActivity extends AppCompatActivity implements NavigationView.
         });
 
 
-
-
-
     }
 
     public void SelectIngredient(String s) {
@@ -157,13 +159,19 @@ public class PantryActivity extends AppCompatActivity implements NavigationView.
 
         background = findViewById(R.id.background);
 
+        // Navigation Menu setup
+        DrawerLayout drawerLayout = bind.drawerLayout;
+        NavigationView navigationView = bind.navView;
+        MaterialToolbar toolbar = bind.toolbar;
+
+
         // Set up nav menu
         navigationView.bringToFront();
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(PantryActivity.this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(PantryActivity.this);
-        navigationView.setCheckedItem(navHome);
+        navigationView.setCheckedItem(R.id.nav_search);
     }
 
     private void SetUpListeners() {
@@ -192,13 +200,13 @@ public class PantryActivity extends AppCompatActivity implements NavigationView.
         });
 
 
-        bottomAppBar.setOnMenuItemClickListener (new Toolbar.OnMenuItemClickListener() {
+        bottomAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
 
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 int itemId = item.getItemId();
                 if (itemId == R.id.deleteIngredient) {
-                    Log.d("CLICK","click");
+                    Log.d("CLICK", "click");
                     if (!selectedIngredients.isEmpty()) {
                         // Dialog to confirm delete
                         MaterialAlertDialogBuilder alert = new MaterialAlertDialogBuilder(PantryActivity.this);
@@ -242,7 +250,7 @@ public class PantryActivity extends AppCompatActivity implements NavigationView.
 
     }
 
-    ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN,  ItemTouchHelper.START | ItemTouchHelper.END) {
+    ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.START | ItemTouchHelper.END) {
 
 
         @Override
@@ -252,9 +260,9 @@ public class PantryActivity extends AppCompatActivity implements NavigationView.
             Log.d("FROM", String.valueOf(fromPosition));
             int toPosition = target.getAdapterPosition();
             Log.d("TO", String.valueOf(toPosition));
-            Collections.swap(ingredientList,fromPosition, toPosition);
+            Collections.swap(ingredientList, fromPosition, toPosition);
             mPantryRef.child("pantry").setValue(Arrays.toString(ingredientList.toArray()));
-            recyclerView.getAdapter().notifyItemMoved(fromPosition,toPosition);
+            recyclerView.getAdapter().notifyItemMoved(fromPosition, toPosition);
             return true;
         }
 
@@ -305,19 +313,21 @@ public class PantryActivity extends AppCompatActivity implements NavigationView.
     public boolean dispatchTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             View v = getCurrentFocus();
-            if ( v instanceof EditText) {
+            if (v instanceof EditText) {
                 Rect outRect = new Rect();
                 v.getGlobalVisibleRect(outRect);
-                if (!outRect.contains((int)event.getRawX(), (int)event.getRawY())) {
+                if (!outRect.contains((int) event.getRawX(), (int) event.getRawY())) {
                     v.clearFocus();
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                 }
             }
         }
-        return super.dispatchTouchEvent( event );
+        return super.dispatchTouchEvent(event);
     }
 
+
+    // For Nav Menu
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         int itemId = menuItem.getItemId();
@@ -326,7 +336,9 @@ public class PantryActivity extends AppCompatActivity implements NavigationView.
             finish();
             startActivity(intent);
         } else if (itemId == R.id.nav_recipes) {
-            Intent intent2 = new Intent(PantryActivity.this, RecipeActivity.class);
+            // Nothing Happens
+        } else if (itemId == R.id.nav_profile) {
+            Intent intent2 = new Intent(PantryActivity.this, ProfileActivity.class);
             finish();
             startActivity(intent2);
         } else if (itemId == R.id.nav_favourites) {
@@ -337,10 +349,6 @@ public class PantryActivity extends AppCompatActivity implements NavigationView.
             Intent intent4 = new Intent(PantryActivity.this, AdvancedSearchActivity.class);
             finish();
             startActivity(intent4);
-        } else if (itemId == R.id.nav_profile) {
-            Intent intent7 = new Intent(PantryActivity.this, ProfileActivity.class);
-            finish();
-            startActivity(intent7);
         } else if (itemId == R.id.nav_logout) {
             FirebaseAuth.getInstance().signOut();
             Intent intent5 = new Intent(PantryActivity.this, LoginActivity.class);
@@ -351,11 +359,19 @@ public class PantryActivity extends AppCompatActivity implements NavigationView.
             finish();
             startActivity(intent6);
         } else if (itemId == R.id.nav_pantry) {
-            // Nothing Happens
+            // Nothing happens
         } else if (itemId == R.id.nav_complex_search) {
-            Intent intent8 = new Intent(PantryActivity.this, ComplexSearchActivity.class);
+            Intent intent7 = new Intent(PantryActivity.this, ComplexSearchActivity.class);
+            finish();
+            startActivity(intent7);
+        } else if (itemId == R.id.nav_shoppinglist) {
+            Intent intent8 = new Intent(PantryActivity.this, ShopCartActivity.class);
             finish();
             startActivity(intent8);
+        } else if (itemId == R.id.nav_locationfinder) {
+            Intent intent9 = new Intent(PantryActivity.this, LocationActivity.class);
+            finish();
+            startActivity(intent9);
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;

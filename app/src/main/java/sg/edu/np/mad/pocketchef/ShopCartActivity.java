@@ -44,7 +44,7 @@ public class ShopCartActivity extends AppCompatActivity implements  NavigationVi
     NavigationView navigationView;
     ActivityShopCartBinding bind;
     List<ShoppingCart> shoppingCartList = new ArrayList<>();
-    MenuItem nav_home;
+    MenuItem nav_shopping_list;
     ItemTouchHelper itemTouchHelper;
     ShoppingCartAdapter adapter;
     ExecutorService executorService = Executors.newCachedThreadPool();
@@ -67,8 +67,8 @@ public class ShopCartActivity extends AppCompatActivity implements  NavigationVi
         bind.drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
-        nav_home = navigationView.getMenu().findItem(R.id.nav_home);
-        navigationView.setCheckedItem(nav_home);
+        nav_shopping_list = navigationView.getMenu().findItem(R.id.nav_shoppinglist);
+        navigationView.setCheckedItem(nav_shopping_list);
         bind.rv.setLayoutManager(new LinearLayoutManager(this));
         adapter = new ShoppingCartAdapter(this, shoppingCartList);
         bind.rv.setAdapter(adapter);
@@ -183,40 +183,44 @@ public class ShopCartActivity extends AppCompatActivity implements  NavigationVi
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
         if (itemId == R.id.nav_home) {
-            // Nothing Happens
-        } else if (itemId == R.id.nav_recipes) {
-            Intent intent = new Intent(this, RecipeActivity.class);
+            Intent intent = new Intent(ShopCartActivity.this, MainActivity.class);
             finish();
             startActivity(intent);
-        } else if (itemId == R.id.nav_profile) {
-            Intent intent2 = new Intent(this, ProfileActivity.class);
+        } else if (itemId == R.id.nav_recipes) {
+            Intent intent2 = new Intent(ShopCartActivity.this, RecipeActivity.class);
             finish();
             startActivity(intent2);
         } else if (itemId == R.id.nav_favourites) {
-            Intent intent3 = new Intent(this, CreateCategoryActivity.class);
-            finish();
-            startActivity(intent3);
-        } else if (itemId == R.id.nav_pantry) {
-            Intent intent3 = new Intent(this, PantryActivity.class);
+            Intent intent3 = new Intent(ShopCartActivity.this, CreateCategoryActivity.class);
             finish();
             startActivity(intent3);
         } else if (itemId == R.id.nav_search) {
-            Intent intent4 = new Intent(this, AdvancedSearchActivity.class);
+            // Nothing Happens
+        } else if (itemId == R.id.nav_profile) {
+            Intent intent4 = new Intent(ShopCartActivity.this, ProfileActivity.class);
             finish();
             startActivity(intent4);
         } else if (itemId == R.id.nav_logout) {
             FirebaseAuth.getInstance().signOut();
-            Intent intent5 = new Intent(this, LoginActivity.class);
+            Intent intent5 = new Intent(ShopCartActivity.this, LoginActivity.class);
             finish();
             startActivity(intent5);
         } else if (itemId == R.id.nav_community) {
-            Intent intent6 = new Intent(this, CommunityActivity.class);
+            Intent intent6 = new Intent(ShopCartActivity.this, CommunityActivity.class);
             finish();
             startActivity(intent6);
-        } else if (itemId == R.id.nav_shoppinglist) {
-            Intent intent7 = new Intent(this, ShopCartActivity.class);
+        } else if (itemId == R.id.nav_complex_search) {
+            Intent intent7 = new Intent(ShopCartActivity.this, ComplexSearchActivity.class);
             finish();
             startActivity(intent7);
+        } else if (itemId == R.id.nav_shoppinglist) {
+            Intent intent8 = new Intent(ShopCartActivity.this, ShopCartActivity.class);
+            finish();
+            startActivity(intent8);
+        } else if (itemId == R.id.nav_locationfinder) {
+            Intent intent9 = new Intent(ShopCartActivity.this, LocationActivity.class);
+            finish();
+            startActivity(intent9);
         }
         bind.drawerLayout.closeDrawer(GravityCompat.START);
         return true;

@@ -18,15 +18,14 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
+import sg.edu.np.mad.pocketchef.databinding.ActivityAdvancedSearchBinding;
+import sg.edu.np.mad.pocketchef.databinding.ActivityRecipeBinding;
+
 public class AdvancedSearchActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     //Defining variables
     //For menu
     DrawerLayout drawerLayout;
-    NavigationView navigationView;
-    MaterialToolbar toolbar;
-    MenuItem nav_home, nav_recipes, nav_search, nav_logout, nav_profile, nav_favourites, nav_community, nav_pantry, nav_complex_search, nav_shoppinglist, nav_locationfinder;
-
     //For user input
     private Spinner dietSpinner;
     private Spinner intolerancesSpinner;
@@ -35,13 +34,17 @@ public class AdvancedSearchActivity extends AppCompatActivity implements Navigat
     private Integer minCarbs, maxCarbs, minProtein, maxProtein, minCalories, maxCalories;
     private Button searchButton; //Button for user to search for recipe
 
+    private ActivityAdvancedSearchBinding bind;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_advanced_search);
-
+        // Initialize view binding
+        bind = ActivityAdvancedSearchBinding.inflate(getLayoutInflater());
+        setContentView(bind.getRoot());
         //Setting up views and listeners
         setupViews();
         setupListeners();
@@ -54,21 +57,11 @@ public class AdvancedSearchActivity extends AppCompatActivity implements Navigat
         intolerancesSpinner = findViewById(R.id.intolerances_spinner);
         searchButton = findViewById(R.id.searchButton);
 
-        // Navigation Menu set up
-        drawerLayout = findViewById(R.id.drawer_layout);
-        navigationView = findViewById(R.id.nav_view);
-        toolbar = findViewById(R.id.toolbar);
-        nav_home = navigationView.getMenu().findItem(R.id.nav_home);
-        nav_recipes = navigationView.getMenu().findItem(R.id.nav_recipes);
-        nav_search = navigationView.getMenu().findItem(R.id.nav_search);
-        nav_logout = navigationView.getMenu().findItem(R.id.nav_logout);
-        nav_profile = navigationView.getMenu().findItem(R.id.nav_profile);
-        nav_favourites = navigationView.getMenu().findItem(R.id.nav_favourites);
-        nav_community = navigationView.getMenu().findItem(R.id.nav_community);
-        nav_pantry = navigationView.getMenu().findItem(R.id.nav_pantry);
-        nav_complex_search = navigationView.getMenu().findItem(R.id.nav_complex_search);
-        nav_shoppinglist = navigationView.getMenu().findItem(R.id.nav_shoppinglist);
-        nav_locationfinder = navigationView.getMenu().findItem(R.id.nav_locationfinder);
+        // Navigation Menu setup
+        DrawerLayout drawerLayout = bind.drawerLayout;
+        NavigationView navigationView = bind.navView;
+        MaterialToolbar toolbar = bind.toolbar;
+
 
         // Set up nav menu
         navigationView.bringToFront();
@@ -76,7 +69,7 @@ public class AdvancedSearchActivity extends AppCompatActivity implements Navigat
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(AdvancedSearchActivity.this);
-        navigationView.setCheckedItem(nav_home);
+        navigationView.setCheckedItem(R.id.nav_search);
     }
 
     // Setting up listeners
@@ -220,19 +213,18 @@ public class AdvancedSearchActivity extends AppCompatActivity implements Navigat
             finish();
             startActivity(intent6);
         } else if (itemId == R.id.nav_complex_search) {
-            Intent intent7 = new Intent(AdvancedSearchActivity.this, AdvancedSearchActivity.class);
+            Intent intent7 = new Intent(AdvancedSearchActivity.this, ComplexSearchActivity.class);
             finish();
             startActivity(intent7);
+        } else if (itemId == R.id.nav_shoppinglist) {
+            Intent intent8 = new Intent(AdvancedSearchActivity.this, ShopCartActivity.class);
+            finish();
+            startActivity(intent8);
+        } else if (itemId == R.id.nav_locationfinder) {
+            Intent intent9 = new Intent(AdvancedSearchActivity.this, LocationActivity.class);
+            finish();
+            startActivity(intent9);
         }
-        //        } else if (itemId = R.id.nav_shoppinglist) {
-//            Intent intent8 = new Intent(MainActivity.this, ShoppingListActivity.class);
-//            finish();
-//            startActivity(intent8);
-//        } else if (itemId = R.id.nav_locationfinder) {
-//            Intent intent9 = new Intent(MainActivity.this, LocationActivity.class);
-//            finish();
-//            startActivity(intent9);
-//        }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
