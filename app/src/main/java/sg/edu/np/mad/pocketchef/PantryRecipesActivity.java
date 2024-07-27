@@ -28,6 +28,7 @@ import sg.edu.np.mad.pocketchef.Listener.RdmRecipeRespListener;
 import sg.edu.np.mad.pocketchef.Models.IngredientsRecipesResponse;
 import sg.edu.np.mad.pocketchef.Models.RandomRecipeApiResponse;
 
+// Timothy - Stage 2
 public class PantryRecipesActivity extends AppCompatActivity {
 
     private RequestManager requestManager;
@@ -50,6 +51,7 @@ public class PantryRecipesActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // back button pressed
+                findViewById(R.id.noAvailableRecipes).setVisibility(View.GONE);
                 finish();
             }
         });
@@ -58,34 +60,22 @@ public class PantryRecipesActivity extends AppCompatActivity {
 
         FindViews();
 
+        // Fetch recipes from API
         fetchIngredientsRecipes();
     }
 
     private void fetchIngredientsRecipes() {
-//        ArrayList<String> ingredients = new ArrayList<>();
-//        ingredients.add("Salt");
-//        ingredients.add("Sugar");
-//        ingredients.add("Butter");
-//        ingredients.add("Honey");
+
 
         ArrayList<String> ingredients = getIntent().getStringArrayListExtra("ingredients");
 
 
-        // Show a Snackbar message indicating that search is in progress
-//        Snackbar.make(findViewById(android.R.id.content), "Searching Recipes...", Snackbar.LENGTH_SHORT).show();
-//        progressBar.setVisibility(View.VISIBLE);
+
         requestManager.getRecipesByIngredients(new IngredientsRecipesListener() {
             @Override
             public void didFetch(ArrayList<IngredientsRecipesResponse> response, String message) {
-//                progressBar.setVisibility(View.GONE);
-//                setupRandomRecipeRecyclerView(response);
-                Log.d("RESPONSE:", response.toString());
-//                response.getRecipes();
-                for (IngredientsRecipesResponse recipe : response) {
 
-
-                    Log.d("RECIPE", recipe.title);
-                }
+                // Load recipes into recyclerview
                 PantryRecipeAdapter pantryRecipeAdapter = new PantryRecipeAdapter(response, PantryRecipesActivity.this);
 
                 LinearLayoutManager pantryRecipeLayoutManager = new LinearLayoutManager(PantryRecipesActivity.this);
@@ -93,12 +83,15 @@ public class PantryRecipesActivity extends AppCompatActivity {
                 pantryRecipesRecyclerView.setLayoutManager(pantryRecipeLayoutManager);
                 pantryRecipesRecyclerView.setItemAnimator(new DefaultItemAnimator());
                 pantryRecipesRecyclerView.setAdapter(pantryRecipeAdapter);
+
+                if (pantryRecipeAdapter.getItemCount() == 0) {
+                    findViewById(R.id.noAvailableRecipes).setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
             public void didError(String message) {
                 Log.d("Message", message);
-//                progressBar.setVisibility(View.GONE);
                 String additionalMessage = "Please check API Key Quota";
                 Toast.makeText(PantryRecipesActivity.this, message + ". " + additionalMessage, Toast.LENGTH_SHORT).show();
             }

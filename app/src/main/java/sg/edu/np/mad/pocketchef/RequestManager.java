@@ -127,6 +127,8 @@ public class RequestManager {
         });
     }
 
+    // Timothy - Stage 2
+    // get recipes based on ingredients
     public void getRecipesByIngredients(IngredientsRecipesListener listener, String ingredients) {
         CallRecipesByIngredients callIngredientsRecipes = retrofit.create(CallRecipesByIngredients.class);
         Call<ArrayList<IngredientsRecipesResponse>> call = callIngredientsRecipes.callIngredientsRecipes(ingredients, "10","1","6895c25fb3bd4372a73ff035ac46b7ab");
@@ -255,7 +257,8 @@ public class RequestManager {
         );
     }
 
-    // Method to GET Instructions from API
+    // Timothy - Stage 2
+    // Method to GET recipes by ingredients from API
     private interface CallRecipesByIngredients {
         @GET("recipes/findByIngredients")
         Call<ArrayList<IngredientsRecipesResponse>> callIngredientsRecipes(

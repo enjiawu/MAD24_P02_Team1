@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -35,8 +36,11 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
+
 import com.google.android.material.textview.MaterialTextView;
+import com.google.common.reflect.TypeToken;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.gson.Gson;
 import com.kongzue.dialogx.dialogs.InputDialog;
 import com.kongzue.dialogx.dialogs.MessageDialog;
 import com.kongzue.dialogx.dialogs.PopTip;
@@ -44,6 +48,8 @@ import com.kongzue.dialogx.dialogs.WaitDialog;
 import com.squareup.picasso.Picasso;
 
 import java.text.MessageFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -56,10 +62,14 @@ import sg.edu.np.mad.pocketchef.Listener.InstructionsListener;
 import sg.edu.np.mad.pocketchef.Listener.RecipeClickListener;
 import sg.edu.np.mad.pocketchef.Listener.RecipeDetailsListener;
 import sg.edu.np.mad.pocketchef.Listener.SimilarRecipesListener;
+import sg.edu.np.mad.pocketchef.Models.App;
+import sg.edu.np.mad.pocketchef.Models.CartItem;
 import sg.edu.np.mad.pocketchef.Models.CategoryBean;
+import sg.edu.np.mad.pocketchef.Models.ExtendedIngredient;
 import sg.edu.np.mad.pocketchef.Models.InstructionsResponse;
 import sg.edu.np.mad.pocketchef.Models.RecipeDetailsC;
 import sg.edu.np.mad.pocketchef.Models.RecipeDetailsResponse;
+import sg.edu.np.mad.pocketchef.Models.ShoppingCart;
 import sg.edu.np.mad.pocketchef.Models.SimilarRecipeResponse;
 import sg.edu.np.mad.pocketchef.Models.SummaryParser;
 
@@ -86,6 +96,8 @@ public class RecipeDetailsActivity extends AppCompatActivity
     MaterialButton buttonNutritionLabel;
     RecipeDetailsC recipeDetailsC;
     ImageView btnFavorite;
+    ImageButton btn_shop;
+    ExecutorService executorService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +109,7 @@ public class RecipeDetailsActivity extends AppCompatActivity
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
+        executorService = Executors.newCachedThreadPool();
         findViews();
         recipeId = Integer.parseInt(getIntent().getStringExtra("id"));
         // Utilising RequestManager class methods
@@ -120,6 +132,12 @@ public class RecipeDetailsActivity extends AppCompatActivity
             }
         });
 
+        btn_shop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showShopDialog();
+            }
+        });
         // Set up the OnClickListener for the Favorite button
         btnFavorite.setOnClickListener(v -> {
             if (recipeDetailsC == null) {
@@ -153,6 +171,7 @@ public class RecipeDetailsActivity extends AppCompatActivity
     private void findViews() {
         // Initialise Progress Bar
         progressBar = findViewById(R.id.progressBar);
+        btn_shop = findViewById(R.id.btn_shop);
         // Initialise Text Views
         textView_meal_name = findViewById(R.id.textView_meal_name);
         textView_meal_source = findViewById(R.id.textView_meal_source);
@@ -357,7 +376,93 @@ public class RecipeDetailsActivity extends AppCompatActivity
                 .into(imageView_nutrition);
     }
 
+    private void showShopDialog() {
 
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_add_to_shop, null);
+        spinnerCategories = dialogView.findViewById(R.id.spinner_categories);
+        Button btTextNewCategory = dialogView.findViewById(R.id.bt_new_category);
+        Button buttonSave = dialogView.findViewById(R.id.button_save);
+        Button buttonCancel = dialogView.findViewById(R.id.button_cancel);
+        getShopList();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(dialogView);
+        AlertDialog dialog = builder.create();
+        btTextNewCategory.setOnClickListener(v -> {
+            dialog.dismiss();
+            new InputDialog("Add New Cart",
+                    "Enter a name for the new cart", "Save", "Cancel")
+                    .setCancelButton((inputDialog, view, s) -> {
+                        inputDialog.dismiss();
+                        return false;
+                    })
+                    .setOkButton((inputDialog, view, s) -> {
+                        if (TextUtils.isEmpty(s)) {
+                            PopTip.show("Input cannot be empty");
+                            return false;
+                        }
+                        WaitDialog.show("loading.....");
+                        ExecutorService executorService = Executors.newSingleThreadExecutor();
+                        executorService.execute(() -> {
+                            ShoppingCart shoppingCart = new ShoppingCart();
+                            shoppingCart.user = App.user;
+                            shoppingCart.name = inputDialog.getInputText().toString();
+                            Gson gson = new Gson();
+                            shoppingCart.items =gson.toJson(ingredientsAdapater.getData(),
+                                    new TypeToken<List<ExtendedIngredient>>() {}.getType());
+                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                            String formattedDateTime = LocalDateTime.now().format(formatter);
+                            shoppingCart.createTime = formattedDateTime;
+                            FavoriteDatabase.getInstance(RecipeDetailsActivity.this).shoppingCartDao()
+                                    .insert(shoppingCart);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    WaitDialog.dismiss();
+                                    PopTip.show("Successfully Added!");
+                                }
+                            });
+
+                        });
+                        return false;
+                    }).show();
+        });
+
+        buttonSave.setOnClickListener(v -> {
+            if (path == null || path.isEmpty()) {
+                PopTip.show("Loading still ongoing, please wait!");
+                return;
+            }
+            executorService.execute(new Runnable() {
+                @Override
+                public void run() {
+                    WaitDialog.show("loading...");
+                    int position  = spinnerCategories.getSelectedItemPosition();
+                    if(position==0){
+                        return;
+                    }
+                    ShoppingCart shoppingCart =data.get(position);
+                    List<ExtendedIngredient> list1 = new Gson().fromJson(shoppingCart.items, new TypeToken<List<ExtendedIngredient>>() {}.getType());
+                    // get adapter data
+                    List<ExtendedIngredient> list2 = ingredientsAdapater.getData();
+                    list1.addAll(list2);
+                    shoppingCart.items = new Gson().toJson(list1);
+                    FavoriteDatabase.getInstance(RecipeDetailsActivity.this).shoppingCartDao().update(shoppingCart);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            WaitDialog.dismiss();
+                            PopTip.show("Successfully Added!");
+                        }
+                    });
+                }
+            });
+            dialog.dismiss();
+        });
+
+        buttonCancel.setOnClickListener(v -> dialog.dismiss());
+
+        dialog.show();
+    }
     // Add to favorite list
 
     Spinner spinnerCategories;
@@ -390,7 +495,7 @@ public class RecipeDetailsActivity extends AppCompatActivity
                         WaitDialog.show("loading.....");
                         ExecutorService executorService = Executors.newSingleThreadExecutor();
                         executorService.execute(() -> {
-                            CategoryBean categoryBean = new CategoryBean("default", s);
+                            CategoryBean categoryBean = new CategoryBean(App.user,"default", s);
                             FavoriteDatabase.getInstance(RecipeDetailsActivity.this)
                                     .categoryDao().insertCategory(categoryBean);
                             runOnUiThread(() -> {
@@ -417,24 +522,47 @@ public class RecipeDetailsActivity extends AppCompatActivity
             recipeDetailsC1.meal_name = textView_meal_name.getText().toString();
             recipeDetailsC1.imagPath = path;
             recipeDetailsC = recipeDetailsC1;
-
-            new Thread(() -> {
-                WaitDialog.show("loading...");
-                FavoriteDatabase.getInstance(RecipeDetailsActivity.this)
-                        .RecipeDetailsCDao().insert(recipeDetailsC1);
-                runOnUiThread(() -> {
-                    WaitDialog.dismiss();
-                    PopTip.show("Successfully Favorite!");
-                    Glide.with(RecipeDetailsActivity.this).load(R.drawable.ic_collect).into(btnFavorite);
-                    btnFavorite.setImageTintList(ColorStateList.valueOf(Color.YELLOW));
-                });
-            }).start();
+            executorService.execute(new Runnable() {
+                @Override
+                public void run() {
+                    WaitDialog.show("loading...");
+                    FavoriteDatabase.getInstance(RecipeDetailsActivity.this)
+                            .RecipeDetailsCDao().insert(recipeDetailsC1);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            WaitDialog.dismiss();
+                            PopTip.show("Successfully Favorite!");
+                            Glide.with(RecipeDetailsActivity.this).load(R.drawable.ic_collect).into(btnFavorite);
+                            btnFavorite.setImageTintList(ColorStateList.valueOf(Color.YELLOW));
+                        }
+                    });
+                }
+            });
             dialog.dismiss();
         });
 
         buttonCancel.setOnClickListener(v -> dialog.dismiss());
 
         dialog.show();
+    }
+    List<ShoppingCart> data;
+    private void getShopList() {
+        new Thread(() -> {
+                data = FavoriteDatabase.getInstance(this)
+                    .shoppingCartDao().getAllShoppingCartsForUser(App.user);
+            List<String> categories = new ArrayList<>();
+            for (int i = 0; i < data.size(); i++) {
+                categories.add(data.get(i).name);
+            }
+            runOnUiThread(() -> {
+                // populate spinner with categories
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(RecipeDetailsActivity.this,
+                        android.R.layout.simple_spinner_item, categories);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinnerCategories.setAdapter(adapter);
+            });
+        }).start();
     }
 
 

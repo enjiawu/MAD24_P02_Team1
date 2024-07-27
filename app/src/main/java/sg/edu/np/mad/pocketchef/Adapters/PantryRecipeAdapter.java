@@ -25,7 +25,7 @@ import sg.edu.np.mad.pocketchef.R;
 import sg.edu.np.mad.pocketchef.RecipeActivity;
 import sg.edu.np.mad.pocketchef.RecipeDetailsActivity;
 
-
+// Timothy - Stage 2
 public class PantryRecipeAdapter extends RecyclerView.Adapter<PantryRecipeViewHolder> {
     ArrayList<IngredientsRecipesResponse> data;
     PantryRecipesActivity pantryRecipesActivity;

@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Updated -->
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
@@ -13,6 +14,7 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
+        android:name=".Models.App"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:enableOnBackInvokedCallback="true"
@@ -23,6 +25,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.pocketchef"
         tools:targetApi="33">
+        <activity
+            android:name=".LocationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MapActivity"
+            android:exported="false" />
         <activity
             android:name=".NotificationsActivity"
             android:exported="false" />
@@ -46,6 +54,22 @@
         <activity
             android:name=".PantryRecipesActivity"
             android:exported="false" />
+        <activity
+            android:name=".ShopHomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CreateShopListCardActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CreateShopCardActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ShopListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ShopCartActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ProfileActivity"
             android:exported="false" />
@@ -85,6 +109,8 @@
         <activity
             android:name=".MainActivity"
             android:exported="true">
+
+
         </activity>
         <activity
             android:name=".SearchedQueryRecipesOutput"
@@ -102,6 +128,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/s_map_api" />
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="sg.edu.np.mad.pocketchef.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
     </application>
 
 </manifest>

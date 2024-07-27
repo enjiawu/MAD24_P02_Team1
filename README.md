@@ -131,7 +131,7 @@ Optional:
 - Users will input their Username, email, password to create their account
 
 #### 3) Menu (Start): 
-![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/Menu1.png)
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/Menu1.jpg)
 - Starting menu for application.
 - Users can view their dashboard statistics including new notifications and the number of posts they have made.
 - Users can view the current most popular post and newest post. Clicking on any will redirect them to that post.

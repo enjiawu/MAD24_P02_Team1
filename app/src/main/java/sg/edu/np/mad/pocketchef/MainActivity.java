@@ -47,6 +47,7 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import sg.edu.np.mad.pocketchef.Adapters.PostCommentsAdapter;
+import sg.edu.np.mad.pocketchef.Models.App;
 import sg.edu.np.mad.pocketchef.Models.CategoryBean;
 import sg.edu.np.mad.pocketchef.Models.Comment;
 import sg.edu.np.mad.pocketchef.Models.Notification;
@@ -68,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     MaterialToolbar toolbar;
+
     MenuItem nav_home, nav_recipes, nav_search, nav_logout, nav_profile, nav_favourites, nav_community, nav_pantry, nav_complex_search, nav_shopping_list, nav_locationfinder;
     CardView cardView1, cardView2, cardView3, cardView4, cardView5, cardView6, cardView7, cardView8, cardView_popularPost, cardView_newestPost, cardView_newNotifications, cardView_myPosts;
 
@@ -124,7 +126,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //Not sure if this is needed
         //menu.findItem(R.id.nav_logout).setVisible(false);
 
-
+        //这是添加默认收藏夹的，不要注释
+        CreateDefaultFavorites();
         // Set up navigation view
         navigationView.bringToFront();
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -208,12 +211,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void run() {
                 List<CategoryBean> list = FavoriteDatabase.getInstance(MainActivity.this).categoryDao().getAllCategories();
                 if(list==null||list.isEmpty()){
-                    CategoryBean categoryBean =new CategoryBean("Favorite","Favorite");
+                    CategoryBean categoryBean =new CategoryBean(App.user,"Favorite","Favorite");
                     FavoriteDatabase.getInstance(MainActivity.this).categoryDao().insertCategory(categoryBean);
                 }
             }
         }).start();
-}
+    }
 
     //To get username
     private void loadProfile() {
@@ -285,10 +288,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
         // Card View On Click Listener for Shopping List Activity
-//        cardView8.setOnClickListener(v -> {
-//            Intent intent = new Intent(MainActivity.this, LocationActivity.class);
-//            startActivity(intent);
-//        });
+        cardView8.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, LocationActivity.class);
+            startActivity(intent);
+        });
 
     }
 
@@ -484,6 +487,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Log.w(TAG, "getUserInfo:onCancelled", error.toException());
             }
         });
+
     }
 
     @Override
