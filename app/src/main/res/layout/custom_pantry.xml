@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/white">
 
     <CheckBox
         android:id="@+id/ingredientCheckbox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="40px"
-        android:background="@color/white"
+        android:layout_marginLeft="40px"
         android:text="List Item" />
 
 </LinearLayout>
