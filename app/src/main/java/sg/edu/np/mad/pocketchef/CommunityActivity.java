@@ -211,6 +211,8 @@ public class CommunityActivity extends AppCompatActivity implements NavigationVi
 
                 // Making the progress bar disappear after posts get loaded
                 progressBar.setVisibility(View.GONE);
+
+                sortPosts(spinner.getSelectedItem().toString());
             }
 
             @Override
