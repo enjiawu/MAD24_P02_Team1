@@ -229,6 +229,16 @@ Optional:
 - Users can view notifications received and delete them by swiping to the left.
 - Users can click on the notifications to view the post related to the notificaiton.
 
+#### 16) Complex Search:
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/ComplexSearch.png)
+- Users can view notifications received and delete them by swiping to the left.
+- Users can click on the notifications to view the post related to the notification.
+
+#### 16) Queried Recipes:
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/QueriedRecipes.png)
+- Users can view notifications received and delete them by swiping to the left.
+- Users can click on the notifications to view the post related to the notificaiton.
+
 ---------------------------------------------
 ### Acknowledgements:
 - Video tutorial for motion layout:
