@@ -89,23 +89,33 @@ public class PantryActivity extends AppCompatActivity implements NavigationView.
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
-                    // Retrieve data safely
-                    String pantry = snapshot.child("pantry").getValue(String.class);
-                    Log.d("PA",pantry);
-                    // Remove the square brackets and split the string by commas
-                    String[] words = pantry.substring(1, pantry.length() - 1).split(", ");
 
-                    Log.d("W", Arrays.toString(words));
-                    // Create an ArrayList from the array of words
-                    ingredientList = new ArrayList<>(Arrays.asList(words));
+                    String pantry = snapshot.child("pantry").getValue(String.class);
+
+                    // Remove the square brackets and split the string by commas
+                    String[] ingredients = pantry.substring(1, pantry.length() - 1).split(", ");
+
+
+                    // Create an ArrayList from the array of ingredients
+                    ingredientList = new ArrayList<>(Arrays.asList(ingredients));
+                    ArrayList<String> tempList = new ArrayList<>(Arrays.asList(ingredients));
+
+                    // Remove any blank ingredients
+                    for (String i : tempList) {
+                        if (i.trim().equals("")) {
+                            ingredientList.remove(i);
+                        }
+                    }
                     pantryAdapter = new PantryIngredientAdapter(ingredientList, PantryActivity.this);
 
+                    // Set up recyclerview
                     LinearLayoutManager pantryLayoutManager = new LinearLayoutManager(PantryActivity.this);
 
                     pantryRecyclerView.setLayoutManager(pantryLayoutManager);
                     pantryRecyclerView.setItemAnimator(new DefaultItemAnimator());
                     pantryRecyclerView.setAdapter(pantryAdapter);
 
+                    // Link ItemTouchHelper to recyclerview
                     ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
                     itemTouchHelper.attachToRecyclerView(pantryRecyclerView);
 

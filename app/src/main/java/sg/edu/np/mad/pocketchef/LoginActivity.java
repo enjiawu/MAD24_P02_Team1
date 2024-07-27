@@ -544,6 +544,7 @@ public class LoginActivity extends AppCompatActivity {
                         // Write user data to the database
                         myRef.child("users").child(uid).child("username").setValue(username);
                         myRef.child("users").child(uid).child("email").setValue(email);
+                        myRef.child("users").child(uid).child("pantry").setValue("[]");
                         myRef.child("usernames").child(uid).setValue(username);
                         myRef.child("emails").child(uid).setValue(email);
 
