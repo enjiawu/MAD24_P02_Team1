@@ -25,7 +25,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             />
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -89,8 +89,9 @@
         android:hint="Unit"
         />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/bt_create"
+        android:backgroundTint="@color/paletteorange"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
