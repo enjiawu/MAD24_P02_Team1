@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.orhanobut.logger.Logger;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -45,6 +46,7 @@ public class InstructionsIngredientsAdapter extends RecyclerView.Adapter<Instruc
             // Check if the image URL is not null
             if (ingredient.image != null && !ingredient.image.isEmpty()) {
                 holder.imageView_instructions_step_items.setVisibility(View.VISIBLE); // Ensure ImageView is visible
+
                 Picasso.get().load(ingredient.image)
                         .fit()
                         .centerCrop()

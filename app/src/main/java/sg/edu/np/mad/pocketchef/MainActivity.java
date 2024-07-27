@@ -37,6 +37,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
+import sg.edu.np.mad.pocketchef.Models.App;
 import sg.edu.np.mad.pocketchef.Models.CategoryBean;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -51,9 +52,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     MaterialToolbar toolbar;
-    MenuItem nav_home, nav_recipes, nav_search, nav_logout;
-
-    CardView cardView1, cardView2, cardView3, cardView4;
+    MenuItem nav_home, nav_recipes, nav_search, nav_logout, nav_profile, nav_favourites, nav_community, nav_pantry, nav_complex_search;
+    CardView cardView1, cardView2, cardView3, cardView4, cardView5, cardView6, cardView7, cardView8;
     //cardView5, cardView6;
 
     @SuppressLint("ClickableViewAccessibility")
@@ -86,8 +86,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         usernameTv = findViewById(R.id.textView_username);
 
         FindViews(); // Initialize views after setContentView()
-        loadProfile(); //Load username
-
+      //  loadProfile(); //Load username
+    //    CreateDefaultFavorites();
         // Set toolbar as action bar
         setSupportActionBar(toolbar);
 
@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void run() {
                 List<CategoryBean> list = FavoriteDatabase.getInstance(MainActivity.this).categoryDao().getAllCategories();
                 if(list==null||list.isEmpty()){
-                    CategoryBean categoryBean =new CategoryBean("Favorite","Favorite");
+                    CategoryBean categoryBean =new CategoryBean(App.user,"Favorite","Favorite");
                     FavoriteDatabase.getInstance(MainActivity.this).categoryDao().insertCategory(categoryBean);
                 }
             }
@@ -212,6 +212,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
             startActivity(intent);
         });
+
+        // Card View On Click Listener for ImageSearchActivity
+        cardView5.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, ComplexSearchActivity.class);
+            startActivity(intent);
+        });
+
+        // Card View On Click Listener for ProfileActivity
+        cardView6.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, CommunityActivity.class);
+            startActivity(intent);
+        });
+
     }
 
     @Override
@@ -232,14 +245,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         nav_recipes = navigationView.getMenu().findItem(R.id.nav_recipes);
         nav_search = navigationView.getMenu().findItem(R.id.nav_search);
         nav_logout = navigationView.getMenu().findItem(R.id.nav_logout);
+        nav_profile = navigationView.getMenu().findItem(R.id.nav_profile);
+        nav_favourites = navigationView.getMenu().findItem(R.id.nav_favourites);
+        nav_community = navigationView.getMenu().findItem(R.id.nav_community);
+        nav_pantry = navigationView.getMenu().findItem(R.id.nav_pantry);
+        nav_complex_search = navigationView.getMenu().findItem(R.id.nav_complex_search);
         cardView1 = findViewById(R.id.cardView1);
         cardView2 = findViewById(R.id.cardView2);
         cardView3 = findViewById(R.id.cardView3);
         cardView4 = findViewById(R.id.cardView4);
-
-        //For Stage 2
-        //cardView5 = findViewById(R.id.cardView5);
-        //cardView6 = findViewById(R.id.cardView6);
+        cardView5 = findViewById(R.id.cardView5);
+        cardView6 = findViewById(R.id.cardView6);
+        cardView7 = findViewById(R.id.cardView7);
+        cardView8 = findViewById(R.id.cardView8);
     }
 
     private void dismissSplashScreen() {
@@ -267,6 +285,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent intent3 = new Intent(MainActivity.this, CreateCategoryActivity.class);
             finish();
             startActivity(intent3);
+        } else if (itemId == R.id.nav_pantry) {
+            Intent intent3 = new Intent(MainActivity.this, PantryActivity.class);
+            finish();
+            startActivity(intent3);
         } else if (itemId == R.id.nav_search) {
             Intent intent4 = new Intent(MainActivity.this, AdvancedSearchActivity.class);
             finish();
@@ -276,6 +298,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent intent5 = new Intent(MainActivity.this, LoginActivity.class);
             finish();
             startActivity(intent5);
+        } else if (itemId == R.id.nav_community) {
+            Intent intent6 = new Intent(MainActivity.this, CommunityActivity.class);
+            finish();
+            startActivity(intent6);
+        } else if (itemId == R.id.nav_complex_search) {
+            Intent intent7 = new Intent(MainActivity.this, ComplexSearchActivity.class);
+            finish();
+            startActivity(intent7);
+        }else if(itemId == R.id.nav_addfeature3){
+            Intent intent9 = new Intent(this, ShopCartActivity.class);
+            finish();
+            startActivity(intent9);
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;

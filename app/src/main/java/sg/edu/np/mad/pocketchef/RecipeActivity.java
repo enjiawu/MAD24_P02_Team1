@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
@@ -47,7 +48,7 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     MaterialToolbar toolbar;
-    MenuItem nav_home, nav_recipes, nav_search;
+    MenuItem nav_home, nav_recipes, nav_search, nav_logout, nav_profile, nav_favourites, nav_community, nav_pantry, nav_complex_search;
     View view;
 
     @Override
@@ -74,6 +75,12 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
         nav_home = navigationView.getMenu().findItem(R.id.nav_home);
         nav_recipes = navigationView.getMenu().findItem(R.id.nav_recipes);
         nav_search = navigationView.getMenu().findItem(R.id.nav_search);
+        nav_logout = navigationView.getMenu().findItem(R.id.nav_logout);
+        nav_profile = navigationView.getMenu().findItem(R.id.nav_profile);
+        nav_favourites = navigationView.getMenu().findItem(R.id.nav_favourites);
+        nav_community = navigationView.getMenu().findItem(R.id.nav_community);
+        nav_pantry = navigationView.getMenu().findItem(R.id.nav_pantry);
+        nav_complex_search = navigationView.getMenu().findItem(R.id.nav_complex_search);
         // Spinner set up
         ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(
                 this,
@@ -165,6 +172,8 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
     // Methods to call API
     // Methods to fetch RandomRecipes
     private void fetchRandomRecipes() {
+        // Show a Snackbar message indicating that search is in progress
+        Snackbar.make(findViewById(android.R.id.content), "Searching Random Recipes", Snackbar.LENGTH_SHORT).show();
         progressBar.setVisibility(View.VISIBLE);
         requestManager.getRandomRecipes(new RdmRecipeRespListener() {
             @Override
@@ -186,7 +195,7 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(RecipeActivity.this, 1));
         RandomRecipeAdapter randomRecipeAdapter = new RandomRecipeAdapter(RecipeActivity.this,
-                response.recipes, recipeClickListener);
+                response.getRecipes(), recipeClickListener);
         recyclerView.setAdapter(randomRecipeAdapter);
     }
 
@@ -220,6 +229,22 @@ public class RecipeActivity extends AppCompatActivity implements NavigationView.
             Intent intent5 = new Intent(RecipeActivity.this, LoginActivity.class);
             finish();
             startActivity(intent5);
+        } else if (itemId == R.id.nav_community) {
+            Intent intent6 = new Intent(RecipeActivity.this, CommunityActivity.class);
+            finish();
+            startActivity(intent6);
+        } else if (itemId == R.id.nav_pantry) {
+            Intent intent7 = new Intent(RecipeActivity.this, PantryActivity.class);
+            finish();
+            startActivity(intent7);
+        } else if (itemId == R.id.nav_complex_search) {
+            Intent intent8 = new Intent(RecipeActivity.this, ComplexSearchActivity.class);
+            finish();
+            startActivity(intent8);
+        }else if (itemId == R.id.nav_addfeature3) {
+            Intent intent7 = new Intent(this, ShopCartActivity.class);
+            finish();
+            startActivity(intent7);
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;

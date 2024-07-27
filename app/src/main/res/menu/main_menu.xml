@@ -52,7 +52,7 @@
             <item
                 android:id="@+id/nav_addfeature3"
                 android:icon="@drawable/pocketchef_logo"
-                android:title="feature3" />
+                android:title="Shop Cart" />
         </menu>
     </item>-->
 </menu>

@@ -49,6 +49,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
+import sg.edu.np.mad.pocketchef.Models.App;
+
 public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
@@ -384,26 +386,22 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         logIn.setOnClickListener(v -> {
-            //                Make sure fields are not empty
             if (usernameEmailLogInText.trim().isEmpty()) {
                 Toast.makeText(LoginActivity.this, "Fill in your username/email.",
                         Toast.LENGTH_SHORT).show();
-
             } else if (passwordLogInText.trim().isEmpty()) {
                 Toast.makeText(LoginActivity.this, "Fill in your account password.",
                         Toast.LENGTH_SHORT).show();
-
                 //                    If email is entered
             } else if (usernameEmailLogInText.contains("@") && usernameEmailLogInText.contains(".")) {
-                mAuth.signInWithEmailAndPassword(usernameEmailLogInText, passwordLogInText).addOnCompleteListener(task -> {
+                mAuth.signInWithEmailAndPassword(usernameEmailLogInText,
+                        passwordLogInText).addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        //                            Go to main
+                        App.user = usernameEmailLogInText;
                         Intent logIn1 = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(logIn1);
-
                     } else {
-//                        Log.d("CONTAINS", String.valueOf(usedEmails.contains(usernameEmailLogInText)));
-
+                        Log.d("CONTAINS", String.valueOf(usedEmails.contains(usernameEmailLogInText)));
                         if (!usedEmails.contains(usernameEmailLogInText))
                             Toast.makeText(LoginActivity.this, "User does not exist.",  // If user does not exist in database
                                     Toast.LENGTH_SHORT).show();
@@ -428,8 +426,9 @@ public class LoginActivity extends AppCompatActivity {
                             if (usernameEmailLogInText.equalsIgnoreCase(user.child("username").getValue(String.class))) {
                                 mAuth.signInWithEmailAndPassword(Objects.requireNonNull(user.child("email").getValue(String.class)), passwordLogInText).addOnCompleteListener(task -> {
                                     if (task.isSuccessful()) {
-                                        //                                            Go to main
+                                        App.user = usernameEmailLogInText;
                                         Intent logIn1 = new Intent(LoginActivity.this, MainActivity.class);
+
                                         startActivity(logIn1);
 
                                     } else {
@@ -583,13 +582,11 @@ public class LoginActivity extends AppCompatActivity {
 //                myRef.child("users").child(uid).child("profile-picture").setValue(profilePicture);
             myRef.child("users").child(uid).child("profile-description").setValue(String.valueOf(Objects.requireNonNull(profileDescriptionSignUp.getEditText()).getText()));
 
-
             if (profilePicture != null) {
                 mStorageRef.child(mAuth.getCurrentUser().getUid()).putFile(Uri.parse(profilePicture)).addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
 
                     } else {
-
                         Toast.makeText(LoginActivity.this, "Unable to upload profile picture", Toast.LENGTH_SHORT).show();
                     }
                 });
