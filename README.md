@@ -269,18 +269,25 @@ Optional:
 - Users can click on the notifications to view the post related to the notificaiton.
 
 #### 17) Shopping List:
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/ShoppingList.png)
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/ShoppingList-Share.png)
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/ShoppingList-Scan.png)
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/ShoppingList-Add.png)
 - Users can view their categories for Shopping list
 - Users can share the selected shopping list with others in external apps using a generate QR code
 - Users can Scan the QR code to get the shopping list detail
 - Users can click on a category to view the ingredients added to a specific category
 
 #### 18) Shopping List Items:
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/ShoppingList-Item.png)
 - Users can view and delete the ingredients that add in the shopping list
 - Users can tick the ingredients that they have and check how many items left in the shooping list
 - Users can scan barcode or use the "+" button to add ingredient that they might want to buy
 - Users can click on the "house" icon to view the item that they already have in Virtual Pantry
 
 #### 19) Virtual Pantry
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/VirtualPantry.png)
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/VirtualPantry-Scanner.jpg)
 - Users can scan barcode to add the products that they already have into the virtual pantry, when the product match with the shopping list item it will auto-ticking the item
 
 ---------------------------------------------
