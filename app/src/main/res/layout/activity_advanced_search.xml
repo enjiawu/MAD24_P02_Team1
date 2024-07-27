@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
+    android:background="@color/palettebeige"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".AdvancedSearchActivity"
-    tools:openDrawer="start">
+    tools:context=".AdvancedSearchActivity">
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
@@ -30,7 +30,7 @@
                 android:id="@+id/main"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#FCFAFB"
+                android:background="@color/palettebeige"
                 android:clipToPadding="false"
                 app:layoutDescription="@xml/recipe_activity_scene">
 
