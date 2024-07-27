@@ -133,10 +133,16 @@ Optional:
 - Successfully implement QR code sharing options - [X]
 - Successfully implement barcode scanning to add products to the Virtual Pantry - [X]
 - Successfully implement auto-ticking of matched items in the shopping list from the Virtual Pantry - [X]
+
 ### Limitations of API:
 #### Advanced Searching - [recipes/complexSearch](https://spoonacular.com/food-api/docs#Search-Recipes-Complex)
 - Some inputs do not generate the correct recipe details when the query and excludeIngredients parameters are both entered. For example, when the user inputs "apple" for the query and excludeIngredients parameters, the API still returns recipes with apples. However, all other food options work, like entering cheese or chicken for both parameters.
 - API calls for equipment and ingredient might be changed due to API Provider changing their output. For example, ingredients utilise "ingredient.image" which is the parameter itself such as "/banana.jpg", however for equipment, it is the full url "https://img.spoonacular.com/equipments_100x100/pan.png". Undocumented changes for this API have happened, so if images do not show up in the recyclerview for "RecipeDetailsActivity", please check through postman.
+
+### Limtiations of App:
+#### Complex Search
+- Food Images limited to 101 types of food, as per labels.txt in assets folder
+- Voice Recognition limited to 6300+ food names, as per ingredients to label.txt in raw folder
 ---------------------------------------------
 ### Screenshots of Application:
 #### 1) Login: 
