@@ -33,8 +33,6 @@ import sg.edu.np.mad.pocketchef.Models.HomeShopItem;
 import sg.edu.np.mad.pocketchef.Models.ProductResponse;
 import sg.edu.np.mad.pocketchef.Models.ShoppingCart;
 import sg.edu.np.mad.pocketchef.databinding.ActivityShopListBinding;
-import sg.edu.np.mad.pocketchef.Net.ApiClient;
-import sg.edu.np.mad.pocketchef.Net.ApiService;
 
 public class ShopListActivity extends AppCompatActivity {
 

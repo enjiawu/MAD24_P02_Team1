@@ -1,4 +1,4 @@
-package sg.edu.np.mad.pocketchef.Net;
+package sg.edu.np.mad.pocketchef;
 
 
 import okhttp3.OkHttpClient;
