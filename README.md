@@ -123,7 +123,7 @@ Optional:
 - Successfully implement drag and drop and swiping to re-order, edit and delete ingredients = [x]
 - Successfully fetch and display recipes from API - [x]
 - Successfully store, load and update pantry items in database - [x]
-#### Generated Shopping List - Wenya - [ ]
+#### Generated Shopping List - Wenya - [X]
 - Successfully implement Shopping List Interface - [X]
 - Successfully created custom categories for shopping list - [X]
 - Successfully implement functionality to add/remove item to the shopping list manually - [X]
@@ -143,6 +143,8 @@ Optional:
 #### Complex Search
 - Food Images limited to 101 types of food, as per labels.txt in assets folder
 - Voice Recognition limited to 6300+ food names, as per ingredients to label.txt in raw folder
+#### Favourites & Shopping List:
+- IllegalStateException occurs when attempting to store data in SQLite once database has exceed capacity, to regain functionality, clear cache of the app
 ---------------------------------------------
 ### Screenshots of Application:
 #### 1) Login: 
@@ -250,6 +252,7 @@ Optional:
 - Users can search via Voice Recognition and Image Classification
 - Upon pressing Open Camera, user will be prompted for camera permission and an image will be taken
 - Upon pressing Open Gallery, user will be prompted for gallery permissions and an image will be selected
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/ComplexSearchImage.png)
 - Classifying an image, a food label with associated prediction value will be provided.
 - Upon pressing Voice Search, voice recognition will start, and food-related keywords will be filtered out
 - Upon pressing Search Recipes, a query will be parsed into intent and recipes will be shown.
