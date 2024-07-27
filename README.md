@@ -241,8 +241,14 @@ Optional:
 
 #### 17) Complex Search:
 ![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/ComplexSearch.png)
-- Users can view notifications received and delete them by swiping to the left.
-- Users can click on the notifications to view the post related to the notification.
+- Users can search via Voice Recognition and Image Classification
+- Upon pressing Open Camera, user will be prompted for camera permission and an image will be taken
+- Upon pressing Open Gallery, user will be prompted for gallery permissions and an image will be selected
+- Classifying an image, a food label with associated prediction value will be provided.
+- Upon pressing Voice Search, voice recognition will start, and food-related keywords will be filtered out
+- Upon pressing Search Recipes, a query will be parsed into intent and recipes will be shown.
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/QueriedRecipes.png)
+- Recipes searched based on query from Complex Search will be viewed in a recycler view format.
 
 #### 18) Shopping List
 ![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/CreateNewShoppingList.png)
