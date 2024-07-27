@@ -23,14 +23,14 @@
             android:icon="@drawable/ic_favorite_list"
             android:title="Pantry" />
     </group>
-        <item android:title="Profile">
-            <menu>
-                <group android:checkableBehavior="single">
-                    <!--
-                <item
-                    android:id="@+id/nav_login"
-                    android:icon="@drawable/ic_login"
-                    android:title="Login" /> -->
+    <item android:title="Profile">
+        <menu>
+            <group android:checkableBehavior="single">
+                <!--
+            <item
+                android:id="@+id/nav_login"
+                android:icon="@drawable/ic_login"
+                android:title="Login" /> -->
                 <item
                     android:id="@+id/nav_profile"
                     android:icon="@drawable/ic_profile"
@@ -39,9 +39,9 @@
                     android:id="@+id/nav_logout"
                     android:icon="@drawable/ic_logout"
                     android:title="Logout" />
-                </group>
-            </menu>
-        </item>
+            </group>
+        </menu>
+    </item>
 
     <item android:title="Additional Features">
         <menu>
@@ -54,17 +54,13 @@
                 android:icon="@drawable/ic_complex_search"
                 android:title="Complex Search" />
             <item
-                android:id="@+id/nav_shoppinglist"
-                android:icon="@drawable/pocketchef_logo"
-                android:title="Shopping List" />
-            <item
                 android:id="@+id/nav_locationfinder"
                 android:icon="@drawable/pocketchef_logo"
                 android:title="Location Finder" />
             <item
                 android:id="@+id/nav_shoppinglist"
                 android:icon="@drawable/pocketchef_logo"
-                android:title="Shop Cart" />
+                android:title="Shopping List" />
         </menu>
     </item>
 </menu>

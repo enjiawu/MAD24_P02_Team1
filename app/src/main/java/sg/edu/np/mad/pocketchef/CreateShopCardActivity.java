@@ -69,7 +69,11 @@ public class CreateShopCardActivity extends AppCompatActivity {
                 shoppingCart.name = name;
                 shoppingCart.user = App.user;
                 shoppingCart.createTime = Utils.getLocalTime();
-                shoppingCart.imagurl = path;
+                if(TextUtils.isEmpty(path)){
+                    shoppingCart.imagurl = "";
+                }else {
+                    shoppingCart.imagurl = path;
+                }
                 WaitDialog.show("loading...");
                 executorService.execute(new Runnable() {
                     @Override
