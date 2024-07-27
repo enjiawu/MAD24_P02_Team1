@@ -1,5 +1,6 @@
 package sg.edu.np.mad.pocketchef;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -8,11 +9,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,29 +26,50 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.FetchPlaceRequest;
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import sg.edu.np.mad.pocketchef.Adapters.PredictionsAdapter;
+import sg.edu.np.mad.pocketchef.databinding.ActivityLocationBinding;
 
-public class LocationActivity extends AppCompatActivity {
+public class LocationActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private PlacesClient placesClient;
     private PredictionsAdapter adapter;
-    NavigationView navigationView;
+    private AutocompleteSessionToken sessionToken;
     EditText searchEt;
     RecyclerView searchLocationRv;
-    private AutocompleteSessionToken sessionToken;
-    ImageView searchIv,backIv;
+    private ActivityLocationBinding bind;
+    ImageView searchIv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location);
-        backIv = findViewById(R.id.backIv);
+        // Initialize view binding
+        bind = ActivityLocationBinding.inflate(getLayoutInflater());
+        setContentView(bind.getRoot());
+        // Set toolbar as action bar
+        setSupportActionBar(bind.toolbar);
+        // Navigation Menu setup
+        DrawerLayout drawerLayout = bind.drawerLayout;
+        NavigationView navigationView = bind.navView;
+        MaterialToolbar toolbar = bind.toolbar;
+
+
+        // Set up nav menu
+        navigationView.bringToFront();
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(LocationActivity.this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+        navigationView.setNavigationItemSelectedListener(LocationActivity.this);
+        navigationView.setCheckedItem(R.id.nav_locationfinder);
+
         searchEt = findViewById(R.id.searchEt);
         searchLocationRv = findViewById(R.id.searchLocationRv);
         searchIv = findViewById(R.id.searchIv);
@@ -89,9 +111,65 @@ public class LocationActivity extends AppCompatActivity {
                 }
             }
         });
+    }
 
-        backIv.setOnClickListener(v -> onBackPressed());
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        int itemId = menuItem.getItemId();
+        if (itemId == R.id.nav_home) {
+            // Nothing Happens
+        } else if (itemId == R.id.nav_recipes) {
+            Intent intent = new Intent(LocationActivity.this, RecipeActivity.class);
+            finish();
+            startActivity(intent);
+        } else if (itemId == R.id.nav_profile) {
+            Intent intent2 = new Intent(LocationActivity.this, ProfileActivity.class);
+            finish();
+            startActivity(intent2);
+        } else if (itemId == R.id.nav_favourites) {
+            Intent intent3 = new Intent(LocationActivity.this, CreateCategoryActivity.class);
+            finish();
+            startActivity(intent3);
+        } else if (itemId == R.id.nav_pantry) {
+            Intent intent3 = new Intent(LocationActivity.this, PantryActivity.class);
+            finish();
+            startActivity(intent3);
+        } else if (itemId == R.id.nav_search) {
+            Intent intent4 = new Intent(LocationActivity.this, AdvancedSearchActivity.class);
+            finish();
+            startActivity(intent4);
+        } else if (itemId == R.id.nav_logout) {
+            FirebaseAuth.getInstance().signOut();
+            Intent intent5 = new Intent(LocationActivity.this, LoginActivity.class);
+            finish();
+            startActivity(intent5);
+        } else if (itemId == R.id.nav_community) {
+            Intent intent6 = new Intent(LocationActivity.this, CommunityActivity.class);
+            finish();
+            startActivity(intent6);
+        } else if (itemId == R.id.nav_complex_search) {
+            Intent intent7 = new Intent(LocationActivity.this, ComplexSearchActivity.class);
+            finish();
+            startActivity(intent7);
+        } else if (itemId == R.id.nav_shoppinglist) {
+            Intent intent8 = new Intent(LocationActivity.this, ShopCartActivity.class);
+            finish();
+            startActivity(intent8);
+        } else if (itemId == R.id.nav_locationfinder) {
+            Intent intent9 = new Intent(LocationActivity.this, LocationActivity.class);
+            finish();
+            startActivity(intent9);
+        }
+        bind.drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            bind.drawerLayout.openDrawer(GravityCompat.START);
+        }
+        return super.onOptionsItemSelected(item);
 
     }
 
@@ -101,14 +179,6 @@ public class LocationActivity extends AppCompatActivity {
             return;
         }
 
-        // Create a RectangularBounds object for the search area (optional)
-//        RectangularBounds singaporeBounds = RectangularBounds.newInstance(
-//                new LatLng(1.1304753, 103.6920359), // Southwest corner of bounds
-//                new LatLng(1.4504753, 104.0910359)  // Northeast corner of bounds
-//        );
-
-
-        // Create a FindAutocompletePredictionsRequest object
         FindAutocompletePredictionsRequest request = FindAutocompletePredictionsRequest.builder()
                 .setCountry("SG")
                 .setSessionToken(sessionToken)
