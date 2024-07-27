@@ -255,10 +255,13 @@ Optional:
 
 #### 19) Pantry:
 ![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/Pantry.png)
+- Users can add, edit and delete their pantry ingredients here
+- Users can select pantry ingredients to search for available recipes
 
 ![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/Pantry2.png)
-- Users can view notifications received and delete them by swiping to the left.
-- Users can click on the notifications to view the post related to the notificaiton.
+- Users can view the possible recipes based on their selected ingredients.
+- Users can view the ingredients they are missing for each recipe.
+- Users can select any recipe to view recipe details and instructions.
 
 #### 20) Google Maps:
 ![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/QueriedRecipes.png)
