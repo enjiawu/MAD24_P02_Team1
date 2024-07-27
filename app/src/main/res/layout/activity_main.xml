@@ -49,6 +49,7 @@
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/textView_title"
             android:layout_width="0dp"
+            android:textStyle="bold"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
@@ -64,8 +65,9 @@
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/textView_title_subtitle"
             android:layout_width="0dp"
+            android:textStyle="italic"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="18dp"
             android:fontFamily="@font/opensans"
             android:text="@string/textView_title_subtitle"
             android:textColor="@color/palettedarkblue"
