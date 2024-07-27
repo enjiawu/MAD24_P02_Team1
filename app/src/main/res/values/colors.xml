@@ -8,4 +8,6 @@
     <color name="palettetext">#140F1F</color>
     <color name="palettedarkblue">#001219</color>
     <color name="transparent">#00FFFFFF</color>
+    <color name="palettepeach">#E3C578</color>
+    <color name="palettelavender">#E1E4F4</color>
 </resources>

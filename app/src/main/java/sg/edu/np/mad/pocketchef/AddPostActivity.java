@@ -1,8 +1,11 @@
 package sg.edu.np.mad.pocketchef;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -12,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,15 +25,34 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import sg.edu.np.mad.pocketchef.Models.Comment;
+import sg.edu.np.mad.pocketchef.Models.Post;
+
+// Enjia - Stage 2
 public class AddPostActivity extends AppCompatActivity {
+    private static final String TAG = "AddPostActivity";
     private ActivityResultLauncher<Intent> resultLauncher;
     private ImageView backButton, recipeImage, addImageIcon;
     private TextView addRecipeImageText;
@@ -38,6 +61,16 @@ public class AddPostActivity extends AppCompatActivity {
     private TextInputLayout recipeTitleBox, fatInfoBox, proteinInfoBox, caloriesInfoBox, prepTimeInfoBox, costPerServingInfoBox, servingsInputBox;
     private Button addMoreStepsButton, addMoreIngredients, addMoreEquipment, postButton;
     private List<TextInputLayout> inputBoxes, instructionsInputBoxes  = new ArrayList<>(), ingredientsInputBoxes  = new ArrayList<>(), equipmentInputBoxes = new ArrayList<>();
+    private Uri imageUri;
+    private ProgressBar progressBar;
+    private String currentUsername, currentUserId, currentProfilePictureUrl;
+
+    // Database
+    FirebaseAuth mAuth;
+    FirebaseDatabase database;
+    DatabaseReference myRef, mUserRef;
+    StorageReference storageReference;
+    FirebaseUser currentUser;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,6 +116,8 @@ public class AddPostActivity extends AppCompatActivity {
         addImageIcon = findViewById(R.id.addRecipeImageIcon);
         addRecipeImageText = findViewById(R.id.addRecipeImageText);
 
+        progressBar = findViewById(R.id.progressBar);
+
         // Add the initial input boxes and set up listeners for them
         TextInputLayout InstructionsInputBox = (TextInputLayout) getLayoutInflater().inflate(R.layout.input_box, null);
         instructionInputLayout.addView(InstructionsInputBox);
@@ -106,13 +141,16 @@ public class AddPostActivity extends AppCompatActivity {
         TextInputEditText equipmentEditText = EquipmentInputBox.findViewById(R.id.input);
         textChangeListener(equipmentEditText);
         textDelete(equipmentEditText, equipmentInputLayout, equipmentInputBoxes);
-    }
 
-    /*
-    * Potential features to add:
-    * Drag and drop step by step instructions for easier reorganisation
-    * Allow users to save their post draft
-    */
+        //Firebase database setup
+        mAuth = FirebaseAuth.getInstance();
+        storageReference = FirebaseStorage.getInstance().getReference().child("PostImages");
+        database = FirebaseDatabase.getInstance("https://pocket-chef-cd59c-default-rtdb.asia-southeast1.firebasedatabase.app/");
+        myRef = database.getReference("posts").push();
+        // Get current user
+        currentUser = mAuth.getCurrentUser();
+        mUserRef = FirebaseDatabase.getInstance().getReference("users");
+    }
 
     // Setting up listeners
     public void setupListeners() {
@@ -153,11 +191,12 @@ public class AddPostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                  if (validateData()){
-                     postRecipe();
+                     addPost();
                  }
             }
         });
 
+        // If the user clicks on the image for the recipe, open thier gallery
         recipeImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -278,7 +317,8 @@ public class AddPostActivity extends AppCompatActivity {
                     @Override
                     public void onActivityResult(ActivityResult result) {
                         try{
-                            Uri imageUri = result.getData().getData();
+                            // Saving image reference to a URI variable
+                            imageUri = result.getData().getData();
                             recipeImage.setImageURI(imageUri);
                             // Make the text and icon invisible
                             addImageIcon.setVisibility(View.GONE);
@@ -292,7 +332,7 @@ public class AddPostActivity extends AppCompatActivity {
         );
     }
 
-
+    // Validate data before post is submitted
     private boolean validateData() {
         boolean isValid = true;
 
@@ -385,15 +425,117 @@ public class AddPostActivity extends AppCompatActivity {
         return isValid;
     }
 
-    // Function to post recipe
-    private void postRecipe() {
+    // Function to add post
+    private void addPost() {
+        // Show progress bar
+        progressBar.setVisibility(View.VISIBLE);
+
+        // Access firebase storage
+        final StorageReference imageFilePath = storageReference.child(imageUri.getLastPathSegment());
+        imageFilePath.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                imageFilePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        String imageDownloadLink = uri.toString();
+
+                        // Collate instructions, ingredients, and equipment into lists
+                        List<String> instructions = new ArrayList<>();
+                        for (TextInputLayout inputBox : instructionsInputBoxes) {
+                            TextInputEditText editText = inputBox.findViewById(R.id.input);
+                            String instruction = editText.getText().toString().trim();
+                            if (!instruction.isEmpty()) {
+                                instructions.add(instruction);
+                            }
+                        }
+
+                        List<String> ingredients = new ArrayList<>();
+                        for (TextInputLayout inputBox : ingredientsInputBoxes) {
+                            TextInputEditText editText = inputBox.findViewById(R.id.input);
+                            String ingredient = editText.getText().toString().trim();
+                            if (!ingredient.isEmpty()) {
+                                ingredients.add(ingredient);
+                            }
+                        }
+
+                        List<String> equipment = new ArrayList<>();
+                        for (TextInputLayout inputBox : equipmentInputBoxes) {
+                            TextInputEditText editText = inputBox.findViewById(R.id.input);
+                            String equipmentItem = editText.getText().toString().trim();
+                            if (!equipmentItem.isEmpty()) {
+                                equipment.add(equipmentItem);
+                            }
+                        }
+
+                        // Checking what the saved equipment, instructions and ingredients are
+                        Log.d(TAG, equipment.toString());
+                        Log.d(TAG, instructions.toString());
+                        Log.d(TAG, ingredients.toString());
+                        mUserRef.child(currentUser.getUid()).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if (snapshot.exists()) {
+                                    // Get username and user id of the user who made the post
+                                    currentUserId = currentUser.getUid();
+
+                                    // Create post object
+                                    Post post = new Post(
+                                            recipeTitleInput.getText().toString().trim(),
+                                            imageDownloadLink,
+                                            Float.parseFloat(proteinInput.getText().toString().trim()),
+                                            Float.parseFloat(fatInput.getText().toString().trim()),
+                                            Float.parseFloat(caloriesInput.getText().toString().trim()),
+                                            Float.parseFloat(servingsInput.getText().toString().trim()),
+                                            Float.parseFloat(prepTimeInput.getText().toString().trim()),
+                                            Float.parseFloat(costPerServingInput.getText().toString().trim()),
+                                            instructions,
+                                            ingredients,
+                                            equipment,
+                                            new ArrayList<Comment>(),
+                                            currentUserId
+                                    );
+
+                                    // Add post data to firebase database
+                                    myRef.setValue(post).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void unused) {
+                                            Toast.makeText(AddPostActivity.this, "Post has been published", Toast.LENGTH_SHORT).show();
+                                            NotificationHelper.showNotification(AddPostActivity.this, post.getTitle(), "A new post by @" + snapshot.child("username").getValue(String.class) + " has been added!");
+
+                                        }
+                                    });
+
+                                    progressBar.setVisibility(View.GONE);
+
+                                    new Handler().postDelayed(new Runnable() { // Delay by 2 seconds so they can see the message
+                                        @Override
+                                        public void run() {
+                                            // Go to community activity and see new post
+                                            Intent intent = new Intent(AddPostActivity.this, CommunityActivity.class);
+                                            finish();
+                                            startActivity(intent);
+                                        }
+                                    }, 1000);
+                                } else {
+                                    Log.w(TAG, "DataSnapshot does not exist");
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                Log.e(TAG, "DatabaseError: " + error.getMessage()); // Handle database error
+                            }
+                        });
 
 
-        // Go to community activity and see new post
-        Intent intent = new Intent(AddPostActivity.this, CommunityActivity.class);
-        finish();
-        startActivity(intent);
+                    }
+                });
+            }
+        });
+
     }
-
 }
+
+
 

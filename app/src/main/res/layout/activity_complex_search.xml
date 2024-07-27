@@ -23,81 +23,289 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="@drawable/ic_launcher_foreground"
-            app:title="Combined Seach"
-            app:titleTextColor="@android:color/white" />
+            app:title="Complex Search"
+            app:titleTextColor="@color/palettedarkblue" />
 
         <!-- ImageView for Image -->
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="wrap_content"
-            android:layout_height="200dp"
-            android:layout_centerHorizontal="true"
+        <!-- ImageView inside CardView -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/imageCardView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_marginTop="16dp"
-            android:src="@drawable/ic_launcher_foreground"
+            app:cardBackgroundColor="@color/palettelavender"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="2dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_default="percent"
+            app:layout_constraintHeight_percent="0.4"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar" />
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="1.0">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_launcher_foreground" />
+        </com.google.android.material.card.MaterialCardView>
 
         <!-- Result TextView -->
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/resultTextView"
-            android:layout_width="wrap_content"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/resultCardView"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/resultTextView_placeholder"
-            android:textAlignment="center"
-            android:textSize="18sp"
+            android:layout_margin="16dp"
+            app:cardCornerRadius="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/imageView" />
+            app:layout_constraintTop_toBottomOf="@id/imageCardView"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="0.75">
 
-        <!-- Open Camera Button -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/cameraButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:backgroundTint="@color/paletteorange"
-            android:text="Open Camera"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/resultTextView" />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/resultTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textAlignment="center"
+                android:textSize="18sp"
+                android:visibility="gone" />
 
-        <!-- Open Gallery Button -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/galleryButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:backgroundTint="@color/paletteblue"
-            android:text="Open Gallery"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cameraButton"/>
+        </com.google.android.material.card.MaterialCardView>
 
-        <!-- Start Voice Recognition Button -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_start_recognition"
-            android:layout_width="wrap_content"
+        <!-- Open Camera Card -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardView_open_camera"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:backgroundTint="@color/paletteorange"
-            android:text="Start Voice Recognition"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="5dp"
+            app:cardBackgroundColor="@color/palettelavender"
+            app:cardElevation="2dp"
+            app:layout_constraintEnd_toStartOf="@+id/cardView_open_gallery"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/galleryButton" />
+            app:layout_constraintTop_toBottomOf="@id/resultCardView"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="0.4"
+            app:strokeWidth="0dp">
 
-        <!-- Search Recipes Button -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_search_recipes"
-            android:layout_width="wrap_content"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/textView_open_camera"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Open Camera"
+                    android:textColor="@color/paletteblue"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <!-- FrameLayout for ImageView -->
+                <FrameLayout
+                    android:id="@+id/frameLayout_image_camera"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textView_open_camera">
+
+                    <ImageView
+                        android:id="@+id/imageView_buttonlogo"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginBottom="20dp"
+                        android:scaleType="centerCrop"
+                        app:srcCompat="@drawable/ic_camera" />
+                </FrameLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Open Gallery Card -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardView_open_gallery"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:backgroundTint="@color/paletteblue"
-            android:text="Search Recipes"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="10dp"
+            app:cardBackgroundColor="@color/palettelavender"
+            app:cardElevation="2dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/cardView_open_camera"
+            app:layout_constraintTop_toBottomOf="@id/resultCardView"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="0.4">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/textView_open_gallery"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:text="Open Gallery"
+                    android:textColor="@color/paletteblue"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <!-- FrameLayout for ImageView -->
+                <FrameLayout
+                    android:id="@+id/frameLayout_image_gallery"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="8dp"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textView_open_gallery">
+
+                    <ImageView
+                        android:id="@+id/imageView_buttonlogo2"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginBottom="20dp"
+                        android:scaleType="centerCrop"
+                        app:srcCompat="@drawable/ic_gallery" />
+
+                </FrameLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Start Voice Recognition Card -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardView_start_recognition"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="5dp"
+            app:cardBackgroundColor="@color/palettelavender"
+            app:cardElevation="2dp"
+            app:layout_constraintEnd_toStartOf="@id/cardView_search_recipes"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/button_start_recognition" />
+            app:layout_constraintTop_toBottomOf="@id/cardView_open_camera"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="0.4">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/textView_start_recognition"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="8dp"
+                    android:text="Voice Search"
+                    android:textColor="@color/paletteblue"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <!-- FrameLayout for ImageView -->
+                <FrameLayout
+                    android:id="@+id/frameLayout_image_voice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="15dp"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textView_start_recognition">
+
+                    <ImageView
+                        android:id="@+id/imageView_buttonlogo3"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginBottom="20dp"
+                        android:scaleType="centerCrop"
+                        app:srcCompat="@drawable/ic_microphone" />
+
+                </FrameLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Search Recipes Card -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardView_search_recipes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            app:cardBackgroundColor="@color/palettelavender"
+            app:cardElevation="2dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/cardView_start_recognition"
+            app:layout_constraintTop_toBottomOf="@id/cardView_open_gallery"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="0.4">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/textView_search_recipes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:text="Search Recipes"
+                    android:textColor="@color/paletteblue"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <!-- FrameLayout for ImageView -->
+                <FrameLayout
+                    android:id="@+id/frameLayout_image_recipes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="15dp"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textView_search_recipes">
+
+                    <ImageView
+                        android:id="@+id/imageView_buttonlogo4"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginBottom="20dp"
+                        android:scaleType="centerCrop"
+                        app:srcCompat="@drawable/ic_complex_search" />
+
+                </FrameLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

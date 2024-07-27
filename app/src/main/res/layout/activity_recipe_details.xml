@@ -24,13 +24,13 @@
         tools:context=".RecipeDetailsActivity">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/recipe_details"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/paletteorange"
-            tools:context=".RecipeDetailsActivity"
-            android:id="@+id/recipe_details"
             android:clickable="true"
-            android:focusable="true">
+            android:focusable="true"
+            tools:context=".RecipeDetailsActivity">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
@@ -48,11 +48,11 @@
 
             <!-- Nested scroll view for accessibility -->
             <androidx.core.widget.NestedScrollView
+                android:id="@+id/nestedScrollView_RecipeInfo"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/toolbar"
-                android:id="@+id/nestedScrollView_RecipeInfo">
+                app:layout_constraintTop_toBottomOf="@+id/toolbar">
                 <!-- Linear layout to contain content -->
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -61,167 +61,308 @@
                     android:orientation="vertical"
                     android:padding="8dp">
 
-                    <TextView
-                        android:id="@+id/textView_meal_name"
+                    <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="4dp"
-                        android:text="@string/recipe_name"
-                        android:textColor="@color/paletteorange"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
+                        android:layout_margin="4dp"
+                        android:radius="16dp"
+                        android:strokeColor="@android:color/transparent"
+                        app:cardBackgroundColor="@color/paletteorange"
+                        app:cardElevation="4dp"
+                        app:strokeWidth="0dp">
 
-                    <TextView
-                        android:id="@+id/textView_meal_source"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:padding="4dp"
-                        android:text="@string/source"
-                        android:textColor="@color/paletteblack"
-                        android:textSize="14sp"
-                        android:textStyle="italic" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
 
-                    <ImageView
-                        android:id="@+id/imageView_meal_image"
-                        android:layout_width="match_parent"
-                        android:layout_height="250dp"
-                        android:layout_margin="8dp"
-                        android:scaleType="centerCrop"
-                        tools:ignore="ContentDescription" />
+                            <!-- Meal Name TextView -->
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/textView_meal_name"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:padding="4dp"
+                                android:text="@string/recipe_name"
+                                android:textColor="@color/palettedarkblue"
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
+
+                            <!-- Meal Source TextView -->
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/textView_meal_source"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:padding="4dp"
+                                android:text="@string/source"
+                                android:textColor="@color/paletteblack"
+                                android:textSize="14sp"
+                                android:textStyle="italic" />
+
+                            <com.google.android.material.card.MaterialCardView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="4dp"
+                                app:cardCornerRadius="16dp"
+                                android:strokeColor="@android:color/transparent"
+                                app:cardBackgroundColor="@color/paletteorange"
+                                app:cardElevation="4dp"
+                                app:strokeWidth="0dp">
+
+                                <!-- ShapeableImageView inside MaterialCardView -->
+                                <com.google.android.material.imageview.ShapeableImageView
+                                    android:id="@+id/imageView_meal_image"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:adjustViewBounds="true"
+                                    android:scaleType="centerCrop"
+                                    app:shapeAppearanceOverlay="@style/RoundedCorners" />
+
+                            </com.google.android.material.card.MaterialCardView>
+
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
 
                     <GridLayout
-                        android:id="@+id/gridLayout_summary"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="4dp"
-                        android:layout_marginTop="40dp"
-                        android:background="@color/paletteblue"
-                        android:columnCount="4"
-                        android:elevation="4dp"
-                        android:orientation="horizontal"
-                        android:padding="8dp"
+                        android:layout_margin="16dp"
+                        android:columnCount="3"
+                        android:padding="4dp"
                         android:rowCount="2">
 
-                        <TextView
-                            android:id="@+id/textView_protein_label"
-                            android:layout_width="wrap_content"
+                        <!-- Protein Card -->
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_row="0"
                             android:layout_column="0"
+                            android:layout_columnWeight="1"
                             android:layout_marginEnd="12dp"
                             android:layout_marginBottom="12dp"
-                            android:text="@string/textView_protein_label_text"
-                            android:textColor="@color/paletteorange"
-                            android:textSize="18sp"
-                            android:textStyle="normal" />
+                            app:cardBackgroundColor="@color/palettepeach"
+                            app:cardCornerRadius="8dp"
+                            app:cardElevation="2dp"
+                            app:strokeWidth="0dp">
 
-                        <TextView
-                            android:id="@+id/textView_protein_value"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_row="0"
-                            android:layout_column="1"
-                            android:layout_marginEnd="12dp"
-                            android:layout_marginBottom="12dp"
-                            android:textColor="@color/paletteorange"
-                            android:textSize="18sp"
-                            android:textStyle="normal" />
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="8dp">
 
-                        <TextView
-                            android:id="@+id/textView_fat_label"
-                            android:layout_width="wrap_content"
+                                <com.google.android.material.card.MaterialCardView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:backgroundTint="@color/paletteorange"
+                                    app:cardCornerRadius="0dp"
+                                    app:cardElevation="2dp"
+                                    app:contentPadding="4dp"
+                                    app:strokeWidth="0dp">
+
+                                    <com.google.android.material.textview.MaterialTextView
+                                        android:id="@+id/textView_protein_label"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:text="@string/textView_protein_label_text"
+                                        android:textColor="@color/palettedarkblue"
+                                        android:textSize="18sp"
+                                        android:textStyle="normal" />
+                                </com.google.android.material.card.MaterialCardView>
+
+                                <com.google.android.material.textview.MaterialTextView
+                                    android:id="@+id/textView_protein_value"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:textColor="@color/palettetext"
+                                    android:textSize="18sp"
+                                    android:textStyle="normal" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <!-- Fat Card -->
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_row="0"
                             android:layout_column="2"
+                            android:layout_columnWeight="1"
                             android:layout_marginEnd="12dp"
                             android:layout_marginBottom="12dp"
-                            android:text="@string/textView_fat_label_text"
-                            android:textColor="@color/paletteorange"
-                            android:textSize="18sp"
-                            android:textStyle="normal" />
+                            app:cardBackgroundColor="@color/palettepeach"
+                            app:cardCornerRadius="8dp"
+                            app:cardElevation="2dp"
+                            app:strokeWidth="0dp">
 
-                        <TextView
-                            android:id="@+id/textView_fat_value"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_row="0"
-                            android:layout_column="3"
-                            android:layout_marginBottom="12dp"
-                            android:textColor="@color/paletteorange"
-                            android:textSize="18sp"
-                            android:textStyle="normal" />
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="8dp">
 
-                        <TextView
-                            android:id="@+id/textView_calories_label"
-                            android:layout_width="wrap_content"
+                                <com.google.android.material.card.MaterialCardView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:backgroundTint="@color/paletteorange"
+                                    android:radius="8dp"
+                                    app:cardCornerRadius="0dp"
+                                    app:cardElevation="2dp"
+                                    app:contentPadding="4dp"
+                                    app:strokeWidth="0dp">
+
+                                    <com.google.android.material.textview.MaterialTextView
+                                        android:id="@+id/textView_fat_label"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:text="@string/textView_fat_label_text"
+                                        android:textColor="@color/palettedarkblue"
+                                        android:textSize="18sp"
+                                        android:textStyle="normal" />
+                                </com.google.android.material.card.MaterialCardView>
+
+                                <com.google.android.material.textview.MaterialTextView
+                                    android:id="@+id/textView_fat_value"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:textColor="@color/palettetext"
+                                    android:textSize="18sp"
+                                    android:textStyle="normal" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <!-- Calories Card -->
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_row="1"
                             android:layout_column="0"
+                            android:layout_columnWeight="1"
                             android:layout_marginEnd="12dp"
                             android:layout_marginBottom="12dp"
-                            android:text="@string/textView_calories_label_text"
-                            android:textColor="@color/paletteorange"
-                            android:textSize="18sp"
-                            android:textStyle="normal" />
+                            app:cardBackgroundColor="@color/palettepeach"
+                            app:cardCornerRadius="8dp"
+                            app:cardElevation="2dp"
+                            app:strokeWidth="0dp">
 
-                        <TextView
-                            android:id="@+id/textView_calories_value"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_row="1"
-                            android:layout_column="1"
-                            android:layout_marginEnd="12dp"
-                            android:layout_marginBottom="12dp"
-                            android:textColor="@color/paletteorange"
-                            android:textSize="18sp"
-                            android:textStyle="normal" />
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="8dp">
 
-                        <TextView
-                            android:id="@+id/textView_daily_requirements_coverage_label"
-                            android:layout_width="wrap_content"
+                                <com.google.android.material.card.MaterialCardView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:backgroundTint="@color/paletteorange"
+                                    app:cardCornerRadius="0dp"
+                                    app:cardElevation="2dp"
+                                    app:contentPadding="4dp"
+                                    app:strokeWidth="0dp">
+
+                                    <com.google.android.material.textview.MaterialTextView
+                                        android:id="@+id/textView_calories_label"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:text="@string/textView_calories_label_text"
+                                        android:textColor="@color/palettedarkblue"
+                                        android:textSize="18sp"
+                                        android:textStyle="normal" />
+                                </com.google.android.material.card.MaterialCardView>
+
+                                <com.google.android.material.textview.MaterialTextView
+                                    android:id="@+id/textView_calories_value"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:textColor="@color/palettetext"
+                                    android:textSize="18sp"
+                                    android:textStyle="normal" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <!-- Daily Requirements Card -->
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_row="1"
                             android:layout_column="2"
+                            android:layout_columnWeight="1"
                             android:layout_marginEnd="12dp"
                             android:layout_marginBottom="12dp"
-                            android:text="@string/textView_daily_requirements_coverage_label_text"
-                            android:textColor="@color/paletteorange"
-                            android:textSize="18sp"
-                            android:textStyle="normal" />
+                            app:cardBackgroundColor="@color/palettepeach"
+                            app:cardCornerRadius="8dp"
+                            app:cardElevation="2dp"
+                            app:strokeWidth="0dp">
 
-                        <TextView
-                            android:id="@+id/textView_daily_requirements_coverage_value"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_row="1"
-                            android:layout_column="3"
-                            android:layout_marginBottom="12dp"
-                            android:textColor="@color/paletteorange"
-                            android:textSize="18sp"
-                            android:textStyle="normal" />
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="8dp">
+
+                                <com.google.android.material.card.MaterialCardView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:backgroundTint="@color/paletteorange"
+                                    app:cardCornerRadius="0dp"
+                                    app:contentPadding="4dp"
+                                    app:strokeWidth="0dp">
+
+                                    <com.google.android.material.textview.MaterialTextView
+                                        android:id="@+id/textView_daily_requirements_coverage_label"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:text="@string/textView_daily_requirements_coverage_label_text"
+                                        android:textColor="@color/palettedarkblue"
+                                        android:textSize="18sp"
+                                        android:textStyle="normal" />
+                                </com.google.android.material.card.MaterialCardView>
+
+                                <com.google.android.material.textview.MaterialTextView
+                                    android:id="@+id/textView_daily_requirements_coverage_value"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:textColor="@color/palettetext"
+                                    android:textSize="18sp"
+                                    android:textStyle="normal" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
                     </GridLayout>
+
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/button_Nutrition_Label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:backgroundTint="@color/paletteorange"
+                        android:elevation="4dp"
+                        android:fontFamily="@font/montserrat"
                         android:outlineAmbientShadowColor="@color/paletteorange"
                         android:outlineSpotShadowColor="@color/paletteorange"
                         android:padding="8dp"
                         android:text="@string/button_Nutrition_label_text"
-                        android:fontFamily="@font/montserrat"
-                        android:backgroundTint="@color/paletteorange"
-                        android:textColor="@color/palettetext"/>
+                        android:textColor="@color/palettedarkblue" />
+
                     <!-- Nutrition Dialog Layout -->
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/nutrition_dialog_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:visibility="gone"
-                        android:padding="16dp">
+                        android:padding="16dp"
+                        android:visibility="gone">
 
                         <!-- Title TextView -->
                         <com.google.android.material.textview.MaterialTextView
@@ -233,7 +374,7 @@
                             android:textAlignment="center"
                             android:textColor="@color/palettedarkblue"
                             android:textSize="24sp"
-                            app:layout_constraintTop_toTopOf="parent"/>
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <!-- Nutrition Label ImageView -->
                         <ImageView
@@ -242,103 +383,179 @@
                             android:layout_height="500dp"
                             android:layout_marginTop="16dp"
                             android:scaleType="fitCenter"
-                            app:layout_constraintTop_toBottomOf="@id/textView_title"
                             android:src="@drawable/ic_launcher_foreground"
+                            app:layout_constraintTop_toBottomOf="@id/textView_title"
                             tools:ignore="ContentDescription" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <TextView
-                        android:id="@+id/textView_meal_servings"
+                    <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:drawableStart="@drawable/ic_servings"
-                        android:drawablePadding="8dp"
-                        android:drawableTint="@color/paletteorange"
-                        android:padding="8dp"
-                        android:text="@string/servings_text"
-                        android:textColor="@color/paletteblue"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        tools:ignore="UseCompatTextViewDrawableXml" />
+                        android:layout_margin="16dp"
+                        android:padding="16dp"
+                        android:radius="8dp"
+                        app:cardBackgroundColor="@color/palettebeige"
+                        app:cardElevation="4dp"
+                        app:strokeWidth="0dp">
 
-                    <TextView
-                        android:id="@+id/textView_meal_ready"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:drawableStart="@drawable/ic_time"
-                        android:drawablePadding="8dp"
-                        android:drawableTint="@color/paletteorange"
-                        android:padding="8dp"
-                        android:text="@string/time_text"
-                        android:textColor="@color/paletteblue"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        tools:ignore="UseCompatTextViewDrawableXml" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/textView_meal_price"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:drawableStart="@drawable/ic_cost"
-                        android:drawablePadding="8dp"
-                        android:drawableTint="@color/paletteorange"
-                        android:padding="8dp"
-                        android:text="@string/cost_text"
-                        android:textColor="@color/paletteblue"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        tools:ignore="UseCompatTextViewDrawableXml" />
+                            <!-- Servings Card -->
+                            <com.google.android.material.card.MaterialCardView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="8dp"
+                                android:radius="8dp"
+                                app:cardBackgroundColor="@color/palettepeach"
+                                app:cardElevation="2dp"
+                                app:strokeWidth="0dp">
 
-                    <TextView
+                                <com.google.android.material.textview.MaterialTextView
+                                    android:id="@+id/textView_meal_servings"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:drawableStart="@drawable/ic_servings"
+                                    android:drawablePadding="8dp"
+                                    android:drawableTint="@color/palettedarkblue"
+                                    android:padding="8dp"
+                                    android:text="@string/servings_text"
+                                    android:textColor="@color/paletteblue"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold"
+                                    tools:ignore="UseCompatTextViewDrawableXml" />
+                            </com.google.android.material.card.MaterialCardView>
+
+                            <!-- Ready Time Card -->
+                            <com.google.android.material.card.MaterialCardView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="8dp"
+                                android:radius="8dp"
+                                app:cardBackgroundColor="@color/palettepeach"
+                                app:strokeWidth="0dp">
+
+                                <com.google.android.material.textview.MaterialTextView
+                                    android:id="@+id/textView_meal_ready"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:drawableStart="@drawable/ic_time"
+                                    android:drawablePadding="8dp"
+                                    android:drawableTint="@color/palettedarkblue"
+                                    android:padding="8dp"
+                                    android:text="@string/time_text"
+                                    android:textColor="@color/paletteblue"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold"
+                                    tools:ignore="UseCompatTextViewDrawableXml" />
+                            </com.google.android.material.card.MaterialCardView>
+
+                            <!-- Price Card -->
+                            <com.google.android.material.card.MaterialCardView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:radius="8dp"
+                                app:cardBackgroundColor="@color/palettepeach"
+                                app:cardElevation="2dp"
+                                app:strokeWidth="0dp">
+
+                                <com.google.android.material.textview.MaterialTextView
+                                    android:id="@+id/textView_meal_price"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:drawableStart="@drawable/ic_cost"
+                                    android:drawablePadding="8dp"
+                                    android:drawableTint="@color/palettedarkblue"
+                                    android:padding="8dp"
+                                    android:text="@string/cost_text"
+                                    android:textColor="@color/paletteblue"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold"
+                                    tools:ignore="UseCompatTextViewDrawableXml" />
+                            </com.google.android.material.card.MaterialCardView>
+
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:padding="8dp"
-                        android:text="@string/activity_recipe_details_instructions_title"
-                        android:textColor="@color/palettedarkblue"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:layout_margin="16dp"
+                        android:backgroundTint="@color/paletteorange"
+                        android:radius="8dp"
+                        app:cardElevation="4dp">
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:padding="8dp"
+                            android:text="@string/activity_recipe_details_instructions_title"
+                            android:textColor="@color/palettetext"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+                    </com.google.android.material.card.MaterialCardView>
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recycler_meal_instructions"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="8dp"
-                        android:background="@color/paletteorange" />
+                        android:background="@color/palettebeige" />
 
-                    <TextView
+                    <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:padding="8dp"
-                        android:text="@string/activity_recipe_details_ingredients_title"
-                        android:textColor="@color/palettetext"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:layout_margin="16dp"
+                        android:backgroundTint="@color/paletteorange"
+                        android:radius="8dp"
+                        app:cardElevation="4dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:padding="8dp"
+                            android:text="@string/activity_recipe_details_ingredients_title"
+                            android:textColor="@color/palettetext"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+                    </com.google.android.material.card.MaterialCardView>
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recycler_meal_ingredients"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="8dp"
-                        android:background="@color/paletteorange" />
+                        android:background="@color/palettebeige" />
 
-                    <TextView
+                    <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:padding="8dp"
-                        android:text="@string/activity_recipe_details_similarrecipes_title"
-                        android:textColor="@color/palettetext"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:layout_margin="16dp"
+                        android:backgroundTint="@color/paletteorange"
+                        android:radius="8dp"
+                        app:cardElevation="4dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:padding="8dp"
+                            android:text="@string/activity_recipe_details_similarrecipes_title"
+                            android:textColor="@color/palettetext"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+                    </com.google.android.material.card.MaterialCardView>
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recycler_meal_similar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="8dp"
-                        android:background="@color/paletteorange" />
+                        android:background="@color/palettebeige" />
                 </LinearLayout>
             </androidx.core.widget.NestedScrollView>
             <!-- add to favorite list button -->
@@ -350,12 +567,14 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Favorite Button"
                 android:padding="15dp"
                 android:src="@drawable/ic_btn_star"
-                app:tint="@android:color/white"
+                app:cardElevation="4dp"
                 app:layout_constraintBottom_toTopOf="@+id/nestedScrollView_RecipeInfo"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@android:color/white" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ProgressBar

@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">pocketchef</string>
-    <string name="api_key">a337243f8ab941abb3c0498cd50e7867</string>
+    <string name="api_key">ecf1f9a5a71942279609e19286c0a00b</string>
     <string name="source">Source</string>
     <string name="textView_title_text">Pocket Chef</string>
     <string name="textView_title_subtitle">Recipes at your fingertips</string>
@@ -122,10 +122,10 @@
     <string name="activity_recipe_details_ingredients_title">Ingredients</string>
     <string name="activity_recipe_details_similarrecipes_title">Similar Recipes</string>
     <string name="button_Nutrition_label_text">View Nutrition Info</string>
-    <string name="textView_calories_label_text">Calories:</string>
-    <string name="textView_daily_requirements_coverage_label_text">Daily Req:</string>
-    <string name="textView_fat_label_text">Fat:</string>
-    <string name="textView_protein_label_text">Protein:</string>
+    <string name="textView_calories_label_text">Calories</string>
+    <string name="textView_daily_requirements_coverage_label_text">Daily Req</string>
+    <string name="textView_fat_label_text">Fat</string>
+    <string name="textView_protein_label_text">Protein</string>
     <string name="cardView1_title_text">Recipes</string>
     <string name="cardView2_title_text">Advanced Search</string>
     <string name="btn_favourite_text">Add To Favourites</string>
@@ -154,7 +154,7 @@
     <string name="calories_info">Calories (kcal)</string>
     <string name="servings_info">No. of servings</string>
     <string name="prep_time">Prep Time (min)</string>
-    <string name="cost_per_serving">Cost per serving</string>
+    <string name="cost_per_serving">Cost per serving ($0.00)</string>
     <string name="instructions">Step-by-step instructions (in order)</string>
     <string name="ingredients">Ingredients</string>
     <string name="equipment">Equipment</string>
@@ -168,13 +168,39 @@
     <string name="add_instructions_hint">Instructions for this step: </string>
     <!-- Sorting for posts -->
     <string-array name="postSortArray">
-        <item>My Posts</item>
         <item>Newest</item>
         <item>Oldest</item>
         <item>Popularity (Asc)</item>
         <item>Popularity (Desc)</item>
+        <item>My Posts</item>
     </string-array>
     <string name="comment">Comments</string>
     <string name="addComment">Add comment...</string>
-    <string name="resultTextView_placeholder">Placeholder</string>
+    <string name="noEquipment">No Equipment Needed</string>
+    <string name="noComments">Be the first to leave a message!</string>
+    <string name="noPosts">No Post Found!</string>
+    <string name="notifications_title">Notifications</string>
+    <string name="noNotifications">No new notifications</string>
+    <string name="newNotifications">New notifications</string>
+    <string name="myPosts">My Posts</string>
+    <string name="seeMore">See More</string>
+    <string name="popularPost">Popular Post</string>
+    <string name="newestPost">Newest Post</string>
+
+    <string name="resultTextView_placeholder">Search for recipes...</string>
+    <string name="cardView_open_camera_textview_text">Open Camera</string>
+    <string name="cardView5_text">Complex Search</string>
+    <string name="textView_welcome_message_text">Welcome Back,</string>
+    <string name="cardView3_title_text">Favourites\n</string>
+    <string name="cardView_4_text">Profile\n</string>
+    <string name="cardView3_text">Favourites</string>
+    <string name="cardView4_text">Pantry</string>
+    <string name="list_random_recipe_imageView_food_contentdesc">Food Image</string>
+    <string name="textView_upvote_text">1 Upvote</string>
+    <string name="textView_time_text">2 hours</string>
+    <string name="textView_no_image_available">No Image Available</string>
+    <string name="textView_money_placeholder">x.xx</string>
+    <string name="textView_carbs_placeholder">100</string>
+    <string name="similar_recipes_text">Similar Recipes</string>
+    <string name="changePasswordTv_text">Change Password?</string>
 </resources>
