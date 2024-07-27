@@ -24,7 +24,6 @@ public interface ShoppingCartDao {
     @Query("SELECT * FROM ShoppingCart WHERE id = :id")
     ShoppingCart getAllShoppingCartsForId(int id);
 
-    // 可以添加更多查询方法
     @Query("SELECT * FROM ShoppingCart WHERE user = :user")
     List<ShoppingCart> getAllShoppingCartsForUser(String user);
 
