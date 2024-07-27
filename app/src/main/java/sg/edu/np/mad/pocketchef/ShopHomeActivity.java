@@ -30,8 +30,6 @@ import retrofit2.Response;
 import sg.edu.np.mad.pocketchef.Adapters.HomeShopAdapter;
 import sg.edu.np.mad.pocketchef.Models.HomeShopItem;
 import sg.edu.np.mad.pocketchef.Models.ProductResponse;
-import sg.edu.np.mad.pocketchef.Net.ApiClient;
-import sg.edu.np.mad.pocketchef.Net.ApiService;
 import sg.edu.np.mad.pocketchef.databinding.ActivityShopHomeBinding;
 
 
