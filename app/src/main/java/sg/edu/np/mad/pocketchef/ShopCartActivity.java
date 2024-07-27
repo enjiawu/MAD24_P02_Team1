@@ -213,7 +213,7 @@ public class ShopCartActivity extends AppCompatActivity implements  NavigationVi
             Intent intent6 = new Intent(this, CommunityActivity.class);
             finish();
             startActivity(intent6);
-        } else if (itemId == R.id.nav_addfeature3) {
+        } else if (itemId == R.id.nav_shoppinglist) {
             Intent intent7 = new Intent(this, ShopCartActivity.class);
             finish();
             startActivity(intent7);

@@ -71,9 +71,6 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".PostDetailsActivity"
-            android:exported="false" /> 
-        <activity
             android:name=".ProfileActivity"
             android:exported="false" />
         <activity
@@ -115,12 +112,6 @@
 
 
         </activity>
-        <activity
-            android:name=".SearchedQueryRecipesOutput"
-            android:exported="true" />
-        <activity
-            android:name=".ComplexSearchActivity"
-            android:exported="true" />
         <activity
             android:name=".SearchedQueryRecipesOutput"
             android:exported="true" />
