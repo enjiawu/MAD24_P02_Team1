@@ -191,8 +191,8 @@
     <string name="cardView_open_camera_textview_text">Open Camera</string>
     <string name="cardView5_text">Complex Search</string>
     <string name="textView_welcome_message_text">Welcome Back,</string>
-    <string name="cardView3_title_text">Favourites\n</string>
-    <string name="cardView_4_text">Profile\n</string>
+    <string name="cardView3_title_text">Favourites</string>
+    <string name="cardView_4_text">Shopping List</string>
     <string name="cardView3_text">Favourites</string>
     <string name="cardView4_text">Pantry</string>
     <string name="list_random_recipe_imageView_food_contentdesc">Food Image</string>
@@ -208,4 +208,6 @@
 
 
     <string name="s_map_api">AIzaSyBLIQc5G7x6lh945rbXAzr0OGlzK_tjOng</string>
+    <string name="cardView8_text">Location Finder</string>
+    <string name="textView_subtitle_text">Group 5 P02</string>
 </resources>

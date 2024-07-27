@@ -23,14 +23,14 @@
             android:icon="@drawable/ic_favorite_list"
             android:title="Pantry" />
     </group>
-        <item android:title="Profile">
-            <menu>
-                <group android:checkableBehavior="single">
-                    <!--
-                <item
-                    android:id="@+id/nav_login"
-                    android:icon="@drawable/ic_login"
-                    android:title="Login" /> -->
+    <item android:title="Profile">
+        <menu>
+            <group android:checkableBehavior="single">
+                <!--
+            <item
+                android:id="@+id/nav_login"
+                android:icon="@drawable/ic_login"
+                android:title="Login" /> -->
                 <item
                     android:id="@+id/nav_profile"
                     android:icon="@drawable/ic_profile"
@@ -39,15 +39,15 @@
                     android:id="@+id/nav_logout"
                     android:icon="@drawable/ic_logout"
                     android:title="Logout" />
-                </group>
-            </menu>
-        </item>
+            </group>
+        </menu>
+    </item>
 
     <item android:title="Additional Features">
         <menu>
             <item
                 android:id="@+id/nav_community"
-                android:icon="@drawable/pocketchef_logo"
+                android:icon="@drawable/ic_community"
                 android:title="Community" />
             <item
                 android:id="@+id/nav_complex_search"
@@ -55,11 +55,11 @@
                 android:title="Complex Search" />
             <item
                 android:id="@+id/nav_shoppinglist"
-                android:icon="@drawable/pocketchef_logo"
+                android:icon="@drawable/ic_shoppinglist"
                 android:title="Shopping List" />
             <item
                 android:id="@+id/nav_locationfinder"
-                android:icon="@drawable/pocketchef_logo"
+                android:icon="@drawable/ic_location"
                 android:title="Location Finder" />
         </menu>
     </item>

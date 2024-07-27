@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import sg.edu.np.mad.pocketchef.PantryActivity;
 import sg.edu.np.mad.pocketchef.R;
 
+// Timothy - Stage 2
 public class PantryIngredientAdapter extends RecyclerView.Adapter<PantryIngredientViewHolder>{
     PantryActivity pantryActivity;
     ArrayList<String> data;

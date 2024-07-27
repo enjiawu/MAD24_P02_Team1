@@ -39,5 +39,15 @@
         android:layout_height="wrap_content"
         android:paddingBottom="?attr/actionBarSize"
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/noAvailableRecipes"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Looks like there is nothing here."
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:visibility="gone"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

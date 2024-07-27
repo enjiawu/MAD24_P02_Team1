@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.orhanobut.logger.Logger;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -47,6 +48,7 @@ public class InstructionsIngredientsAdapter extends RecyclerView.Adapter<Instruc
                 String completeImageUrl = "https://img.spoonacular.com/ingredients_100x100/" + ingredient.image;
                 holder.imageView_instructions_step_items.setVisibility(View.VISIBLE); // Ensure ImageView is visible
                 Picasso.get().load(completeImageUrl)
+
                         .fit()
                         .centerCrop()
                         .into(holder.imageView_instructions_step_items);

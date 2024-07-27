@@ -6,13 +6,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawerLayout"
 
-    android:focusableInTouchMode="true"
-    android:clickable="true"
-    android:focusable="true"
-    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+
     tools:context=".PantryActivity">
+
+
+    <ImageView
+        android:id="@+id/background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/paletteblue" />
 
 
     <com.google.android.material.navigation.NavigationView
@@ -42,18 +47,36 @@
             app:navigationIcon="@drawable/ic_launcher_foreground"
             app:title="Pantry" />
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@color/white"
+            app:layout_constraintBottom_toTopOf="@id/pantryRecyclerView"
+            app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/pantryRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+            app:layout_constrainedHeight="true"
+            app:layout_constraintBottom_toTopOf="@+id/textInputLayout"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@color/white"
+            app:layout_constraintBottom_toTopOf="@id/coordinatorLayout"
+            app:layout_constraintTop_toBottomOf="@id/pantryRecyclerView" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:helperTextEnabled="true"
             app:helperText="Tap anywhere to add"
+            app:helperTextEnabled="true"
             app:layout_constraintTop_toBottomOf="@+id/pantryRecyclerView">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -61,14 +84,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="New pantry item"
-                android:inputType="text"/>
+                android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>
 
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/coordinatorLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent">
+            android:layout_marginTop="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
 
             <com.google.android.material.bottomappbar.BottomAppBar
                 android:id="@+id/bottomAppBar"
@@ -90,8 +116,6 @@
                 app:icon="@drawable/ic_recipes"
                 app:layout_anchor="@id/bottomAppBar" />
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.drawerlayout.widget.DrawerLayout>
 
