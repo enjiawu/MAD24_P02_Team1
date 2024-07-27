@@ -85,7 +85,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/end">
@@ -102,120 +101,129 @@
         <!-- Card View Visibility set to Visible -->
         <Constraint
             android:id="@+id/cardView1"
-            android:visibility="visible"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="10dp"
+            android:visibility="visible"
+            app:layout_constraintEnd_toStartOf="@+id/cardView2"
             app:layout_constraintHeight_default="percent"
             app:layout_constraintHeight_percent="0.2"
-            app:layout_constraintWidth_default="percent"
-            app:layout_constraintWidth_percent="0.5"
-            app:layout_constraintEnd_toStartOf="@+id/cardView2"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView_logo" />
+            app:layout_constraintTop_toBottomOf="@+id/imageView_logo"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="0.5" />
 
         <Constraint
             android:id="@+id/cardView2"
-            android:visibility="visible"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="10dp"
+            android:visibility="visible"
             app:layout_constraintHeight_default="percent"
             app:layout_constraintHeight_percent="0.2"
-            app:layout_constraintWidth_default="percent"
-            app:layout_constraintWidth_percent="0.5"
             app:layout_constraintStart_toEndOf="@+id/cardView1"
-            app:layout_constraintTop_toBottomOf="@+id/imageView_logo" />
+            app:layout_constraintTop_toBottomOf="@+id/imageView_logo"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="0.5" />
 
         <Constraint
             android:id="@+id/cardView3"
-            android:visibility="visible"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="10dp"
+            android:visibility="visible"
+            app:layout_constraintEnd_toStartOf="@+id/cardView4"
             app:layout_constraintHeight_default="percent"
             app:layout_constraintHeight_percent="0.2"
-            app:layout_constraintWidth_default="percent"
-            app:layout_constraintWidth_percent="0.5"
-            app:layout_constraintEnd_toStartOf="@+id/cardView4"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardView2" />
+            app:layout_constraintTop_toBottomOf="@+id/cardView2"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="0.5" />
 
         <Constraint
             android:id="@+id/cardView4"
-            android:visibility="visible"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="10dp"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_default="percent"
             app:layout_constraintHeight_percent="0.2"
-            app:layout_constraintWidth_default="percent"
-            app:layout_constraintWidth_percent="0.5"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/cardView3"
-            app:layout_constraintTop_toBottomOf="@+id/cardView2" />
+            app:layout_constraintTop_toBottomOf="@+id/cardView2"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="0.5" />
 
         <Constraint
             android:id="@+id/cardView5"
-            android:visibility="visible"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="10dp"
+            android:visibility="visible"
+            app:layout_constraintEnd_toStartOf="@+id/cardView6"
             app:layout_constraintHeight_default="percent"
             app:layout_constraintHeight_percent="0.2"
-            app:layout_constraintWidth_default="percent"
-            app:layout_constraintWidth_percent="0.5"
-            app:layout_constraintEnd_toStartOf="@+id/cardView6"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardView3" />
+            app:layout_constraintTop_toBottomOf="@+id/cardView3"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="0.5" />
 
         <Constraint
             android:id="@+id/cardView6"
-            android:visibility="visible"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="10dp"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_default="percent"
             app:layout_constraintHeight_percent="0.2"
-            app:layout_constraintWidth_default="percent"
-            app:layout_constraintWidth_percent="0.5"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/cardView5"
-            app:layout_constraintTop_toBottomOf="@+id/cardView3" />
+            app:layout_constraintTop_toBottomOf="@+id/cardView3"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="0.5" />
 
         <Constraint
             android:id="@+id/cardView7"
-            android:visibility="visible"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="10dp"
+            android:visibility="visible"
+            app:layout_constraintEnd_toStartOf="@+id/cardView8"
             app:layout_constraintHeight_default="percent"
             app:layout_constraintHeight_percent="0.2"
-            app:layout_constraintWidth_default="percent"
-            app:layout_constraintWidth_percent="0.5"
-            app:layout_constraintEnd_toStartOf="@+id/cardView8"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardView6" />
+            app:layout_constraintTop_toBottomOf="@+id/cardView6"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="0.5" />
 
         <Constraint
             android:id="@+id/cardView8"
-            android:visibility="visible"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="10dp"
-            android:layout_marginBottom="16dp"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_default="percent"
             app:layout_constraintHeight_percent="0.2"
-            app:layout_constraintWidth_default="percent"
-            app:layout_constraintWidth_percent="0.5"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/cardView7"
-            app:layout_constraintTop_toBottomOf="@+id/cardView6" />
+            app:layout_constraintTop_toBottomOf="@+id/cardView6"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="0.5" />
 
         <Constraint
             android:id="@+id/toolbar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <Constraint
+            android:id="@+id/community_view"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:gravity="center_vertical" />
+
     </ConstraintSet>
 </MotionScene>

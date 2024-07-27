@@ -1,6 +1,7 @@
 package sg.edu.np.mad.pocketchef.Adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,15 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -24,10 +34,27 @@ public class PostCommentsAdapter extends RecyclerView.Adapter<PostCommentsViewHo
     Context context;
     List<Comment> comments = new ArrayList<>();
     CommentOnHoldListener commentOnHoldListener;
+
+    // To load user data for posts
+    FirebaseAuth mAuth;
+    FirebaseDatabase database;
+    DatabaseReference mUserRef;
+    StorageReference storageReference;
+    FirebaseUser currentUser;
+
     public PostCommentsAdapter(Context context, List<Comment> comments, CommentOnHoldListener commentOnHoldListener) {
         this.context = context;
         this.comments = comments;
         this.commentOnHoldListener = commentOnHoldListener;
+
+        // Set up database for post user data
+        //Firebase database setup
+        mAuth = FirebaseAuth.getInstance();
+        storageReference = FirebaseStorage.getInstance().getReference().child("PostImages");
+        database = FirebaseDatabase.getInstance("https://pocket-chef-cd59c-default-rtdb.asia-southeast1.firebasedatabase.app/");
+        // Get current user
+        currentUser = mAuth.getCurrentUser();
+        mUserRef = FirebaseDatabase.getInstance().getReference("users");
     }
 
     @NonNull
@@ -41,23 +68,38 @@ public class PostCommentsAdapter extends RecyclerView.Adapter<PostCommentsViewHo
         Comment comment = comments.get(position);
 
         if (comment != null) { // Must check if comment is null because we deleting  based on position from the database
-            // Setting all the comment information
-            holder.username.setText("@" + comment.getUsername());
-            holder.datePosted.setText(comment.formatDate());
-            holder.comment.setText(comment.getComment());
-
-            // Load profile picture
-            if (comment.getUserProfilePicture() != null) {
-                Picasso.get().load(comment.getUserProfilePicture()).into(holder.profilePicture);
-            } else {
-                holder.profilePicture.setImageResource(R.drawable.pocketchef_logo);
-            }
-
-            holder.commentContainer.setOnLongClickListener(new View.OnLongClickListener() {
+            mUserRef.child(comment.getUserId()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
-                public boolean onLongClick(View v) {
-                    commentOnHoldListener.onCommentHold(position);
-                    return true;
+                public void onDataChange(@NonNull DataSnapshot userSnapshot) {
+                    if (userSnapshot.exists()) {
+                        String commentUsername = userSnapshot.child("username").getValue(String.class);
+                        String Image = userSnapshot.child("Image").getValue(String.class);
+
+                        // Setting all the comment information
+                        holder.username.setText("@" + commentUsername);
+                        holder.datePosted.setText(comment.formatDate());
+                        holder.comment.setText(comment.getComment());
+
+                        // Load profile picture
+                        if (Image != null) {
+                            Picasso.get().load(Image).into(holder.profilePicture);
+                        } else {
+                            holder.profilePicture.setImageResource(R.drawable.pocketchef_logo);
+                        }
+
+                        holder.commentContainer.setOnLongClickListener(new View.OnLongClickListener() {
+                            @Override
+                            public boolean onLongClick(View v) {
+                                commentOnHoldListener.onCommentHold(position);
+                                return true;
+                            }
+                        });
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    // Handle database error
+                    Log.e("CommunityAdapter", "Error loading post details", error.toException());
                 }
             });
         }

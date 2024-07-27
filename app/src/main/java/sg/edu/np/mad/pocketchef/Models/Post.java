@@ -18,7 +18,7 @@ public class Post {
     private List<Comment> comments;
     private int likes;
 
-    public Post(String title, String recipeImage, float protein, float fat, float calories, float servings, float prepTime, float costPerServing, List<String> instructions, List<String> ingredients, List<String> equipment, String username, List<Comment> comments, String userId, String profilePicture) {
+    public Post(String title, String recipeImage, float protein, float fat, float calories, float servings, float prepTime, float costPerServing, List<String> instructions, List<String> ingredients, List<String> equipment, List<Comment> comments, String userId) {
         this.title = title;
         this.recipeImage = recipeImage;
         this.protein = protein;
@@ -30,13 +30,11 @@ public class Post {
         this.instructions = instructions;
         this.ingredients = ingredients;
         this.equipment = equipment;
-        this.username = username;
         this.timeStamp = ServerValue.TIMESTAMP;
         this.comments = comments != null ? comments : new ArrayList<>(); // Initialize comments list
         this.likes = 0;
         this.likesUsers = new ArrayList<>();
         this.userId = userId;
-        this.profilePicture = profilePicture;
     }
 
     public Post() {
@@ -141,14 +139,6 @@ public class Post {
         this.equipment = equipment;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     public Object getTimeStamp() {
         return timeStamp;
     }
@@ -187,14 +177,6 @@ public class Post {
 
     public void setUserId(String userId) {
         this.userId = userId;
-    }
-
-    public String getProfilePicture() {
-        return profilePicture;
-    }
-
-    public void setProfilePicture(String profilePicture) {
-        this.profilePicture = profilePicture;
     }
 
     // To format date for posts

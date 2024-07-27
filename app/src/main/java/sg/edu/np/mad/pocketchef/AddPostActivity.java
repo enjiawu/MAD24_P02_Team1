@@ -39,6 +39,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -151,12 +152,6 @@ public class AddPostActivity extends AppCompatActivity {
         mUserRef = FirebaseDatabase.getInstance().getReference("users");
     }
 
-    /*
-    * Potential features to add:
-    * Drag and drop step by step instructions for easier reorganisation
-    * Allow users to save their post draft
-    */
-
     // Setting up listeners
     public void setupListeners() {
         // Check if back button has been clicked
@@ -201,6 +196,7 @@ public class AddPostActivity extends AppCompatActivity {
             }
         });
 
+        // If the user clicks on the image for the recipe, open thier gallery
         recipeImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -336,7 +332,7 @@ public class AddPostActivity extends AppCompatActivity {
         );
     }
 
-
+    // Validate data before post is submitted
     private boolean validateData() {
         boolean isValid = true;
 
@@ -480,14 +476,8 @@ public class AddPostActivity extends AppCompatActivity {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 if (snapshot.exists()) {
-                                    // Retrieve data safely
-                                    String username = snapshot.child("username").getValue(String.class);
-                                    String profilePictureUrl = snapshot.child("profile-picture").getValue(String.class);
-
                                     // Get username and user id of the user who made the post
-                                    currentUsername = username;
                                     currentUserId = currentUser.getUid();
-                                    currentProfilePictureUrl = profilePictureUrl;
 
                                     // Create post object
                                     Post post = new Post(
@@ -502,10 +492,8 @@ public class AddPostActivity extends AppCompatActivity {
                                             instructions,
                                             ingredients,
                                             equipment,
-                                            currentUsername,
                                             new ArrayList<Comment>(),
-                                            currentUserId,
-                                            currentProfilePictureUrl
+                                            currentUserId
                                     );
 
                                     // Add post data to firebase database
@@ -513,6 +501,8 @@ public class AddPostActivity extends AppCompatActivity {
                                         @Override
                                         public void onSuccess(Void unused) {
                                             Toast.makeText(AddPostActivity.this, "Post has been published", Toast.LENGTH_SHORT).show();
+                                            NotificationHelper.showNotification(AddPostActivity.this, post.getTitle(), "A new post by @" + snapshot.child("username").getValue(String.class) + " has been added!");
+
                                         }
                                     });
 
