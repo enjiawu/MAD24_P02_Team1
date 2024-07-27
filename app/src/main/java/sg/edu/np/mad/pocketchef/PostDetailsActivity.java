@@ -32,8 +32,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputEditText;
@@ -61,7 +59,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import android.widget.Toast;
 
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -83,12 +80,10 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
     private final String TAG = "PostDetailsActivtity";
     String postKey;
 
-    //Favourites
-    RecipeDetailsC recipeDetailsC;
     ProgressBar progressBar;
 
     // Post details
-    ImageButton shareButton, favouriteButton, likeButton, addCommentButton;
+    ImageButton shareButton, likeButton, addCommentButton;
     TextView recipeName, username, protein, fat, calories, servings, prepTime, costPerServing, date, noEquipmentText, noCommentsText;
     ImageView recipeImage, profilePicture;
     RecyclerView instructionsRecyclerView, ingredientsRecyclerView, equipmentRecyclerView, commentsRecyclerView;
@@ -101,7 +96,6 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
     DatabaseReference postsRef, mUserRef, postRef;
     StorageReference storageReference;
     FirebaseUser currentUser;
-    FirebaseMessaging firebaseMessaging;
 
     //For navigation menu
     DrawerLayout drawerLayout;
@@ -159,7 +153,6 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
         // Initialise Progress Bar
         progressBar = findViewById(R.id.progressBar);
         // Initialise buttons
-        favouriteButton = findViewById(R.id.btn_favorite);
         shareButton = findViewById(R.id.btn_share);
         likeButton = findViewById(R.id.btn_like);
         addCommentButton = findViewById(R.id.btn_addComment);
@@ -392,33 +385,6 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
             @Override
             public void onClick(View v) {
                 addComment();
-            }
-        });
-
-        // Set up the OnClickListener for the Favorite button
-        favouriteButton.setOnClickListener(v -> {
-            if (recipeDetailsC == null) {
-                showFavoriteDialog();
-            } else {
-                // if recipe is already favorite, confirm favorite
-                MessageDialog.show("Unfavorite recipe", "Are you sure you want to unfavorite this recipe?", "Yes"
-                        , "No").setOkButtonClickListener((dialog, v1) -> {
-                    WaitDialog.show("loading...");
-                    new Thread(() -> {
-                        // delete recipe from favorites
-                        FavoriteDatabase.getInstance(PostDetailsActivity.this)
-                                .RecipeDetailsCDao().delete(recipeDetailsC);
-                        recipeDetailsC = null; // update favorite status
-                        runOnUiThread(() -> {
-                            // update favorite button appearance
-                            Glide.with(PostDetailsActivity.this).load(R.drawable.ic_btn_star).into(favouriteButton);
-                            favouriteButton.setImageTintList(ColorStateList.valueOf(Color.WHITE));
-                            WaitDialog.dismiss();
-                        });
-                    }).start();
-
-                    return false;
-                });
             }
         });
     }
@@ -741,106 +707,6 @@ public class PostDetailsActivity extends AppCompatActivity implements Navigation
         notificationsRef.child(notificationId).removeValue()
                 .addOnSuccessListener(aVoid -> Log.d(TAG, "Notification successfully deleted"))
                 .addOnFailureListener(e -> Log.e(TAG, "Error deleting notification: " + e.getMessage()));
-    }
-
-
-    // Add to favorite list
-    Spinner spinnerCategories;
-    private String path;
-
-    // show dialog to add to favorites
-    private void showFavoriteDialog() {
-
-        View dialogView = getLayoutInflater().inflate(R.layout.dialog_add_to_favorites, null);
-        spinnerCategories = dialogView.findViewById(R.id.spinner_categories);
-        Button btTextNewCategory = dialogView.findViewById(R.id.bt_new_category);
-        Button buttonSave = dialogView.findViewById(R.id.button_save);
-        Button buttonCancel = dialogView.findViewById(R.id.button_cancel);
-        getCategories();
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setView(dialogView);
-        AlertDialog dialog = builder.create();
-        btTextNewCategory.setOnClickListener(v -> {
-            dialog.dismiss();
-            new InputDialog("Add New Category", "Enter a name for the new category", "Save", "Cancel")
-                    .setCancelButton((inputDialog, view, s) -> {
-                        inputDialog.dismiss();
-                        return false;
-                    })
-                    .setOkButton((inputDialog, view, s) -> {
-                        if (TextUtils.isEmpty(s)) {
-                            PopTip.show("Input cannot be empty");
-                            return false;
-                        }
-
-                        WaitDialog.show("loading.....");
-                        ExecutorService executorService = Executors.newSingleThreadExecutor();
-                        executorService.execute(() -> {
-                            CategoryBean categoryBean = new CategoryBean(App.user,"default", s);
-                            FavoriteDatabase.getInstance(PostDetailsActivity.this)
-                                    .categoryDao().insertCategory(categoryBean);
-                            runOnUiThread(() -> {
-                                WaitDialog.dismiss();
-                                PopTip.show("Successfully Added!");
-                            });
-                        });
-                        return false;
-                    }).show();
-        });
-
-        buttonSave.setOnClickListener(v -> {
-            if (path == null || path.isEmpty()) {
-                PopTip.show("Loading still ongoing, please wait!");
-                return;
-            }
-            RecipeDetailsC recipeDetailsC1 = new RecipeDetailsC();
-            //recipeDetailsC1.recipeDetailsResponseId = postId;
-            Log.d("run", postKey + "");
-            recipeDetailsC1.categoryBeanId = spinnerCategories.getSelectedItem().toString();
-            recipeDetailsC1.meal_servings = servings.getText().toString();
-            recipeDetailsC1.meal_ready = prepTime.getText().toString();
-            recipeDetailsC1.meal_price = costPerServing.getText().toString();
-            recipeDetailsC1.meal_name = recipeName.getText().toString();
-            recipeDetailsC1.imagPath = path;
-            recipeDetailsC = recipeDetailsC1;
-
-            new Thread(() -> {
-                WaitDialog.show("loading...");
-                FavoriteDatabase.getInstance(PostDetailsActivity.this)
-                        .RecipeDetailsCDao().insert(recipeDetailsC1);
-                runOnUiThread(() -> {
-                    WaitDialog.dismiss();
-                    PopTip.show("Successfully Favorite!");
-                    Glide.with(PostDetailsActivity.this).load(R.drawable.ic_collect).into(favouriteButton);
-                    favouriteButton.setImageTintList(ColorStateList.valueOf(Color.YELLOW));
-                });
-            }).start();
-            dialog.dismiss();
-        });
-
-        buttonCancel.setOnClickListener(v -> dialog.dismiss());
-
-        dialog.show();
-    }
-
-
-    // retrieve categories from database
-    private void getCategories() {
-        new Thread(() -> {
-            List<CategoryBean> data = FavoriteDatabase.getInstance(PostDetailsActivity.this)
-                    .categoryDao().getAllCategories();
-            List<String> categories = new ArrayList<>();
-            for (int i = 0; i < data.size(); i++) {
-                categories.add(data.get(i).text);
-            }
-            runOnUiThread(() -> {
-                // populate spinner with categories
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(PostDetailsActivity.this,
-                        android.R.layout.simple_spinner_item, categories);
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                spinnerCategories.setAdapter(adapter);
-            });
-        }).start();
     }
 
     @Override
