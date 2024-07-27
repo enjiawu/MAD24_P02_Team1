@@ -305,31 +305,55 @@ https://github.com/EdricYeo117/MAD_Assignment_Stage2_MLPythonCode
   https://www.youtube.com/watch?v=jtT60yFPelI
 ------------------------------------------------
 ### Dependencies Utilised:
-- Picasso dependency for image loading from API:
-https://github.com/square/picasso
-- Retrofit dependency for API calling:
-https://github.com/square/retrofit
-- Retrofit gson converter dependency:
-https://github.com/square/retrofit/tree/trunk/retrofit-converters/gson
-- Material 3 open-source Google design system:
-https://m3.material.io/
-- Glide an image loading and cache library
-https://github.com/bumptech/glide
-- Jsoup a java to html parser 
-  https://jsoup.org/download
-- Firebase for database
+-Android AppCompat:
+https://developer.android.com/jetpack/androidx/releases/appcompat
+-Android Maps Utils:
+https://github.com/googlemaps/android-maps-utils
+-Android Room:
+https://developer.android.com/jetpack/androidx/releases/room
+-CircleImageView:
+https://github.com/hdodenhof/CircleImageView
+-Firebase App Check:
+https://firebase.google.com/docs/app-check
+-Firebase App Check SafetyNet:
+https://firebase.google.com/docs/app-check/android/safetynet-provider
+-Firebase for Database:
 https://firebase.google.com/
-- CircleImageView
-  https://github.com/hdodenhof/CircleImageView
-- Android Splashscreen
-https://developer.android.com/jetpack/androidx/releases/core
-- Android AppCompat
-  https://developer.android.com/jetpack/androidx/releases/appcompat
-- Android Room
-  https://developer.android.com/jetpack/androidx/releases/room
-- Kongzue DialogX
-  https://github.com/kongzue/DialogX
-- Kongzue DialogX Album Dialog and File Dialog
-  https://github.com/kongzue/DialogXSample
-- ZXing Barcode Scanner
-  https://github.com/zxing/zxing
+-Glide:
+https://github.com/bumptech/glide
+-Gson:
+https://github.com/google/gson
+-Guava:
+https://github.com/google/guava
+-Jsoup:
+https://jsoup.org/download
+-Kongzue DialogX:
+https://github.com/kongzue/DialogX
+-Kongzue DialogX Album Dialog and File Dialog:
+https://github.com/kongzue/DialogXSample
+-Logger:
+https://github.com/orhanobut/logger
+-OkHttp:
+https://github.com/square/okhttp
+-OkHttp Logging Interceptor:
+https://github.com/square/okhttp/tree/master/okhttp-logging-interceptor
+-PermissionX:
+https://github.com/guolindev/PermissionX
+-Picasso:
+https://github.com/square/picasso
+-Play Services Location & Maps:
+https://developers.google.com/android/guides/setup
+-Retrofit:
+https://github.com/square/retrofit
+-Retrofit Gson Converter:
+https://github.com/square/retrofit/tree/trunk/retrofit-converters/gson
+-TensorFlow Lite:
+https://github.com/tensorflow/tensorflow/tree/master/tensorflow/lite
+-ZXing Barcode Scanner:
+https://github.com/zxing/zxing
+-ZXing Android Embedded:
+https://github.com/journeyapps/zxing-android-embedded
+-Material 3:
+https://m3.material.io/
+-Google Places:
+https://developers.google.com/maps/documentation/places/android-sdk/overview
