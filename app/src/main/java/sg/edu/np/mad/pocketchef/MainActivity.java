@@ -104,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //For username
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
+
         // Initialize Firebase Database
         mUserRef = FirebaseDatabase.getInstance().getReference("users");
         usernameTv = findViewById(R.id.textView_username);

@@ -85,11 +85,6 @@
         <activity
             android:name=".MainActivity"
             android:exported="true">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
         </activity>
         <activity
             android:name=".SearchedQueryRecipesOutput"
@@ -101,15 +96,12 @@
             android:name=".LoginActivity"
             android:exported="true"
             android:theme="@style/Theme.StartApp">
-        </activity>
-
-        <service
-            android:name=".PushNotificationService"
-            android:exported="false">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </service>
+        </activity>
     </application>
 
 </manifest>

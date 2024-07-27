@@ -240,6 +240,11 @@ public class EditPostActivity extends AppCompatActivity {
             editText.setText(data);
             inputLayout.addView(inputBox);
             inputBoxes.add(inputBox);
+            if(inputLayout == ingredientsInputLayout){ // Change the hints
+                inputBox.setHint("Enter Ingredient");
+            } else if (inputLayout == equipmentInputLayout){
+                inputBox.setHint("Enter Equipment");
+            }
         }
     }
 
@@ -306,18 +311,22 @@ public class EditPostActivity extends AppCompatActivity {
 
     // Function to add new input box
     private void addInputBox(String type) {
+        String hint = null;
         switch(type){
             case "instructions":
                 inputBoxes = instructionsInputBoxes;
                 inputLayout = instructionInputLayout;
+                hint = "Instructions for this step: ";
                 break;
             case "ingredients":
                 inputBoxes = ingredientsInputBoxes;
                 inputLayout = ingredientsInputLayout;
+                hint = "Enter Ingredient: ";
                 break;
             case "equipment":
                 inputBoxes = equipmentInputBoxes;
                 inputLayout = equipmentInputLayout;
+                hint = "Enter Equipment:  ";
                 break;
             default:
                 // Nothing Happens
@@ -341,6 +350,7 @@ public class EditPostActivity extends AppCompatActivity {
             TextInputLayout inputBox = (TextInputLayout) getLayoutInflater().inflate(R.layout.input_box, null);
             inputLayout.addView(inputBox);
             inputBoxes.add(inputBox);
+            inputBox.setHint(hint);
 
             TextInputEditText editText = inputBox.findViewById(R.id.input);
             textChangeListener(editText);
