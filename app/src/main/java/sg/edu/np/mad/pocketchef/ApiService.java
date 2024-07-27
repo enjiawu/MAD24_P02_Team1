@@ -1,4 +1,4 @@
-package sg.edu.np.mad.pocketchef.Net;
+package sg.edu.np.mad.pocketchef;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

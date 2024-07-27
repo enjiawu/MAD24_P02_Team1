@@ -8,8 +8,8 @@
         android:id="@+id/ingredientCheckbox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="40px"
         android:layout_marginLeft="40px"
+        android:padding="40px"
         android:text="List Item" />
 
 </LinearLayout>
