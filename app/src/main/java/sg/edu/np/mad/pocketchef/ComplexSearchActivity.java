@@ -426,6 +426,8 @@ public class ComplexSearchActivity extends AppCompatActivity implements Navigati
                 int maxIndex = getMaxIndex(outputArray);
                 // Map the index to the corresponding label
                 classifiedLabel = labels.get(maxIndex);
+                // Clean the classified label
+                classifiedLabel = classifiedLabel.replace("_", " ");
                 // Get the confidence value from the output array
                 float confidenceValue = outputArray[maxIndex];
                 // Convert confidence value to percentage, max confidence value is 255
