@@ -305,55 +305,55 @@ https://github.com/EdricYeo117/MAD_Assignment_Stage2_MLPythonCode
   https://www.youtube.com/watch?v=jtT60yFPelI
 ------------------------------------------------
 ### Dependencies Utilised:
--Android AppCompat:
+- Android AppCompat:
 https://developer.android.com/jetpack/androidx/releases/appcompat
--Android Maps Utils:
+- Android Maps Utils:
 https://github.com/googlemaps/android-maps-utils
--Android Room:
+- Android Room:
 https://developer.android.com/jetpack/androidx/releases/room
--CircleImageView:
+- CircleImageView:
 https://github.com/hdodenhof/CircleImageView
--Firebase App Check:
+- Firebase App Check:
 https://firebase.google.com/docs/app-check
--Firebase App Check SafetyNet:
+- Firebase App Check SafetyNet:
 https://firebase.google.com/docs/app-check/android/safetynet-provider
--Firebase for Database:
+- Firebase for Database:
 https://firebase.google.com/
--Glide:
+- Glide:
 https://github.com/bumptech/glide
--Gson:
+- Gson:
 https://github.com/google/gson
--Guava:
+- Guava:
 https://github.com/google/guava
--Jsoup:
+- Jsoup:
 https://jsoup.org/download
--Kongzue DialogX:
+- Kongzue DialogX:
 https://github.com/kongzue/DialogX
--Kongzue DialogX Album Dialog and File Dialog:
+- Kongzue DialogX Album Dialog and File Dialog:
 https://github.com/kongzue/DialogXSample
--Logger:
+- Logger:
 https://github.com/orhanobut/logger
 -OkHttp:
 https://github.com/square/okhttp
--OkHttp Logging Interceptor:
+- OkHttp Logging Interceptor:
 https://github.com/square/okhttp/tree/master/okhttp-logging-interceptor
--PermissionX:
+- PermissionX:
 https://github.com/guolindev/PermissionX
--Picasso:
+- Picasso:
 https://github.com/square/picasso
--Play Services Location & Maps:
+- Play Services Location & Maps:
 https://developers.google.com/android/guides/setup
--Retrofit:
+- Retrofit:
 https://github.com/square/retrofit
--Retrofit Gson Converter:
+- Retrofit Gson Converter:
 https://github.com/square/retrofit/tree/trunk/retrofit-converters/gson
--TensorFlow Lite:
+- TensorFlow Lite:
 https://github.com/tensorflow/tensorflow/tree/master/tensorflow/lite
--ZXing Barcode Scanner:
+- ZXing Barcode Scanner:
 https://github.com/zxing/zxing
--ZXing Android Embedded:
+- ZXing Android Embedded:
 https://github.com/journeyapps/zxing-android-embedded
--Material 3:
+- Material 3:
 https://m3.material.io/
--Google Places:
+- Google Places:
 https://developers.google.com/maps/documentation/places/android-sdk/overview
