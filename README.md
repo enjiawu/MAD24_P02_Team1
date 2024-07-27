@@ -333,7 +333,7 @@ https://github.com/kongzue/DialogX
 https://github.com/kongzue/DialogXSample
 - Logger:
 https://github.com/orhanobut/logger
--OkHttp:
+- OkHttp:
 https://github.com/square/okhttp
 - OkHttp Logging Interceptor:
 https://github.com/square/okhttp/tree/master/okhttp-logging-interceptor
