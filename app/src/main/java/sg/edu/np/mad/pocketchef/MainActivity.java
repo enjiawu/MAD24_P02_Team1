@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         notificationActivity();
 
         //Create default favourites to test functionalities
-        CreateDefaultFavorites();
+//        CreateDefaultFavorites();
 
         // Custom setOnTouchListener for swipe gestures (in-built Gesture Detector is not working)
         motionLayout.setOnTouchListener(new View.OnTouchListener() {
