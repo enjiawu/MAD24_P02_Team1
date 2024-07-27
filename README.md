@@ -118,11 +118,21 @@ Optional:
 - Successfully handle user interactions (e.g., clicks on map direction) - [X]
 - Successfully implement permissions for user's location - [X]
 #### Virtual Pantry - Timothy - [ ]
-- Successfully implement Nested Recycler view - [ ]
-- Successfully parse ingredients through API to fetch images - [ ]
-- Successfully fetch and display recipes from API - [ ]
-- Successfully store pantry items in database - [ ]
+- Successfully implement Recycler view to display ingredients- [x]
+- Successfully implement Recycler view to display recipes - [x]
+- Successfully implement drag and drop and swiping to re-order, edit and delete ingredients = [x]
+- Successfully fetch and display recipes from API - [x]
+- Successfully store, load and update pantry items in database - [x]
 #### Generated Shopping List - Wenya - [ ]
+- Successfully implement Shopping List Interface - [X]
+- Successfully created custom categories for shopping list - [X]
+- Successfully implement functionality to add/remove item to the shopping list manually - [X]
+- Successfully used DAO to store and retrieve shopping list data - [X]
+- Successfully implement the ability to add all ingredients from a selected recipe to the shopping list - [X]
+- Successfully include quantities and units for each ingredient, based on selected recipes - [X]
+- Successfully implement QR code sharing options - [X]
+- Successfully implement barcode scanning to add products to the Virtual Pantry - [X]
+- Successfully implement auto-ticking of matched items in the shopping list from the Virtual Pantry - [X]
 ### Limitations of API:
 #### Advanced Searching - [recipes/complexSearch](https://spoonacular.com/food-api/docs#Search-Recipes-Complex)
 - Some inputs do not generate the correct recipe details when the query and excludeIngredients parameters are both entered. For example, when the user inputs "apple" for the query and excludeIngredients parameters, the API still returns recipes with apples. However, all other food options work, like entering cheese or chicken for both parameters.
@@ -229,15 +239,56 @@ Optional:
 - Users can view notifications received and delete them by swiping to the left.
 - Users can click on the notifications to view the post related to the notificaiton.
 
-#### 16) Complex Search:
+#### 17) Complex Search:
 ![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/ComplexSearch.png)
 - Users can view notifications received and delete them by swiping to the left.
 - Users can click on the notifications to view the post related to the notification.
 
-#### 16) Queried Recipes:
+#### 18) Shopping List
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/CreateNewShoppingList.png)
+
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/ShoppingList.png)
+
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/ShoppingListDetails.png)
+- Users can view notifications received and delete them by swiping to the left.
+- Users can click on the notifications to view the post related to the notificaiton.
+
+#### 19) Pantry:
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/Pantry.png)
+- Users can add, edit and delete their pantry ingredients here
+- Users can select pantry ingredients to search for available recipes
+
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/Pantry2.png)
+- Users can view the possible recipes based on their selected ingredients.
+- Users can view the ingredients they are missing for each recipe.
+- Users can select any recipe to view recipe details and instructions.
+
+#### 20) Google Maps:
 ![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/QueriedRecipes.png)
 - Users can view notifications received and delete them by swiping to the left.
 - Users can click on the notifications to view the post related to the notificaiton.
+
+#### 17) Shopping List:
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/ShoppingList.png)
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/ShoppingList-Share.png)
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/ShoppingList-Scan.png)
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/ShoppingList-Add.png)
+- Users can view their categories for Shopping list
+- Users can share the selected shopping list with others in external apps using a generate QR code
+- Users can Scan the QR code to get the shopping list detail
+- Users can click on a category to view the ingredients added to a specific category
+
+#### 18) Shopping List Items:
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/ShoppingList-Item.png)
+- Users can view and delete the ingredients that add in the shopping list
+- Users can tick the ingredients that they have and check how many items left in the shooping list
+- Users can scan barcode or use the "+" button to add ingredient that they might want to buy
+- Users can click on the "house" icon to view the item that they already have in Virtual Pantry
+
+#### 19) Virtual Pantry
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/VirtualPantry.png)
+![image](https://github.com/enjiawu/MAD24_P02_Team1/blob/main/Images/VirtualPantry-Scanner.jpg)
+- Users can scan barcode to add the products that they already have into the virtual pantry, when the product match with the shopping list item it will auto-ticking the item
 
 ---------------------------------------------
 ### Acknowledgements:
@@ -254,6 +305,8 @@ https://json2csharp.com/
   https://www.tutorialspoint.com/design_pattern/data_access_object_pattern.htm
 - Additional Github Repository for Jin Rong's ML Code:
 https://github.com/EdricYeo117/MAD_Assignment_Stage2_MLPythonCode
+- Video tutorial for barcode scanner
+  https://www.youtube.com/watch?v=jtT60yFPelI
 ------------------------------------------------
 ### Dependencies Utilised:
 - Picasso dependency for image loading from API:
@@ -282,4 +335,5 @@ https://developer.android.com/jetpack/androidx/releases/core
   https://github.com/kongzue/DialogX
 - Kongzue DialogX Album Dialog and File Dialog
   https://github.com/kongzue/DialogXSample
-
+- ZXing Barcode Scanner
+  https://github.com/zxing/zxing
