@@ -259,7 +259,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivity(intent);
         });
 
-        // Card View On Click Listener for ProfileActivity
+        // Card View On Click Listener for ProfileActivity (changing this to shoppinglist)
         cardView4.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
             startActivity(intent);
@@ -285,7 +285,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Card View On Click Listener for Shopping List Activity
 //        cardView8.setOnClickListener(v -> {
-//            Intent intent = new Intent(MainActivity.this, ShoppingListActivity.class);
+//            Intent intent = new Intent(MainActivity.this, LocationActivity.class);
 //            startActivity(intent);
 //        });
 
