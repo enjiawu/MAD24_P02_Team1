@@ -113,15 +113,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         postsRef = FirebaseDatabase.getInstance().getReference("posts");
 
         FindViews(); // Initialize views after setContentView()
-        //   loadProfile(); //Load username
-        //     setUpDashboard(); // Set up dashboard
+        loadProfile(); //Load username
+        setUpDashboard(); // Set up dashboard
 
         // Set toolbar as action bar
         setSupportActionBar(toolbar);
 
         // Set up Notifications
         notificationButton = findViewById(R.id.notification_button);
-        //    notificationActivity();
+        notificationActivity();
 
         //Not sure if this is needed
         //menu.findItem(R.id.nav_logout).setVisible(false);
