@@ -31,7 +31,6 @@ import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
@@ -46,13 +45,10 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import sg.edu.np.mad.pocketchef.Adapters.PostCommentsAdapter;
 import sg.edu.np.mad.pocketchef.Models.App;
 import sg.edu.np.mad.pocketchef.Models.CategoryBean;
-import sg.edu.np.mad.pocketchef.Models.Comment;
 import sg.edu.np.mad.pocketchef.Models.Notification;
 import sg.edu.np.mad.pocketchef.Models.Post;
-import sg.edu.np.mad.pocketchef.databinding.ActivityAdvancedSearchBinding;
 import sg.edu.np.mad.pocketchef.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -70,10 +66,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ActivityMainBinding bind;
 
     DrawerLayout drawerLayout;
-    NavigationView navigationView;
     MaterialToolbar toolbar;
-
-    MenuItem nav_home, nav_recipes, nav_search, nav_logout, nav_profile, nav_favourites, nav_community, nav_pantry, nav_complex_search, nav_shopping_list, nav_locationfinder;
     CardView cardView1, cardView2, cardView3, cardView4, cardView5, cardView6, cardView7, cardView8, cardView_popularPost, cardView_newestPost, cardView_newNotifications, cardView_myPosts;
 
     // In-app notifications (Stage 2 - Enjia)
