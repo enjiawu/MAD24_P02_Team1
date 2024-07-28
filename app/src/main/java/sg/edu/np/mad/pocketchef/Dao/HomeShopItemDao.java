@@ -18,5 +18,4 @@ public interface HomeShopItemDao {
     @Delete
     void delete(HomeShopItem homeShopItem);
 
-    // 其他数据库操作方法...
 }
