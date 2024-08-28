@@ -2,11 +2,11 @@
 # MAD24_P02_Team1
 MAD 2024 Assignment
 ## Students:
-- S10258457C **Yeo Jin Rong**
-- S10256978E **Wu Enjia**  
-- S10256132A **Timothy Chai Weijie** 
-- S10262576D **Ggwendolynn Lee Rasni**  
-- S10262410A **Xue Wenya**  
+- **Jin Rong**
+- **Enjia**  
+- **Timothy** 
+- **Ggwendolynn**  
+- **Wenya**  
 
 ## Welcome to Pocket Chef
 ### Introduction
