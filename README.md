@@ -88,9 +88,10 @@ Through our platform, users will gain access to tools and resources to plan meal
 - Create new activity SearchedRecipeQueryOutput - [X]
 - Obtain Recipes successfully from spoonacular api, prompting with query pasesed from intent, and adapt into recycler view - [X]
 - Implement onClickListener for recipes leading to RecipeDetailsActivity - [X]
+- https://youtu.be/Vs5PxBIVkzM Video demonstration in-class of application https://youtu.be/Vs5PxBIVkzM
 Optional:
 - Consolidate both activities into one activity - [X]
-- UI/UX improvements, such as button animation and transitions - []
+- UI/UX improvements, such as button animation and transitions - [X]
 
 ##### Menu Update to accomodate new features - Jin Rong []
 - Incorporate new buttons for new features in Main Menu and Drawable Menu - []
